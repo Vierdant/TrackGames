@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { auth } from "../auth";
 import db from "../db";
-import { GameListType } from "../generated/prisma/enums";
+import { ActivityType, InteractionTargetType, NotificationType, GameListType } from "../generated/prisma/enums";
 import { siteStats } from "../cache/resources";
 
 const displayModes = ["GRID", "RANKING", "TIER"];
@@ -106,6 +106,38 @@ export async function createPlaylist(formData: FormData) {
             id: true,
         },
     });
+
+    await db.activity.create({
+        data: {
+            userId,
+            type: ActivityType.CREATED_PLAYLIST,
+            targetType: InteractionTargetType.GAME_LIST,
+            targetId: playlist.id,
+            listId: playlist.id,
+            expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+        },
+    });
+
+    const followers = await db.userFollow.findMany({
+        where: {
+            followingId: userId,
+        },
+        select: {
+            followerId: true,
+        },
+    });
+
+    if (followers.length) {
+        await db.notification.createMany({
+            data: followers.map((follow) => ({
+                userId: follow.followerId,
+                actorId: userId,
+                type: NotificationType.FOLLOWING_CREATED_LIST,
+                targetType: InteractionTargetType.GAME_LIST,
+                targetId: playlist.id,
+            })),
+        });
+    }
 
     siteStats.refresh().catch(console.error);
     revalidatePath("/u/[user]", "page");

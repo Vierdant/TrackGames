@@ -11,6 +11,8 @@ import AddPlaylistGameForm from "./AddPlaylistGameForm";
 import TierLabelsForm from "./TierLabelsForm";
 import GameListEditButton from "@/app/components/playlist/GameListEditButton";
 import { profileThemeStyle } from "@/lib/account/user";
+import CommentSection from "@/app/components/comments/CommentSection";
+import { InteractionTargetType } from "@/lib/generated/prisma/enums";
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
@@ -54,6 +56,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                     <Container className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_18rem] lg:items-start">
                         <div className="flex min-w-0 flex-col gap-5">
                             <PlaylistEntriesView listId={playlist.id} entries={playlist.entries} mode={playlist.displayMode} canEdit={canEdit} tiers={tiers} tierColors={tierColors} />
+                            <CommentSection targetType={InteractionTargetType.GAME_LIST} targetId={playlist.id} />
                         </div>
 
                         <aside className="flex flex-col gap-4 border-l border-border">

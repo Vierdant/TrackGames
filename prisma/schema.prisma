@@ -27,10 +27,18 @@ model User {
   accounts      Account[]
   sessions      Session[]
 
-  createdAt DateTime        @default(now())
-  updatedAt DateTime        @updatedAt
-  games     UserGameEntry[]
-  gameLists GameList[]
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  games            UserGameEntry[]
+  gameLists        GameList[]
+  likes            Like[]
+  comments         Comment[]
+  activities       Activity[]
+  notifications    Notification[]
+  sentNotifications Notification[] @relation("NotificationActor")
+  following        UserFollow[]    @relation("UserFollowing")
+  followers        UserFollow[]    @relation("UserFollowers")
+  badges           UserBadge[]
 }
 
 model Account {
@@ -98,6 +106,7 @@ model Game {
   updatedAt   DateTime        @updatedAt
   users       UserGameEntry[]
   listEntries GameListEntry[]
+  activities  Activity[]
 
   @@index([name])
   @@index([gameType])
@@ -132,24 +141,24 @@ model UserGameEntry {
 }
 
 model GameList {
-  id          String          @id @default(cuid())
+  id          String            @id @default(cuid())
   userId      String
   type        GameListType
-  displayMode String          @default("GRID")
-  tierLabels  String[]        @default(["S", "A", "B", "C", "D"])
-  tierColors  String[]        @default(["#f59e0b", "#22c55e", "#3b82f6", "#a855f7", "#ef4444"])
+  displayMode String            @default("GRID")
+  tierLabels  String[]          @default(["S", "A", "B", "C", "D"])
+  tierColors  String[]          @default(["#f59e0b", "#22c55e", "#3b82f6", "#a855f7", "#ef4444"])
   name        String
   slug        String?
-  description String?         @db.Text
+  description String?           @db.Text
   image       String?
   background  String?
   color       String?
   accentColor String?
-  privacy     String          @default("public")
+  privacy     String            @default("public")
   entries     GameListEntry[]
-  createdAt   DateTime        @default(now())
-  updatedAt   DateTime        @updatedAt
-  user        User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+  user        User              @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, slug])
   @@index([userId])
@@ -233,6 +242,144 @@ model Keyword {
   @@index([name])
 }
 
+model Activity {
+  id String @id @default(cuid())
+
+  userId String
+  type   ActivityType
+
+  targetType InteractionTargetType?
+  targetId   String?
+  gameId    Int?
+  listId    String?
+  commentId String?
+
+  message String? @db.Text
+
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  game    Game?    @relation(fields: [gameId], references: [id], onDelete: SetNull)
+  comment Comment? @relation(fields: [commentId], references: [id], onDelete: SetNull)
+
+  createdAt DateTime @default(now())
+  expiresAt DateTime @default(dbgenerated("(CURRENT_TIMESTAMP + INTERVAL '30 days')"))
+
+  @@index([userId])
+  @@index([type])
+  @@index([targetType, targetId])
+  @@index([createdAt])
+  @@index([expiresAt])
+}
+
+model Like {
+  id String @id @default(cuid())
+
+  userId     String
+  targetType LikeTargetType
+  targetId   String
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@unique([userId, targetType, targetId])
+  @@index([targetType, targetId])
+  @@index([userId])
+}
+
+model Comment {
+  id String @id @default(cuid())
+
+  userId     String
+  targetType InteractionTargetType
+  targetId   String
+  parentId   String?
+  content    String @db.Text
+
+  user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  parent        Comment?       @relation("CommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
+  replies       Comment[]      @relation("CommentReplies")
+  activities    Activity[]
+  notifications Notification[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([targetType, targetId])
+  @@index([parentId])
+  @@index([userId])
+}
+
+model UserFollow {
+  id String @id @default(cuid())
+
+  followerId  String
+  followingId String
+
+  follower  User @relation("UserFollowing", fields: [followerId], references: [id], onDelete: Cascade)
+  following User @relation("UserFollowers", fields: [followingId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@unique([followerId, followingId])
+  @@index([followerId])
+  @@index([followingId])
+}
+
+model Badge {
+  id          String @id @default(cuid())
+  slug        String @unique
+  name        String
+  description String? @db.Text
+  icon        String?
+  color       String?
+
+  users UserBadge[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model UserBadge {
+  id String @id @default(cuid())
+
+  userId  String
+  badgeId String
+
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  badge Badge @relation(fields: [badgeId], references: [id], onDelete: Cascade)
+
+  earnedAt DateTime @default(now())
+
+  @@unique([userId, badgeId])
+  @@index([userId])
+  @@index([badgeId])
+}
+
+model Notification {
+  id String @id @default(cuid())
+
+  userId  String
+  actorId String?
+  type    NotificationType
+
+  targetType InteractionTargetType?
+  targetId   String?
+  commentId  String?
+  message    String? @db.Text
+  readAt     DateTime?
+
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  actor   User?    @relation("NotificationActor", fields: [actorId], references: [id], onDelete: SetNull)
+  comment Comment? @relation(fields: [commentId], references: [id], onDelete: SetNull)
+
+  createdAt DateTime @default(now())
+
+  @@index([userId, readAt])
+  @@index([actorId])
+  @@index([targetType, targetId])
+  @@index([createdAt])
+}
+
 enum GameListType {
   LIBRARY
   PLAYLIST
@@ -263,4 +410,38 @@ enum GameType {
   FORK
   PACK
   UPDATE
+}
+
+enum ActivityType {
+  ADDED_GAME_TO_LIBRARY
+  RATED_GAME
+  CREATED_PLAYLIST
+  ADDED_GAME_TO_PLAYLIST
+  LIKED_GAME_LIST
+  LIKED_COMMENT
+  COMMENTED_ON_GAME_LIST
+  COMMENTED_ON_PROFILE
+  COMMENTED_ON_GAME
+  REPLIED_TO_COMMENT
+  FOLLOWED_USER
+  EARNED_BADGE
+}
+
+enum InteractionTargetType {
+  GAME_LIST
+  USER_PROFILE
+  GAME
+}
+
+enum LikeTargetType {
+  GAME_LIST
+  COMMENT
+}
+
+enum NotificationType {
+  COMMENT_REPLY
+  RECEIVED_LIKE
+  FOLLOWED_USER
+  FOLLOWING_CREATED_LIST
+  EARNED_BADGE
 }

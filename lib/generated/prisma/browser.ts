@@ -87,3 +87,38 @@ export type Company = Prisma.CompanyModel
  * 
  */
 export type Keyword = Prisma.KeywordModel
+/**
+ * Model Activity
+ * 
+ */
+export type Activity = Prisma.ActivityModel
+/**
+ * Model Like
+ * 
+ */
+export type Like = Prisma.LikeModel
+/**
+ * Model Comment
+ * 
+ */
+export type Comment = Prisma.CommentModel
+/**
+ * Model UserFollow
+ * 
+ */
+export type UserFollow = Prisma.UserFollowModel
+/**
+ * Model Badge
+ * 
+ */
+export type Badge = Prisma.BadgeModel
+/**
+ * Model UserBadge
+ * 
+ */
+export type UserBadge = Prisma.UserBadgeModel
+/**
+ * Model Notification
+ * 
+ */
+export type Notification = Prisma.NotificationModel

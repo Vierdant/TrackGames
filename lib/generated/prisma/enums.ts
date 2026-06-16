@@ -48,3 +48,49 @@ export const GameType = {
 } as const
 
 export type GameType = (typeof GameType)[keyof typeof GameType]
+
+
+export const ActivityType = {
+  ADDED_GAME_TO_LIBRARY: 'ADDED_GAME_TO_LIBRARY',
+  RATED_GAME: 'RATED_GAME',
+  CREATED_PLAYLIST: 'CREATED_PLAYLIST',
+  ADDED_GAME_TO_PLAYLIST: 'ADDED_GAME_TO_PLAYLIST',
+  LIKED_GAME_LIST: 'LIKED_GAME_LIST',
+  LIKED_COMMENT: 'LIKED_COMMENT',
+  COMMENTED_ON_GAME_LIST: 'COMMENTED_ON_GAME_LIST',
+  COMMENTED_ON_PROFILE: 'COMMENTED_ON_PROFILE',
+  COMMENTED_ON_GAME: 'COMMENTED_ON_GAME',
+  REPLIED_TO_COMMENT: 'REPLIED_TO_COMMENT',
+  FOLLOWED_USER: 'FOLLOWED_USER',
+  EARNED_BADGE: 'EARNED_BADGE'
+} as const
+
+export type ActivityType = (typeof ActivityType)[keyof typeof ActivityType]
+
+
+export const InteractionTargetType = {
+  GAME_LIST: 'GAME_LIST',
+  USER_PROFILE: 'USER_PROFILE',
+  GAME: 'GAME'
+} as const
+
+export type InteractionTargetType = (typeof InteractionTargetType)[keyof typeof InteractionTargetType]
+
+
+export const LikeTargetType = {
+  GAME_LIST: 'GAME_LIST',
+  COMMENT: 'COMMENT'
+} as const
+
+export type LikeTargetType = (typeof LikeTargetType)[keyof typeof LikeTargetType]
+
+
+export const NotificationType = {
+  COMMENT_REPLY: 'COMMENT_REPLY',
+  RECEIVED_LIKE: 'RECEIVED_LIKE',
+  FOLLOWED_USER: 'FOLLOWED_USER',
+  FOLLOWING_CREATED_LIST: 'FOLLOWING_CREATED_LIST',
+  EARNED_BADGE: 'EARNED_BADGE'
+} as const
+
+export type NotificationType = (typeof NotificationType)[keyof typeof NotificationType]

@@ -1,5 +1,4 @@
 import { PrimaryButton } from "../ui/Buttons";
-import { CircleQuestionMark } from "lucide-react";
 import Container from "./Container";
 import Link from "next/link";
 import ThemeSwitch from "../ui/ThemeSwitch";
@@ -7,10 +6,13 @@ import { auth } from "@/lib/auth";
 import { UserMenu } from "../ui/UserMenu";
 import { getUser } from "@/lib/account/user";
 import HeaderSearch from "./HeaderSearch";
+import NotificationMenu from "../notifications/NotificationMenu";
+import { getUserNotifications } from "@/lib/data/social";
 
 export default async function Header() {
     const session = await auth();
     const user = await getUser(session?.user);
+    const notifications = user ? await getUserNotifications(user.id) : [];
 
     return (
         <header className="relative z-20 flex min-h-20 flex-row items-center justify-center border-b border-border bg-bg p-4 sm:p-5">
@@ -23,7 +25,10 @@ export default async function Header() {
                     <HeaderSearch />
                     <ThemeSwitch className="hidden md:grid" />
                     {user ? (
-                        <UserMenu user={user} />
+                        <>
+                            <NotificationMenu notifications={notifications} />
+                            <UserMenu user={user} />
+                        </>
                     ) : (
                         <PrimaryButton href="/login?mode=login" className="px-4 sm:px-6">Login</PrimaryButton>
                     )}

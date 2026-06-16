@@ -37,6 +37,7 @@ export type GameListMinAggregateOutputType = {
   color: string | null
   accentColor: string | null
   privacy: string | null
+  commentsHidden: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -54,6 +55,7 @@ export type GameListMaxAggregateOutputType = {
   color: string | null
   accentColor: string | null
   privacy: string | null
+  commentsHidden: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -73,6 +75,7 @@ export type GameListCountAggregateOutputType = {
   color: number
   accentColor: number
   privacy: number
+  commentsHidden: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -92,6 +95,7 @@ export type GameListMinAggregateInputType = {
   color?: true
   accentColor?: true
   privacy?: true
+  commentsHidden?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -109,6 +113,7 @@ export type GameListMaxAggregateInputType = {
   color?: true
   accentColor?: true
   privacy?: true
+  commentsHidden?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -128,6 +133,7 @@ export type GameListCountAggregateInputType = {
   color?: true
   accentColor?: true
   privacy?: true
+  commentsHidden?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -220,6 +226,7 @@ export type GameListGroupByOutputType = {
   color: string | null
   accentColor: string | null
   privacy: string
+  commentsHidden: boolean
   createdAt: Date
   updatedAt: Date
   _count: GameListCountAggregateOutputType | null
@@ -260,6 +267,7 @@ export type GameListWhereInput = {
   color?: Prisma.StringNullableFilter<"GameList"> | string | null
   accentColor?: Prisma.StringNullableFilter<"GameList"> | string | null
   privacy?: Prisma.StringFilter<"GameList"> | string
+  commentsHidden?: Prisma.BoolFilter<"GameList"> | boolean
   createdAt?: Prisma.DateTimeFilter<"GameList"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"GameList"> | Date | string
   entries?: Prisma.GameListEntryListRelationFilter
@@ -281,6 +289,7 @@ export type GameListOrderByWithRelationInput = {
   color?: Prisma.SortOrderInput | Prisma.SortOrder
   accentColor?: Prisma.SortOrderInput | Prisma.SortOrder
   privacy?: Prisma.SortOrder
+  commentsHidden?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   entries?: Prisma.GameListEntryOrderByRelationAggregateInput
@@ -306,6 +315,7 @@ export type GameListWhereUniqueInput = Prisma.AtLeast<{
   color?: Prisma.StringNullableFilter<"GameList"> | string | null
   accentColor?: Prisma.StringNullableFilter<"GameList"> | string | null
   privacy?: Prisma.StringFilter<"GameList"> | string
+  commentsHidden?: Prisma.BoolFilter<"GameList"> | boolean
   createdAt?: Prisma.DateTimeFilter<"GameList"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"GameList"> | Date | string
   entries?: Prisma.GameListEntryListRelationFilter
@@ -327,6 +337,7 @@ export type GameListOrderByWithAggregationInput = {
   color?: Prisma.SortOrderInput | Prisma.SortOrder
   accentColor?: Prisma.SortOrderInput | Prisma.SortOrder
   privacy?: Prisma.SortOrder
+  commentsHidden?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.GameListCountOrderByAggregateInput
@@ -352,6 +363,7 @@ export type GameListScalarWhereWithAggregatesInput = {
   color?: Prisma.StringNullableWithAggregatesFilter<"GameList"> | string | null
   accentColor?: Prisma.StringNullableWithAggregatesFilter<"GameList"> | string | null
   privacy?: Prisma.StringWithAggregatesFilter<"GameList"> | string
+  commentsHidden?: Prisma.BoolWithAggregatesFilter<"GameList"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"GameList"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"GameList"> | Date | string
 }
@@ -370,6 +382,7 @@ export type GameListCreateInput = {
   color?: string | null
   accentColor?: string | null
   privacy?: string
+  commentsHidden?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   entries?: Prisma.GameListEntryCreateNestedManyWithoutListInput
@@ -391,6 +404,7 @@ export type GameListUncheckedCreateInput = {
   color?: string | null
   accentColor?: string | null
   privacy?: string
+  commentsHidden?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   entries?: Prisma.GameListEntryUncheckedCreateNestedManyWithoutListInput
@@ -410,6 +424,7 @@ export type GameListUpdateInput = {
   color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accentColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacy?: Prisma.StringFieldUpdateOperationsInput | string
+  commentsHidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   entries?: Prisma.GameListEntryUpdateManyWithoutListNestedInput
@@ -431,6 +446,7 @@ export type GameListUncheckedUpdateInput = {
   color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accentColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacy?: Prisma.StringFieldUpdateOperationsInput | string
+  commentsHidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   entries?: Prisma.GameListEntryUncheckedUpdateManyWithoutListNestedInput
@@ -451,6 +467,7 @@ export type GameListCreateManyInput = {
   color?: string | null
   accentColor?: string | null
   privacy?: string
+  commentsHidden?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -469,6 +486,7 @@ export type GameListUpdateManyMutationInput = {
   color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accentColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacy?: Prisma.StringFieldUpdateOperationsInput | string
+  commentsHidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -488,6 +506,7 @@ export type GameListUncheckedUpdateManyInput = {
   color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accentColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacy?: Prisma.StringFieldUpdateOperationsInput | string
+  commentsHidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -522,6 +541,7 @@ export type GameListCountOrderByAggregateInput = {
   color?: Prisma.SortOrder
   accentColor?: Prisma.SortOrder
   privacy?: Prisma.SortOrder
+  commentsHidden?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -539,6 +559,7 @@ export type GameListMaxOrderByAggregateInput = {
   color?: Prisma.SortOrder
   accentColor?: Prisma.SortOrder
   privacy?: Prisma.SortOrder
+  commentsHidden?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -556,6 +577,7 @@ export type GameListMinOrderByAggregateInput = {
   color?: Prisma.SortOrder
   accentColor?: Prisma.SortOrder
   privacy?: Prisma.SortOrder
+  commentsHidden?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -657,6 +679,7 @@ export type GameListCreateWithoutUserInput = {
   color?: string | null
   accentColor?: string | null
   privacy?: string
+  commentsHidden?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   entries?: Prisma.GameListEntryCreateNestedManyWithoutListInput
@@ -676,6 +699,7 @@ export type GameListUncheckedCreateWithoutUserInput = {
   color?: string | null
   accentColor?: string | null
   privacy?: string
+  commentsHidden?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   entries?: Prisma.GameListEntryUncheckedCreateNestedManyWithoutListInput
@@ -725,6 +749,7 @@ export type GameListScalarWhereInput = {
   color?: Prisma.StringNullableFilter<"GameList"> | string | null
   accentColor?: Prisma.StringNullableFilter<"GameList"> | string | null
   privacy?: Prisma.StringFilter<"GameList"> | string
+  commentsHidden?: Prisma.BoolFilter<"GameList"> | boolean
   createdAt?: Prisma.DateTimeFilter<"GameList"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"GameList"> | Date | string
 }
@@ -743,6 +768,7 @@ export type GameListCreateWithoutEntriesInput = {
   color?: string | null
   accentColor?: string | null
   privacy?: string
+  commentsHidden?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutGameListsInput
@@ -763,6 +789,7 @@ export type GameListUncheckedCreateWithoutEntriesInput = {
   color?: string | null
   accentColor?: string | null
   privacy?: string
+  commentsHidden?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -797,6 +824,7 @@ export type GameListUpdateWithoutEntriesInput = {
   color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accentColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacy?: Prisma.StringFieldUpdateOperationsInput | string
+  commentsHidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutGameListsNestedInput
@@ -817,6 +845,7 @@ export type GameListUncheckedUpdateWithoutEntriesInput = {
   color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accentColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacy?: Prisma.StringFieldUpdateOperationsInput | string
+  commentsHidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -835,6 +864,7 @@ export type GameListCreateManyUserInput = {
   color?: string | null
   accentColor?: string | null
   privacy?: string
+  commentsHidden?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -853,6 +883,7 @@ export type GameListUpdateWithoutUserInput = {
   color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accentColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacy?: Prisma.StringFieldUpdateOperationsInput | string
+  commentsHidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   entries?: Prisma.GameListEntryUpdateManyWithoutListNestedInput
@@ -872,6 +903,7 @@ export type GameListUncheckedUpdateWithoutUserInput = {
   color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accentColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacy?: Prisma.StringFieldUpdateOperationsInput | string
+  commentsHidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   entries?: Prisma.GameListEntryUncheckedUpdateManyWithoutListNestedInput
@@ -891,6 +923,7 @@ export type GameListUncheckedUpdateManyWithoutUserInput = {
   color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accentColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacy?: Prisma.StringFieldUpdateOperationsInput | string
+  commentsHidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -941,6 +974,7 @@ export type GameListSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   color?: boolean
   accentColor?: boolean
   privacy?: boolean
+  commentsHidden?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   entries?: boolean | Prisma.GameList$entriesArgs<ExtArgs>
@@ -963,6 +997,7 @@ export type GameListSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   color?: boolean
   accentColor?: boolean
   privacy?: boolean
+  commentsHidden?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -983,6 +1018,7 @@ export type GameListSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   color?: boolean
   accentColor?: boolean
   privacy?: boolean
+  commentsHidden?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -1003,11 +1039,12 @@ export type GameListSelectScalar = {
   color?: boolean
   accentColor?: boolean
   privacy?: boolean
+  commentsHidden?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type GameListOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "type" | "displayMode" | "tierLabels" | "tierColors" | "name" | "slug" | "description" | "image" | "background" | "color" | "accentColor" | "privacy" | "createdAt" | "updatedAt", ExtArgs["result"]["gameList"]>
+export type GameListOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "type" | "displayMode" | "tierLabels" | "tierColors" | "name" | "slug" | "description" | "image" | "background" | "color" | "accentColor" | "privacy" | "commentsHidden" | "createdAt" | "updatedAt", ExtArgs["result"]["gameList"]>
 export type GameListInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   entries?: boolean | Prisma.GameList$entriesArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -1041,6 +1078,7 @@ export type $GameListPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     color: string | null
     accentColor: string | null
     privacy: string
+    commentsHidden: boolean
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["gameList"]>
@@ -1482,6 +1520,7 @@ export interface GameListFieldRefs {
   readonly color: Prisma.FieldRef<"GameList", 'String'>
   readonly accentColor: Prisma.FieldRef<"GameList", 'String'>
   readonly privacy: Prisma.FieldRef<"GameList", 'String'>
+  readonly commentsHidden: Prisma.FieldRef<"GameList", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"GameList", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"GameList", 'DateTime'>
 }

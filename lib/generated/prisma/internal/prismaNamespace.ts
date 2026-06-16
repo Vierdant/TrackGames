@@ -2034,6 +2034,8 @@ export const UserScalarFieldEnum = {
   socials: 'socials',
   preferences: 'preferences',
   widgets: 'widgets',
+  commentsHidden: 'commentsHidden',
+  roles: 'roles',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -2145,6 +2147,7 @@ export const GameListScalarFieldEnum = {
   color: 'color',
   accentColor: 'accentColor',
   privacy: 'privacy',
+  commentsHidden: 'commentsHidden',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -2387,6 +2390,27 @@ export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaM
 
 
 /**
+ * Reference to a field of type 'Boolean'
+ */
+export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+/**
+ * Reference to a field of type 'UserRole[]'
+ */
+export type ListEnumUserRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'UserRole[]'>
+    
+
+
+/**
+ * Reference to a field of type 'UserRole'
+ */
+export type EnumUserRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'UserRole'>
+    
+
+
+/**
  * Reference to a field of type 'Int'
  */
 export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
@@ -2439,13 +2463,6 @@ export type EnumGameStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$Prism
  * Reference to a field of type 'GameStatus[]'
  */
 export type ListEnumGameStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'GameStatus[]'>
-    
-
-
-/**
- * Reference to a field of type 'Boolean'
- */
-export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
 
 

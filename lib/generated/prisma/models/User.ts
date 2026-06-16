@@ -41,6 +41,7 @@ export type UserMinAggregateOutputType = {
   socials: string | null
   preferences: string | null
   widgets: string | null
+  commentsHidden: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -62,6 +63,7 @@ export type UserMaxAggregateOutputType = {
   socials: string | null
   preferences: string | null
   widgets: string | null
+  commentsHidden: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -83,6 +85,8 @@ export type UserCountAggregateOutputType = {
   socials: number
   preferences: number
   widgets: number
+  commentsHidden: number
+  roles: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -106,6 +110,7 @@ export type UserMinAggregateInputType = {
   socials?: true
   preferences?: true
   widgets?: true
+  commentsHidden?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -127,6 +132,7 @@ export type UserMaxAggregateInputType = {
   socials?: true
   preferences?: true
   widgets?: true
+  commentsHidden?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -148,6 +154,8 @@ export type UserCountAggregateInputType = {
   socials?: true
   preferences?: true
   widgets?: true
+  commentsHidden?: true
+  roles?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -242,6 +250,8 @@ export type UserGroupByOutputType = {
   socials: string | null
   preferences: string | null
   widgets: string | null
+  commentsHidden: boolean
+  roles: $Enums.UserRole[]
   createdAt: Date
   updatedAt: Date
   _count: UserCountAggregateOutputType | null
@@ -284,6 +294,8 @@ export type UserWhereInput = {
   socials?: Prisma.StringNullableFilter<"User"> | string | null
   preferences?: Prisma.StringNullableFilter<"User"> | string | null
   widgets?: Prisma.StringNullableFilter<"User"> | string | null
+  commentsHidden?: Prisma.BoolFilter<"User"> | boolean
+  roles?: Prisma.EnumUserRoleNullableListFilter<"User">
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   accounts?: Prisma.AccountListRelationFilter
@@ -317,6 +329,8 @@ export type UserOrderByWithRelationInput = {
   socials?: Prisma.SortOrderInput | Prisma.SortOrder
   preferences?: Prisma.SortOrderInput | Prisma.SortOrder
   widgets?: Prisma.SortOrderInput | Prisma.SortOrder
+  commentsHidden?: Prisma.SortOrder
+  roles?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   accounts?: Prisma.AccountOrderByRelationAggregateInput
@@ -353,6 +367,8 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   socials?: Prisma.StringNullableFilter<"User"> | string | null
   preferences?: Prisma.StringNullableFilter<"User"> | string | null
   widgets?: Prisma.StringNullableFilter<"User"> | string | null
+  commentsHidden?: Prisma.BoolFilter<"User"> | boolean
+  roles?: Prisma.EnumUserRoleNullableListFilter<"User">
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   accounts?: Prisma.AccountListRelationFilter
@@ -386,6 +402,8 @@ export type UserOrderByWithAggregationInput = {
   socials?: Prisma.SortOrderInput | Prisma.SortOrder
   preferences?: Prisma.SortOrderInput | Prisma.SortOrder
   widgets?: Prisma.SortOrderInput | Prisma.SortOrder
+  commentsHidden?: Prisma.SortOrder
+  roles?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.UserCountOrderByAggregateInput
@@ -413,6 +431,8 @@ export type UserScalarWhereWithAggregatesInput = {
   socials?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   preferences?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   widgets?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  commentsHidden?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
+  roles?: Prisma.EnumUserRoleNullableListFilter<"User">
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
 }
@@ -434,6 +454,8 @@ export type UserCreateInput = {
   socials?: string | null
   preferences?: string | null
   widgets?: string | null
+  commentsHidden?: boolean
+  roles?: Prisma.UserCreaterolesInput | $Enums.UserRole[]
   createdAt?: Date | string
   updatedAt?: Date | string
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
@@ -467,6 +489,8 @@ export type UserUncheckedCreateInput = {
   socials?: string | null
   preferences?: string | null
   widgets?: string | null
+  commentsHidden?: boolean
+  roles?: Prisma.UserCreaterolesInput | $Enums.UserRole[]
   createdAt?: Date | string
   updatedAt?: Date | string
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
@@ -500,6 +524,8 @@ export type UserUpdateInput = {
   socials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   preferences?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   widgets?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  commentsHidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  roles?: Prisma.UserUpdaterolesInput | $Enums.UserRole[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
@@ -533,6 +559,8 @@ export type UserUncheckedUpdateInput = {
   socials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   preferences?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   widgets?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  commentsHidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  roles?: Prisma.UserUpdaterolesInput | $Enums.UserRole[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
@@ -566,6 +594,8 @@ export type UserCreateManyInput = {
   socials?: string | null
   preferences?: string | null
   widgets?: string | null
+  commentsHidden?: boolean
+  roles?: Prisma.UserCreaterolesInput | $Enums.UserRole[]
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -587,6 +617,8 @@ export type UserUpdateManyMutationInput = {
   socials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   preferences?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   widgets?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  commentsHidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  roles?: Prisma.UserUpdaterolesInput | $Enums.UserRole[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -608,8 +640,18 @@ export type UserUncheckedUpdateManyInput = {
   socials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   preferences?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   widgets?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  commentsHidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  roles?: Prisma.UserUpdaterolesInput | $Enums.UserRole[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type EnumUserRoleNullableListFilter<$PrismaModel = never> = {
+  equals?: $Enums.UserRole[] | Prisma.ListEnumUserRoleFieldRefInput<$PrismaModel> | null
+  has?: $Enums.UserRole | Prisma.EnumUserRoleFieldRefInput<$PrismaModel> | null
+  hasEvery?: $Enums.UserRole[] | Prisma.ListEnumUserRoleFieldRefInput<$PrismaModel>
+  hasSome?: $Enums.UserRole[] | Prisma.ListEnumUserRoleFieldRefInput<$PrismaModel>
+  isEmpty?: boolean
 }
 
 export type UserCountOrderByAggregateInput = {
@@ -629,6 +671,8 @@ export type UserCountOrderByAggregateInput = {
   socials?: Prisma.SortOrder
   preferences?: Prisma.SortOrder
   widgets?: Prisma.SortOrder
+  commentsHidden?: Prisma.SortOrder
+  roles?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -650,6 +694,7 @@ export type UserMaxOrderByAggregateInput = {
   socials?: Prisma.SortOrder
   preferences?: Prisma.SortOrder
   widgets?: Prisma.SortOrder
+  commentsHidden?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -671,6 +716,7 @@ export type UserMinOrderByAggregateInput = {
   socials?: Prisma.SortOrder
   preferences?: Prisma.SortOrder
   widgets?: Prisma.SortOrder
+  commentsHidden?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -685,6 +731,10 @@ export type UserNullableScalarRelationFilter = {
   isNot?: Prisma.UserWhereInput | null
 }
 
+export type UserCreaterolesInput = {
+  set: $Enums.UserRole[]
+}
+
 export type StringFieldUpdateOperationsInput = {
   set?: string
 }
@@ -695,6 +745,15 @@ export type NullableStringFieldUpdateOperationsInput = {
 
 export type NullableDateTimeFieldUpdateOperationsInput = {
   set?: Date | string | null
+}
+
+export type BoolFieldUpdateOperationsInput = {
+  set?: boolean
+}
+
+export type UserUpdaterolesInput = {
+  set?: $Enums.UserRole[]
+  push?: $Enums.UserRole | $Enums.UserRole[]
 }
 
 export type DateTimeFieldUpdateOperationsInput = {
@@ -888,6 +947,8 @@ export type UserCreateWithoutAccountsInput = {
   socials?: string | null
   preferences?: string | null
   widgets?: string | null
+  commentsHidden?: boolean
+  roles?: Prisma.UserCreaterolesInput | $Enums.UserRole[]
   createdAt?: Date | string
   updatedAt?: Date | string
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
@@ -920,6 +981,8 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   socials?: string | null
   preferences?: string | null
   widgets?: string | null
+  commentsHidden?: boolean
+  roles?: Prisma.UserCreaterolesInput | $Enums.UserRole[]
   createdAt?: Date | string
   updatedAt?: Date | string
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
@@ -968,6 +1031,8 @@ export type UserUpdateWithoutAccountsInput = {
   socials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   preferences?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   widgets?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  commentsHidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  roles?: Prisma.UserUpdaterolesInput | $Enums.UserRole[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
@@ -1000,6 +1065,8 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   socials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   preferences?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   widgets?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  commentsHidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  roles?: Prisma.UserUpdaterolesInput | $Enums.UserRole[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
@@ -1032,6 +1099,8 @@ export type UserCreateWithoutSessionsInput = {
   socials?: string | null
   preferences?: string | null
   widgets?: string | null
+  commentsHidden?: boolean
+  roles?: Prisma.UserCreaterolesInput | $Enums.UserRole[]
   createdAt?: Date | string
   updatedAt?: Date | string
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
@@ -1064,6 +1133,8 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   socials?: string | null
   preferences?: string | null
   widgets?: string | null
+  commentsHidden?: boolean
+  roles?: Prisma.UserCreaterolesInput | $Enums.UserRole[]
   createdAt?: Date | string
   updatedAt?: Date | string
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
@@ -1112,6 +1183,8 @@ export type UserUpdateWithoutSessionsInput = {
   socials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   preferences?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   widgets?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  commentsHidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  roles?: Prisma.UserUpdaterolesInput | $Enums.UserRole[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
@@ -1144,6 +1217,8 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   socials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   preferences?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   widgets?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  commentsHidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  roles?: Prisma.UserUpdaterolesInput | $Enums.UserRole[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
@@ -1176,6 +1251,8 @@ export type UserCreateWithoutGamesInput = {
   socials?: string | null
   preferences?: string | null
   widgets?: string | null
+  commentsHidden?: boolean
+  roles?: Prisma.UserCreaterolesInput | $Enums.UserRole[]
   createdAt?: Date | string
   updatedAt?: Date | string
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
@@ -1208,6 +1285,8 @@ export type UserUncheckedCreateWithoutGamesInput = {
   socials?: string | null
   preferences?: string | null
   widgets?: string | null
+  commentsHidden?: boolean
+  roles?: Prisma.UserCreaterolesInput | $Enums.UserRole[]
   createdAt?: Date | string
   updatedAt?: Date | string
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
@@ -1256,6 +1335,8 @@ export type UserUpdateWithoutGamesInput = {
   socials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   preferences?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   widgets?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  commentsHidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  roles?: Prisma.UserUpdaterolesInput | $Enums.UserRole[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
@@ -1288,6 +1369,8 @@ export type UserUncheckedUpdateWithoutGamesInput = {
   socials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   preferences?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   widgets?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  commentsHidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  roles?: Prisma.UserUpdaterolesInput | $Enums.UserRole[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
@@ -1320,6 +1403,8 @@ export type UserCreateWithoutGameListsInput = {
   socials?: string | null
   preferences?: string | null
   widgets?: string | null
+  commentsHidden?: boolean
+  roles?: Prisma.UserCreaterolesInput | $Enums.UserRole[]
   createdAt?: Date | string
   updatedAt?: Date | string
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
@@ -1352,6 +1437,8 @@ export type UserUncheckedCreateWithoutGameListsInput = {
   socials?: string | null
   preferences?: string | null
   widgets?: string | null
+  commentsHidden?: boolean
+  roles?: Prisma.UserCreaterolesInput | $Enums.UserRole[]
   createdAt?: Date | string
   updatedAt?: Date | string
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
@@ -1400,6 +1487,8 @@ export type UserUpdateWithoutGameListsInput = {
   socials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   preferences?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   widgets?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  commentsHidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  roles?: Prisma.UserUpdaterolesInput | $Enums.UserRole[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
@@ -1432,6 +1521,8 @@ export type UserUncheckedUpdateWithoutGameListsInput = {
   socials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   preferences?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   widgets?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  commentsHidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  roles?: Prisma.UserUpdaterolesInput | $Enums.UserRole[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
@@ -1464,6 +1555,8 @@ export type UserCreateWithoutActivitiesInput = {
   socials?: string | null
   preferences?: string | null
   widgets?: string | null
+  commentsHidden?: boolean
+  roles?: Prisma.UserCreaterolesInput | $Enums.UserRole[]
   createdAt?: Date | string
   updatedAt?: Date | string
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
@@ -1496,6 +1589,8 @@ export type UserUncheckedCreateWithoutActivitiesInput = {
   socials?: string | null
   preferences?: string | null
   widgets?: string | null
+  commentsHidden?: boolean
+  roles?: Prisma.UserCreaterolesInput | $Enums.UserRole[]
   createdAt?: Date | string
   updatedAt?: Date | string
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
@@ -1544,6 +1639,8 @@ export type UserUpdateWithoutActivitiesInput = {
   socials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   preferences?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   widgets?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  commentsHidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  roles?: Prisma.UserUpdaterolesInput | $Enums.UserRole[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
@@ -1576,6 +1673,8 @@ export type UserUncheckedUpdateWithoutActivitiesInput = {
   socials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   preferences?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   widgets?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  commentsHidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  roles?: Prisma.UserUpdaterolesInput | $Enums.UserRole[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
@@ -1608,6 +1707,8 @@ export type UserCreateWithoutLikesInput = {
   socials?: string | null
   preferences?: string | null
   widgets?: string | null
+  commentsHidden?: boolean
+  roles?: Prisma.UserCreaterolesInput | $Enums.UserRole[]
   createdAt?: Date | string
   updatedAt?: Date | string
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
@@ -1640,6 +1741,8 @@ export type UserUncheckedCreateWithoutLikesInput = {
   socials?: string | null
   preferences?: string | null
   widgets?: string | null
+  commentsHidden?: boolean
+  roles?: Prisma.UserCreaterolesInput | $Enums.UserRole[]
   createdAt?: Date | string
   updatedAt?: Date | string
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
@@ -1688,6 +1791,8 @@ export type UserUpdateWithoutLikesInput = {
   socials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   preferences?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   widgets?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  commentsHidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  roles?: Prisma.UserUpdaterolesInput | $Enums.UserRole[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
@@ -1720,6 +1825,8 @@ export type UserUncheckedUpdateWithoutLikesInput = {
   socials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   preferences?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   widgets?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  commentsHidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  roles?: Prisma.UserUpdaterolesInput | $Enums.UserRole[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
@@ -1752,6 +1859,8 @@ export type UserCreateWithoutCommentsInput = {
   socials?: string | null
   preferences?: string | null
   widgets?: string | null
+  commentsHidden?: boolean
+  roles?: Prisma.UserCreaterolesInput | $Enums.UserRole[]
   createdAt?: Date | string
   updatedAt?: Date | string
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
@@ -1784,6 +1893,8 @@ export type UserUncheckedCreateWithoutCommentsInput = {
   socials?: string | null
   preferences?: string | null
   widgets?: string | null
+  commentsHidden?: boolean
+  roles?: Prisma.UserCreaterolesInput | $Enums.UserRole[]
   createdAt?: Date | string
   updatedAt?: Date | string
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
@@ -1832,6 +1943,8 @@ export type UserUpdateWithoutCommentsInput = {
   socials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   preferences?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   widgets?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  commentsHidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  roles?: Prisma.UserUpdaterolesInput | $Enums.UserRole[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
@@ -1864,6 +1977,8 @@ export type UserUncheckedUpdateWithoutCommentsInput = {
   socials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   preferences?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   widgets?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  commentsHidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  roles?: Prisma.UserUpdaterolesInput | $Enums.UserRole[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
@@ -1896,6 +2011,8 @@ export type UserCreateWithoutFollowingInput = {
   socials?: string | null
   preferences?: string | null
   widgets?: string | null
+  commentsHidden?: boolean
+  roles?: Prisma.UserCreaterolesInput | $Enums.UserRole[]
   createdAt?: Date | string
   updatedAt?: Date | string
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
@@ -1928,6 +2045,8 @@ export type UserUncheckedCreateWithoutFollowingInput = {
   socials?: string | null
   preferences?: string | null
   widgets?: string | null
+  commentsHidden?: boolean
+  roles?: Prisma.UserCreaterolesInput | $Enums.UserRole[]
   createdAt?: Date | string
   updatedAt?: Date | string
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
@@ -1965,6 +2084,8 @@ export type UserCreateWithoutFollowersInput = {
   socials?: string | null
   preferences?: string | null
   widgets?: string | null
+  commentsHidden?: boolean
+  roles?: Prisma.UserCreaterolesInput | $Enums.UserRole[]
   createdAt?: Date | string
   updatedAt?: Date | string
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
@@ -1997,6 +2118,8 @@ export type UserUncheckedCreateWithoutFollowersInput = {
   socials?: string | null
   preferences?: string | null
   widgets?: string | null
+  commentsHidden?: boolean
+  roles?: Prisma.UserCreaterolesInput | $Enums.UserRole[]
   createdAt?: Date | string
   updatedAt?: Date | string
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
@@ -2045,6 +2168,8 @@ export type UserUpdateWithoutFollowingInput = {
   socials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   preferences?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   widgets?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  commentsHidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  roles?: Prisma.UserUpdaterolesInput | $Enums.UserRole[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
@@ -2077,6 +2202,8 @@ export type UserUncheckedUpdateWithoutFollowingInput = {
   socials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   preferences?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   widgets?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  commentsHidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  roles?: Prisma.UserUpdaterolesInput | $Enums.UserRole[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
@@ -2120,6 +2247,8 @@ export type UserUpdateWithoutFollowersInput = {
   socials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   preferences?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   widgets?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  commentsHidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  roles?: Prisma.UserUpdaterolesInput | $Enums.UserRole[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
@@ -2152,6 +2281,8 @@ export type UserUncheckedUpdateWithoutFollowersInput = {
   socials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   preferences?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   widgets?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  commentsHidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  roles?: Prisma.UserUpdaterolesInput | $Enums.UserRole[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
@@ -2184,6 +2315,8 @@ export type UserCreateWithoutBadgesInput = {
   socials?: string | null
   preferences?: string | null
   widgets?: string | null
+  commentsHidden?: boolean
+  roles?: Prisma.UserCreaterolesInput | $Enums.UserRole[]
   createdAt?: Date | string
   updatedAt?: Date | string
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
@@ -2216,6 +2349,8 @@ export type UserUncheckedCreateWithoutBadgesInput = {
   socials?: string | null
   preferences?: string | null
   widgets?: string | null
+  commentsHidden?: boolean
+  roles?: Prisma.UserCreaterolesInput | $Enums.UserRole[]
   createdAt?: Date | string
   updatedAt?: Date | string
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
@@ -2264,6 +2399,8 @@ export type UserUpdateWithoutBadgesInput = {
   socials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   preferences?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   widgets?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  commentsHidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  roles?: Prisma.UserUpdaterolesInput | $Enums.UserRole[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
@@ -2296,6 +2433,8 @@ export type UserUncheckedUpdateWithoutBadgesInput = {
   socials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   preferences?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   widgets?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  commentsHidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  roles?: Prisma.UserUpdaterolesInput | $Enums.UserRole[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
@@ -2328,6 +2467,8 @@ export type UserCreateWithoutNotificationsInput = {
   socials?: string | null
   preferences?: string | null
   widgets?: string | null
+  commentsHidden?: boolean
+  roles?: Prisma.UserCreaterolesInput | $Enums.UserRole[]
   createdAt?: Date | string
   updatedAt?: Date | string
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
@@ -2360,6 +2501,8 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   socials?: string | null
   preferences?: string | null
   widgets?: string | null
+  commentsHidden?: boolean
+  roles?: Prisma.UserCreaterolesInput | $Enums.UserRole[]
   createdAt?: Date | string
   updatedAt?: Date | string
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
@@ -2397,6 +2540,8 @@ export type UserCreateWithoutSentNotificationsInput = {
   socials?: string | null
   preferences?: string | null
   widgets?: string | null
+  commentsHidden?: boolean
+  roles?: Prisma.UserCreaterolesInput | $Enums.UserRole[]
   createdAt?: Date | string
   updatedAt?: Date | string
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
@@ -2429,6 +2574,8 @@ export type UserUncheckedCreateWithoutSentNotificationsInput = {
   socials?: string | null
   preferences?: string | null
   widgets?: string | null
+  commentsHidden?: boolean
+  roles?: Prisma.UserCreaterolesInput | $Enums.UserRole[]
   createdAt?: Date | string
   updatedAt?: Date | string
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
@@ -2477,6 +2624,8 @@ export type UserUpdateWithoutNotificationsInput = {
   socials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   preferences?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   widgets?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  commentsHidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  roles?: Prisma.UserUpdaterolesInput | $Enums.UserRole[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
@@ -2509,6 +2658,8 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   socials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   preferences?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   widgets?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  commentsHidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  roles?: Prisma.UserUpdaterolesInput | $Enums.UserRole[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
@@ -2552,6 +2703,8 @@ export type UserUpdateWithoutSentNotificationsInput = {
   socials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   preferences?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   widgets?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  commentsHidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  roles?: Prisma.UserUpdaterolesInput | $Enums.UserRole[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
@@ -2584,6 +2737,8 @@ export type UserUncheckedUpdateWithoutSentNotificationsInput = {
   socials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   preferences?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   widgets?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  commentsHidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  roles?: Prisma.UserUpdaterolesInput | $Enums.UserRole[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
@@ -2746,6 +2901,8 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   socials?: boolean
   preferences?: boolean
   widgets?: boolean
+  commentsHidden?: boolean
+  roles?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   accounts?: boolean | Prisma.User$accountsArgs<ExtArgs>
@@ -2780,6 +2937,8 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   socials?: boolean
   preferences?: boolean
   widgets?: boolean
+  commentsHidden?: boolean
+  roles?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["user"]>
@@ -2801,6 +2960,8 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   socials?: boolean
   preferences?: boolean
   widgets?: boolean
+  commentsHidden?: boolean
+  roles?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["user"]>
@@ -2822,11 +2983,13 @@ export type UserSelectScalar = {
   socials?: boolean
   preferences?: boolean
   widgets?: boolean
+  commentsHidden?: boolean
+  roles?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "emailVerified" | "passwordHash" | "image" | "background" | "bio" | "profileColor" | "accentColor" | "privacy" | "contactEmail" | "website" | "socials" | "preferences" | "widgets" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "emailVerified" | "passwordHash" | "image" | "background" | "bio" | "profileColor" | "accentColor" | "privacy" | "contactEmail" | "website" | "socials" | "preferences" | "widgets" | "commentsHidden" | "roles" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   accounts?: boolean | Prisma.User$accountsArgs<ExtArgs>
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
@@ -2878,6 +3041,8 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     socials: string | null
     preferences: string | null
     widgets: string | null
+    commentsHidden: boolean
+    roles: $Enums.UserRole[]
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["user"]>
@@ -3331,6 +3496,8 @@ export interface UserFieldRefs {
   readonly socials: Prisma.FieldRef<"User", 'String'>
   readonly preferences: Prisma.FieldRef<"User", 'String'>
   readonly widgets: Prisma.FieldRef<"User", 'String'>
+  readonly commentsHidden: Prisma.FieldRef<"User", 'Boolean'>
+  readonly roles: Prisma.FieldRef<"User", 'UserRole[]'>
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"User", 'DateTime'>
 }

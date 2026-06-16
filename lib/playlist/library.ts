@@ -15,6 +15,7 @@ const listSelect = {
     color: true,
     accentColor: true,
     privacy: true,
+    commentsHidden: true,
     entries: true
 }
 

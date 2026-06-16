@@ -18,6 +18,8 @@ import { getPlatform } from "@/lib/data/platforms";
 import { auth } from "@/lib/auth";
 import { getUserGameEntry } from "@/lib/data/library";
 import { ratingToFive } from "@/lib/util/rating";
+import CommentSection from "@/app/components/comments/CommentSection";
+import { InteractionTargetType } from "@/lib/generated/prisma/enums";
 
 function platformIcon(name: string) {
     const lower = name.toLowerCase();
@@ -275,6 +277,9 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
             <section className="w-full mt-20 mb-10">
                 <Container>
                     <RelatedGamesTabs franchiesGames={franchiseGames} seriesGames={collectionsGames} similarGames={similarGames} />
+                    <div className="mt-10">
+                        <CommentSection targetType={InteractionTargetType.GAME} targetId={game.id!.toString()} />
+                    </div>
                 </Container>
             </section>
         </div>

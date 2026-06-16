@@ -3,8 +3,11 @@ import Container from "@/app/components/layout/Container";
 import { SocialLink } from "@/lib/types";
 import { GhostButton, PrimaryButton } from "../ui/Buttons";
 import AvatarPreview from "./AvatarView";
+import FollowButton from "../social/FollowButton";
+import RoleTags from "./RoleTags";
+import { UserRole } from "@/lib/generated/prisma/enums";
 
-export default function ProfileHeader({ owned, isSettings, profileImage, displayName, socials = [], bio }: { owned?: boolean; isSettings?: boolean; profileImage: string | null | undefined; displayName: string; socials?: SocialLink[]; bio?: string; }) {
+export default function ProfileHeader({ owned, isSettings, profileImage, displayName, socials = [], bio, roles = [], followUserId, isFollowing = false, loggedIn = false }: { owned?: boolean; isSettings?: boolean; profileImage: string | null | undefined; displayName: string; socials?: SocialLink[]; bio?: string; roles?: UserRole[]; followUserId?: string; isFollowing?: boolean; loggedIn?: boolean; }) {
     return (
         <section className="relative z-10 w-full bg-bg/95 border-b border-border">
             <Container className="relative z-1 flex flex-row items-end justify-start gap-10 pt-5">
@@ -15,6 +18,7 @@ export default function ProfileHeader({ owned, isSettings, profileImage, display
                         <div className="min-w-0 flex-1 flex-col justify-between">
                             <div className="mb-5 flex min-w-0 flex-col gap-2 md:flex-row md:items-center md:gap-3">
                                 <h1 className="max-w-full wrap-break-word text-3xl md:text-4xl font-bold">{displayName}</h1>
+                                <RoleTags roles={roles} />
                                 <SocialIconLinks socials={socials} />
                             </div>
                             {bio && <p className="max-w-full wrap-break-word text-sm md:text-md font-body">{bio}</p>}
@@ -26,6 +30,8 @@ export default function ProfileHeader({ owned, isSettings, profileImage, display
                                 <>
                                     {owned ? (
                                         <GhostButton href="/settings">Settings</GhostButton>
+                                    ) : followUserId ? (
+                                        <FollowButton userId={followUserId} initiallyFollowing={isFollowing} loggedIn={loggedIn} />
                                     ) : (
                                         <PrimaryButton>Follow</PrimaryButton>
                                     )}

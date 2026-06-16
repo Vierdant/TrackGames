@@ -87,6 +87,7 @@ export type LikeTargetType = (typeof LikeTargetType)[keyof typeof LikeTargetType
 
 export const NotificationType = {
   COMMENT_REPLY: 'COMMENT_REPLY',
+  COMMENTED_ON_PROFILE: 'COMMENTED_ON_PROFILE',
   RECEIVED_LIKE: 'RECEIVED_LIKE',
   FOLLOWED_USER: 'FOLLOWED_USER',
   FOLLOWING_CREATED_LIST: 'FOLLOWING_CREATED_LIST',
@@ -94,3 +95,12 @@ export const NotificationType = {
 } as const
 
 export type NotificationType = (typeof NotificationType)[keyof typeof NotificationType]
+
+
+export const UserRole = {
+  ADMIN: 'ADMIN',
+  STAFF: 'STAFF',
+  VIP: 'VIP'
+} as const
+
+export type UserRole = (typeof UserRole)[keyof typeof UserRole]

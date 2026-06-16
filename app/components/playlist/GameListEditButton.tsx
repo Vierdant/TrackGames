@@ -7,9 +7,9 @@ import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { createPortal } from "react-dom";
 import { GhostButton, PrimaryButton } from "../ui/Buttons";
-import { Input, Select, Textarea } from "../ui/Inputs";
+import { Checkbox, Input, Select, Textarea } from "../ui/Inputs";
 
-export default function GameListEditButton({ list }: { list: Pick<GameList, "id" | "type" | "name" | "description" | "image" | "background" | "color" | "accentColor" | "privacy"> }) {
+export default function GameListEditButton({ list }: { list: Pick<GameList, "id" | "type" | "name" | "description" | "image" | "background" | "color" | "accentColor" | "privacy" | "commentsHidden"> }) {
     const [open, setOpen] = useState(false);
     const [pending, startTransition] = useTransition();
     const router = useRouter();
@@ -74,6 +74,10 @@ export default function GameListEditButton({ list }: { list: Pick<GameList, "id"
                                     <option value="public">Public</option>
                                     <option value="private">Private</option>
                                 </Select>
+                            </label>
+                            <label className="flex items-center gap-2 text-sm font-bold text-text-muted">
+                                <Checkbox name="commentsHidden" defaultChecked={list.commentsHidden} />
+                                Hide comments
                             </label>
                             <div className="mt-2 flex flex-wrap justify-between gap-2">
                                 {canDelete && (

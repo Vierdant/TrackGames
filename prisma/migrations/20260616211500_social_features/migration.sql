@@ -1,0 +1,2 @@
+ALTER TABLE "User" ADD COLUMN "commentsHidden" BOOLEAN NOT NULL DEFAULT false;
+ALTER TABLE "GameList" ADD COLUMN "commentsHidden" BOOLEAN NOT NULL DEFAULT false;

@@ -12,7 +12,9 @@ import TierLabelsForm from "./TierLabelsForm";
 import GameListEditButton from "@/app/components/playlist/GameListEditButton";
 import { profileThemeStyle } from "@/lib/account/user";
 import CommentSection from "@/app/components/comments/CommentSection";
-import { InteractionTargetType } from "@/lib/generated/prisma/enums";
+import { InteractionTargetType, LikeTargetType } from "@/lib/generated/prisma/enums";
+import LikeButton from "@/app/components/social/LikeButton";
+import { getPlaylistLikeState } from "@/lib/data/social";
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
@@ -24,7 +26,10 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
 
     const canEdit = session?.user?.id === playlist.userId;
     const gameIds = playlist.entries.map((entry) => entry.gameId);
-    const ownedCount = await getPlaylistLibraryCount(session?.user?.id, gameIds);
+    const [ownedCount, likeState] = await Promise.all([
+        getPlaylistLibraryCount(session?.user?.id, gameIds),
+        getPlaylistLikeState(playlist.id, session?.user?.id),
+    ]);
     const ownedPercent = playlist.entries.length ? Math.round((ownedCount / playlist.entries.length) * 100) : 0;
     const modeAction = updatePlaylistDisplayMode.bind(null, playlist.id);
     const tiers = playlist.tierLabels.length ? playlist.tierLabels : ["S", "A", "B", "C", "D"];
@@ -45,6 +50,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                                 <p className="text-md text-text-muted">{playlist.description || "No description."}</p>
                             </div>
                             <div className="flex shrink-0 flex-row flex-wrap justify-end gap-3 md:gap-5">
+                                <LikeButton targetType={LikeTargetType.GAME_LIST} targetId={playlist.id} initialLikes={likeState.likes} initiallyLiked={likeState.liked} loggedIn={Boolean(session?.user?.id)} />
                                 {canEdit && <GameListEditButton list={playlist} />}
                                 {playlist.user?.name && <GhostButton href={`/u/${playlist.user.name}`}>View Profile</GhostButton>}
                             </div>
@@ -56,7 +62,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                     <Container className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_18rem] lg:items-start">
                         <div className="flex min-w-0 flex-col gap-5">
                             <PlaylistEntriesView listId={playlist.id} entries={playlist.entries} mode={playlist.displayMode} canEdit={canEdit} tiers={tiers} tierColors={tierColors} />
-                            <CommentSection targetType={InteractionTargetType.GAME_LIST} targetId={playlist.id} />
+                            {!playlist.commentsHidden && <CommentSection targetType={InteractionTargetType.GAME_LIST} targetId={playlist.id} />}
                         </div>
 
                         <aside className="flex flex-col gap-4 border-l border-border">

@@ -321,6 +321,7 @@ export async function updateGameListSettings(listId: string, formData: FormData)
             color: color(formData.get("color")),
             accentColor: color(formData.get("accentColor")),
             privacy: String(formData.get("privacy") ?? "public") === "private" ? "private" : "public",
+            commentsHidden: formData.get("commentsHidden") === "on",
         },
     });
 

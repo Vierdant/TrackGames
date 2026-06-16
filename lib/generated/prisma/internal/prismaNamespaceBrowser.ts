@@ -107,6 +107,8 @@ export const UserScalarFieldEnum = {
   socials: 'socials',
   preferences: 'preferences',
   widgets: 'widgets',
+  commentsHidden: 'commentsHidden',
+  roles: 'roles',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -218,6 +220,7 @@ export const GameListScalarFieldEnum = {
   color: 'color',
   accentColor: 'accentColor',
   privacy: 'privacy',
+  commentsHidden: 'commentsHidden',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

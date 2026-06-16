@@ -16,6 +16,7 @@ export async function getComments(targetType: InteractionTargetType, targetId: s
                     id: true,
                     name: true,
                     image: true,
+                    roles: true,
                 },
             },
         },

@@ -50,6 +50,16 @@
     "slug": "the-seven-days-i-spent-with-you"
   },
   {
+    "id": 392773,
+    "cover": {
+      "id": 546356,
+      "image_id": "cobpkk"
+    },
+    "first_release_date": 1781654400,
+    "name": "Bee Streamer Idler",
+    "slug": "bee-streamer-idler"
+  },
+  {
     "id": 401559,
     "cover": {
       "id": 562737,
@@ -972,15 +982,5 @@
     "first_release_date": 1782172800,
     "name": "Deadwave",
     "slug": "deadwave"
-  },
-  {
-    "id": 403184,
-    "cover": {
-      "id": 565660,
-      "image_id": "coc4gs"
-    },
-    "first_release_date": 1782172800,
-    "name": "Raccoon Packer",
-    "slug": "raccoon-packer"
   }
 ]

@@ -34,6 +34,10 @@ export async function addComment(targetType: InteractionTargetType, targetId: st
         throw new Error("Comment is required.");
     }
 
+    if (content.length > 2000) {
+        throw new Error("Comments must be 2000 characters or fewer.");
+    }
+
     if (parentId) {
         const parent = await db.comment.findFirst({
             where: {
@@ -57,7 +61,7 @@ export async function addComment(targetType: InteractionTargetType, targetId: st
                 targetType,
                 targetId,
                 parentId,
-                content: content.slice(0, 2000),
+                content,
             },
         });
 
@@ -93,7 +97,7 @@ export async function addComment(targetType: InteractionTargetType, targetId: st
             userId,
             targetType,
             targetId,
-            content: content.slice(0, 2000),
+            content,
         },
     });
 
@@ -107,6 +111,19 @@ export async function addComment(targetType: InteractionTargetType, targetId: st
             expiresAt: activityExpiry(),
         },
     });
+
+    if (targetType === InteractionTargetType.USER_PROFILE && targetId !== userId) {
+        await db.notification.create({
+            data: {
+                userId: targetId,
+                actorId: userId,
+                type: NotificationType.COMMENTED_ON_PROFILE,
+                targetType,
+                targetId,
+                commentId: comment.id,
+            },
+        });
+    }
 }
 
 export async function toggleLike(targetType: LikeTargetType, targetId: string) {
@@ -173,4 +190,108 @@ export async function toggleLike(targetType: LikeTargetType, targetId: string) {
             },
         });
     }
+}
+
+export async function deleteComment(commentId: string) {
+    const userId = await getCurrentUserId();
+    const comment = await db.comment.findUnique({
+        where: {
+            id: commentId,
+        },
+        select: {
+            id: true,
+            userId: true,
+        },
+    });
+
+    if (!comment || comment.userId !== userId) {
+        throw new Error("Comment not found.");
+    }
+
+    await db.$transaction([
+        db.like.deleteMany({
+            where: {
+                targetType: LikeTargetType.COMMENT,
+                targetId: comment.id,
+            },
+        }),
+        db.comment.delete({
+            where: {
+                id: comment.id,
+            },
+        }),
+    ]);
+}
+
+export async function toggleFollow(userIdToFollow: string) {
+    const userId = await getCurrentUserId();
+
+    if (userId === userIdToFollow) {
+        throw new Error("You cannot follow yourself.");
+    }
+
+    const existing = await db.userFollow.findUnique({
+        where: {
+            followerId_followingId: {
+                followerId: userId,
+                followingId: userIdToFollow,
+            },
+        },
+        select: {
+            id: true,
+        },
+    });
+
+    if (existing) {
+        await db.userFollow.delete({
+            where: {
+                id: existing.id,
+            },
+        });
+
+        return { following: false };
+    }
+
+    await db.userFollow.create({
+        data: {
+            followerId: userId,
+            followingId: userIdToFollow,
+        },
+    });
+
+    await db.activity.create({
+        data: {
+            userId,
+            type: ActivityType.FOLLOWED_USER,
+            targetType: InteractionTargetType.USER_PROFILE,
+            targetId: userIdToFollow,
+            expiresAt: activityExpiry(),
+        },
+    });
+
+    await db.notification.create({
+        data: {
+            userId: userIdToFollow,
+            actorId: userId,
+            type: NotificationType.FOLLOWED_USER,
+            targetType: InteractionTargetType.USER_PROFILE,
+            targetId: userId,
+        },
+    });
+
+    return { following: true };
+}
+
+export async function markNotificationsRead() {
+    const userId = await getCurrentUserId();
+
+    await db.notification.updateMany({
+        where: {
+            userId,
+            readAt: null,
+        },
+        data: {
+            readAt: new Date(),
+        },
+    });
 }

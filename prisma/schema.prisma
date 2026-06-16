@@ -24,6 +24,8 @@ model User {
   socials       String?   @db.Text
   preferences   String?   @db.Text
   widgets       String?   @db.Text
+  commentsHidden Boolean  @default(false)
+  roles         UserRole[] @default([])
   accounts      Account[]
   sessions      Session[]
 
@@ -155,6 +157,7 @@ model GameList {
   color       String?
   accentColor String?
   privacy     String            @default("public")
+  commentsHidden Boolean        @default(false)
   entries     GameListEntry[]
   createdAt   DateTime          @default(now())
   updatedAt   DateTime          @updatedAt
@@ -440,8 +443,15 @@ enum LikeTargetType {
 
 enum NotificationType {
   COMMENT_REPLY
+  COMMENTED_ON_PROFILE
   RECEIVED_LIKE
   FOLLOWED_USER
   FOLLOWING_CREATED_LIST
   EARNED_BADGE
+}
+
+enum UserRole {
+  ADMIN
+  STAFF
+  VIP
 }

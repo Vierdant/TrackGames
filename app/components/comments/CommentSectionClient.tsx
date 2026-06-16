@@ -1,14 +1,14 @@
 "use client";
 
 import AvatarView from "@/app/components/user/AvatarView";
-import { addComment, toggleLike } from "@/lib/actions/social";
-import { InteractionTargetType, LikeTargetType } from "@/lib/generated/prisma/enums";
-import { Heart, MessageCircle, Send } from "lucide-react";
+import { addComment, deleteComment, toggleLike } from "@/lib/actions/social";
+import { InteractionTargetType, LikeTargetType, UserRole } from "@/lib/generated/prisma/enums";
+import { Heart, MessageCircle, Send, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useRef, useState, useTransition } from "react";
-import { GhostButton, PrimaryButton } from "../ui/Buttons";
-import { Textarea } from "../ui/Inputs";
+import { PrimaryButton } from "../ui/Buttons";
+import RoleTags from "../user/RoleTags";
 
 type Comment = {
     id: string;
@@ -22,27 +22,40 @@ type Comment = {
         id: string;
         name: string | null;
         image: string | null;
+        roles: UserRole[];
     };
 };
 
 function CommentForm({ action, placeholder = "Write a comment" }: { action: (formData: FormData) => Promise<void>; placeholder?: string }) {
     const ref = useRef<HTMLFormElement>(null);
+    const [content, setContent] = useState("");
     const [pending, startTransition] = useTransition();
     const router = useRouter();
 
     function save(formData: FormData) {
         startTransition(async () => {
             await action(formData);
+            setContent("");
             ref.current?.reset();
             router.refresh();
         });
     }
 
     return (
-        <form ref={ref} action={save} className="flex flex-col gap-2">
-            <Textarea name="content" rows={3} maxLength={2000} placeholder={placeholder} required />
-            <div className="flex justify-end">
-                <PrimaryButton type="submit" disabled={pending} className="gap-2 px-4 py-2">
+        <form ref={ref} action={save} className="overflow-hidden rounded border border-border bg-bg-secondary/80">
+            <textarea
+                name="content"
+                rows={3}
+                maxLength={2000}
+                value={content}
+                onChange={(event) => setContent(event.target.value)}
+                placeholder={placeholder}
+                required
+                className="block w-full resize-y bg-transparent p-3 text-sm outline-none placeholder:text-text-faint"
+            />
+            <div className="flex items-center justify-between border-t border-border px-3 py-2">
+                <span className="text-xs text-text-faint">{content.length}/2000</span>
+                <PrimaryButton type="submit" disabled={pending || !content.trim()} className="gap-2 px-4 py-2">
                     <Send size={16} />
                     {pending ? "Posting..." : "Post"}
                 </PrimaryButton>
@@ -65,6 +78,13 @@ function CommentItem({ comment, comments, targetType, targetId, currentUserId }:
         });
     }
 
+    function remove() {
+        startTransition(async () => {
+            await deleteComment(comment.id);
+            router.refresh();
+        });
+    }
+
     return (
         <div className="flex gap-3">
             <AvatarView image={comment.user.image} size={8} mdSize={8} iconSize={18} />
@@ -76,6 +96,7 @@ function CommentItem({ comment, comments, targetType, targetId, currentUserId }:
                         ) : (
                             <span className="font-bold">Unknown</span>
                         )}
+                        <RoleTags roles={comment.user.roles} />
                         <span className="text-xs text-text-faint">{new Date(comment.createdAt).toLocaleDateString()}</span>
                     </div>
                     <p className="mt-2 whitespace-pre-wrap text-sm text-text-muted">{comment.content}</p>
@@ -91,6 +112,12 @@ function CommentItem({ comment, comments, targetType, targetId, currentUserId }:
                         <button type="button" onClick={() => setReplying(!replying)} className="flex cursor-pointer items-center gap-1 rounded px-2 py-1 hover:text-primary">
                             <MessageCircle size={14} />
                             Reply
+                        </button>
+                    )}
+                    {currentUserId === comment.userId && (
+                        <button type="button" onClick={remove} disabled={pending} className="flex cursor-pointer items-center gap-1 rounded px-2 py-1 hover:text-error">
+                            <Trash2 size={14} />
+                            Delete
                         </button>
                     )}
                 </div>
@@ -116,7 +143,7 @@ export default function CommentSectionClient({ targetType, targetId, comments, c
     const addTopLevel = addComment.bind(null, targetType, targetId, null);
 
     return (
-        <section className="flex flex-col gap-4 rounded bg-bg p-4">
+        <section id="comments" className="flex flex-col gap-4 rounded bg-bg p-4 scroll-mt-24">
             <div className="flex items-center justify-between gap-3 border-b border-border pb-2">
                 <h2 className="text-sm font-bold">Comments</h2>
                 <span className="text-xs text-text-faint">{comments.length}</span>

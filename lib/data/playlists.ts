@@ -17,6 +17,7 @@ const playlistSelect = {
     color: true,
     accentColor: true,
     privacy: true,
+    commentsHidden: true,
     createdAt: true,
     updatedAt: true,
     user: {

@@ -92,6 +92,7 @@ const settingsSchema = z.object({
     profileColor: colorSchema.optional(),
     accentColor: colorSchema.optional(),
     privacy: z.enum(["public", "followers", "private"]).optional(),
+    commentsHidden: z.coerce.boolean().optional(),
     socials: socialLinksSchema.optional(),
     preferences: nullableText(2000).optional(),
     widgets: nullableText(20000).optional(),
@@ -205,6 +206,7 @@ function pickUpdateData(tab: z.infer<typeof tabSchema>, values: z.infer<typeof s
         data.profileColor = values.profileColor;
         data.accentColor = values.accentColor;
         data.socials = values.socials;
+        data.commentsHidden = values.commentsHidden ?? false;
     }
 
     if (tab === "privacy") {

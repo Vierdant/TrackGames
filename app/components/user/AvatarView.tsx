@@ -10,7 +10,7 @@ export default function AvatarPreview({ image, size = 24, mdSize = size*1.5, ico
         "--avatar-size": `${size * 0.25}rem`,
         "--avatar-md-size": `${desktopSize * 0.25}rem`,
     } as CSSProperties;
-    const imageSize = Math.round(desktopSize * 4);
+    const imageSize = Math.round(desktopSize * 8);
 
     return (
         <div
@@ -24,6 +24,7 @@ export default function AvatarPreview({ image, size = 24, mdSize = size*1.5, ico
                     fill
                     priority={priority}
                     sizes={`${imageSize}px`}
+                    quality={90}
                     className="pointer-events-none select-none object-cover object-center"
                 />
                 :

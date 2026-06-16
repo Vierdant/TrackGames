@@ -35,6 +35,8 @@ export async function getUser(sessionUser: SessionUserRef | undefined): Promise<
             socials: true,
             preferences: true,
             widgets: true,
+            commentsHidden: true,
+            roles: true,
             accounts: {
                 select: {
                     provider: true,
@@ -60,6 +62,8 @@ export async function getUser(sessionUser: SessionUserRef | undefined): Promise<
         socials: profile.socials,
         preferences: profile.preferences,
         widgets: profile.widgets,
+        commentsHidden: profile.commentsHidden,
+        roles: profile.roles,
         hasPassword: Boolean(profile.passwordHash),
         linkedProviders: profile.accounts.map((account) => account.provider),
         createdAt: profile.createdAt.toLocaleDateString(undefined, { month: "long", year: "numeric" }),
@@ -80,6 +84,8 @@ export async function getPublicUser(name: string): Promise<PublicUser | null> {
             accentColor: true,
             socials: true,
             widgets: true,
+            commentsHidden: true,
+            roles: true,
             createdAt: true
         }
     });

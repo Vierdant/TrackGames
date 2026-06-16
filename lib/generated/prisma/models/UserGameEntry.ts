@@ -723,10 +723,6 @@ export type EnumGameStatusFieldUpdateOperationsInput = {
   set?: $Enums.GameStatus
 }
 
-export type BoolFieldUpdateOperationsInput = {
-  set?: boolean
-}
-
 export type UserGameEntryCreateWithoutUserInput = {
   id?: string
   status?: $Enums.GameStatus

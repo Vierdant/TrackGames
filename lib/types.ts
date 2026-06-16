@@ -1,5 +1,5 @@
 import { LinkType, MarkdownAlign, WidgetType } from "./enums";
-import { GameStatus, GameType } from "./generated/prisma/enums";
+import { GameStatus, GameType, UserRole } from "./generated/prisma/enums";
 
 export type PopScoreEntry = {
     game_id: number;
@@ -142,6 +142,7 @@ export type GameList = {
     color?: string | null;
     accentColor?: string | null;
     privacy: string;
+    commentsHidden: boolean;
     entries: GameListEntry[];
     user?: Pick<User, "id" | "name" | "image">;
     createdAt: Date;
@@ -203,6 +204,8 @@ export type User = {
     socials?: string | null;
     preferences?: string | null;
     widgets?: string | null;
+    commentsHidden: boolean;
+    roles: UserRole[];
     hasPassword: boolean;
     linkedProviders: string[];
     createdAt: string;
@@ -220,6 +223,8 @@ export type PublicUser = {
     accentColor?: string | null;
     socials?: string;
     widgets?: string;
+    commentsHidden: boolean;
+    roles: UserRole[];
 }
 
 export type Widget = {

@@ -41,6 +41,7 @@ export type GameListEntryMinAggregateOutputType = {
   listId: string | null
   gameId: number | null
   position: number | null
+  tier: string | null
   addedAt: Date | null
 }
 
@@ -49,6 +50,7 @@ export type GameListEntryMaxAggregateOutputType = {
   listId: string | null
   gameId: number | null
   position: number | null
+  tier: string | null
   addedAt: Date | null
 }
 
@@ -57,6 +59,7 @@ export type GameListEntryCountAggregateOutputType = {
   listId: number
   gameId: number
   position: number
+  tier: number
   addedAt: number
   _all: number
 }
@@ -77,6 +80,7 @@ export type GameListEntryMinAggregateInputType = {
   listId?: true
   gameId?: true
   position?: true
+  tier?: true
   addedAt?: true
 }
 
@@ -85,6 +89,7 @@ export type GameListEntryMaxAggregateInputType = {
   listId?: true
   gameId?: true
   position?: true
+  tier?: true
   addedAt?: true
 }
 
@@ -93,6 +98,7 @@ export type GameListEntryCountAggregateInputType = {
   listId?: true
   gameId?: true
   position?: true
+  tier?: true
   addedAt?: true
   _all?: true
 }
@@ -188,6 +194,7 @@ export type GameListEntryGroupByOutputType = {
   listId: string
   gameId: number
   position: number | null
+  tier: string | null
   addedAt: Date
   _count: GameListEntryCountAggregateOutputType | null
   _avg: GameListEntryAvgAggregateOutputType | null
@@ -219,6 +226,7 @@ export type GameListEntryWhereInput = {
   listId?: Prisma.StringFilter<"GameListEntry"> | string
   gameId?: Prisma.IntFilter<"GameListEntry"> | number
   position?: Prisma.IntNullableFilter<"GameListEntry"> | number | null
+  tier?: Prisma.StringNullableFilter<"GameListEntry"> | string | null
   addedAt?: Prisma.DateTimeFilter<"GameListEntry"> | Date | string
   list?: Prisma.XOR<Prisma.GameListScalarRelationFilter, Prisma.GameListWhereInput>
   game?: Prisma.XOR<Prisma.GameScalarRelationFilter, Prisma.GameWhereInput>
@@ -229,6 +237,7 @@ export type GameListEntryOrderByWithRelationInput = {
   listId?: Prisma.SortOrder
   gameId?: Prisma.SortOrder
   position?: Prisma.SortOrderInput | Prisma.SortOrder
+  tier?: Prisma.SortOrderInput | Prisma.SortOrder
   addedAt?: Prisma.SortOrder
   list?: Prisma.GameListOrderByWithRelationInput
   game?: Prisma.GameOrderByWithRelationInput
@@ -243,6 +252,7 @@ export type GameListEntryWhereUniqueInput = Prisma.AtLeast<{
   listId?: Prisma.StringFilter<"GameListEntry"> | string
   gameId?: Prisma.IntFilter<"GameListEntry"> | number
   position?: Prisma.IntNullableFilter<"GameListEntry"> | number | null
+  tier?: Prisma.StringNullableFilter<"GameListEntry"> | string | null
   addedAt?: Prisma.DateTimeFilter<"GameListEntry"> | Date | string
   list?: Prisma.XOR<Prisma.GameListScalarRelationFilter, Prisma.GameListWhereInput>
   game?: Prisma.XOR<Prisma.GameScalarRelationFilter, Prisma.GameWhereInput>
@@ -253,6 +263,7 @@ export type GameListEntryOrderByWithAggregationInput = {
   listId?: Prisma.SortOrder
   gameId?: Prisma.SortOrder
   position?: Prisma.SortOrderInput | Prisma.SortOrder
+  tier?: Prisma.SortOrderInput | Prisma.SortOrder
   addedAt?: Prisma.SortOrder
   _count?: Prisma.GameListEntryCountOrderByAggregateInput
   _avg?: Prisma.GameListEntryAvgOrderByAggregateInput
@@ -269,12 +280,14 @@ export type GameListEntryScalarWhereWithAggregatesInput = {
   listId?: Prisma.StringWithAggregatesFilter<"GameListEntry"> | string
   gameId?: Prisma.IntWithAggregatesFilter<"GameListEntry"> | number
   position?: Prisma.IntNullableWithAggregatesFilter<"GameListEntry"> | number | null
+  tier?: Prisma.StringNullableWithAggregatesFilter<"GameListEntry"> | string | null
   addedAt?: Prisma.DateTimeWithAggregatesFilter<"GameListEntry"> | Date | string
 }
 
 export type GameListEntryCreateInput = {
   id?: string
   position?: number | null
+  tier?: string | null
   addedAt?: Date | string
   list: Prisma.GameListCreateNestedOneWithoutEntriesInput
   game: Prisma.GameCreateNestedOneWithoutListEntriesInput
@@ -285,12 +298,14 @@ export type GameListEntryUncheckedCreateInput = {
   listId: string
   gameId: number
   position?: number | null
+  tier?: string | null
   addedAt?: Date | string
 }
 
 export type GameListEntryUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   position?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  tier?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   addedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   list?: Prisma.GameListUpdateOneRequiredWithoutEntriesNestedInput
   game?: Prisma.GameUpdateOneRequiredWithoutListEntriesNestedInput
@@ -301,6 +316,7 @@ export type GameListEntryUncheckedUpdateInput = {
   listId?: Prisma.StringFieldUpdateOperationsInput | string
   gameId?: Prisma.IntFieldUpdateOperationsInput | number
   position?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  tier?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   addedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -309,12 +325,14 @@ export type GameListEntryCreateManyInput = {
   listId: string
   gameId: number
   position?: number | null
+  tier?: string | null
   addedAt?: Date | string
 }
 
 export type GameListEntryUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   position?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  tier?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   addedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -323,6 +341,7 @@ export type GameListEntryUncheckedUpdateManyInput = {
   listId?: Prisma.StringFieldUpdateOperationsInput | string
   gameId?: Prisma.IntFieldUpdateOperationsInput | number
   position?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  tier?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   addedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -346,6 +365,7 @@ export type GameListEntryCountOrderByAggregateInput = {
   listId?: Prisma.SortOrder
   gameId?: Prisma.SortOrder
   position?: Prisma.SortOrder
+  tier?: Prisma.SortOrder
   addedAt?: Prisma.SortOrder
 }
 
@@ -359,6 +379,7 @@ export type GameListEntryMaxOrderByAggregateInput = {
   listId?: Prisma.SortOrder
   gameId?: Prisma.SortOrder
   position?: Prisma.SortOrder
+  tier?: Prisma.SortOrder
   addedAt?: Prisma.SortOrder
 }
 
@@ -367,6 +388,7 @@ export type GameListEntryMinOrderByAggregateInput = {
   listId?: Prisma.SortOrder
   gameId?: Prisma.SortOrder
   position?: Prisma.SortOrder
+  tier?: Prisma.SortOrder
   addedAt?: Prisma.SortOrder
 }
 
@@ -462,6 +484,7 @@ export type GameListEntryUncheckedUpdateManyWithoutListNestedInput = {
 export type GameListEntryCreateWithoutGameInput = {
   id?: string
   position?: number | null
+  tier?: string | null
   addedAt?: Date | string
   list: Prisma.GameListCreateNestedOneWithoutEntriesInput
 }
@@ -470,6 +493,7 @@ export type GameListEntryUncheckedCreateWithoutGameInput = {
   id?: string
   listId: string
   position?: number | null
+  tier?: string | null
   addedAt?: Date | string
 }
 
@@ -507,12 +531,14 @@ export type GameListEntryScalarWhereInput = {
   listId?: Prisma.StringFilter<"GameListEntry"> | string
   gameId?: Prisma.IntFilter<"GameListEntry"> | number
   position?: Prisma.IntNullableFilter<"GameListEntry"> | number | null
+  tier?: Prisma.StringNullableFilter<"GameListEntry"> | string | null
   addedAt?: Prisma.DateTimeFilter<"GameListEntry"> | Date | string
 }
 
 export type GameListEntryCreateWithoutListInput = {
   id?: string
   position?: number | null
+  tier?: string | null
   addedAt?: Date | string
   game: Prisma.GameCreateNestedOneWithoutListEntriesInput
 }
@@ -521,6 +547,7 @@ export type GameListEntryUncheckedCreateWithoutListInput = {
   id?: string
   gameId: number
   position?: number | null
+  tier?: string | null
   addedAt?: Date | string
 }
 
@@ -554,12 +581,14 @@ export type GameListEntryCreateManyGameInput = {
   id?: string
   listId: string
   position?: number | null
+  tier?: string | null
   addedAt?: Date | string
 }
 
 export type GameListEntryUpdateWithoutGameInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   position?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  tier?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   addedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   list?: Prisma.GameListUpdateOneRequiredWithoutEntriesNestedInput
 }
@@ -568,6 +597,7 @@ export type GameListEntryUncheckedUpdateWithoutGameInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   listId?: Prisma.StringFieldUpdateOperationsInput | string
   position?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  tier?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   addedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -575,6 +605,7 @@ export type GameListEntryUncheckedUpdateManyWithoutGameInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   listId?: Prisma.StringFieldUpdateOperationsInput | string
   position?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  tier?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   addedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -582,12 +613,14 @@ export type GameListEntryCreateManyListInput = {
   id?: string
   gameId: number
   position?: number | null
+  tier?: string | null
   addedAt?: Date | string
 }
 
 export type GameListEntryUpdateWithoutListInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   position?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  tier?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   addedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   game?: Prisma.GameUpdateOneRequiredWithoutListEntriesNestedInput
 }
@@ -596,6 +629,7 @@ export type GameListEntryUncheckedUpdateWithoutListInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   gameId?: Prisma.IntFieldUpdateOperationsInput | number
   position?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  tier?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   addedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -603,6 +637,7 @@ export type GameListEntryUncheckedUpdateManyWithoutListInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   gameId?: Prisma.IntFieldUpdateOperationsInput | number
   position?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  tier?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   addedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -613,6 +648,7 @@ export type GameListEntrySelect<ExtArgs extends runtime.Types.Extensions.Interna
   listId?: boolean
   gameId?: boolean
   position?: boolean
+  tier?: boolean
   addedAt?: boolean
   list?: boolean | Prisma.GameListDefaultArgs<ExtArgs>
   game?: boolean | Prisma.GameDefaultArgs<ExtArgs>
@@ -623,6 +659,7 @@ export type GameListEntrySelectCreateManyAndReturn<ExtArgs extends runtime.Types
   listId?: boolean
   gameId?: boolean
   position?: boolean
+  tier?: boolean
   addedAt?: boolean
   list?: boolean | Prisma.GameListDefaultArgs<ExtArgs>
   game?: boolean | Prisma.GameDefaultArgs<ExtArgs>
@@ -633,6 +670,7 @@ export type GameListEntrySelectUpdateManyAndReturn<ExtArgs extends runtime.Types
   listId?: boolean
   gameId?: boolean
   position?: boolean
+  tier?: boolean
   addedAt?: boolean
   list?: boolean | Prisma.GameListDefaultArgs<ExtArgs>
   game?: boolean | Prisma.GameDefaultArgs<ExtArgs>
@@ -643,10 +681,11 @@ export type GameListEntrySelectScalar = {
   listId?: boolean
   gameId?: boolean
   position?: boolean
+  tier?: boolean
   addedAt?: boolean
 }
 
-export type GameListEntryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "listId" | "gameId" | "position" | "addedAt", ExtArgs["result"]["gameListEntry"]>
+export type GameListEntryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "listId" | "gameId" | "position" | "tier" | "addedAt", ExtArgs["result"]["gameListEntry"]>
 export type GameListEntryInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   list?: boolean | Prisma.GameListDefaultArgs<ExtArgs>
   game?: boolean | Prisma.GameDefaultArgs<ExtArgs>
@@ -671,6 +710,7 @@ export type $GameListEntryPayload<ExtArgs extends runtime.Types.Extensions.Inter
     listId: string
     gameId: number
     position: number | null
+    tier: string | null
     addedAt: Date
   }, ExtArgs["result"]["gameListEntry"]>
   composites: {}
@@ -1101,6 +1141,7 @@ export interface GameListEntryFieldRefs {
   readonly listId: Prisma.FieldRef<"GameListEntry", 'String'>
   readonly gameId: Prisma.FieldRef<"GameListEntry", 'Int'>
   readonly position: Prisma.FieldRef<"GameListEntry", 'Int'>
+  readonly tier: Prisma.FieldRef<"GameListEntry", 'String'>
   readonly addedAt: Prisma.FieldRef<"GameListEntry", 'DateTime'>
 }
     

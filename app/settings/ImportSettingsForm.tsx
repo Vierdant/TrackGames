@@ -3,11 +3,12 @@
 import { GhostButton, PrimaryButton } from "@/app/components/ui/Buttons";
 import { Input } from "@/app/components/ui/Inputs";
 import { getSteamProfileImportPreview, importSteamLibrary } from "@/lib/actions/import";
+import Image from "next/image";
 import { useState, useTransition } from "react";
 
 export default function ImportSettingsForm() {
     const [steamId, setSteamId] = useState("");
-    const [profile, setProfile] = useState<{ steamId: string; personaname: string } | null>(null);
+    const [profile, setProfile] = useState<{ steamId: string; personaname: string; profileurl: string; avatar: string; } | null>(null);
     const [error, setError] = useState("");
     const [result, setResult] = useState<{ imported: number; failed: string[] } | null>(null);
     const [pending, startTransition] = useTransition();
@@ -28,6 +29,8 @@ export default function ImportSettingsForm() {
             setProfile({
                 steamId: response.steamId ?? "",
                 personaname: response.personaname ?? "",
+                profileurl: response.profileurl ?? "",
+                avatar: response.avatar ?? "",
             });
         });
     }
@@ -47,17 +50,22 @@ export default function ImportSettingsForm() {
 
     return (
         <div className="flex flex-col gap-6">
-            <section className="rounded border border-border bg-bg-secondary p-4">
+            <section>
                 <div className="mb-4">
-                    <h3 className="text-lg font-bold">Steam</h3>
-                    <a href="https://steamdb.info/calculator/" target="_blank" rel="noreferrer" className="text-sm font-bold text-primary hover:text-primary-hover">
-                        Get your profile ID
-                    </a>
+                    <h3 className="text-lg font-bold">Steam Library</h3>
                 </div>
 
                 <div className="flex max-w-xl flex-col gap-3">
-                    <label className="text-sm font-bold text-text-muted">
-                        Steam profile ID
+                    <label className="text-sm text-text-muted">
+                        <div className="flex flex-row justify-between">
+                            <p className="font-bold">
+                                Steam profile ID
+                            </p>
+
+                            <a href="https://steamdb.info/calculator/" target="_blank" rel="noreferrer" className="text-sm text-primary hover:text-primary-hover">
+                                Get your profile ID
+                            </a>
+                        </div>
                         <Input value={steamId} onChange={(event) => setSteamId(event.target.value)} placeholder="7656119..." />
                     </label>
                     <div className="flex flex-row gap-2">
@@ -70,19 +78,38 @@ export default function ImportSettingsForm() {
                 {error && <p className="mt-4 rounded border border-error/40 bg-error/10 p-3 text-sm font-bold text-error">{error}</p>}
 
                 {profile && !result && (
-                    <div className="mt-5 rounded border border-warning/40 bg-warning/10 p-4">
-                        <p className="font-bold text-text">Import library from {profile.personaname}?</p>
-                        <p className="mt-1 text-sm text-text-muted">Importing a Steam library will add matched games and overwrite existing time played values in your library.</p>
-                        <PrimaryButton type="button" onClick={importLibrary} disabled={pending} className="mt-4 w-fit">
-                            {pending ? "Importing..." : "Confirm import"}
-                        </PrimaryButton>
+                    <div className="mt-5 rounded border border-warning/40 bg-bg/80 p-4">
+                        <div className="flex flex-col gap-4">
+                            <div className="flex flex-row items-start gap-4">
+                                {profile.avatar && (
+                                    <div className="relative h-24 w-24 shrink-0 rounded overflow-hidden">
+                                        <Image src={profile.avatar} alt="Steam Image" fill sizes="100px" className="object-cover" />
+                                    </div>
+                                )}
+                                <div>
+                                    <p className="font-bold text-text">Import games from profile <a href={profile.profileurl} target="_blank" className="bg-bg p-1 text-secondary">{profile.personaname}</a>?</p>
+                                    <p className="mt-1 text-sm text-text-muted">Importing a Steam library will add matched games and overwrite existing time played values in your library.</p>
+                                </div>
+                            </div>
+                            <PrimaryButton type="button" onClick={importLibrary} disabled={pending} className="mt-4 w-fit">
+                                {pending ? "Importing..." : "Confirm import"}
+                            </PrimaryButton>
+                        </div>
                     </div>
                 )}
 
                 {result && (
-                    <div className="mt-5 rounded border border-success/40 bg-success/10 p-4">
+                    <div className="mt-5 rounded border border-success/40 bg-bg/80 p-4">
                         <p className="font-bold text-success">Imported {result.imported} games.</p>
-                        <p className="mt-1 text-sm text-text-muted">Failed to import {result.failed.length} games.</p>
+                        <p className="mt-1 text-sm text-error">* Failed to import {result.failed.length} games.</p>
+                        <br/>
+                        <h2 className="text-text-muted">Next Steps:</h2>
+                        <ul className="text-text-muted text-sm">
+                            <li>- Download failed import list from below</li>
+                            <li>- Review game titles and attempt searching for them in the site</li>
+                            <li>- Add them to library and adjust their game time</li>
+                            <li>- Game time is provided as (time), inside the downloaded list</li>
+                        </ul>
                         <div className="mt-4 flex flex-row gap-2">
                             {failedUrl && (
                                 <a

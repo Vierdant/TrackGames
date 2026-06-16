@@ -1,0 +1,26 @@
+import db from "../db";
+import { GameListType } from "../generated/prisma/enums";
+
+export async function getSiteStats() {
+    const [games, users, libraries, playlists] = await Promise.all([
+        db.game.count(),
+        db.user.count(),
+        db.gameList.count({
+            where: {
+                type: GameListType.LIBRARY,
+            },
+        }),
+        db.gameList.count({
+            where: {
+                type: GameListType.PLAYLIST,
+            },
+        }),
+    ]);
+
+    return {
+        games,
+        users,
+        libraries,
+        playlists,
+    };
+}

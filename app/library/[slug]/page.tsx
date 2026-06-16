@@ -6,6 +6,8 @@ import { getUserGameEntries } from "@/lib/data/library";
 import { ensureAndGetUserLibrary } from "@/lib/playlist/library";
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
+import GameListEditButton from "@/app/components/playlist/GameListEditButton";
+import { profileThemeStyle } from "@/lib/account/user";
 
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
     const { slug } = await params;
@@ -17,7 +19,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
     const background = library.background ?? null;
 
     return (
-        <main className="relative z-0 flex-1">
+        <main className="relative z-0 flex-1" style={profileThemeStyle(library.color, library.accentColor)}>
             <BackgroundView src={background} />
             <Container>
                 {/* HEADER */}
@@ -29,6 +31,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
                                 <p className="text-md text-text-muted">{library.description}Testing Description</p>
                             </div>
                             <div className="flex shrink-0 flex-row flex-wrap justify-end gap-3 md:gap-5">
+                                {isOwnLibrary && <GameListEditButton list={library} />}
                                 <GhostButton href={`/u/${slug}`}>View Profile</GhostButton>
                             </div>
                         </div>

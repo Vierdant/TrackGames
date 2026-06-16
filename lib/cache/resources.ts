@@ -1,5 +1,6 @@
 import CachedResource from "./CachedResource";
 import { calculateTrendingGames, calculateYearlyHitGames, calculateHiddenGems, calculateMostAnticipated, calculateComingSoon, calculateRecentlyReleased } from "../external/igdb/games";
+import { getSiteStats } from "../data/stats";
 
 export const trendingGames = new CachedResource({
     name: "trending-games",
@@ -45,6 +46,17 @@ export const recentreleases = new CachedResource({
     fetcher: calculateRecentlyReleased
 })
 
+export const siteStats = new CachedResource({
+    name: "site-stats",
+    ttlMs: 1000 * 60 * 5,
+    fallback: {
+        games: 0,
+        users: 0,
+        libraries: 0,
+        playlists: 0,
+    },
+    fetcher: getSiteStats
+})
 
 export const cachedResources = [
     trendingGames,
@@ -52,5 +64,6 @@ export const cachedResources = [
     hiddenGames,
     mostAnticipated,
     comingSoon,
-    recentreleases
+    recentreleases,
+    siteStats
 ]

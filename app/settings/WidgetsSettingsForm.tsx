@@ -31,7 +31,7 @@ export default function WidgetsSettingsForm({ profile }: { profile: User; }) {
     }
 
     return (
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col">
             <input type="hidden" name="widgets" value={widgetPayload} />
             <div className="flex flex-wrap gap-2">
                 {([WidgetType.GAMELIST, WidgetType.MARKDOWN, WidgetType.STATS]).map((type) => (

@@ -47,6 +47,8 @@ export async function getSteamProfileImportPreview(steamId: string) {
     return {
         steamId: id,
         personaname: String(profile.personaname),
+        profileurl: profile.profileurl,
+        avatar: profile.avatarfull
     };
 }
 
@@ -106,7 +108,7 @@ export async function importSteamLibrary(steamId: string) {
         const match = steamGame.slugs.map((slug) => foundBySlug.get(slug)).find(Boolean);
 
         if (!match) {
-            failed.push(`${steamGame.name} (${steamGame.slugs.join(", ")})`);
+            failed.push(`${steamGame.name} (${steamGame.hours})`);
             continue;
         }
 

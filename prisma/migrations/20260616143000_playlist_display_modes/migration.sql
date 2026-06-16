@@ -1,0 +1,2 @@
+ALTER TABLE "GameList" ADD COLUMN "displayMode" TEXT NOT NULL DEFAULT 'GRID';
+ALTER TABLE "GameListEntry" ADD COLUMN "tier" TEXT;

@@ -200,6 +200,9 @@ export const GameListScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
   type: 'type',
+  displayMode: 'displayMode',
+  tierLabels: 'tierLabels',
+  tierColors: 'tierColors',
   name: 'name',
   slug: 'slug',
   description: 'description',
@@ -220,6 +223,7 @@ export const GameListEntryScalarFieldEnum = {
   listId: 'listId',
   gameId: 'gameId',
   position: 'position',
+  tier: 'tier',
   addedAt: 'addedAt'
 } as const
 

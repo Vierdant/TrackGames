@@ -8,8 +8,8 @@ export default function FollowerPreviewPanel({ title, profiles }: {
     }[]
 }) {
     return (
-        <div className="w-full max-w-4xl rounded bg-bg-secondary p-4">
-            <div className="mb-3 flex items-center justify-between gap-4">
+        <div className="w-full max-w-4xl rounded bg-bg-secondary/80 p-4">
+            <div className="mb-3 flex items-center justify-between gap-4 border-b border-border pb-2">
                 <h2 className="text-sm">{title} - {profiles.length}</h2>
                 <button
                     type="button"
@@ -19,7 +19,7 @@ export default function FollowerPreviewPanel({ title, profiles }: {
                 </button>
             </div>
 
-            <div className="grid w-full gap-2 rounded bg-surface p-2">
+            <div className="grid w-full gap-2 rounded p-2">
                 {profiles.length > 0 ? profiles.map((profile) => (
                     <div key={profile.name} className="flex min-w-0 items-center gap-3 rounded bg-bg-secondary/60 p-2">
                         <div className="relative grid size-10 shrink-0 place-items-center overflow-hidden rounded-full text-text-muted">

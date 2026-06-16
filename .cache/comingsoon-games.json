@@ -1,65 +1,5 @@
 [
   {
-    "id": 305177,
-    "cover": {
-      "id": 551304,
-      "image_id": "cobte0"
-    },
-    "first_release_date": 1781568000,
-    "name": "Copa City",
-    "slug": "copa-city"
-  },
-  {
-    "id": 376970,
-    "cover": {
-      "id": 505072,
-      "image_id": "coatps"
-    },
-    "first_release_date": 1781568000,
-    "name": "Junkster",
-    "slug": "junkster"
-  },
-  {
-    "id": 378242,
-    "cover": {
-      "id": 507074,
-      "image_id": "coav9e"
-    },
-    "first_release_date": 1781568000,
-    "name": "Daughter of the Rift",
-    "slug": "daughter-of-the-rift"
-  },
-  {
-    "id": 398424,
-    "cover": {
-      "id": 556614,
-      "image_id": "cobxhi"
-    },
-    "first_release_date": 1781568000,
-    "name": "Barbie: Horse Ride & Rescue",
-    "slug": "barbie-horse-ride-and-rescue"
-  },
-  {
-    "id": 401368,
-    "cover": {
-      "id": 562436,
-      "image_id": "coc1z8"
-    },
-    "first_release_date": 1781568000,
-    "name": "Auto Shop Simulator",
-    "slug": "auto-shop-simulator"
-  },
-  {
-    "id": 404046,
-    "cover": {
-      "id": 567410,
-      "image_id": "coc5te"
-    },
-    "first_release_date": 1781568000,
-    "name": "Vibe or Dare",
-    "slug": "vibe-or-dare"
-  },
-  {
     "id": 277267,
     "cover": {
       "id": 371962,
@@ -78,16 +18,6 @@
     "first_release_date": 1781654400,
     "name": "Glimvale: My Mini Overworld",
     "slug": "glimvale-my-mini-overworld"
-  },
-  {
-    "id": 361826,
-    "cover": {
-      "id": 480707,
-      "image_id": "coaawz"
-    },
-    "first_release_date": 1781654400,
-    "name": "Denshattack!",
-    "slug": "denshattack"
   },
   {
     "id": 367933,
@@ -982,5 +912,75 @@
     "first_release_date": 1782172800,
     "name": "Journey to the King",
     "slug": "journey-to-the-king"
+  },
+  {
+    "id": 396963,
+    "cover": {
+      "id": 567178,
+      "image_id": "coc5my"
+    },
+    "first_release_date": 1782172800,
+    "name": "Scratch Off!",
+    "slug": "scratch-off"
+  },
+  {
+    "id": 397866,
+    "cover": {
+      "id": 555432,
+      "image_id": "cobwko"
+    },
+    "first_release_date": 1782172800,
+    "name": "Kudo’s Kuppa",
+    "slug": "kudos-kuppa"
+  },
+  {
+    "id": 398491,
+    "cover": {
+      "id": 558685,
+      "image_id": "cobz31"
+    },
+    "first_release_date": 1782172800,
+    "name": "Cyber92 Datawar",
+    "slug": "cyber92-datawar"
+  },
+  {
+    "id": 400543,
+    "cover": {
+      "id": 560868,
+      "image_id": "coc0ro"
+    },
+    "first_release_date": 1782172800,
+    "name": "The Song Of Will",
+    "slug": "the-song-of-will"
+  },
+  {
+    "id": 400712,
+    "cover": {
+      "id": 561191,
+      "image_id": "coc10n"
+    },
+    "first_release_date": 1782172800,
+    "name": "MAGE",
+    "slug": "mage--1"
+  },
+  {
+    "id": 402845,
+    "cover": {
+      "id": 565094,
+      "image_id": "coc412"
+    },
+    "first_release_date": 1782172800,
+    "name": "Deadwave",
+    "slug": "deadwave"
+  },
+  {
+    "id": 403184,
+    "cover": {
+      "id": 565660,
+      "image_id": "coc4gs"
+    },
+    "first_release_date": 1782172800,
+    "name": "Raccoon Packer",
+    "slug": "raccoon-packer"
   }
 ]

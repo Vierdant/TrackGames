@@ -3,7 +3,7 @@ import { PrimaryButton, GhostButton } from "./components/ui/Buttons";
 import { Bolt, Star } from "lucide-react";
 import StatBlock from "./components/StatBlock";
 import Container from "./components/layout/Container";
-import { trendingGames, yearlyGames, hiddenGames, mostAnticipated, comingSoon, recentreleases } from "@/lib/cache/resources";
+import { trendingGames, yearlyGames, hiddenGames, mostAnticipated, comingSoon, recentreleases, siteStats } from "@/lib/cache/resources";
 import GameCard from "./components/game/GameCard";
 import HorizontalScroller from "./components/layout/HorizontalScroller";
 import GameFeature from "./components/game/GameFeature";
@@ -14,13 +14,14 @@ import GameStatInfoCard from "./components/game/GameStatInfoCard";
 import { formatRawGame } from "@/lib/external/igdb/util";
 
 export default async function Home() {
-  const [trendingDataList, yearlyDataList, hiddenDataList, mostAnticipatedList, comingSoonList, recentReleasesList] = await Promise.all([
+  const [trendingDataList, yearlyDataList, hiddenDataList, mostAnticipatedList, comingSoonList, recentReleasesList, stats] = await Promise.all([
     trendingGames.get(),
     yearlyGames.get(),
     hiddenGames.get(),
     mostAnticipated.get(),
     comingSoon.get(),
-    recentreleases.get()
+    recentreleases.get(),
+    siteStats.get()
   ]);
 
   return (
@@ -37,10 +38,10 @@ export default async function Home() {
                 <p className="text-xl text-text-muted font-body mt-5">Rate, track and categorize your games into lists. Customize your page and share it among friends.</p>
               </div>
               <div className="grid grid-cols-4 gap-3 border-blue-800 text-text min-w-100 max-w-100">
-                <StatBlock color="var(--primary)" title="Games" value={356452} />
-                <StatBlock color="var(--secondary)" title="Users" value={26545125} />
-                <StatBlock color="var(--success)" title="Libraries" value={19236100} />
-                <StatBlock color="var(--error)" title="Playlists" value={173124900} />
+                <StatBlock color="var(--primary)" title="Games" value={stats.games} />
+                <StatBlock color="var(--secondary)" title="Users" value={stats.users} />
+                <StatBlock color="var(--success)" title="Libraries" value={stats.libraries} />
+                <StatBlock color="var(--error)" title="Playlists" value={stats.playlists} />
               </div>
               <div className="flex flex-row gap-5 items-center mt-5">
                 <PrimaryButton href="/login?mode=register">Join</PrimaryButton>

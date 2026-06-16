@@ -7,7 +7,7 @@
     },
     "name": "007 First Light",
     "slug": "007-first-light",
-    "total_rating": 80.35726519951656
+    "total_rating": 80.35621906073406
   },
   {
     "id": 308535,
@@ -36,7 +36,7 @@
     },
     "name": "Forza Horizon 6",
     "slug": "forza-horizon-6",
-    "total_rating": 85.0842670984821
+    "total_rating": 85.08421649826853
   },
   {
     "id": 405028,
@@ -48,14 +48,14 @@
     "slug": "meccha-chameleon--1"
   },
   {
-    "id": 134612,
+    "id": 361855,
     "cover": {
-      "id": 556845,
-      "image_id": "cobxnx"
+      "id": 480825,
+      "image_id": "coab09"
     },
-    "name": "Pragmata",
-    "slug": "pragmata",
-    "total_rating": 86.87346583622282
+    "name": "LEGO Batman: Legacy of the Dark Knight",
+    "slug": "lego-batman-legacy-of-the-dark-knight",
+    "total_rating": 86.9754001021264
   },
   {
     "id": 393398,
@@ -66,25 +66,6 @@
     "name": "Librarian: Tidy Up the Arcane Library!",
     "slug": "librarian-tidy-up-the-arcane-library",
     "total_rating": 83.26707790724241
-  },
-  {
-    "id": 361855,
-    "cover": {
-      "id": 480825,
-      "image_id": "coab09"
-    },
-    "name": "LEGO Batman: Legacy of the Dark Knight",
-    "slug": "lego-batman-legacy-of-the-dark-knight",
-    "total_rating": 86.97401726231965
-  },
-  {
-    "id": 403497,
-    "cover": {
-      "id": 566449,
-      "image_id": "coc52p"
-    },
-    "name": "Fortune Mill",
-    "slug": "fortune-mill"
   },
   {
     "id": 320140,
@@ -114,7 +95,16 @@
     },
     "name": "Mina the Hollower",
     "slug": "mina-the-hollower",
-    "total_rating": 88.20156446458387
+    "total_rating": 88.20209138337071
+  },
+  {
+    "id": 403497,
+    "cover": {
+      "id": 566449,
+      "image_id": "coc52p"
+    },
+    "name": "Fortune Mill",
+    "slug": "fortune-mill"
   },
   {
     "id": 399673,
@@ -145,6 +135,16 @@
     "slug": "road-to-empress-ii"
   },
   {
+    "id": 341400,
+    "cover": {
+      "id": 460041,
+      "image_id": "co9uyx"
+    },
+    "name": "Voidling Bound",
+    "slug": "voidling-bound--1",
+    "total_rating": 80
+  },
+  {
     "id": 237780,
     "cover": {
       "id": 411162,
@@ -155,14 +155,13 @@
     "total_rating": 75.56534953765959
   },
   {
-    "id": 389109,
+    "id": 404400,
     "cover": {
-      "id": 535728,
-      "image_id": "cobhdc"
+      "id": 568251,
+      "image_id": "coc6gr"
     },
-    "name": "Terrinoth: Heroes of Descent",
-    "slug": "terrinoth-heroes-of-descent",
-    "total_rating": 75
+    "name": "FIFA World Cup: Launch Edition",
+    "slug": "fifa-world-cup-launch-edition"
   },
   {
     "id": 305157,
@@ -172,7 +171,7 @@
     },
     "name": "Mixtape",
     "slug": "mixtape--1",
-    "total_rating": 73.3222256969037
+    "total_rating": 73.59015751406093
   },
   {
     "id": 314543,

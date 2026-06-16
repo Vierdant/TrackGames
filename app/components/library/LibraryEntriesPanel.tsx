@@ -2,10 +2,10 @@
 
 import { GameStatus } from "@/lib/generated/prisma/enums";
 import { UserGameEntry } from "@/lib/types";
-import { Grid2X2, List } from "lucide-react";
-import { useState } from "react";
+import { Grid2X2, List, Search } from "lucide-react";
+import { useMemo, useState } from "react";
 import PaginatedList from "../layout/PaginatedList";
-import { Select } from "../ui/Inputs";
+import { Input, Select } from "../ui/Inputs";
 import PlaylistCard from "./PlaylistCard";
 
 function statusLabel(status: string) {
@@ -17,17 +17,23 @@ export default function LibraryEntriesPanel({ entries, canEdit }: { entries: Use
     const [mode, setMode] = useState<"grid" | "list">("grid");
     const [status, setStatus] = useState("all");
     const [sort, setSort] = useState("added");
-    const filtered = items.filter((entry) => {
-        if (status !== "all" && entry.status !== status) return false;
-        return true;
-    }).sort((a, b) => {
-        if (sort === "rating") return (b.rating ?? -1) - (a.rating ?? -1);
-        if (sort === "time") return (b.timePlayed ?? -1) - (a.timePlayed ?? -1);
-        if (sort === "name") return (a.game.name ?? "").localeCompare(b.game.name ?? "");
-        if (sort === "release") return Number(b.game.releaseDate ?? 0) - Number(a.game.releaseDate ?? 0);
-        if (sort === "notes") return (b.notes ?? "").localeCompare(a.notes ?? "")
-        return Number(b.addedAt ?? 0) - Number(a.addedAt ?? 0);
-    });
+    const [query, setQuery] = useState("");
+    const filtered = useMemo(() => {
+        const search = query.trim().toLowerCase();
+
+        return items.filter((entry) => {
+            if (status !== "all" && entry.status !== status) return false;
+            if (search && !(entry.game.name ?? "").toLowerCase().includes(search)) return false;
+            return true;
+        }).sort((a, b) => {
+            if (sort === "rating") return (b.rating ?? -1) - (a.rating ?? -1);
+            if (sort === "time") return (b.timePlayed ?? -1) - (a.timePlayed ?? -1);
+            if (sort === "name") return (a.game.name ?? "").localeCompare(b.game.name ?? "");
+            if (sort === "release") return Number(b.game.releaseDate ?? 0) - Number(a.game.releaseDate ?? 0);
+            if (sort === "notes") return (b.notes ?? "").localeCompare(a.notes ?? "")
+            return Number(b.addedAt ?? 0) - Number(a.addedAt ?? 0);
+        });
+    }, [items, query, sort, status]);
 
     function updateEntry(updated: UserGameEntry) {
         setItems((current) => current.map((entry) => entry.id === updated.id ? updated : entry));
@@ -37,6 +43,10 @@ export default function LibraryEntriesPanel({ entries, canEdit }: { entries: Use
         <div className="flex w-full flex-col gap-5">
             <div className="flex flex-col gap-3 mb-2 md:flex-row md:items-center md:justify-between">
                 <div className="flex flex-row flex-wrap gap-3">
+                    <div className="relative min-w-64">
+                        <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-text-faint" size={17} />
+                        <Input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search library" className="pl-9" />
+                    </div>
                     <Select className="border-t-0 border-l-0 border-r-0 rounded-none" value={status} onChange={(event) => setStatus(event.target.value)} aria-label="Filter by status">
                         <option value="all">All statuses</option>
                         {Object.values(GameStatus).map((value) => (

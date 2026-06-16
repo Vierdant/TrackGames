@@ -117,6 +117,37 @@ export type UserGameEntry = {
     game: Game;
 }
 
+export type GameListEntry = {
+    id: string;
+    listId: string;
+    gameId: number;
+    position?: number | null;
+    tier?: string | null;
+    addedAt: Date;
+    game: Game;
+}
+
+export type GameList = {
+    id: string;
+    userId: string;
+    type: string;
+    displayMode: string;
+    tierLabels: string[];
+    tierColors: string[];
+    name: string;
+    slug?: string | null;
+    description?: string | null;
+    image?: string | null;
+    background?: string | null;
+    color?: string | null;
+    accentColor?: string | null;
+    privacy: string;
+    entries: GameListEntry[];
+    user?: Pick<User, "id" | "name" | "image">;
+    createdAt: Date;
+    updatedAt: Date;
+}
+
 export type Collection = {
     id: number;
     name: string;
@@ -198,7 +229,7 @@ export type Widget = {
     visible: boolean;
     content: string;
     stats: string[];
-    games: string[];
+    games: number[];
 }
 
 export type SocialLink = {

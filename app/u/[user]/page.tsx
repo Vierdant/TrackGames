@@ -10,6 +10,8 @@ import UserWidget from "./UserWidget";
 import { parseSocials } from "@/lib/account/socials";
 import { parseWidgets } from "@/lib/account/widget";
 import ProfileHeader from "@/app/components/user/ProfileHeader";
+import { getUserPlaylists } from "@/lib/data/playlists";
+import ProfilePlaylists from "./ProfilePlaylists";
 
 export default async function Page({ params, searchParams }: { params: Promise<{ user: string }>; searchParams: Promise<{ tab?: string }>; }) {
     const { user } = await params;
@@ -27,6 +29,7 @@ export default async function Page({ params, searchParams }: { params: Promise<{
     const socials = parseSocials(profile.socials);
     const savedWidgets = parseWidgets(profile.widgets);
     const profileWidgets = savedWidgets.length > 0 ? savedWidgets : [];
+    const playlists = tab === "playlists" ? await getUserPlaylists(profile.id) : [];
 
     return (
         <main className="relative z-0 flex-1" style={profileThemeStyle(profile.profileColor, profile.accentColor)}>
@@ -44,9 +47,9 @@ export default async function Page({ params, searchParams }: { params: Promise<{
                             <FollowerPreviewPanel title="Followers" profiles={[]} />
 
                             {/* BADGES */}
-                            <div className="w-full rounded bg-bg-secondary p-4">
-                                <h2 className="mb-3 text-sm">Badges</h2>
-                                <div className="grid w-full grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 bg-surface rounded p-2">
+                            <div className="w-full rounded bg-bg-secondary/80 p-4">
+                                <h2 className="mb-3 text-sm border-b border-border pb-2">Badges</h2>
+                                <div className="grid w-full grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 rounded p-2">
                                     <div className="flex items-center justify-center">
                                         <Badge size={24} />
                                     </div>
@@ -66,7 +69,7 @@ export default async function Page({ params, searchParams }: { params: Promise<{
                                     <div className="flex flex-col gap-2 w-full justify-center">
                                         {profileWidgets &&
                                             profileWidgets.map((widget, index) => (
-                                                <UserWidget key={index} widget={widget} />
+                                                <UserWidget key={index} widget={widget} userId={profile.id} />
                                             ))
                                         }
                                     </div>
@@ -79,7 +82,7 @@ export default async function Page({ params, searchParams }: { params: Promise<{
                                 }
                                 {tab === "playlists" &&
                                     (
-                                        <p>Playlists</p>
+                                        <ProfilePlaylists playlists={playlists} canCreate={isOwnProfile} />
                                     )
                                 }
 

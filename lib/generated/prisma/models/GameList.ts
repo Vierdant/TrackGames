@@ -28,6 +28,7 @@ export type GameListMinAggregateOutputType = {
   id: string | null
   userId: string | null
   type: $Enums.GameListType | null
+  displayMode: string | null
   name: string | null
   slug: string | null
   description: string | null
@@ -44,6 +45,7 @@ export type GameListMaxAggregateOutputType = {
   id: string | null
   userId: string | null
   type: $Enums.GameListType | null
+  displayMode: string | null
   name: string | null
   slug: string | null
   description: string | null
@@ -60,6 +62,9 @@ export type GameListCountAggregateOutputType = {
   id: number
   userId: number
   type: number
+  displayMode: number
+  tierLabels: number
+  tierColors: number
   name: number
   slug: number
   description: number
@@ -78,6 +83,7 @@ export type GameListMinAggregateInputType = {
   id?: true
   userId?: true
   type?: true
+  displayMode?: true
   name?: true
   slug?: true
   description?: true
@@ -94,6 +100,7 @@ export type GameListMaxAggregateInputType = {
   id?: true
   userId?: true
   type?: true
+  displayMode?: true
   name?: true
   slug?: true
   description?: true
@@ -110,6 +117,9 @@ export type GameListCountAggregateInputType = {
   id?: true
   userId?: true
   type?: true
+  displayMode?: true
+  tierLabels?: true
+  tierColors?: true
   name?: true
   slug?: true
   description?: true
@@ -199,6 +209,9 @@ export type GameListGroupByOutputType = {
   id: string
   userId: string
   type: $Enums.GameListType
+  displayMode: string
+  tierLabels: string[]
+  tierColors: string[]
   name: string
   slug: string | null
   description: string | null
@@ -236,6 +249,9 @@ export type GameListWhereInput = {
   id?: Prisma.StringFilter<"GameList"> | string
   userId?: Prisma.StringFilter<"GameList"> | string
   type?: Prisma.EnumGameListTypeFilter<"GameList"> | $Enums.GameListType
+  displayMode?: Prisma.StringFilter<"GameList"> | string
+  tierLabels?: Prisma.StringNullableListFilter<"GameList">
+  tierColors?: Prisma.StringNullableListFilter<"GameList">
   name?: Prisma.StringFilter<"GameList"> | string
   slug?: Prisma.StringNullableFilter<"GameList"> | string | null
   description?: Prisma.StringNullableFilter<"GameList"> | string | null
@@ -254,6 +270,9 @@ export type GameListOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   type?: Prisma.SortOrder
+  displayMode?: Prisma.SortOrder
+  tierLabels?: Prisma.SortOrder
+  tierColors?: Prisma.SortOrder
   name?: Prisma.SortOrder
   slug?: Prisma.SortOrderInput | Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -276,6 +295,9 @@ export type GameListWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.GameListWhereInput | Prisma.GameListWhereInput[]
   userId?: Prisma.StringFilter<"GameList"> | string
   type?: Prisma.EnumGameListTypeFilter<"GameList"> | $Enums.GameListType
+  displayMode?: Prisma.StringFilter<"GameList"> | string
+  tierLabels?: Prisma.StringNullableListFilter<"GameList">
+  tierColors?: Prisma.StringNullableListFilter<"GameList">
   name?: Prisma.StringFilter<"GameList"> | string
   slug?: Prisma.StringNullableFilter<"GameList"> | string | null
   description?: Prisma.StringNullableFilter<"GameList"> | string | null
@@ -294,6 +316,9 @@ export type GameListOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   type?: Prisma.SortOrder
+  displayMode?: Prisma.SortOrder
+  tierLabels?: Prisma.SortOrder
+  tierColors?: Prisma.SortOrder
   name?: Prisma.SortOrder
   slug?: Prisma.SortOrderInput | Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -316,6 +341,9 @@ export type GameListScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"GameList"> | string
   userId?: Prisma.StringWithAggregatesFilter<"GameList"> | string
   type?: Prisma.EnumGameListTypeWithAggregatesFilter<"GameList"> | $Enums.GameListType
+  displayMode?: Prisma.StringWithAggregatesFilter<"GameList"> | string
+  tierLabels?: Prisma.StringNullableListFilter<"GameList">
+  tierColors?: Prisma.StringNullableListFilter<"GameList">
   name?: Prisma.StringWithAggregatesFilter<"GameList"> | string
   slug?: Prisma.StringNullableWithAggregatesFilter<"GameList"> | string | null
   description?: Prisma.StringNullableWithAggregatesFilter<"GameList"> | string | null
@@ -331,6 +359,9 @@ export type GameListScalarWhereWithAggregatesInput = {
 export type GameListCreateInput = {
   id?: string
   type: $Enums.GameListType
+  displayMode?: string
+  tierLabels?: Prisma.GameListCreatetierLabelsInput | string[]
+  tierColors?: Prisma.GameListCreatetierColorsInput | string[]
   name: string
   slug?: string | null
   description?: string | null
@@ -349,6 +380,9 @@ export type GameListUncheckedCreateInput = {
   id?: string
   userId: string
   type: $Enums.GameListType
+  displayMode?: string
+  tierLabels?: Prisma.GameListCreatetierLabelsInput | string[]
+  tierColors?: Prisma.GameListCreatetierColorsInput | string[]
   name: string
   slug?: string | null
   description?: string | null
@@ -365,6 +399,9 @@ export type GameListUncheckedCreateInput = {
 export type GameListUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumGameListTypeFieldUpdateOperationsInput | $Enums.GameListType
+  displayMode?: Prisma.StringFieldUpdateOperationsInput | string
+  tierLabels?: Prisma.GameListUpdatetierLabelsInput | string[]
+  tierColors?: Prisma.GameListUpdatetierColorsInput | string[]
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -383,6 +420,9 @@ export type GameListUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumGameListTypeFieldUpdateOperationsInput | $Enums.GameListType
+  displayMode?: Prisma.StringFieldUpdateOperationsInput | string
+  tierLabels?: Prisma.GameListUpdatetierLabelsInput | string[]
+  tierColors?: Prisma.GameListUpdatetierColorsInput | string[]
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -400,6 +440,9 @@ export type GameListCreateManyInput = {
   id?: string
   userId: string
   type: $Enums.GameListType
+  displayMode?: string
+  tierLabels?: Prisma.GameListCreatetierLabelsInput | string[]
+  tierColors?: Prisma.GameListCreatetierColorsInput | string[]
   name: string
   slug?: string | null
   description?: string | null
@@ -415,6 +458,9 @@ export type GameListCreateManyInput = {
 export type GameListUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumGameListTypeFieldUpdateOperationsInput | $Enums.GameListType
+  displayMode?: Prisma.StringFieldUpdateOperationsInput | string
+  tierLabels?: Prisma.GameListUpdatetierLabelsInput | string[]
+  tierColors?: Prisma.GameListUpdatetierColorsInput | string[]
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -431,6 +477,9 @@ export type GameListUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumGameListTypeFieldUpdateOperationsInput | $Enums.GameListType
+  displayMode?: Prisma.StringFieldUpdateOperationsInput | string
+  tierLabels?: Prisma.GameListUpdatetierLabelsInput | string[]
+  tierColors?: Prisma.GameListUpdatetierColorsInput | string[]
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -462,6 +511,9 @@ export type GameListCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   type?: Prisma.SortOrder
+  displayMode?: Prisma.SortOrder
+  tierLabels?: Prisma.SortOrder
+  tierColors?: Prisma.SortOrder
   name?: Prisma.SortOrder
   slug?: Prisma.SortOrder
   description?: Prisma.SortOrder
@@ -478,6 +530,7 @@ export type GameListMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   type?: Prisma.SortOrder
+  displayMode?: Prisma.SortOrder
   name?: Prisma.SortOrder
   slug?: Prisma.SortOrder
   description?: Prisma.SortOrder
@@ -494,6 +547,7 @@ export type GameListMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   type?: Prisma.SortOrder
+  displayMode?: Prisma.SortOrder
   name?: Prisma.SortOrder
   slug?: Prisma.SortOrder
   description?: Prisma.SortOrder
@@ -553,8 +607,26 @@ export type GameListUncheckedUpdateManyWithoutUserNestedInput = {
   deleteMany?: Prisma.GameListScalarWhereInput | Prisma.GameListScalarWhereInput[]
 }
 
+export type GameListCreatetierLabelsInput = {
+  set: string[]
+}
+
+export type GameListCreatetierColorsInput = {
+  set: string[]
+}
+
 export type EnumGameListTypeFieldUpdateOperationsInput = {
   set?: $Enums.GameListType
+}
+
+export type GameListUpdatetierLabelsInput = {
+  set?: string[]
+  push?: string | string[]
+}
+
+export type GameListUpdatetierColorsInput = {
+  set?: string[]
+  push?: string | string[]
 }
 
 export type GameListCreateNestedOneWithoutEntriesInput = {
@@ -574,6 +646,9 @@ export type GameListUpdateOneRequiredWithoutEntriesNestedInput = {
 export type GameListCreateWithoutUserInput = {
   id?: string
   type: $Enums.GameListType
+  displayMode?: string
+  tierLabels?: Prisma.GameListCreatetierLabelsInput | string[]
+  tierColors?: Prisma.GameListCreatetierColorsInput | string[]
   name: string
   slug?: string | null
   description?: string | null
@@ -590,6 +665,9 @@ export type GameListCreateWithoutUserInput = {
 export type GameListUncheckedCreateWithoutUserInput = {
   id?: string
   type: $Enums.GameListType
+  displayMode?: string
+  tierLabels?: Prisma.GameListCreatetierLabelsInput | string[]
+  tierColors?: Prisma.GameListCreatetierColorsInput | string[]
   name: string
   slug?: string | null
   description?: string | null
@@ -636,6 +714,9 @@ export type GameListScalarWhereInput = {
   id?: Prisma.StringFilter<"GameList"> | string
   userId?: Prisma.StringFilter<"GameList"> | string
   type?: Prisma.EnumGameListTypeFilter<"GameList"> | $Enums.GameListType
+  displayMode?: Prisma.StringFilter<"GameList"> | string
+  tierLabels?: Prisma.StringNullableListFilter<"GameList">
+  tierColors?: Prisma.StringNullableListFilter<"GameList">
   name?: Prisma.StringFilter<"GameList"> | string
   slug?: Prisma.StringNullableFilter<"GameList"> | string | null
   description?: Prisma.StringNullableFilter<"GameList"> | string | null
@@ -651,6 +732,9 @@ export type GameListScalarWhereInput = {
 export type GameListCreateWithoutEntriesInput = {
   id?: string
   type: $Enums.GameListType
+  displayMode?: string
+  tierLabels?: Prisma.GameListCreatetierLabelsInput | string[]
+  tierColors?: Prisma.GameListCreatetierColorsInput | string[]
   name: string
   slug?: string | null
   description?: string | null
@@ -668,6 +752,9 @@ export type GameListUncheckedCreateWithoutEntriesInput = {
   id?: string
   userId: string
   type: $Enums.GameListType
+  displayMode?: string
+  tierLabels?: Prisma.GameListCreatetierLabelsInput | string[]
+  tierColors?: Prisma.GameListCreatetierColorsInput | string[]
   name: string
   slug?: string | null
   description?: string | null
@@ -699,6 +786,9 @@ export type GameListUpdateToOneWithWhereWithoutEntriesInput = {
 export type GameListUpdateWithoutEntriesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumGameListTypeFieldUpdateOperationsInput | $Enums.GameListType
+  displayMode?: Prisma.StringFieldUpdateOperationsInput | string
+  tierLabels?: Prisma.GameListUpdatetierLabelsInput | string[]
+  tierColors?: Prisma.GameListUpdatetierColorsInput | string[]
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -716,6 +806,9 @@ export type GameListUncheckedUpdateWithoutEntriesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumGameListTypeFieldUpdateOperationsInput | $Enums.GameListType
+  displayMode?: Prisma.StringFieldUpdateOperationsInput | string
+  tierLabels?: Prisma.GameListUpdatetierLabelsInput | string[]
+  tierColors?: Prisma.GameListUpdatetierColorsInput | string[]
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -731,6 +824,9 @@ export type GameListUncheckedUpdateWithoutEntriesInput = {
 export type GameListCreateManyUserInput = {
   id?: string
   type: $Enums.GameListType
+  displayMode?: string
+  tierLabels?: Prisma.GameListCreatetierLabelsInput | string[]
+  tierColors?: Prisma.GameListCreatetierColorsInput | string[]
   name: string
   slug?: string | null
   description?: string | null
@@ -746,6 +842,9 @@ export type GameListCreateManyUserInput = {
 export type GameListUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumGameListTypeFieldUpdateOperationsInput | $Enums.GameListType
+  displayMode?: Prisma.StringFieldUpdateOperationsInput | string
+  tierLabels?: Prisma.GameListUpdatetierLabelsInput | string[]
+  tierColors?: Prisma.GameListUpdatetierColorsInput | string[]
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -762,6 +861,9 @@ export type GameListUpdateWithoutUserInput = {
 export type GameListUncheckedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumGameListTypeFieldUpdateOperationsInput | $Enums.GameListType
+  displayMode?: Prisma.StringFieldUpdateOperationsInput | string
+  tierLabels?: Prisma.GameListUpdatetierLabelsInput | string[]
+  tierColors?: Prisma.GameListUpdatetierColorsInput | string[]
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -778,6 +880,9 @@ export type GameListUncheckedUpdateWithoutUserInput = {
 export type GameListUncheckedUpdateManyWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumGameListTypeFieldUpdateOperationsInput | $Enums.GameListType
+  displayMode?: Prisma.StringFieldUpdateOperationsInput | string
+  tierLabels?: Prisma.GameListUpdatetierLabelsInput | string[]
+  tierColors?: Prisma.GameListUpdatetierColorsInput | string[]
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -825,6 +930,9 @@ export type GameListSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   id?: boolean
   userId?: boolean
   type?: boolean
+  displayMode?: boolean
+  tierLabels?: boolean
+  tierColors?: boolean
   name?: boolean
   slug?: boolean
   description?: boolean
@@ -844,6 +952,9 @@ export type GameListSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   id?: boolean
   userId?: boolean
   type?: boolean
+  displayMode?: boolean
+  tierLabels?: boolean
+  tierColors?: boolean
   name?: boolean
   slug?: boolean
   description?: boolean
@@ -861,6 +972,9 @@ export type GameListSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   id?: boolean
   userId?: boolean
   type?: boolean
+  displayMode?: boolean
+  tierLabels?: boolean
+  tierColors?: boolean
   name?: boolean
   slug?: boolean
   description?: boolean
@@ -878,6 +992,9 @@ export type GameListSelectScalar = {
   id?: boolean
   userId?: boolean
   type?: boolean
+  displayMode?: boolean
+  tierLabels?: boolean
+  tierColors?: boolean
   name?: boolean
   slug?: boolean
   description?: boolean
@@ -890,7 +1007,7 @@ export type GameListSelectScalar = {
   updatedAt?: boolean
 }
 
-export type GameListOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "type" | "name" | "slug" | "description" | "image" | "background" | "color" | "accentColor" | "privacy" | "createdAt" | "updatedAt", ExtArgs["result"]["gameList"]>
+export type GameListOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "type" | "displayMode" | "tierLabels" | "tierColors" | "name" | "slug" | "description" | "image" | "background" | "color" | "accentColor" | "privacy" | "createdAt" | "updatedAt", ExtArgs["result"]["gameList"]>
 export type GameListInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   entries?: boolean | Prisma.GameList$entriesArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -913,6 +1030,9 @@ export type $GameListPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     id: string
     userId: string
     type: $Enums.GameListType
+    displayMode: string
+    tierLabels: string[]
+    tierColors: string[]
     name: string
     slug: string | null
     description: string | null
@@ -1351,6 +1471,9 @@ export interface GameListFieldRefs {
   readonly id: Prisma.FieldRef<"GameList", 'String'>
   readonly userId: Prisma.FieldRef<"GameList", 'String'>
   readonly type: Prisma.FieldRef<"GameList", 'GameListType'>
+  readonly displayMode: Prisma.FieldRef<"GameList", 'String'>
+  readonly tierLabels: Prisma.FieldRef<"GameList", 'String[]'>
+  readonly tierColors: Prisma.FieldRef<"GameList", 'String[]'>
   readonly name: Prisma.FieldRef<"GameList", 'String'>
   readonly slug: Prisma.FieldRef<"GameList", 'String'>
   readonly description: Prisma.FieldRef<"GameList", 'String'>

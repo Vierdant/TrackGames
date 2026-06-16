@@ -15,7 +15,7 @@ export default function ProfileHeader({ owned, isSettings, profileImage, display
                         <div className="min-w-0 flex-1 flex-col justify-between">
                             <div className="mb-5 flex min-w-0 flex-col gap-2 md:flex-row md:items-center md:gap-3">
                                 <h1 className="max-w-full wrap-break-word text-3xl md:text-4xl font-bold">{displayName}</h1>
-                                {!isSettings && <SocialIconLinks socials={socials} />}
+                                <SocialIconLinks socials={socials} />
                             </div>
                             {bio && <p className="max-w-full wrap-break-word text-sm md:text-md font-body">{bio}</p>}
                         </div>

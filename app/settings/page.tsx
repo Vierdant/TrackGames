@@ -9,6 +9,7 @@ import { redirect } from "next/navigation";
 import SettingsPanel from "./SettingsPanel";
 import type { ReactNode } from "react";
 import ProfileHeader from "@/app/components/user/ProfileHeader";
+import { parseSocials } from "@/lib/account/socials";
 
 const tabs: { id: string; label: string; description: string; icon: typeof UserIcon }[] = [
     { id: "profile", label: "Profile", description: "Bio, avatar, background, and colors", icon: UserIcon },
@@ -21,7 +22,7 @@ const tabs: { id: string; label: string; description: string; icon: typeof UserI
 
 function SectionShell({ title, children }: { title: string; children: ReactNode }) {
     return (
-        <div className="rounded bg-bg-secondary/80 p-5">
+        <div className="rounded bg-bg p-5">
             <div className="mb-5 flex flex-col gap-3 border-b border-border pb-4 md:flex-row md:items-start md:justify-between">
                 <div>
                     <h2 className="text-2xl font-bold">{title}</h2>
@@ -66,20 +67,22 @@ export default async function SettingsPage({ searchParams }: { searchParams: Pro
         redirect("/login");
     }
 
-    const background = profile.background ?? "https://cdn.pixabay.com/video/2020/06/16/42197-429661458_large.mp4";
+    const background = profile.background;
     const active = normalize.byKey(tabs, "id", activeTab) ?? tabs[0];
+    const bio = profile.bio ?? "No bio yet."
+    const socials = parseSocials(profile.socials);
 
     return (
         <main className="relative z-0 flex-1" style={profileThemeStyle(profile.profileColor, profile.accentColor)}>
             <ProfileBackground src={background} />
 
             <Container>
-                <ProfileHeader isSettings={true} profileImage={profile.image} displayName={profile.name ?? "Player"} />
+                <ProfileHeader isSettings={true} profileImage={profile.image} displayName={profile.name ?? "Player"} socials={socials} bio={bio} />
 
                 <section className="relative z-10 bg-bg/95 py-5">
                     <Container className="grid gap-5 lg:grid-cols-[15rem_minmax(0,1fr)] lg:items-start">
-                        <aside className="rounded bg-bg-secondary/80 p-3">
-                            <nav className="flex gap-2 flex-col">
+                        <aside className="border-r border-border">
+                            <nav className="flex flex-col">
                                 {tabs.map((tab) => {
                                     const Icon = tab.icon;
                                     const selected = tab.id === activeTab;
@@ -88,11 +91,11 @@ export default async function SettingsPage({ searchParams }: { searchParams: Pro
                                         <Link
                                             key={tab.id}
                                             href={`/settings?tab=${tab.id}`}
-                                            className={`flex min-w-56 items-start gap-3 rounded px-3 py-3 text-left transition-colors lg:min-w-0 ${selected ? "bg-primary/15 text-primary" : "text-text-muted hover:bg-surface hover:text-text"}`}
+                                            className={`flex min-w-56 items-start gap-3 p-5 border-b border-border text-left transition-colors lg:min-w-0 ${selected ? "bg-surface text-text" : "text-text-muted hover:bg-surface hover:text-text"}`}
                                         >
                                             <Icon size={18} aria-hidden="true" className="mt-0.5 shrink-0" />
                                             <span className="min-w-0">
-                                                <span className="block text-sm font-bold">{tab.label}</span>
+                                                <span className="block text-md font-bold">{tab.label}</span>
                                             </span>
                                         </Link>
                                     );

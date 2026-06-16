@@ -1,5 +1,95 @@
 [
   {
+    "id": 404046,
+    "cover": {
+      "id": 567410,
+      "image_id": "coc5te"
+    },
+    "first_release_date": 1781568000,
+    "name": "Vibe or Dare",
+    "slug": "vibe-or-dare"
+  },
+  {
+    "id": 403690,
+    "cover": {
+      "id": 571248,
+      "image_id": "coc8s0"
+    },
+    "first_release_date": 1781568000,
+    "name": "City Car Driving 2.0",
+    "slug": "city-car-driving-2-dot-0"
+  },
+  {
+    "id": 401495,
+    "cover": {
+      "id": 562620,
+      "image_id": "coc24c"
+    },
+    "first_release_date": 1781568000,
+    "name": "Trail & Error",
+    "slug": "trail-and-error--1"
+  },
+  {
+    "id": 401368,
+    "cover": {
+      "id": 562436,
+      "image_id": "coc1z8"
+    },
+    "first_release_date": 1781568000,
+    "name": "Auto Shop Simulator",
+    "slug": "auto-shop-simulator"
+  },
+  {
+    "id": 398424,
+    "cover": {
+      "id": 556614,
+      "image_id": "cobxhi"
+    },
+    "first_release_date": 1781568000,
+    "name": "Barbie: Horse Ride & Rescue",
+    "slug": "barbie-horse-ride-and-rescue"
+  },
+  {
+    "id": 378242,
+    "cover": {
+      "id": 507074,
+      "image_id": "coav9e"
+    },
+    "first_release_date": 1781568000,
+    "name": "Daughter of the Rift",
+    "slug": "daughter-of-the-rift"
+  },
+  {
+    "id": 376970,
+    "cover": {
+      "id": 505072,
+      "image_id": "coatps"
+    },
+    "first_release_date": 1781568000,
+    "name": "Junkster",
+    "slug": "junkster"
+  },
+  {
+    "id": 305177,
+    "cover": {
+      "id": 551304,
+      "image_id": "cobte0"
+    },
+    "first_release_date": 1781568000,
+    "name": "Copa City",
+    "slug": "copa-city"
+  },
+  {
+    "id": 406722,
+    "cover": {
+      "id": 571701,
+      "image_id": "coc94l"
+    },
+    "first_release_date": 1781481600,
+    "name": "Cat Chases Mouse",
+    "slug": "cat-chases-mouse"
+  },
+  {
     "id": 405331,
     "cover": {
       "id": 569565,
@@ -92,8 +182,8 @@
   {
     "id": 312679,
     "cover": {
-      "id": 403130,
-      "image_id": "co8n22"
+      "id": 571776,
+      "image_id": "coc96o"
     },
     "first_release_date": 1781481600,
     "name": "Alaric",
@@ -176,6 +266,16 @@
     "slug": "power-typing-game-gori-da"
   },
   {
+    "id": 406393,
+    "cover": {
+      "id": 571875,
+      "image_id": "coc99f"
+    },
+    "first_release_date": 1781308800,
+    "name": "Ultimate Blacksmith Tycoon",
+    "slug": "ultimate-blacksmith-tycoon"
+  },
+  {
     "id": 404529,
     "cover": {
       "id": 570372,
@@ -187,6 +287,10 @@
   },
   {
     "id": 402305,
+    "cover": {
+      "id": 571819,
+      "image_id": "coc97v"
+    },
     "first_release_date": 1781308800,
     "name": "Asphalt Dominion",
     "slug": "asphalt-dominion"
@@ -272,6 +376,26 @@
     "slug": "bladefall"
   },
   {
+    "id": 406706,
+    "cover": {
+      "id": 571667,
+      "image_id": "coc93n"
+    },
+    "first_release_date": 1781222400,
+    "name": "A.C.I.T. Soup",
+    "slug": "acit-soup"
+  },
+  {
+    "id": 406703,
+    "cover": {
+      "id": 571661,
+      "image_id": "coc93h"
+    },
+    "first_release_date": 1781222400,
+    "name": "Fragments of Fear",
+    "slug": "fragments-of-fear"
+  },
+  {
     "id": 406693,
     "cover": {
       "id": 571644,
@@ -280,6 +404,16 @@
     "first_release_date": 1781222400,
     "name": "Escape the Marine Lab",
     "slug": "escape-the-marine-lab"
+  },
+  {
+    "id": 406651,
+    "cover": {
+      "id": 571588,
+      "image_id": "coc91g"
+    },
+    "first_release_date": 1781222400,
+    "name": "Reactor Critical",
+    "slug": "reactor-critical"
   },
   {
     "id": 406475,
@@ -306,6 +440,16 @@
     "first_release_date": 1781222400,
     "name": "Wet Wealth",
     "slug": "wet-wealth"
+  },
+  {
+    "id": 406363,
+    "cover": {
+      "id": 571143,
+      "image_id": "coc8p3"
+    },
+    "first_release_date": 1781222400,
+    "name": "Sakura Hime 6",
+    "slug": "sakura-hime-6"
   },
   {
     "id": 406342,
@@ -688,6 +832,16 @@
     "slug": "survival-machine"
   },
   {
+    "id": 406700,
+    "cover": {
+      "id": 571658,
+      "image_id": "coc93e"
+    },
+    "first_release_date": 1781136000,
+    "name": "FZDDR",
+    "slug": "fzddr"
+  },
+  {
     "id": 406479,
     "cover": {
       "id": 571360,
@@ -820,159 +974,9 @@
     "slug": "youtuber-girls-love-behind-the-camera"
   },
   {
-    "id": 404264,
-    "cover": {
-      "id": 570373,
-      "image_id": "coc83p"
-    },
-    "first_release_date": 1781136000,
-    "name": "Judy's Adventure DX",
-    "slug": "judys-adventure-dx"
-  },
-  {
     "id": 404261,
     "first_release_date": 1781136000,
     "name": "Aphrodite Evolve Weapons Survivor: Greek Gods Versus Heaven",
     "slug": "aphrodite-evolve-weapons-survivor-greek-gods-versus-heaven"
-  },
-  {
-    "id": 404031,
-    "cover": {
-      "id": 567559,
-      "image_id": "coc5xj"
-    },
-    "first_release_date": 1781136000,
-    "name": "Space Warpster",
-    "slug": "space-warpster"
-  },
-  {
-    "id": 403749,
-    "cover": {
-      "id": 566714,
-      "image_id": "coc5a2"
-    },
-    "first_release_date": 1781136000,
-    "name": "Reel it! World Fishing",
-    "slug": "reel-it-world-fishing"
-  },
-  {
-    "id": 403722,
-    "cover": {
-      "id": 566688,
-      "image_id": "coc59c"
-    },
-    "first_release_date": 1781136000,
-    "name": "Youtuber Boys: Love Behind the Camera",
-    "slug": "youtuber-boys-love-behind-the-camera"
-  },
-  {
-    "id": 403637,
-    "cover": {
-      "id": 566504,
-      "image_id": "coc548"
-    },
-    "first_release_date": 1781136000,
-    "name": "Nosferatu no Otome-tachi",
-    "slug": "nosferatu-no-otome-tachi"
-  },
-  {
-    "id": 402574,
-    "cover": {
-      "id": 564545,
-      "image_id": "coc3lt"
-    },
-    "first_release_date": 1781136000,
-    "name": "Dragon Loop",
-    "slug": "dragon-loop"
-  },
-  {
-    "id": 402426,
-    "cover": {
-      "id": 564255,
-      "image_id": "coc3dr"
-    },
-    "first_release_date": 1781136000,
-    "name": "Lovely Deco House",
-    "slug": "lovely-deco-house"
-  },
-  {
-    "id": 401397,
-    "cover": {
-      "id": 562454,
-      "image_id": "coc1zq"
-    },
-    "first_release_date": 1781136000,
-    "name": "Honey Sprint",
-    "slug": "honey-sprint"
-  },
-  {
-    "id": 396520,
-    "cover": {
-      "id": 553328,
-      "image_id": "cobuy8"
-    },
-    "first_release_date": 1781136000,
-    "name": "Boxroom",
-    "slug": "boxroom"
-  },
-  {
-    "id": 391162,
-    "cover": {
-      "id": 545089,
-      "image_id": "cobold"
-    },
-    "first_release_date": 1781136000,
-    "name": "Buenos Aires Mirror Line",
-    "slug": "buenos-aires-mirror-line"
-  },
-  {
-    "id": 390321,
-    "cover": {
-      "id": 538775,
-      "image_id": "cobjpz"
-    },
-    "first_release_date": 1781136000,
-    "name": "Dreamstranded",
-    "slug": "dreamstranded"
-  },
-  {
-    "id": 388457,
-    "cover": {
-      "id": 533732,
-      "image_id": "cobftw"
-    },
-    "first_release_date": 1781136000,
-    "name": "Powerful Pro Yakyuu 2026-2027",
-    "slug": "powerful-pro-yakyuu-2026-2027"
-  },
-  {
-    "id": 385399,
-    "cover": {
-      "id": 526357,
-      "image_id": "coba51"
-    },
-    "first_release_date": 1781136000,
-    "name": "Underwater",
-    "slug": "underwater--3"
-  },
-  {
-    "id": 381087,
-    "cover": {
-      "id": 513246,
-      "image_id": "cob00u"
-    },
-    "first_release_date": 1781136000,
-    "name": "Frog Sqwad",
-    "slug": "frog-sqwad"
-  },
-  {
-    "id": 379753,
-    "cover": {
-      "id": 568243,
-      "image_id": "coc6gj"
-    },
-    "first_release_date": 1781136000,
-    "name": "Imago Season",
-    "slug": "imago-season"
   }
 ]

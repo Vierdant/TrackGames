@@ -2,9 +2,9 @@
 
 import { GhostButton, PrimaryButton } from "@/app/components/ui/Buttons";
 import { Input } from "@/app/components/ui/Inputs";
+import MenuPanel from "@/app/components/ui/MenuPanel";
 import * as normalize from "@/lib/util/normalize";
-import { X } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export function ColorField({ name, value, onChange, placeholder, label }: { name: string; value: string; onChange: (value: string) => void; placeholder: string; label: string }) {
     const pickerValue = normalize.hexColor(value || placeholder);
@@ -28,18 +28,18 @@ export function ColorField({ name, value, onChange, placeholder, label }: { name
     );
 }
 
-export function MediaModal({ title, value, onClose, onSave }: { title: string; value: string; onClose: () => void; onSave: (value: string) => void }) {
+export function MediaModal({ open, title, value, onClose, onSave }: { open: boolean; title: string; value: string; onClose: () => void; onSave: (value: string) => void }) {
     const [draft, setDraft] = useState(value);
 
+    useEffect(() => {
+        if (!open) return;
+
+        const frame = window.requestAnimationFrame(() => setDraft(value));
+        return () => window.cancelAnimationFrame(frame);
+    }, [open, value]);
+
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-overlay px-4">
-            <div className="w-full max-w-md rounded bg-bg-secondary p-5 shadow-main">
-                <div className="mb-4 flex items-center justify-between">
-                    <h3 className="text-lg font-bold">{title}</h3>
-                    <button type="button" onClick={onClose} className="cursor-pointer rounded p-1 text-text-muted hover:text-primary" aria-label="Close">
-                        <X size={18} />
-                    </button>
-                </div>
+        <MenuPanel open={open} onClose={onClose} title={title}>
                 <div className="flex flex-col gap-3">
                     <Input value={draft} onChange={(event) => setDraft(event.target.value)} placeholder="https://..." />
                 </div>
@@ -47,8 +47,7 @@ export function MediaModal({ title, value, onClose, onSave }: { title: string; v
                     <GhostButton type="button" onClick={onClose}>Cancel</GhostButton>
                     <PrimaryButton type="button" onClick={() => onSave(draft)}>Apply</PrimaryButton>
                 </div>
-            </div>
-        </div>
+        </MenuPanel>
     );
 }
 

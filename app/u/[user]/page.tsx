@@ -1,5 +1,5 @@
 import Container from "@/app/components/layout/Container";
-import { getPublicUser, profileThemeStyle } from "@/lib/account/user";
+import { canViewPrivacy, getPublicUser, profileThemeStyle } from "@/lib/account/user";
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
 import FollowerPreviewPanel from "./FollowerPreviewPanel";
@@ -17,9 +17,10 @@ import { getProfileSocialState, getUserActivities, getUserBadges } from "@/lib/d
 import BadgeView from "@/app/components/social/BadgeView";
 import ActivityList from "./ActivityList";
 
-export default async function Page({ params, searchParams }: { params: Promise<{ user: string }>; searchParams: Promise<{ tab?: string; activityPage?: string }>; }) {
+export default async function Page({ params, searchParams }: { params: Promise<{ user: string }>; searchParams: Promise<{ tab?: string; activityPage?: string; activityFilter?: string }>; }) {
     const { user } = await params;
-    const { tab = "profile", activityPage = "1" } = await searchParams;
+    const { tab = "profile", activityPage = "1", activityFilter = "all" } = await searchParams;
+    const activeTab = tab === "logs" ? "activity" : tab;
     const [profile, session] = await Promise.all([getPublicUser(user), auth()]);
 
     if (!profile) {
@@ -33,11 +34,18 @@ export default async function Page({ params, searchParams }: { params: Promise<{
     const socials = parseSocials(profile.socials);
     const savedWidgets = parseWidgets(profile.widgets);
     const profileWidgets = savedWidgets.length > 0 ? savedWidgets : [];
-    const [socialState, badges, playlists, activity] = await Promise.all([
+    const [socialState, badges] = await Promise.all([
         getProfileSocialState(profile.id, session?.user?.id),
         getUserBadges(profile.id),
-        tab === "playlists" ? getUserPlaylists(profile.id) : [],
-        tab === "activity" ? getUserActivities(profile.id, Number(activityPage)) : null,
+    ]);
+    const canViewProfile = canViewPrivacy(profile.privacy, isOwnProfile, socialState.isFollowing);
+    const canViewLibrary = canViewPrivacy(profile.libraryPrivacy, isOwnProfile, socialState.isFollowing);
+    const canViewLogs = canViewPrivacy(profile.logsPrivacy, isOwnProfile, socialState.isFollowing);
+    const canViewActivity = canViewPrivacy(profile.activityPrivacy, isOwnProfile, socialState.isFollowing);
+    const safeActivityFilter = activityFilter === "logs" && !canViewLogs ? "all" : activityFilter;
+    const [playlists, activity] = await Promise.all([
+        activeTab === "playlists" && canViewLibrary ? getUserPlaylists(profile.id) : [],
+        activeTab === "activity" && canViewActivity ? getUserActivities(profile.id, Number(activityPage), safeActivityFilter, canViewLogs) : null,
     ]);
 
     return (
@@ -69,8 +77,8 @@ export default async function Page({ params, searchParams }: { params: Promise<{
                         </aside>
                         {/* RIGHT SIDE */}
                         <div className="min-w-0 flex-1">
-                            <ProfileSwitcherPanel user={displayName} defaultTab={tab}>
-                                {tab === "profile" && (
+                            <ProfileSwitcherPanel user={displayName} defaultTab={activeTab}>
+                                {activeTab === "profile" && canViewProfile && (
                                     <div className="flex flex-col gap-2 w-full justify-center">
                                         {profileWidgets &&
                                             profileWidgets.map((widget, index) => (
@@ -81,16 +89,25 @@ export default async function Page({ params, searchParams }: { params: Promise<{
                                     </div>
 
                                 )}
-                                {tab === "activity" &&
+                                {activeTab === "profile" && !canViewProfile && (
+                                    <p className="rounded border border-border bg-bg p-4 text-sm text-text-muted">This profile is private.</p>
+                                )}
+                                {activeTab === "activity" && canViewActivity &&
                                     (
-                                        <ActivityList user={displayName} activities={activity?.activities ?? []} page={activity?.page ?? 1} totalPages={activity?.totalPages ?? 1} />
+                                        <ActivityList user={displayName} activities={activity?.activities ?? []} page={activity?.page ?? 1} totalPages={activity?.totalPages ?? 1} filter={safeActivityFilter} canViewLogs={canViewLogs} />
                                     )
                                 }
-                                {tab === "playlists" &&
+                                {activeTab === "activity" && !canViewActivity && (
+                                    <p className="rounded border border-border bg-bg p-4 text-sm text-text-muted">Activity is private.</p>
+                                )}
+                                {activeTab === "playlists" && canViewLibrary &&
                                     (
                                         <ProfilePlaylists playlists={playlists} canCreate={isOwnProfile} />
                                     )
                                 }
+                                {activeTab === "playlists" && !canViewLibrary && (
+                                    <p className="rounded border border-border bg-bg p-4 text-sm text-text-muted">Library and playlists are private.</p>
+                                )}
 
                             </ProfileSwitcherPanel>
                         </div>

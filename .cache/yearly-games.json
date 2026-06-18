@@ -64,7 +64,7 @@
     ],
     "slug": "subnautica-2",
     "summary": "Subnautica 2 is an underwater survival adventure set on an all-new alien world, developed by Unknown Worlds. Play alone or with friends in 4-player co-op. Adapt to survive by building custom bases and crafting tools. Explore the unknown to uncover the mysteries hidden within the depths.",
-    "total_rating": 90.05856888383866
+    "total_rating": 90.03710862727858
   },
   {
     "id": 347668,
@@ -158,6 +158,61 @@
     "total_rating": 90.02884515306263
   },
   {
+    "id": 134612,
+    "cover": {
+      "id": 556845,
+      "image_id": "cobxnx"
+    },
+    "name": "Pragmata",
+    "platforms": [
+      {
+        "id": 169,
+        "name": "Xbox Series X|S"
+      },
+      {
+        "id": 508,
+        "name": "Nintendo Switch 2"
+      },
+      {
+        "id": 6,
+        "name": "PC (Microsoft Windows)"
+      },
+      {
+        "id": 167,
+        "name": "PlayStation 5"
+      }
+    ],
+    "screenshots": [
+      {
+        "id": 388131,
+        "image_id": "sc8bhf"
+      },
+      {
+        "id": 388130,
+        "image_id": "sc8bhe"
+      },
+      {
+        "id": 388269,
+        "image_id": "sc8bl9"
+      },
+      {
+        "id": 388270,
+        "image_id": "sc8bla"
+      },
+      {
+        "id": 388272,
+        "image_id": "sc8blc"
+      },
+      {
+        "id": 388271,
+        "image_id": "sc8blb"
+      }
+    ],
+    "slug": "pragmata",
+    "summary": "Pragmata is a sci-fi action-adventure game set in the near future. The story follows Hugh and his android companion Diana as they navigate a Lunar research station. Gameplay incorporates action elements alongside mechanics involving interaction with systems within the environment.",
+    "total_rating": 87.25038843156199
+  },
+  {
     "id": 361855,
     "cover": {
       "id": 480825,
@@ -211,61 +266,6 @@
     "slug": "lego-batman-legacy-of-the-dark-knight",
     "summary": "Rise as the Dark Knight and experience the essential Batman story in a bold, action-packed adventure with hard-hitting combat, an open-world Gotham City, and the signature LEGO charm that fans know and love.",
     "total_rating": 86.9754001021264
-  },
-  {
-    "id": 134612,
-    "cover": {
-      "id": 556845,
-      "image_id": "cobxnx"
-    },
-    "name": "Pragmata",
-    "platforms": [
-      {
-        "id": 169,
-        "name": "Xbox Series X|S"
-      },
-      {
-        "id": 508,
-        "name": "Nintendo Switch 2"
-      },
-      {
-        "id": 6,
-        "name": "PC (Microsoft Windows)"
-      },
-      {
-        "id": 167,
-        "name": "PlayStation 5"
-      }
-    ],
-    "screenshots": [
-      {
-        "id": 388131,
-        "image_id": "sc8bhf"
-      },
-      {
-        "id": 388130,
-        "image_id": "sc8bhe"
-      },
-      {
-        "id": 388269,
-        "image_id": "sc8bl9"
-      },
-      {
-        "id": 388270,
-        "image_id": "sc8bla"
-      },
-      {
-        "id": 388272,
-        "image_id": "sc8blc"
-      },
-      {
-        "id": 388271,
-        "image_id": "sc8blb"
-      }
-    ],
-    "slug": "pragmata",
-    "summary": "Pragmata is a sci-fi action-adventure game set in the near future. The story follows Hugh and his android companion Diana as they navigate a Lunar research station. Gameplay incorporates action elements alongside mechanics involving interaction with systems within the environment.",
-    "total_rating": 86.87346583622282
   },
   {
     "id": 125633,
@@ -340,7 +340,7 @@
     ],
     "slug": "crimson-desert",
     "summary": "Crimson Desert is an open-world action-adventure game set in the beautiful yet brutal continent of Pywel. Embark on a journey as the Greymane Kliff and restore what has been lost. Explore uncharted lands, fight against threats that stand in your way, and discover the wonders the world has in store.",
-    "total_rating": 85.69210079177404
+    "total_rating": 85.6462799446314
   },
   {
     "id": 348330,
@@ -419,7 +419,7 @@
     ],
     "slug": "forza-horizon-6",
     "summary": "Discover the breathtaking landscapes of Japan in over 550 real-world cars and become a racing Legend at the Horizon Festival. Start your journey as a tourist and explore a world full of hit music and Japanese culture. Build a Valley Estate, acquire awe-inspiring homes, and display your prized car collection in fully Customizable Garages. Cruise the roads with your friends and join Car Meets around Japan, unleash your imagination with EventLab and build together in Horizon CoLab.",
-    "total_rating": 85.08421649826853
+    "total_rating": 85.09141249403497
   },
   {
     "id": 152244,
@@ -675,7 +675,7 @@
     ],
     "slug": "reanimal",
     "summary": "The creators of Little Nightmares I & II have returned to take you on a darker, more terrifying journey than ever before. In this horror adventure game, a brother & sister go through hell to rescue their missing friends and escape the island that they used to call home.",
-    "total_rating": 80.8802169973954
+    "total_rating": 80.87922879634075
   },
   {
     "id": 141114,
@@ -738,7 +738,7 @@
     ],
     "slug": "007-first-light",
     "summary": "007 First Light is a thrilling espionage action-adventure game from IO Interactive. Players follow James Bond as a young, resourceful, and sometimes reckless recruit in MI6's training program and discover an origin story of the world's most famous spy.",
-    "total_rating": 80.35621906073406
+    "total_rating": 79.84985014083328
   },
   {
     "id": 250630,
@@ -833,7 +833,7 @@
     ],
     "slug": "marathon--2",
     "summary": "A PvP-focused extraction shooter set on the mysterious planet of Tau Ceti IV, Marathon will see players inhabit the bodies of Runners, cybernetic mercenaries who have been designed to survive the planet’s harsh environments and explore the lost colony that once inhabited Tau Ceti’s surface. Players will engage solo or in crews of three, searching for mysterious alien artifacts, as well as for valuable loot and new weapons and gear that they can add to their collection.",
-    "total_rating": 78.76582531203391
+    "total_rating": 78.76236749030724
   },
   {
     "id": 237780,

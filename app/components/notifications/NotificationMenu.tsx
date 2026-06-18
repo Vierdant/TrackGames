@@ -3,7 +3,8 @@
 import { markNotificationsRead } from "@/lib/actions/social";
 import { Bell } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useRef, useState, useTransition } from "react";
+import { useRef, useState, useTransition } from "react";
+import MenuPanel from "../ui/MenuPanel";
 
 type Notification = {
     id: string;
@@ -34,20 +35,7 @@ export default function NotificationMenu({ notifications }: { notifications: Not
     const [open, setOpen] = useState(false);
     const [unread, setUnread] = useState(notifications.some((notification) => !notification.readAt));
     const [pending, startTransition] = useTransition();
-    const menuRef = useRef<HTMLDivElement>(null);
-
-    useEffect(() => {
-        if (!open) return;
-
-        function close(event: MouseEvent) {
-            if (!menuRef.current?.contains(event.target as Node)) {
-                setOpen(false);
-            }
-        }
-
-        document.addEventListener("mousedown", close);
-        return () => document.removeEventListener("mousedown", close);
-    }, [open]);
+    const buttonRef = useRef<HTMLButtonElement>(null);
 
     function toggle() {
         setOpen(!open);
@@ -61,13 +49,12 @@ export default function NotificationMenu({ notifications }: { notifications: Not
     }
 
     return (
-        <div ref={menuRef} className="relative">
-            <button type="button" onClick={toggle} disabled={pending} className="relative grid size-10 cursor-pointer place-items-center rounded text-text-muted transition hover:text-primary" aria-label="Notifications">
+        <div className="relative">
+            <button ref={buttonRef} type="button" onClick={toggle} disabled={pending} className="relative grid size-10 cursor-pointer place-items-center rounded text-text-muted transition hover:text-primary" aria-label="Notifications">
                 <Bell size={19} />
                 {unread && <span className="absolute right-2 top-2 size-2 rounded-full bg-error" />}
             </button>
-            {open && (
-                <div className="absolute right-0 top-full z-50 mt-3 w-80 rounded border border-border bg-bg-secondary p-2 text-sm shadow-main">
+            <MenuPanel open={open} onClose={() => setOpen(false)} variant="anchored" showClose={false} role="menu" anchorRef={buttonRef}>
                     <h2 className="border-b border-border px-2 pb-2 text-sm font-bold">Notifications</h2>
                     <div className="mt-2 flex max-h-96 flex-col overflow-y-auto">
                         {notifications.length ? notifications.map((notification) => (
@@ -79,8 +66,7 @@ export default function NotificationMenu({ notifications }: { notifications: Not
                             <p className="px-3 py-4 text-text-muted">No notifications yet.</p>
                         )}
                     </div>
-                </div>
-            )}
+            </MenuPanel>
         </div>
     );
 }

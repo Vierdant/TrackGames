@@ -5,9 +5,9 @@ import { GameList } from "@/lib/types";
 import { Edit3, Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
-import { createPortal } from "react-dom";
 import { GhostButton, PrimaryButton } from "../ui/Buttons";
 import { Checkbox, Input, Select, Textarea } from "../ui/Inputs";
+import MenuPanel from "../ui/MenuPanel";
 
 export default function GameListEditButton({ list }: { list: Pick<GameList, "id" | "type" | "name" | "description" | "image" | "background" | "color" | "accentColor" | "privacy" | "commentsHidden"> }) {
     const [open, setOpen] = useState(false);
@@ -39,12 +39,7 @@ export default function GameListEditButton({ list }: { list: Pick<GameList, "id"
                 <Edit3 size={16} />
                 Edit
             </GhostButton>
-            {open && typeof document !== "undefined" && createPortal(
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-overlay px-4">
-                    <div className="relative w-full max-w-lg rounded bg-bg p-5 shadow-main">
-                        <div className="mb-4 flex items-center justify-between gap-3">
-                            <h3 className="text-lg font-bold">Edit list</h3>
-                        </div>
+            <MenuPanel open={open} onClose={() => setOpen(false)} title="Edit list" panelClassName="max-w-lg bg-bg" portal>
                         <form action={save} className="flex flex-col gap-3">
                             <label className="text-sm font-bold text-text-muted">
                                 Name
@@ -92,10 +87,7 @@ export default function GameListEditButton({ list }: { list: Pick<GameList, "id"
                                 </div>
                             </div>
                         </form>
-                    </div>
-                </div>,
-                document.body
-            )}
+            </MenuPanel>
         </>
     );
 }

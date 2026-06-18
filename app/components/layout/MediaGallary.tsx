@@ -1,5 +1,6 @@
 "use client";
 
+import { ImageIdToURL } from "@/lib/external/igdb/util";
 import Image from "next/image";
 import { useState } from "react";
 import HorizontalScroller from "./HorizontalScroller";
@@ -76,7 +77,7 @@ export default function MediaGallery({ media }: { media: MediaItem[] }) {
                             ) : (
                                 <span className="relative block w-24 sm:w-32 aspect-video">
                                     <Image
-                                        src={`https://images.igdb.com/igdb/image/upload/t_original/${item.id}.jpg`}
+                                        src={ImageIdToURL(item.id, "screenshot_big") ?? ""}
                                         alt=""
                                         fill
                                         sizes="128px"

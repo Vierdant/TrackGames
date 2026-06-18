@@ -390,6 +390,7 @@ export const ModelName = {
   VerificationToken: 'VerificationToken',
   Game: 'Game',
   UserGameEntry: 'UserGameEntry',
+  UserGamePlayLog: 'UserGamePlayLog',
   GameList: 'GameList',
   GameListEntry: 'GameListEntry',
   Collection: 'Collection',
@@ -420,7 +421,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "account" | "session" | "verificationToken" | "game" | "userGameEntry" | "gameList" | "gameListEntry" | "collection" | "franchise" | "genre" | "platform" | "company" | "keyword" | "activity" | "like" | "comment" | "userFollow" | "badge" | "userBadge" | "notification"
+    modelProps: "user" | "account" | "session" | "verificationToken" | "game" | "userGameEntry" | "userGamePlayLog" | "gameList" | "gameListEntry" | "collection" | "franchise" | "genre" | "platform" | "company" | "keyword" | "activity" | "like" | "comment" | "userFollow" | "badge" | "userBadge" | "notification"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -865,6 +866,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.UserGameEntryCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.UserGameEntryCountAggregateOutputType> | number
+        }
+      }
+    }
+    UserGamePlayLog: {
+      payload: Prisma.$UserGamePlayLogPayload<ExtArgs>
+      fields: Prisma.UserGamePlayLogFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.UserGamePlayLogFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserGamePlayLogPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.UserGamePlayLogFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserGamePlayLogPayload>
+        }
+        findFirst: {
+          args: Prisma.UserGamePlayLogFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserGamePlayLogPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.UserGamePlayLogFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserGamePlayLogPayload>
+        }
+        findMany: {
+          args: Prisma.UserGamePlayLogFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserGamePlayLogPayload>[]
+        }
+        create: {
+          args: Prisma.UserGamePlayLogCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserGamePlayLogPayload>
+        }
+        createMany: {
+          args: Prisma.UserGamePlayLogCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.UserGamePlayLogCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserGamePlayLogPayload>[]
+        }
+        delete: {
+          args: Prisma.UserGamePlayLogDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserGamePlayLogPayload>
+        }
+        update: {
+          args: Prisma.UserGamePlayLogUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserGamePlayLogPayload>
+        }
+        deleteMany: {
+          args: Prisma.UserGamePlayLogDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.UserGamePlayLogUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.UserGamePlayLogUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserGamePlayLogPayload>[]
+        }
+        upsert: {
+          args: Prisma.UserGamePlayLogUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserGamePlayLogPayload>
+        }
+        aggregate: {
+          args: Prisma.UserGamePlayLogAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateUserGamePlayLog>
+        }
+        groupBy: {
+          args: Prisma.UserGamePlayLogGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.UserGamePlayLogGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.UserGamePlayLogCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.UserGamePlayLogCountAggregateOutputType> | number
         }
       }
     }
@@ -2029,6 +2104,9 @@ export const UserScalarFieldEnum = {
   profileColor: 'profileColor',
   accentColor: 'accentColor',
   privacy: 'privacy',
+  libraryPrivacy: 'libraryPrivacy',
+  logsPrivacy: 'logsPrivacy',
+  activityPrivacy: 'activityPrivacy',
   contactEmail: 'contactEmail',
   website: 'website',
   socials: 'socials',
@@ -2117,6 +2195,7 @@ export const UserGameEntryScalarFieldEnum = {
   status: 'status',
   rating: 'rating',
   timePlayed: 'timePlayed',
+  timeMode: 'timeMode',
   timeFinished: 'timeFinished',
   timeMastered: 'timeMastered',
   notes: 'notes',
@@ -2130,6 +2209,21 @@ export const UserGameEntryScalarFieldEnum = {
 } as const
 
 export type UserGameEntryScalarFieldEnum = (typeof UserGameEntryScalarFieldEnum)[keyof typeof UserGameEntryScalarFieldEnum]
+
+
+export const UserGamePlayLogScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  entryId: 'entryId',
+  gameId: 'gameId',
+  hours: 'hours',
+  note: 'note',
+  skip: 'skip',
+  playedAt: 'playedAt',
+  createdAt: 'createdAt'
+} as const
+
+export type UserGamePlayLogScalarFieldEnum = (typeof UserGamePlayLogScalarFieldEnum)[keyof typeof UserGamePlayLogScalarFieldEnum]
 
 
 export const GameListScalarFieldEnum = {
@@ -2651,6 +2745,7 @@ export type GlobalOmitConfig = {
   verificationToken?: Prisma.VerificationTokenOmit
   game?: Prisma.GameOmit
   userGameEntry?: Prisma.UserGameEntryOmit
+  userGamePlayLog?: Prisma.UserGamePlayLogOmit
   gameList?: Prisma.GameListOmit
   gameListEntry?: Prisma.GameListEntryOmit
   collection?: Prisma.CollectionOmit

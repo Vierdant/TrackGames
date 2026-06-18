@@ -57,6 +57,7 @@ export const ModelName = {
   VerificationToken: 'VerificationToken',
   Game: 'Game',
   UserGameEntry: 'UserGameEntry',
+  UserGamePlayLog: 'UserGamePlayLog',
   GameList: 'GameList',
   GameListEntry: 'GameListEntry',
   Collection: 'Collection',
@@ -102,6 +103,9 @@ export const UserScalarFieldEnum = {
   profileColor: 'profileColor',
   accentColor: 'accentColor',
   privacy: 'privacy',
+  libraryPrivacy: 'libraryPrivacy',
+  logsPrivacy: 'logsPrivacy',
+  activityPrivacy: 'activityPrivacy',
   contactEmail: 'contactEmail',
   website: 'website',
   socials: 'socials',
@@ -190,6 +194,7 @@ export const UserGameEntryScalarFieldEnum = {
   status: 'status',
   rating: 'rating',
   timePlayed: 'timePlayed',
+  timeMode: 'timeMode',
   timeFinished: 'timeFinished',
   timeMastered: 'timeMastered',
   notes: 'notes',
@@ -203,6 +208,21 @@ export const UserGameEntryScalarFieldEnum = {
 } as const
 
 export type UserGameEntryScalarFieldEnum = (typeof UserGameEntryScalarFieldEnum)[keyof typeof UserGameEntryScalarFieldEnum]
+
+
+export const UserGamePlayLogScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  entryId: 'entryId',
+  gameId: 'gameId',
+  hours: 'hours',
+  note: 'note',
+  skip: 'skip',
+  playedAt: 'playedAt',
+  createdAt: 'createdAt'
+} as const
+
+export type UserGamePlayLogScalarFieldEnum = (typeof UserGamePlayLogScalarFieldEnum)[keyof typeof UserGamePlayLogScalarFieldEnum]
 
 
 export const GameListScalarFieldEnum = {

@@ -6,7 +6,7 @@ import MediaGallary from "@/app/components/layout/MediaGallary";
 import { Company, Game, Genre, Platform } from "@/lib/types";
 import { ImageIdToURL } from "@/lib/external/igdb/util";
 import * as normalize from "@/lib/util/normalize";
-import { Monitor, ToggleRight, Gamepad2, GamepadDirectional, TabletSmartphone, Astroid, Play, Library, Apple, Clock, Flag, BadgeCheck, Star } from "lucide-react";
+import { Monitor, ToggleRight, Gamepad2, GamepadDirectional, TabletSmartphone, Astroid, Play, Library, Apple, Clock, Flag, BadgeCheck } from "lucide-react";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { getGame, getGameBySlug } from "@/lib/data/games";
@@ -101,7 +101,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
 
                 <Container className="relative z-1 flex justify-start gap-10 items-end h-full flex-row">
                     <div className="mb-4 flex min-h-max min-w-0 max-w-full gap-6 text-text">
-                        <GameCard game={game} />
+                        <GameCard game={game} preload />
                         <div className="flex min-w-0 flex-col justify-between">
                             <div className="min-w-0">
                                 <h1 className="max-w-full wrap-break-word text-4xl font-bold">{game.name}</h1>

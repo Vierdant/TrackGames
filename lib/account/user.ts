@@ -32,6 +32,9 @@ export async function getUser(sessionUser: SessionUserRef | undefined): Promise<
             profileColor: true,
             accentColor: true,
             privacy: true,
+            libraryPrivacy: true,
+            logsPrivacy: true,
+            activityPrivacy: true,
             socials: true,
             preferences: true,
             widgets: true,
@@ -59,6 +62,9 @@ export async function getUser(sessionUser: SessionUserRef | undefined): Promise<
         profileColor: profile.profileColor,
         accentColor: profile.accentColor,
         privacy: profile.privacy,
+        libraryPrivacy: profile.libraryPrivacy,
+        logsPrivacy: profile.logsPrivacy,
+        activityPrivacy: profile.activityPrivacy,
         socials: profile.socials,
         preferences: profile.preferences,
         widgets: profile.widgets,
@@ -82,6 +88,10 @@ export async function getPublicUser(name: string): Promise<PublicUser | null> {
             bio: true,
             profileColor: true,
             accentColor: true,
+            privacy: true,
+            libraryPrivacy: true,
+            logsPrivacy: true,
+            activityPrivacy: true,
             socials: true,
             widgets: true,
             commentsHidden: true,
@@ -91,6 +101,13 @@ export async function getPublicUser(name: string): Promise<PublicUser | null> {
     });
 
     return user as PublicUser;
+}
+
+export function canViewPrivacy(privacy: string | null | undefined, isOwner: boolean, isFollower: boolean) {
+    if (isOwner) return true;
+    if (privacy === "private") return false;
+    if (privacy === "followers") return isFollower;
+    return true;
 }
 
 export function profileThemeStyle(profileColor: string | null | undefined, accentColor: string | null | undefined) {

@@ -1,5 +1,5 @@
 import db from "../db";
-import { InteractionTargetType, LikeTargetType, NotificationType } from "../generated/prisma/enums";
+import { ActivityType, InteractionTargetType, LikeTargetType, NotificationType } from "../generated/prisma/enums";
 
 export const activityPageSize = 32;
 
@@ -99,16 +99,26 @@ export async function getProfileSocialState(profileId: string, viewerId?: string
     };
 }
 
-export async function getUserActivities(userId: string, page: number) {
+export async function getUserActivities(userId: string, page: number, filter = "all", canViewLogs = true) {
     const safePage = Math.max(1, Math.floor(page));
+    const typeGroups: Record<string, ActivityType[]> = {
+        logs: [ActivityType.LOGGED_GAME_PLAY],
+        games: [ActivityType.ADDED_GAME_TO_LIBRARY, ActivityType.RATED_GAME],
+        playlists: [ActivityType.CREATED_PLAYLIST, ActivityType.ADDED_GAME_TO_PLAYLIST, ActivityType.LIKED_GAME_LIST, ActivityType.COMMENTED_ON_GAME_LIST],
+        comments: [ActivityType.COMMENTED_ON_GAME_LIST, ActivityType.COMMENTED_ON_PROFILE, ActivityType.COMMENTED_ON_GAME, ActivityType.REPLIED_TO_COMMENT, ActivityType.LIKED_COMMENT],
+        social: [ActivityType.FOLLOWED_USER, ActivityType.EARNED_BADGE],
+    };
+    const types = filter === "logs" && !canViewLogs ? [] : typeGroups[filter];
+    const where = {
+        userId,
+        expiresAt: {
+            gt: new Date(),
+        },
+        ...(types ? { type: { in: types } } : !canViewLogs ? { type: { not: ActivityType.LOGGED_GAME_PLAY } } : {}),
+    };
     const [activities, count] = await Promise.all([
         db.activity.findMany({
-            where: {
-                userId,
-                expiresAt: {
-                    gt: new Date(),
-                },
-            },
+            where,
             take: activityPageSize,
             skip: (safePage - 1) * activityPageSize,
             orderBy: {
@@ -130,12 +140,7 @@ export async function getUserActivities(userId: string, page: number) {
             },
         }),
         db.activity.count({
-            where: {
-                userId,
-                expiresAt: {
-                    gt: new Date(),
-                },
-            },
+            where,
         }),
     ]);
     const targets = activities.map((activity) => ({
@@ -202,6 +207,27 @@ export async function getUserActivities(userId: string, page: number) {
         page: safePage,
         totalPages: Math.max(1, Math.ceil(count / activityPageSize)),
     };
+}
+
+export async function getUserGamePlayLogs(userId: string) {
+    return await db.userGamePlayLog.findMany({
+        where: {
+            userId,
+        },
+        take: 24,
+        orderBy: {
+            playedAt: "desc",
+        },
+        include: {
+            game: {
+                select: {
+                    slug: true,
+                    name: true,
+                    cover: true,
+                },
+            },
+        },
+    });
 }
 
 export async function getUserBadges(userId: string) {

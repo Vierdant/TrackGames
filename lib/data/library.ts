@@ -9,6 +9,11 @@ export async function getUserGameEntries(userId: string): Promise<UserGameEntry[
         },
         include: {
             game: true,
+            userGamePlayLogs: {
+                orderBy: {
+                    playedAt: "desc",
+                },
+            },
         },
         orderBy: {
             addedAt: "desc",

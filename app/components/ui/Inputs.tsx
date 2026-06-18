@@ -29,5 +29,12 @@ export const Select = forwardRef<HTMLSelectElement, SelectHTMLAttributes<HTMLSel
 });
 
 export const Checkbox = forwardRef<HTMLInputElement, InputHTMLAttributes<HTMLInputElement>>(function Checkbox({ className, type, ...props }, ref) {
-    return <input ref={ref} {...props} type={type ?? "checkbox"} className={join("size-4 rounded border border-border bg-bg accent-primary", className)} />;
+    return (
+        <input
+            ref={ref}
+            {...props}
+            type={type ?? "checkbox"}
+            className={join("size-4 shrink-0 cursor-pointer appearance-none rounded border border-border bg-bg transition checked:border-primary checked:bg-primary checked:shadow-[0_0_0_3px_color-mix(in_srgb,var(--primary)_22%,transparent)] hover:border-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 disabled:cursor-not-allowed disabled:opacity-50", className)}
+        />
+    );
 });

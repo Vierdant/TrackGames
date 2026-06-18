@@ -1,7 +1,7 @@
 "use client";
 
 import { GhostButton, PrimaryButton } from "@/app/components/ui/Buttons";
-import { Input } from "@/app/components/ui/Inputs";
+import { Checkbox, Input } from "@/app/components/ui/Inputs";
 import { getSteamProfileImportPreview, importSteamLibrary } from "@/lib/actions/import";
 import Image from "next/image";
 import { useState, useTransition } from "react";
@@ -9,6 +9,7 @@ import { useState, useTransition } from "react";
 export default function ImportSettingsForm() {
     const [steamId, setSteamId] = useState("");
     const [profile, setProfile] = useState<{ steamId: string; personaname: string; profileurl: string; avatar: string; } | null>(null);
+    const [skipImportedLogs, setSkipImportedLogs] = useState(true);
     const [error, setError] = useState("");
     const [result, setResult] = useState<{ imported: number; failed: string[] } | null>(null);
     const [pending, startTransition] = useTransition();
@@ -41,7 +42,7 @@ export default function ImportSettingsForm() {
         setError("");
         startTransition(async () => {
             try {
-                setResult(await importSteamLibrary(profile.steamId));
+                setResult(await importSteamLibrary(profile.steamId, skipImportedLogs));
             } catch {
                 setError("Steam import failed. Check your profile ID and try again.");
             }
@@ -88,9 +89,20 @@ export default function ImportSettingsForm() {
                                 )}
                                 <div>
                                     <p className="font-bold text-text">Import games from profile <a href={profile.profileurl} target="_blank" className="bg-bg p-1 text-secondary">{profile.personaname}</a>?</p>
-                                    <p className="mt-1 text-sm text-text-muted">Importing a Steam library will add matched games and overwrite existing time played values in your library.</p>
+                                    <p className="mt-1 text-sm text-text-muted">Importing a Steam library will add matched games, overwrite existing time played values, and create an import log for each matched game.</p>
                                 </div>
                             </div>
+                            <label className="flex cursor-pointer items-start gap-3 rounded border border-border bg-bg/60 p-3 text-sm text-text-muted">
+                                <Checkbox
+                                    checked={skipImportedLogs}
+                                    onChange={(event) => setSkipImportedLogs(event.target.checked)}
+                                    className="mt-0.5"
+                                />
+                                <span>
+                                    <span className="block font-bold text-text">Exclude imported logs from recaps</span>
+                                    <span>Excluded logs still appear in your log history, but do not count toward recap and rollup totals.</span>
+                                </span>
+                            </label>
                             <PrimaryButton type="button" onClick={importLibrary} disabled={pending} className="mt-4 w-fit">
                                 {pending ? "Importing..." : "Confirm import"}
                             </PrimaryButton>

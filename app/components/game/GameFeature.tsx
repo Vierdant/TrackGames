@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useState } from "react";
-import { Game, RawGame } from "@/lib/types";
+import { Game } from "@/lib/types";
 import { ImageIdToURL } from "@/lib/external/igdb/util";
 import Link from "next/link";
 
@@ -36,7 +36,7 @@ export default function GameFeature({ game }: { game: Game }) {
                         <p className="text-xs font-bold text-text-faint">Screenshots</p>
                         <div className="flex gap-2">
                         {screenshots.map((screenshot, index) => {
-                            const src = ImageIdToURL(screenshot, "1080");
+                            const src = ImageIdToURL(screenshot, "screenshot_big");
                             const isActive = index === activeScreenshot;
                             if (!src) return null;
 
@@ -71,7 +71,7 @@ export default function GameFeature({ game }: { game: Game }) {
                         src={heroSrc}
                         alt={game.name ?? "Game cover"}
                         fill
-                        sizes="(max-width: 768px) 100vw, 68vw"
+                        sizes="(max-width: 768px) 100vw, 620px"
                         className="object-contain object-center select-none"
                     />
                 ) : null}

@@ -125,6 +125,17 @@ body {
   font-weight: 400;
 }
 
+input[type="number"] {
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  margin: 0;
+  -webkit-appearance: none;
+}
+
 h1,
 h2,
 h3 {
@@ -158,6 +169,66 @@ h3 {
 
 .animate-auth-mode-in {
   animation: auth-mode-in 180ms ease-out;
+}
+
+@keyframes menu-panel-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes menu-panel-out {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  to {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes menu-overlay-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes menu-overlay-out {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+.animate-menu-panel-in {
+  animation: menu-panel-in 160ms ease-out;
+}
+
+.animate-menu-panel-out {
+  animation: menu-panel-out 140ms ease-in forwards;
+}
+
+.animate-menu-overlay-in {
+  animation: menu-overlay-in 160ms ease-out;
+}
+
+.animate-menu-overlay-out {
+  animation: menu-overlay-out 140ms ease-in forwards;
 }
 
 @utility no-scrollbar {

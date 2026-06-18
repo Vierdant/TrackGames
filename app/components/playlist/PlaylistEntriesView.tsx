@@ -1,10 +1,12 @@
 "use client";
 
 import GameCard from "@/app/components/game/GameCard";
+import { FilterBar } from "@/app/components/ui/FilterBar";
+import MenuPanel from "@/app/components/ui/MenuPanel";
 import { Input, Select } from "@/app/components/ui/Inputs";
 import { removeGameFromPlaylist, updatePlaylistEntry } from "@/lib/actions/playlists";
 import { GameListEntry } from "@/lib/types";
-import { Edit3, Search, Trash2, X } from "lucide-react";
+import { Edit3, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useMemo, useState, useTransition, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
@@ -41,15 +43,7 @@ function EntryShell({ listId, entry, canEdit, tiers, children }: { listId: strin
                     <Edit3 size={16} />
                 </button>
             )}
-            {editing && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-overlay px-4">
-                    <div className="w-full max-w-md rounded bg-bg-secondary p-5 shadow-main">
-                        <div className="mb-4 flex items-center justify-between gap-3">
-                            <h3 className="truncate text-lg font-bold">{entry.game.name}</h3>
-                            <button type="button" onClick={() => setEditing(false)} className="cursor-pointer rounded p-1 text-text-muted hover:text-primary" aria-label="Close">
-                                <X size={18} />
-                            </button>
-                        </div>
+            <MenuPanel open={editing} onClose={() => setEditing(false)} title={entry.game.name}>
                         <form action={save} className="flex flex-col gap-3">
                             <label className="text-sm font-bold text-text-muted">
                                 Position
@@ -74,9 +68,7 @@ function EntryShell({ listId, entry, canEdit, tiers, children }: { listId: strin
                                 </div>
                             </div>
                         </form>
-                    </div>
-                </div>
-            )}
+            </MenuPanel>
         </div>
     );
 }
@@ -147,18 +139,22 @@ export default function PlaylistEntriesView({ listId, entries, mode, canEdit, ti
 
     return (
         <div className="flex flex-col gap-4">
-            <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-                <div className="relative w-full md:max-w-sm">
-                    <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-text-faint" size={17} />
-                    <Input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search playlist" className="pl-9" />
-                </div>
-                <Select value={sort} onChange={(event) => setSort(event.target.value)} className="border-t-0 border-l-0 border-r-0 rounded-none">
-                    <option value="position">Playlist order</option>
-                    <option value="added">Recently added</option>
-                    <option value="name">Name</option>
-                    <option value="release">Release date</option>
-                </Select>
-            </div>
+            <FilterBar
+                filters={[
+                    { type: "search", value: query, onChange: setQuery, placeholder: "Search playlist" },
+                    {
+                    type: "select",
+                    label: "Sort playlist",
+                    value: sort,
+                    onChange: setSort,
+                    options: [
+                        { value: "position", label: "Playlist order" },
+                        { value: "added", label: "Recently added" },
+                        { value: "name", label: "Name" },
+                        { value: "release", label: "Release date" },
+                    ],
+                }]}
+            />
             {filtered.length ? (
                 <div className="grid gap-4 grid-cols-[repeat(auto-fill,8rem)]">
                     {filtered.map((entry) => (

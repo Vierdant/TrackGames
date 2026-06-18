@@ -22,9 +22,8 @@ export default function AvatarPreview({ image, size = 24, mdSize = size*1.5, ico
                     src={image}
                     alt={alt}
                     fill
-                    priority={priority}
+                    preload={priority}
                     sizes={`${imageSize}px`}
-                    quality={90}
                     className="pointer-events-none select-none object-cover object-center"
                 />
                 :

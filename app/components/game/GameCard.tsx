@@ -7,12 +7,12 @@ import { ImageIdToURL } from "@/lib/external/igdb/util";
 import { rippleEffect } from "@/lib/util/effects";
 import Link from "next/link";
 
-export default function GameCard({ game, size = 140, effect, hover, slugged = false }: { game: Game; size?: number | "full"; effect?: "ripple", hover?: "name", slugged?: boolean }) {
+export default function GameCard({ game, size = 140, effect, hover, slugged = false, preload = false }: { game: Game; size?: number | "full"; effect?: "ripple", hover?: "name", slugged?: boolean; preload?: boolean }) {
     const cardRef = useRef<HTMLDivElement>(null);
-    const src = ImageIdToURL(game.cover);
     const isFullSize = size === "full";
     const height = isFullSize ? "100%" : Math.round(size * 1.4);
-    const imageSizes = isFullSize ? "100vw" : `${size}px`;
+    const imageSizes = isFullSize ? "(max-width: 640px) 42vw, 140px" : `${size}px`;
+    const src = ImageIdToURL(game.cover, "cover_big");
 
     const createRipple = useCallback((event: React.PointerEvent<HTMLDivElement>) => {
         if (!effect) return;
@@ -20,7 +20,7 @@ export default function GameCard({ game, size = 140, effect, hover, slugged = fa
         if (effect == "ripple") {
             rippleEffect(cardRef, event);
         }
-    }, []);
+    }, [effect]);
 
     let imageClass = "object-cover object-center select-none";
 
@@ -41,6 +41,7 @@ export default function GameCard({ game, size = 140, effect, hover, slugged = fa
                     alt={game.slug ?? "game cover"}
                     fill
                     sizes={imageSizes}
+                    preload={preload}
                     className={imageClass}
                 />
                 : null}

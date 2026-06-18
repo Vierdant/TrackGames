@@ -7,7 +7,8 @@ import { ensureAndGetUserLibrary } from "@/lib/playlist/library";
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
 import GameListEditButton from "@/app/components/playlist/GameListEditButton";
-import { profileThemeStyle } from "@/lib/account/user";
+import { canViewPrivacy, profileThemeStyle } from "@/lib/account/user";
+import db from "@/lib/db";
 
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
     const { slug } = await params;
@@ -15,11 +16,23 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
     if (!library) redirect("/not-found");
 
     const isOwnLibrary = session?.user ? session.user.id === library.userId : false;
-    const userEntries = await getUserGameEntries(library?.userId);
+    const follow = !isOwnLibrary && session?.user?.id ? await db.userFollow.findUnique({
+        where: {
+            followerId_followingId: {
+                followerId: session.user.id,
+                followingId: library.userId,
+            },
+        },
+        select: {
+            id: true,
+        },
+    }) : null;
+    const canViewLibrary = canViewPrivacy(library.user?.libraryPrivacy ?? library.privacy, isOwnLibrary, Boolean(follow));
+    const userEntries = canViewLibrary ? await getUserGameEntries(library?.userId) : [];
     const background = library.background ?? null;
 
     return (
-        <main className="relative z-0 flex-1" style={profileThemeStyle(library.color, library.accentColor)}>
+        <main className="relative z-0 flex-1 mb-40" style={profileThemeStyle(library.color, library.accentColor)}>
             <BackgroundView src={background} />
             <Container>
                 {/* HEADER */}
@@ -40,7 +53,9 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
 
                 <section className="relative z-10 pt-5 pb-10 bg-bg/95">
                     <Container className="flex flex-col-reverse gap-5 lg:flex-row lg:items-start">
-                        {userEntries.length ? (
+                        {!canViewLibrary ? (
+                            <p className="rounded border border-border bg-bg p-4 text-sm text-text-muted">This library is private.</p>
+                        ) : userEntries.length ? (
                             <LibraryEntriesPanel entries={userEntries} canEdit={isOwnLibrary} />
                         ) : (
                             <p>No games found.</p>

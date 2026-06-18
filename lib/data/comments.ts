@@ -46,9 +46,23 @@ export async function getComments(targetType: InteractionTargetType, targetId: s
         },
     }) : [];
 
+    const ratings = targetType === InteractionTargetType.GAME ? await db.userGameEntry.findMany({
+        where: {
+            gameId: Number(targetId),
+            userId: {
+                in: Array.from(new Set(comments.map((comment) => comment.userId))),
+            },
+        },
+        select: {
+            userId: true,
+            rating: true,
+        },
+    }) : [];
+
     return comments.map((comment) => ({
         ...comment,
         likes: likes.find((like) => like.targetId === comment.id)?._count ?? 0,
         liked: userLikes.some((like) => like.targetId === comment.id),
+        userRating: ratings.find((rating) => rating.userId === comment.userId)?.rating ?? null,
     }));
 }

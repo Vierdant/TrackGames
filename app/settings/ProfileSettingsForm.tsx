@@ -148,8 +148,8 @@ export default function ProfileSettingsForm({ profile }: { profile: User; }) {
                 )}
             </div>
 
-            {modal === "avatar" && <MediaModal title="Avatar" value={image} onClose={() => setModal(null)} onSave={(value) => { setImage(value); setModal(null); }} />}
-            {modal === "background" && <MediaModal title="Background" value={background} onClose={() => setModal(null)} onSave={(value) => { setBackground(value); setModal(null);}} />}
+            <MediaModal open={modal === "avatar"} title="Avatar" value={image} onClose={() => setModal(null)} onSave={(value) => { setImage(value); setModal(null); }} />
+            <MediaModal open={modal === "background"} title="Background" value={background} onClose={() => setModal(null)} onSave={(value) => { setBackground(value); setModal(null);}} />
         </div>
     );
 }

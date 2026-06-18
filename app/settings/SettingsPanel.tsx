@@ -20,7 +20,7 @@ export default function SettingsPanel({ activeTab, profile }: { activeTab: strin
     return (
         <form action={action} className="flex flex-col gap-5">
             {activeTab === "profile" && <ProfileSettingsForm profile={profile} />}
-            {activeTab === "privacy" && <PrivacySettingsForm privacy={profile.privacy} />}
+            {activeTab === "privacy" && <PrivacySettingsForm profile={profile} />}
             {activeTab === "widgets" && <WidgetsSettingsForm profile={profile} />}
             {activeTab === "preferences" && <PreferencesSettingsForm preferences={profile.preferences} />}
             {activeTab === "account" && <AccountSettingsForm profile={profile} />}

@@ -1,11 +1,13 @@
 import { GameType } from "../../generated/prisma/enums";
 import { Collection, Company, Franchise, Game, Genre, Keyword, Platform, RawCollection, RawCompany, RawFranchise, RawGame, RawGenre, RawKeyword, RawPlatform } from "../../types";
 
-export function ImageIdToURL(id?: string, type: "cover" | "cover_big" | "1080" | "720" = "cover_big"): string | null {
+export function ImageIdToURL(id?: string, type: "cover_small" | "cover" | "cover_big" | "screenshot_big" | "1080" | "720" = "cover_big"): string | null {
     if (id != null) {
         switch (type) {
+            case "cover_small": return `https://images.igdb.com/igdb/image/upload/t_cover_small/${id}.webp`;
             case "cover_big": return `https://images.igdb.com/igdb/image/upload/t_cover_big/${id}.webp`;
             case "cover": return `https://images.igdb.com/igdb/image/upload/t_cover/${id}.webp`;
+            case "screenshot_big": return `https://images.igdb.com/igdb/image/upload/t_screenshot_big/${id}.webp`;
             case "1080": return `https://images.igdb.com/igdb/image/upload/t_1080p/${id}.webp`;
             case "720": return `https://images.igdb.com/igdb/image/upload/t_720p/${id}.webp`;
         }

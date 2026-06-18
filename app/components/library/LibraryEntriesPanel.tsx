@@ -2,10 +2,10 @@
 
 import { GameStatus } from "@/lib/generated/prisma/enums";
 import { UserGameEntry } from "@/lib/types";
-import { Grid2X2, List, Search } from "lucide-react";
+import { Grid2X2, List } from "lucide-react";
 import { useMemo, useState } from "react";
 import PaginatedList from "../layout/PaginatedList";
-import { Input, Select } from "../ui/Inputs";
+import { FilterBar } from "../ui/FilterBar";
 import PlaylistCard from "./PlaylistCard";
 
 function statusLabel(status: string) {
@@ -41,35 +41,44 @@ export default function LibraryEntriesPanel({ entries, canEdit }: { entries: Use
 
     return (
         <div className="flex w-full flex-col gap-5">
-            <div className="flex flex-col gap-3 mb-2 md:flex-row md:items-center md:justify-between">
-                <div className="flex flex-row flex-wrap gap-3">
-                    <div className="relative min-w-64">
-                        <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-text-faint" size={17} />
-                        <Input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search library" className="pl-9" />
-                    </div>
-                    <Select className="border-t-0 border-l-0 border-r-0 rounded-none" value={status} onChange={(event) => setStatus(event.target.value)} aria-label="Filter by status">
-                        <option value="all">All statuses</option>
-                        {Object.values(GameStatus).map((value) => (
-                            <option key={value} value={value}>{statusLabel(value)}</option>
-                        ))}
-                    </Select>
-                    <Select className="border-t-0 border-l-0 border-r-0 rounded-none" value={sort} onChange={(event) => setSort(event.target.value)} aria-label="Sort library">
-                        <option value="added">Recently added</option>
-                        <option value="rating">Rating</option>
-                        <option value="time">Time played</option>
-                        <option value="name">Name</option>
-                        <option value="release">Release date</option>
-                        <option value="notes">Has notes</option>
-                    </Select>
-                </div>
-                <div className="flex flex-row gap-2">
+            <div className="mb-2">
+                <FilterBar
+                    filters={[
+                        { type: "search", value: query, onChange: setQuery, placeholder: "Search library" },
+                        {
+                            type: "select",
+                            label: "Filter by status",
+                            value: status,
+                            onChange: setStatus,
+                            options: [
+                                { value: "all", label: "All statuses" },
+                                ...Object.values(GameStatus).map((value) => ({ value, label: statusLabel(value) })),
+                            ],
+                        },
+                        {
+                            type: "select",
+                            label: "Sort library",
+                            value: sort,
+                            onChange: setSort,
+                            options: [
+                                { value: "added", label: "Recently added" },
+                                { value: "rating", label: "Rating" },
+                                { value: "time", label: "Time played" },
+                                { value: "name", label: "Name" },
+                                { value: "release", label: "Release date" },
+                                { value: "notes", label: "Has notes" },
+                            ],
+                        },
+                    ]}
+                    actions={<div className="flex flex-row gap-2">
                     <button type="button" onClick={() => setMode("grid")} className={`grid size-9 cursor-pointer place-items-center rounded border ${mode === "grid" ? "border-primary text-primary" : "border-border text-text-muted"}`} aria-label="Grid view">
                         <Grid2X2 size={18} aria-hidden="true" />
                     </button>
                     <button type="button" onClick={() => setMode("list")} className={`grid size-9 cursor-pointer place-items-center rounded border ${mode === "list" ? "border-primary text-primary" : "border-border text-text-muted"}`} aria-label="List view">
                         <List size={18} aria-hidden="true" />
                     </button>
-                </div>
+                </div>}
+                />
             </div>
             {filtered.length ? (
                 <PaginatedList

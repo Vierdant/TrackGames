@@ -3,11 +3,13 @@
 import AvatarView from "@/app/components/user/AvatarView";
 import { addComment, deleteComment, toggleLike } from "@/lib/actions/social";
 import { InteractionTargetType, LikeTargetType, UserRole } from "@/lib/generated/prisma/enums";
+import { ratingToFive } from "@/lib/util/rating";
 import { Heart, MessageCircle, Send, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useRef, useState, useTransition } from "react";
 import { PrimaryButton } from "../ui/Buttons";
+import RatingStars from "../game/RatingStars";
 import RoleTags from "../user/RoleTags";
 
 type Comment = {
@@ -18,6 +20,7 @@ type Comment = {
     createdAt: Date;
     likes: number;
     liked: boolean;
+    userRating: number | null;
     user: {
         id: string;
         name: string | null;
@@ -98,6 +101,9 @@ function CommentItem({ comment, comments, targetType, targetId, currentUserId }:
                         )}
                         <RoleTags roles={comment.user.roles} />
                         <span className="text-xs text-text-faint">{new Date(comment.createdAt).toLocaleDateString()}</span>
+                        {targetType === InteractionTargetType.GAME && (
+                            <RatingStars rating={ratingToFive(comment.userRating)} size={13} />
+                        )}
                     </div>
                     <p className="mt-2 whitespace-pre-wrap text-sm text-text-muted">{comment.content}</p>
                 </div>

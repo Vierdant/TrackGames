@@ -105,6 +105,7 @@ export type UserGameEntry = {
     status: GameStatus;
     rating?: number;
     timePlayed?: number;
+    timeMode?: string;
     timeFinished?: number;
     timeMastered?: number;
     notes?: string;
@@ -115,6 +116,20 @@ export type UserGameEntry = {
     masteredAt?: Date;
     user: User;
     game: Game;
+    userGamePlayLogs?: UserGamePlayLog[];
+}
+
+export type UserGamePlayLog = {
+    id: string;
+    userId: string;
+    entryId: string;
+    gameId: number;
+    hours: number;
+    note: string;
+    skip: boolean;
+    playedAt: Date;
+    createdAt: Date;
+    game?: Game;
 }
 
 export type GameListEntry = {
@@ -142,6 +157,9 @@ export type GameList = {
     color?: string | null;
     accentColor?: string | null;
     privacy: string;
+    libraryPrivacy: string;
+    logsPrivacy: string;
+    activityPrivacy: string;
     commentsHidden: boolean;
     entries: GameListEntry[];
     user?: Pick<User, "id" | "name" | "image">;
@@ -201,6 +219,9 @@ export type User = {
     profileColor?: string | null;
     accentColor?: string | null;
     privacy: string;
+    libraryPrivacy: string;
+    logsPrivacy: string;
+    activityPrivacy: string;
     socials?: string | null;
     preferences?: string | null;
     widgets?: string | null;
@@ -221,6 +242,10 @@ export type PublicUser = {
     bio?: string;
     profileColor?: string | null;
     accentColor?: string | null;
+    privacy: string;
+    libraryPrivacy: string;
+    logsPrivacy: string;
+    activityPrivacy: string;
     socials?: string;
     widgets?: string;
     commentsHidden: boolean;

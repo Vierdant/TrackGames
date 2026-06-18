@@ -8,39 +8,43 @@ generator client {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String?   @unique
-  emailVerified DateTime? @map("email_verified")
-  passwordHash  String?
-  image         String?
-  background    String?
-  bio           String?
-  profileColor  String?
-  accentColor   String?
-  privacy       String    @default("public")
-  contactEmail  String?
-  website       String?
-  socials       String?   @db.Text
-  preferences   String?   @db.Text
-  widgets       String?   @db.Text
-  commentsHidden Boolean  @default(false)
-  roles         UserRole[] @default([])
-  accounts      Account[]
-  sessions      Session[]
+  id             String     @id @default(cuid())
+  name           String?
+  email          String?    @unique
+  emailVerified  DateTime?  @map("email_verified")
+  passwordHash   String?
+  image          String?
+  background     String?
+  bio            String?
+  profileColor   String?
+  accentColor    String?
+  privacy        String     @default("public")
+  libraryPrivacy String     @default("public")
+  logsPrivacy    String     @default("public")
+  activityPrivacy String    @default("public")
+  contactEmail   String?
+  website        String?
+  socials        String?    @db.Text
+  preferences    String?    @db.Text
+  widgets        String?    @db.Text
+  commentsHidden Boolean    @default(false)
+  roles          UserRole[] @default([])
+  accounts       Account[]
+  sessions       Session[]
 
-  createdAt        DateTime          @default(now())
-  updatedAt        DateTime          @updatedAt
-  games            UserGameEntry[]
-  gameLists        GameList[]
-  likes            Like[]
-  comments         Comment[]
-  activities       Activity[]
-  notifications    Notification[]
-  sentNotifications Notification[] @relation("NotificationActor")
-  following        UserFollow[]    @relation("UserFollowing")
-  followers        UserFollow[]    @relation("UserFollowers")
-  badges           UserBadge[]
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+  games             UserGameEntry[]
+  gameLists         GameList[]
+  likes             Like[]
+  comments          Comment[]
+  activities        Activity[]
+  notifications     Notification[]
+  sentNotifications Notification[]    @relation("NotificationActor")
+  following         UserFollow[]      @relation("UserFollowing")
+  followers         UserFollow[]      @relation("UserFollowers")
+  badges            UserBadge[]
+  userGamePlayLogs  UserGamePlayLog[]
 }
 
 model Account {
@@ -104,11 +108,12 @@ model Game {
   keywords     Int[]     @default([])
   gameType     GameType  @default(MAINGAME)
 
-  createdAt   DateTime        @default(now())
-  updatedAt   DateTime        @updatedAt
-  users       UserGameEntry[]
-  listEntries GameListEntry[]
-  activities  Activity[]
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  users            UserGameEntry[]
+  listEntries      GameListEntry[]
+  activities       Activity[]
+  userGamePlayLogs UserGamePlayLog[]
 
   @@index([name])
   @@index([gameType])
@@ -122,6 +127,7 @@ model UserGameEntry {
   status       GameStatus @default(BACKLOG)
   rating       Float?
   timePlayed   Float?
+  timeMode     String     @default("logs")
   timeFinished Float?
   timeMastered Float?
   notes        String?    @db.Text
@@ -133,8 +139,9 @@ model UserGameEntry {
   user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   game         Game       @relation(fields: [gameId], references: [id], onDelete: Cascade)
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  userGamePlayLogs UserGamePlayLog[]
 
   @@unique([userId, gameId])
   @@index([userId])
@@ -142,26 +149,46 @@ model UserGameEntry {
   @@index([userId, status])
 }
 
+model UserGamePlayLog {
+  id       String   @id @default(cuid())
+  userId   String
+  entryId  String
+  gameId   Int
+  hours    Float
+  note     String   @db.Text
+  skip     Boolean  @default(false) // if true, log isn't accounted for totals, recaps, etc.
+  playedAt DateTime @default(now())
+
+  user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  game      Game          @relation(fields: [gameId], references: [id], onDelete: Cascade)
+  gameEntry UserGameEntry @relation(fields: [entryId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@index([userId, playedAt])
+  @@index([userId, gameId])
+}
+
 model GameList {
-  id          String            @id @default(cuid())
-  userId      String
-  type        GameListType
-  displayMode String            @default("GRID")
-  tierLabels  String[]          @default(["S", "A", "B", "C", "D"])
-  tierColors  String[]          @default(["#f59e0b", "#22c55e", "#3b82f6", "#a855f7", "#ef4444"])
-  name        String
-  slug        String?
-  description String?           @db.Text
-  image       String?
-  background  String?
-  color       String?
-  accentColor String?
-  privacy     String            @default("public")
-  commentsHidden Boolean        @default(false)
-  entries     GameListEntry[]
-  createdAt   DateTime          @default(now())
-  updatedAt   DateTime          @updatedAt
-  user        User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id             String          @id @default(cuid())
+  userId         String
+  type           GameListType
+  displayMode    String          @default("GRID")
+  tierLabels     String[]        @default(["S", "A", "B", "C", "D"])
+  tierColors     String[]        @default(["#f59e0b", "#22c55e", "#3b82f6", "#a855f7", "#ef4444"])
+  name           String
+  slug           String?
+  description    String?         @db.Text
+  image          String?
+  background     String?
+  color          String?
+  accentColor    String?
+  privacy        String          @default("public")
+  commentsHidden Boolean         @default(false)
+  entries        GameListEntry[]
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  user           User            @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, slug])
   @@index([userId])
@@ -253,9 +280,9 @@ model Activity {
 
   targetType InteractionTargetType?
   targetId   String?
-  gameId    Int?
-  listId    String?
-  commentId String?
+  gameId     Int?
+  listId     String?
+  commentId  String?
 
   message String? @db.Text
 
@@ -296,7 +323,7 @@ model Comment {
   targetType InteractionTargetType
   targetId   String
   parentId   String?
-  content    String @db.Text
+  content    String                @db.Text
 
   user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
   parent        Comment?       @relation("CommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
@@ -329,8 +356,8 @@ model UserFollow {
 }
 
 model Badge {
-  id          String @id @default(cuid())
-  slug        String @unique
+  id          String  @id @default(cuid())
+  slug        String  @unique
   name        String
   description String? @db.Text
   icon        String?
@@ -368,7 +395,7 @@ model Notification {
   targetType InteractionTargetType?
   targetId   String?
   commentId  String?
-  message    String? @db.Text
+  message    String?                @db.Text
   readAt     DateTime?
 
   user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -418,6 +445,7 @@ enum GameType {
 enum ActivityType {
   ADDED_GAME_TO_LIBRARY
   RATED_GAME
+  LOGGED_GAME_PLAY
   CREATED_PLAYLIST
   ADDED_GAME_TO_PLAYLIST
   LIKED_GAME_LIST

@@ -1,6 +1,7 @@
 import { ActivityType, InteractionTargetType } from "@/lib/generated/prisma/enums";
 import Link from "next/link";
-import { GhostButton } from "@/app/components/ui/Buttons";
+import PaginationControls from "@/app/components/layout/PaginationControls";
+import { FilterBar } from "@/app/components/ui/FilterBar";
 
 function commentTargetAfter(targetType: InteractionTargetType | null) {
     if (targetType === InteractionTargetType.GAME_LIST) return "playlist.";
@@ -14,6 +15,7 @@ function activityMessage(activity: { type: ActivityType; targetType: Interaction
 
     if (activity.type === ActivityType.ADDED_GAME_TO_LIBRARY) return { before: "Added", name, after: "to their library." };
     if (activity.type === ActivityType.RATED_GAME) return { before: "Rated", name, after: "." };
+    if (activity.type === ActivityType.LOGGED_GAME_PLAY) return { before: "Logged time in", name, after: "." };
     if (activity.type === ActivityType.CREATED_PLAYLIST) return { before: "Created the playlist", name, after: "." };
     if (activity.type === ActivityType.ADDED_GAME_TO_PLAYLIST) return { before: "Added", name, after: "to a playlist." };
     if (activity.type === ActivityType.LIKED_GAME_LIST) return { before: "Liked the playlist", name, after: "." };
@@ -51,9 +53,29 @@ function ActivityText({ activity }: { activity: { type: ActivityType; targetType
     );
 }
 
-export default function ActivityList({ user, activities, page, totalPages }: { user: string; activities: { id: string; type: ActivityType; targetType: InteractionTargetType | null; targetId: string | null; listId: string | null; targetName: string | null; targetHref: string | null; createdAt: Date; game?: { slug: string | null; name: string | null } | null }[]; page: number; totalPages: number }) {
+export default function ActivityList({ user, activities, page, totalPages, filter, canViewLogs }: { user: string; activities: { id: string; type: ActivityType; targetType: InteractionTargetType | null; targetId: string | null; listId: string | null; targetName: string | null; targetHref: string | null; createdAt: Date; game?: { slug: string | null; name: string | null } | null }[]; page: number; totalPages: number; filter: string; canViewLogs: boolean }) {
+    const filters = [
+        { id: "all", label: "All" },
+        canViewLogs ? { id: "logs", label: "Game logs" } : null,
+        { id: "games", label: "Games" },
+        { id: "playlists", label: "Playlists" },
+        { id: "comments", label: "Comments" },
+        { id: "social", label: "Social" },
+    ].filter((item): item is { id: string; label: string } => Boolean(item));
+
     return (
         <div className="flex flex-col gap-3">
+            <FilterBar filters={[{
+                type: "linkSelect",
+                label: "Filter activity",
+                value: filter,
+                options: filters.map((item) => ({
+                    value: item.id,
+                    label: item.label,
+                    href: `/u/${user}?tab=activity&activityFilter=${item.id}`,
+                })),
+            }]} />
+
             {activities.length ? activities.map((activity) => (
                 <div key={activity.id} className="rounded border border-border bg-bg p-4">
                     <ActivityText activity={activity} />
@@ -64,9 +86,8 @@ export default function ActivityList({ user, activities, page, totalPages }: { u
             )}
 
             {totalPages > 1 && (
-                <div className="mt-2 flex justify-end gap-2">
-                    {page > 1 && <GhostButton href={`/u/${user}?tab=activity&activityPage=${page - 1}`}>Previous</GhostButton>}
-                    {page < totalPages && <GhostButton href={`/u/${user}?tab=activity&activityPage=${page + 1}`}>Next</GhostButton>}
+                <div className="mt-2 flex justify-center">
+                    <PaginationControls page={page} pageCount={totalPages} href={(nextPage) => `/u/${user}?tab=activity&activityFilter=${filter}&activityPage=${nextPage}`} />
                 </div>
             )}
         </div>

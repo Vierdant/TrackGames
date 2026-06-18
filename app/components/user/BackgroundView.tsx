@@ -36,13 +36,16 @@ export default function BackgroundView({ src = null, size, mdSize = size, alt = 
     const shouldPrioritize = priority ?? !size;
 
     useEffect(() => {
-        setVideoReady(false);
+        const frame = window.requestAnimationFrame(() => setVideoReady(false));
 
         const video = videoRef.current;
 
-        if (!video || !isVideo) return;
+        if (!video || !isVideo) {
+            return () => window.cancelAnimationFrame(frame);
+        }
 
         function markReady() {
+            window.cancelAnimationFrame(frame);
             setVideoReady(true);
         }
 
@@ -69,6 +72,7 @@ export default function BackgroundView({ src = null, size, mdSize = size, alt = 
         video.addEventListener("playing", markReady);
 
         return () => {
+            window.cancelAnimationFrame(frame);
             video.removeEventListener("loadedmetadata", markReady);
             video.removeEventListener("loadeddata", markReady);
             video.removeEventListener("canplay", markReady);
@@ -108,7 +112,7 @@ export default function BackgroundView({ src = null, size, mdSize = size, alt = 
                     src={src}
                     alt={alt}
                     fill
-                    priority={shouldPrioritize}
+                    preload={shouldPrioritize}
                     sizes={imageSizes}
                     className={`select-none ${mediaClassName}`}
                 />

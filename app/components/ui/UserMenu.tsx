@@ -4,10 +4,10 @@ import { logout } from "@/lib/actions/auth";
 import ThemeSwitch from "./ThemeSwitch";
 import { Book, CircleQuestionMark, LogOut, Menu, User as UserIcon, X } from "lucide-react";
 import type { User } from "next-auth";
-import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import AvatarPreview from "../user/AvatarView";
+import MenuPanel from "./MenuPanel";
 
 type UserMenuProps = {
     user: User;
@@ -15,35 +15,12 @@ type UserMenuProps = {
 
 export function UserMenu({ user }: UserMenuProps) {
     const [isOpen, setIsOpen] = useState(false);
-    const menuRef = useRef<HTMLDivElement>(null);
-
-    useEffect(() => {
-        if (!isOpen) return;
-
-        function closeOnEscape(event: KeyboardEvent) {
-            if (event.key === "Escape") {
-                setIsOpen(false);
-            }
-        }
-
-        function closeOnOutsideClick(event: MouseEvent) {
-            if (!menuRef.current?.contains(event.target as Node)) {
-                setIsOpen(false);
-            }
-        }
-
-        document.addEventListener("keydown", closeOnEscape);
-        document.addEventListener("mousedown", closeOnOutsideClick);
-
-        return () => {
-            document.removeEventListener("keydown", closeOnEscape);
-            document.removeEventListener("mousedown", closeOnOutsideClick);
-        };
-    }, [isOpen]);
+    const buttonRef = useRef<HTMLButtonElement>(null);
 
     return (
-        <div ref={menuRef} className="relative">
+        <div className="relative">
             <button
+                ref={buttonRef}
                 type="button"
                 onClick={() => setIsOpen((open) => !open)}
                 className="flex h-11 cursor-pointer items-center justify-center gap-2 rounded border border-border bg-bg-secondary px-1.5 pr-3 text-text-muted transition-colors hover:border-primary hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary md:size-10 md:border-0 md:bg-transparent md:p-0"
@@ -61,12 +38,15 @@ export function UserMenu({ user }: UserMenuProps) {
                 className={`fixed inset-0 z-40 bg-overlay transition-opacity md:hidden ${isOpen ? "opacity-100" : "pointer-events-none opacity-0"}`}
             />
 
-            <div
+            <MenuPanel
                 id="user-menu"
+                open={isOpen}
+                onClose={() => setIsOpen(false)}
+                variant="anchored"
                 role="menu"
-                className={`fixed inset-y-0 right-0 z-50 flex w-[min(21rem,calc(100vw-1.5rem))] origin-right flex-col border-l border-border bg-bg-secondary text-sm text-text shadow-main transition duration-150 ease-out md:absolute md:inset-auto md:right-0 md:top-full md:mt-3 md:w-72 md:origin-top-right md:rounded md:border md:p-1.5 ${isOpen
-                    ? "translate-x-0 opacity-100 md:translate-y-0 md:scale-100"
-                    : "pointer-events-none translate-x-full opacity-0 md:translate-x-0 md:-translate-y-1 md:scale-95"}`}
+                showClose={false}
+                anchorRef={buttonRef}
+                panelClassName="fixed inset-y-0 right-0 flex w-[min(21rem,calc(100vw-1.5rem))] origin-right flex-col border-l border-border text-text md:absolute md:inset-auto md:right-0 md:top-full md:mt-3 md:w-72 md:origin-top-right md:rounded md:border md:p-1.5"
             >
                 <div className="flex items-center justify-between border-b border-border p-4 md:hidden">
                     <AvatarPreview image={user.image} size={12} priority alt={`${user.name ?? "user"} profile image`} />
@@ -135,7 +115,7 @@ export function UserMenu({ user }: UserMenuProps) {
                         </button>
                     </form>
                 </div>
-            </div>
+            </MenuPanel>
         </div>
     )
 }

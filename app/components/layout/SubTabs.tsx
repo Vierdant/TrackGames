@@ -8,7 +8,7 @@ export default function SubTabs({tabs, active, setter, viewAll, viewAllHref, chi
 
     return (
         <div className="min-w-0">
-            <nav className="mb-5 flex min-w-0 flex-row items-center gap-2 border-b border-border" aria-label="Related games">
+            <nav className="mb-5 flex min-w-0 flex-row items-center gap-2 border-b border-border" aria-label="Tabs">
                 {tabs.map((tab) => {
                     const isActive = tab.id === active;
 

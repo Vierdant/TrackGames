@@ -92,6 +92,9 @@ const settingsSchema = z.object({
     profileColor: colorSchema.optional(),
     accentColor: colorSchema.optional(),
     privacy: z.enum(["public", "followers", "private"]).optional(),
+    libraryPrivacy: z.enum(["public", "followers", "private"]).optional(),
+    logsPrivacy: z.enum(["public", "followers", "private"]).optional(),
+    activityPrivacy: z.enum(["public", "followers", "private"]).optional(),
     commentsHidden: z.coerce.boolean().optional(),
     socials: socialLinksSchema.optional(),
     preferences: nullableText(2000).optional(),
@@ -211,6 +214,9 @@ function pickUpdateData(tab: z.infer<typeof tabSchema>, values: z.infer<typeof s
 
     if (tab === "privacy") {
         data.privacy = values.privacy;
+        data.libraryPrivacy = values.libraryPrivacy;
+        data.logsPrivacy = values.logsPrivacy;
+        data.activityPrivacy = values.activityPrivacy;
     }
 
     if (tab === "widgets") {

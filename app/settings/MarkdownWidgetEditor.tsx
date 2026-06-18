@@ -2,10 +2,11 @@
 
 import { GhostButton } from "@/app/components/ui/Buttons";
 import { MarkdownBlocks } from "@/app/components/markdown/MarkdownBlocks";
-import { AlignCenter, AlignLeft, AlignRight, Bold, Eye, Image as ImageIcon, Italic, Link, Palette, Strikethrough, Table, Video, X } from "lucide-react";
+import { AlignCenter, AlignLeft, AlignRight, Bold, Eye, Image as ImageIcon, Italic, Link, Palette, Strikethrough, Table, Video } from "lucide-react";
 import { useRef, useState } from "react";
 import { parseMarkdownBlocks } from "@/lib/markdown";
 import { Input, Textarea } from "@/app/components/ui/Inputs";
+import MenuPanel from "@/app/components/ui/MenuPanel";
 
 type MarkdownWidgetEditorProps = {
     value: string;
@@ -19,6 +20,7 @@ function quoteAttribute(value: string) {
 export default function MarkdownWidgetEditor({ value, onChange }: MarkdownWidgetEditorProps) {
     const textareaRef = useRef<HTMLTextAreaElement | null>(null);
     const [mediaModal, setMediaModal] = useState<"image" | "video" | null>(null);
+    const [lastMediaModal, setLastMediaModal] = useState<"image" | "video">("image");
     const [showPreview, setShowPreview] = useState(false);
     const [imageSrc, setImageSrc] = useState("");
     const [videoSrc, setVideoSrc] = useState("");
@@ -111,10 +113,16 @@ export default function MarkdownWidgetEditor({ value, onChange }: MarkdownWidget
                 <GhostButton type="button" onClick={() => wrapBlock("end")} className="px-3 py-2" title="Align block to end" aria-label="Align block to end">
                     <AlignRight size={16} />
                 </GhostButton>
-                <GhostButton type="button" onClick={() => setMediaModal("image")} className="px-3 py-2" title="Insert image" aria-label="Insert image">
+                <GhostButton type="button" onClick={() => {
+                    setLastMediaModal("image");
+                    setMediaModal("image");
+                }} className="px-3 py-2" title="Insert image" aria-label="Insert image">
                     <ImageIcon size={16} />
                 </GhostButton>
-                <GhostButton type="button" onClick={() => setMediaModal("video")} className="px-3 py-2" title="Insert video" aria-label="Insert video">
+                <GhostButton type="button" onClick={() => {
+                    setLastMediaModal("video");
+                    setMediaModal("video");
+                }} className="px-3 py-2" title="Insert video" aria-label="Insert video">
                     <Video size={16} />
                 </GhostButton>
             </div>
@@ -138,17 +146,9 @@ export default function MarkdownWidgetEditor({ value, onChange }: MarkdownWidget
                 </div>
             )}
 
-            {mediaModal && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-overlay px-4">
-                    <div className="w-full max-w-md rounded bg-bg-secondary p-5 shadow-main">
-                        <div className="mb-4 flex items-center justify-between">
-                            <h3 className="text-lg font-bold">{mediaModal === "image" ? "Insert image" : "Insert video"}</h3>
-                            <button type="button" onClick={() => setMediaModal(null)} className="cursor-pointer rounded p-1 text-text-muted hover:text-primary" aria-label="Close">
-                                <X size={18} />
-                            </button>
-                        </div>
+            <MenuPanel open={Boolean(mediaModal)} onClose={() => setMediaModal(null)} title={lastMediaModal === "image" ? "Insert image" : "Insert video"}>
                         <div className="flex flex-col gap-2">
-                            {mediaModal === "image" ? (
+                            {lastMediaModal === "image" ? (
                                 <>
                                     <Input value={imageSrc} onChange={(event) => setImageSrc(event.target.value)} placeholder="https://images.unsplash.com/..." />
                                     <Input value={mediaAlt} onChange={(event) => setMediaAlt(event.target.value)} placeholder="Alt text" />
@@ -163,13 +163,11 @@ export default function MarkdownWidgetEditor({ value, onChange }: MarkdownWidget
                         </div>
                         <div className="mt-5 flex justify-end gap-2">
                             <GhostButton type="button" onClick={() => setMediaModal(null)}>Cancel</GhostButton>
-                            <GhostButton type="button" onClick={mediaModal === "image" ? insertImage : insertVideo} disabled={mediaModal === "image" ? !imageSrc.trim() : !videoSrc.trim()}>
+                            <GhostButton type="button" onClick={lastMediaModal === "image" ? insertImage : insertVideo} disabled={lastMediaModal === "image" ? !imageSrc.trim() : !videoSrc.trim()}>
                                 Insert
                             </GhostButton>
                         </div>
-                    </div>
-                </div>
-            )}
+            </MenuPanel>
         </div>
     );
 }

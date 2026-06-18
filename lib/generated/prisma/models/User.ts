@@ -36,6 +36,9 @@ export type UserMinAggregateOutputType = {
   profileColor: string | null
   accentColor: string | null
   privacy: string | null
+  libraryPrivacy: string | null
+  logsPrivacy: string | null
+  activityPrivacy: string | null
   contactEmail: string | null
   website: string | null
   socials: string | null
@@ -58,6 +61,9 @@ export type UserMaxAggregateOutputType = {
   profileColor: string | null
   accentColor: string | null
   privacy: string | null
+  libraryPrivacy: string | null
+  logsPrivacy: string | null
+  activityPrivacy: string | null
   contactEmail: string | null
   website: string | null
   socials: string | null
@@ -80,6 +86,9 @@ export type UserCountAggregateOutputType = {
   profileColor: number
   accentColor: number
   privacy: number
+  libraryPrivacy: number
+  logsPrivacy: number
+  activityPrivacy: number
   contactEmail: number
   website: number
   socials: number
@@ -105,6 +114,9 @@ export type UserMinAggregateInputType = {
   profileColor?: true
   accentColor?: true
   privacy?: true
+  libraryPrivacy?: true
+  logsPrivacy?: true
+  activityPrivacy?: true
   contactEmail?: true
   website?: true
   socials?: true
@@ -127,6 +139,9 @@ export type UserMaxAggregateInputType = {
   profileColor?: true
   accentColor?: true
   privacy?: true
+  libraryPrivacy?: true
+  logsPrivacy?: true
+  activityPrivacy?: true
   contactEmail?: true
   website?: true
   socials?: true
@@ -149,6 +164,9 @@ export type UserCountAggregateInputType = {
   profileColor?: true
   accentColor?: true
   privacy?: true
+  libraryPrivacy?: true
+  logsPrivacy?: true
+  activityPrivacy?: true
   contactEmail?: true
   website?: true
   socials?: true
@@ -245,6 +263,9 @@ export type UserGroupByOutputType = {
   profileColor: string | null
   accentColor: string | null
   privacy: string
+  libraryPrivacy: string
+  logsPrivacy: string
+  activityPrivacy: string
   contactEmail: string | null
   website: string | null
   socials: string | null
@@ -289,6 +310,9 @@ export type UserWhereInput = {
   profileColor?: Prisma.StringNullableFilter<"User"> | string | null
   accentColor?: Prisma.StringNullableFilter<"User"> | string | null
   privacy?: Prisma.StringFilter<"User"> | string
+  libraryPrivacy?: Prisma.StringFilter<"User"> | string
+  logsPrivacy?: Prisma.StringFilter<"User"> | string
+  activityPrivacy?: Prisma.StringFilter<"User"> | string
   contactEmail?: Prisma.StringNullableFilter<"User"> | string | null
   website?: Prisma.StringNullableFilter<"User"> | string | null
   socials?: Prisma.StringNullableFilter<"User"> | string | null
@@ -310,6 +334,7 @@ export type UserWhereInput = {
   following?: Prisma.UserFollowListRelationFilter
   followers?: Prisma.UserFollowListRelationFilter
   badges?: Prisma.UserBadgeListRelationFilter
+  userGamePlayLogs?: Prisma.UserGamePlayLogListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -324,6 +349,9 @@ export type UserOrderByWithRelationInput = {
   profileColor?: Prisma.SortOrderInput | Prisma.SortOrder
   accentColor?: Prisma.SortOrderInput | Prisma.SortOrder
   privacy?: Prisma.SortOrder
+  libraryPrivacy?: Prisma.SortOrder
+  logsPrivacy?: Prisma.SortOrder
+  activityPrivacy?: Prisma.SortOrder
   contactEmail?: Prisma.SortOrderInput | Prisma.SortOrder
   website?: Prisma.SortOrderInput | Prisma.SortOrder
   socials?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -345,6 +373,7 @@ export type UserOrderByWithRelationInput = {
   following?: Prisma.UserFollowOrderByRelationAggregateInput
   followers?: Prisma.UserFollowOrderByRelationAggregateInput
   badges?: Prisma.UserBadgeOrderByRelationAggregateInput
+  userGamePlayLogs?: Prisma.UserGamePlayLogOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -362,6 +391,9 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   profileColor?: Prisma.StringNullableFilter<"User"> | string | null
   accentColor?: Prisma.StringNullableFilter<"User"> | string | null
   privacy?: Prisma.StringFilter<"User"> | string
+  libraryPrivacy?: Prisma.StringFilter<"User"> | string
+  logsPrivacy?: Prisma.StringFilter<"User"> | string
+  activityPrivacy?: Prisma.StringFilter<"User"> | string
   contactEmail?: Prisma.StringNullableFilter<"User"> | string | null
   website?: Prisma.StringNullableFilter<"User"> | string | null
   socials?: Prisma.StringNullableFilter<"User"> | string | null
@@ -383,6 +415,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   following?: Prisma.UserFollowListRelationFilter
   followers?: Prisma.UserFollowListRelationFilter
   badges?: Prisma.UserBadgeListRelationFilter
+  userGamePlayLogs?: Prisma.UserGamePlayLogListRelationFilter
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -397,6 +430,9 @@ export type UserOrderByWithAggregationInput = {
   profileColor?: Prisma.SortOrderInput | Prisma.SortOrder
   accentColor?: Prisma.SortOrderInput | Prisma.SortOrder
   privacy?: Prisma.SortOrder
+  libraryPrivacy?: Prisma.SortOrder
+  logsPrivacy?: Prisma.SortOrder
+  activityPrivacy?: Prisma.SortOrder
   contactEmail?: Prisma.SortOrderInput | Prisma.SortOrder
   website?: Prisma.SortOrderInput | Prisma.SortOrder
   socials?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -426,6 +462,9 @@ export type UserScalarWhereWithAggregatesInput = {
   profileColor?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   accentColor?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   privacy?: Prisma.StringWithAggregatesFilter<"User"> | string
+  libraryPrivacy?: Prisma.StringWithAggregatesFilter<"User"> | string
+  logsPrivacy?: Prisma.StringWithAggregatesFilter<"User"> | string
+  activityPrivacy?: Prisma.StringWithAggregatesFilter<"User"> | string
   contactEmail?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   website?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   socials?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
@@ -449,6 +488,9 @@ export type UserCreateInput = {
   profileColor?: string | null
   accentColor?: string | null
   privacy?: string
+  libraryPrivacy?: string
+  logsPrivacy?: string
+  activityPrivacy?: string
   contactEmail?: string | null
   website?: string | null
   socials?: string | null
@@ -470,6 +512,7 @@ export type UserCreateInput = {
   following?: Prisma.UserFollowCreateNestedManyWithoutFollowerInput
   followers?: Prisma.UserFollowCreateNestedManyWithoutFollowingInput
   badges?: Prisma.UserBadgeCreateNestedManyWithoutUserInput
+  userGamePlayLogs?: Prisma.UserGamePlayLogCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -484,6 +527,9 @@ export type UserUncheckedCreateInput = {
   profileColor?: string | null
   accentColor?: string | null
   privacy?: string
+  libraryPrivacy?: string
+  logsPrivacy?: string
+  activityPrivacy?: string
   contactEmail?: string | null
   website?: string | null
   socials?: string | null
@@ -505,6 +551,7 @@ export type UserUncheckedCreateInput = {
   following?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowerInput
   followers?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowingInput
   badges?: Prisma.UserBadgeUncheckedCreateNestedManyWithoutUserInput
+  userGamePlayLogs?: Prisma.UserGamePlayLogUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -519,6 +566,9 @@ export type UserUpdateInput = {
   profileColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accentColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacy?: Prisma.StringFieldUpdateOperationsInput | string
+  libraryPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  logsPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  activityPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
   contactEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   socials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -540,6 +590,7 @@ export type UserUpdateInput = {
   following?: Prisma.UserFollowUpdateManyWithoutFollowerNestedInput
   followers?: Prisma.UserFollowUpdateManyWithoutFollowingNestedInput
   badges?: Prisma.UserBadgeUpdateManyWithoutUserNestedInput
+  userGamePlayLogs?: Prisma.UserGamePlayLogUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -554,6 +605,9 @@ export type UserUncheckedUpdateInput = {
   profileColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accentColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacy?: Prisma.StringFieldUpdateOperationsInput | string
+  libraryPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  logsPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  activityPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
   contactEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   socials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -575,6 +629,7 @@ export type UserUncheckedUpdateInput = {
   following?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowerNestedInput
   followers?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowingNestedInput
   badges?: Prisma.UserBadgeUncheckedUpdateManyWithoutUserNestedInput
+  userGamePlayLogs?: Prisma.UserGamePlayLogUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -589,6 +644,9 @@ export type UserCreateManyInput = {
   profileColor?: string | null
   accentColor?: string | null
   privacy?: string
+  libraryPrivacy?: string
+  logsPrivacy?: string
+  activityPrivacy?: string
   contactEmail?: string | null
   website?: string | null
   socials?: string | null
@@ -612,6 +670,9 @@ export type UserUpdateManyMutationInput = {
   profileColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accentColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacy?: Prisma.StringFieldUpdateOperationsInput | string
+  libraryPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  logsPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  activityPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
   contactEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   socials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -635,6 +696,9 @@ export type UserUncheckedUpdateManyInput = {
   profileColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accentColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacy?: Prisma.StringFieldUpdateOperationsInput | string
+  libraryPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  logsPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  activityPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
   contactEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   socials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -666,6 +730,9 @@ export type UserCountOrderByAggregateInput = {
   profileColor?: Prisma.SortOrder
   accentColor?: Prisma.SortOrder
   privacy?: Prisma.SortOrder
+  libraryPrivacy?: Prisma.SortOrder
+  logsPrivacy?: Prisma.SortOrder
+  activityPrivacy?: Prisma.SortOrder
   contactEmail?: Prisma.SortOrder
   website?: Prisma.SortOrder
   socials?: Prisma.SortOrder
@@ -689,6 +756,9 @@ export type UserMaxOrderByAggregateInput = {
   profileColor?: Prisma.SortOrder
   accentColor?: Prisma.SortOrder
   privacy?: Prisma.SortOrder
+  libraryPrivacy?: Prisma.SortOrder
+  logsPrivacy?: Prisma.SortOrder
+  activityPrivacy?: Prisma.SortOrder
   contactEmail?: Prisma.SortOrder
   website?: Prisma.SortOrder
   socials?: Prisma.SortOrder
@@ -711,6 +781,9 @@ export type UserMinOrderByAggregateInput = {
   profileColor?: Prisma.SortOrder
   accentColor?: Prisma.SortOrder
   privacy?: Prisma.SortOrder
+  libraryPrivacy?: Prisma.SortOrder
+  logsPrivacy?: Prisma.SortOrder
+  activityPrivacy?: Prisma.SortOrder
   contactEmail?: Prisma.SortOrder
   website?: Prisma.SortOrder
   socials?: Prisma.SortOrder
@@ -800,6 +873,20 @@ export type UserUpdateOneRequiredWithoutGamesNestedInput = {
   upsert?: Prisma.UserUpsertWithoutGamesInput
   connect?: Prisma.UserWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutGamesInput, Prisma.UserUpdateWithoutGamesInput>, Prisma.UserUncheckedUpdateWithoutGamesInput>
+}
+
+export type UserCreateNestedOneWithoutUserGamePlayLogsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutUserGamePlayLogsInput, Prisma.UserUncheckedCreateWithoutUserGamePlayLogsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutUserGamePlayLogsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutUserGamePlayLogsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutUserGamePlayLogsInput, Prisma.UserUncheckedCreateWithoutUserGamePlayLogsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutUserGamePlayLogsInput
+  upsert?: Prisma.UserUpsertWithoutUserGamePlayLogsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutUserGamePlayLogsInput, Prisma.UserUpdateWithoutUserGamePlayLogsInput>, Prisma.UserUncheckedUpdateWithoutUserGamePlayLogsInput>
 }
 
 export type UserCreateNestedOneWithoutGameListsInput = {
@@ -942,6 +1029,9 @@ export type UserCreateWithoutAccountsInput = {
   profileColor?: string | null
   accentColor?: string | null
   privacy?: string
+  libraryPrivacy?: string
+  logsPrivacy?: string
+  activityPrivacy?: string
   contactEmail?: string | null
   website?: string | null
   socials?: string | null
@@ -962,6 +1052,7 @@ export type UserCreateWithoutAccountsInput = {
   following?: Prisma.UserFollowCreateNestedManyWithoutFollowerInput
   followers?: Prisma.UserFollowCreateNestedManyWithoutFollowingInput
   badges?: Prisma.UserBadgeCreateNestedManyWithoutUserInput
+  userGamePlayLogs?: Prisma.UserGamePlayLogCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutAccountsInput = {
@@ -976,6 +1067,9 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   profileColor?: string | null
   accentColor?: string | null
   privacy?: string
+  libraryPrivacy?: string
+  logsPrivacy?: string
+  activityPrivacy?: string
   contactEmail?: string | null
   website?: string | null
   socials?: string | null
@@ -996,6 +1090,7 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   following?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowerInput
   followers?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowingInput
   badges?: Prisma.UserBadgeUncheckedCreateNestedManyWithoutUserInput
+  userGamePlayLogs?: Prisma.UserGamePlayLogUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutAccountsInput = {
@@ -1026,6 +1121,9 @@ export type UserUpdateWithoutAccountsInput = {
   profileColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accentColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacy?: Prisma.StringFieldUpdateOperationsInput | string
+  libraryPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  logsPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  activityPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
   contactEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   socials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1046,6 +1144,7 @@ export type UserUpdateWithoutAccountsInput = {
   following?: Prisma.UserFollowUpdateManyWithoutFollowerNestedInput
   followers?: Prisma.UserFollowUpdateManyWithoutFollowingNestedInput
   badges?: Prisma.UserBadgeUpdateManyWithoutUserNestedInput
+  userGamePlayLogs?: Prisma.UserGamePlayLogUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAccountsInput = {
@@ -1060,6 +1159,9 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   profileColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accentColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacy?: Prisma.StringFieldUpdateOperationsInput | string
+  libraryPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  logsPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  activityPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
   contactEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   socials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1080,6 +1182,7 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   following?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowerNestedInput
   followers?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowingNestedInput
   badges?: Prisma.UserBadgeUncheckedUpdateManyWithoutUserNestedInput
+  userGamePlayLogs?: Prisma.UserGamePlayLogUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutSessionsInput = {
@@ -1094,6 +1197,9 @@ export type UserCreateWithoutSessionsInput = {
   profileColor?: string | null
   accentColor?: string | null
   privacy?: string
+  libraryPrivacy?: string
+  logsPrivacy?: string
+  activityPrivacy?: string
   contactEmail?: string | null
   website?: string | null
   socials?: string | null
@@ -1114,6 +1220,7 @@ export type UserCreateWithoutSessionsInput = {
   following?: Prisma.UserFollowCreateNestedManyWithoutFollowerInput
   followers?: Prisma.UserFollowCreateNestedManyWithoutFollowingInput
   badges?: Prisma.UserBadgeCreateNestedManyWithoutUserInput
+  userGamePlayLogs?: Prisma.UserGamePlayLogCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutSessionsInput = {
@@ -1128,6 +1235,9 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   profileColor?: string | null
   accentColor?: string | null
   privacy?: string
+  libraryPrivacy?: string
+  logsPrivacy?: string
+  activityPrivacy?: string
   contactEmail?: string | null
   website?: string | null
   socials?: string | null
@@ -1148,6 +1258,7 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   following?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowerInput
   followers?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowingInput
   badges?: Prisma.UserBadgeUncheckedCreateNestedManyWithoutUserInput
+  userGamePlayLogs?: Prisma.UserGamePlayLogUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutSessionsInput = {
@@ -1178,6 +1289,9 @@ export type UserUpdateWithoutSessionsInput = {
   profileColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accentColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacy?: Prisma.StringFieldUpdateOperationsInput | string
+  libraryPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  logsPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  activityPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
   contactEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   socials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1198,6 +1312,7 @@ export type UserUpdateWithoutSessionsInput = {
   following?: Prisma.UserFollowUpdateManyWithoutFollowerNestedInput
   followers?: Prisma.UserFollowUpdateManyWithoutFollowingNestedInput
   badges?: Prisma.UserBadgeUpdateManyWithoutUserNestedInput
+  userGamePlayLogs?: Prisma.UserGamePlayLogUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -1212,6 +1327,9 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   profileColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accentColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacy?: Prisma.StringFieldUpdateOperationsInput | string
+  libraryPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  logsPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  activityPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
   contactEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   socials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1232,6 +1350,7 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   following?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowerNestedInput
   followers?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowingNestedInput
   badges?: Prisma.UserBadgeUncheckedUpdateManyWithoutUserNestedInput
+  userGamePlayLogs?: Prisma.UserGamePlayLogUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutGamesInput = {
@@ -1246,6 +1365,9 @@ export type UserCreateWithoutGamesInput = {
   profileColor?: string | null
   accentColor?: string | null
   privacy?: string
+  libraryPrivacy?: string
+  logsPrivacy?: string
+  activityPrivacy?: string
   contactEmail?: string | null
   website?: string | null
   socials?: string | null
@@ -1266,6 +1388,7 @@ export type UserCreateWithoutGamesInput = {
   following?: Prisma.UserFollowCreateNestedManyWithoutFollowerInput
   followers?: Prisma.UserFollowCreateNestedManyWithoutFollowingInput
   badges?: Prisma.UserBadgeCreateNestedManyWithoutUserInput
+  userGamePlayLogs?: Prisma.UserGamePlayLogCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutGamesInput = {
@@ -1280,6 +1403,9 @@ export type UserUncheckedCreateWithoutGamesInput = {
   profileColor?: string | null
   accentColor?: string | null
   privacy?: string
+  libraryPrivacy?: string
+  logsPrivacy?: string
+  activityPrivacy?: string
   contactEmail?: string | null
   website?: string | null
   socials?: string | null
@@ -1300,6 +1426,7 @@ export type UserUncheckedCreateWithoutGamesInput = {
   following?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowerInput
   followers?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowingInput
   badges?: Prisma.UserBadgeUncheckedCreateNestedManyWithoutUserInput
+  userGamePlayLogs?: Prisma.UserGamePlayLogUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutGamesInput = {
@@ -1330,6 +1457,9 @@ export type UserUpdateWithoutGamesInput = {
   profileColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accentColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacy?: Prisma.StringFieldUpdateOperationsInput | string
+  libraryPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  logsPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  activityPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
   contactEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   socials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1350,6 +1480,7 @@ export type UserUpdateWithoutGamesInput = {
   following?: Prisma.UserFollowUpdateManyWithoutFollowerNestedInput
   followers?: Prisma.UserFollowUpdateManyWithoutFollowingNestedInput
   badges?: Prisma.UserBadgeUpdateManyWithoutUserNestedInput
+  userGamePlayLogs?: Prisma.UserGamePlayLogUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutGamesInput = {
@@ -1364,6 +1495,9 @@ export type UserUncheckedUpdateWithoutGamesInput = {
   profileColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accentColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacy?: Prisma.StringFieldUpdateOperationsInput | string
+  libraryPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  logsPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  activityPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
   contactEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   socials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1375,6 +1509,175 @@ export type UserUncheckedUpdateWithoutGamesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  gameLists?: Prisma.GameListUncheckedUpdateManyWithoutUserNestedInput
+  likes?: Prisma.LikeUncheckedUpdateManyWithoutUserNestedInput
+  comments?: Prisma.CommentUncheckedUpdateManyWithoutUserNestedInput
+  activities?: Prisma.ActivityUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  sentNotifications?: Prisma.NotificationUncheckedUpdateManyWithoutActorNestedInput
+  following?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowerNestedInput
+  followers?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowingNestedInput
+  badges?: Prisma.UserBadgeUncheckedUpdateManyWithoutUserNestedInput
+  userGamePlayLogs?: Prisma.UserGamePlayLogUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutUserGamePlayLogsInput = {
+  id?: string
+  name?: string | null
+  email?: string | null
+  emailVerified?: Date | string | null
+  passwordHash?: string | null
+  image?: string | null
+  background?: string | null
+  bio?: string | null
+  profileColor?: string | null
+  accentColor?: string | null
+  privacy?: string
+  libraryPrivacy?: string
+  logsPrivacy?: string
+  activityPrivacy?: string
+  contactEmail?: string | null
+  website?: string | null
+  socials?: string | null
+  preferences?: string | null
+  widgets?: string | null
+  commentsHidden?: boolean
+  roles?: Prisma.UserCreaterolesInput | $Enums.UserRole[]
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  games?: Prisma.UserGameEntryCreateNestedManyWithoutUserInput
+  gameLists?: Prisma.GameListCreateNestedManyWithoutUserInput
+  likes?: Prisma.LikeCreateNestedManyWithoutUserInput
+  comments?: Prisma.CommentCreateNestedManyWithoutUserInput
+  activities?: Prisma.ActivityCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  sentNotifications?: Prisma.NotificationCreateNestedManyWithoutActorInput
+  following?: Prisma.UserFollowCreateNestedManyWithoutFollowerInput
+  followers?: Prisma.UserFollowCreateNestedManyWithoutFollowingInput
+  badges?: Prisma.UserBadgeCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutUserGamePlayLogsInput = {
+  id?: string
+  name?: string | null
+  email?: string | null
+  emailVerified?: Date | string | null
+  passwordHash?: string | null
+  image?: string | null
+  background?: string | null
+  bio?: string | null
+  profileColor?: string | null
+  accentColor?: string | null
+  privacy?: string
+  libraryPrivacy?: string
+  logsPrivacy?: string
+  activityPrivacy?: string
+  contactEmail?: string | null
+  website?: string | null
+  socials?: string | null
+  preferences?: string | null
+  widgets?: string | null
+  commentsHidden?: boolean
+  roles?: Prisma.UserCreaterolesInput | $Enums.UserRole[]
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  games?: Prisma.UserGameEntryUncheckedCreateNestedManyWithoutUserInput
+  gameLists?: Prisma.GameListUncheckedCreateNestedManyWithoutUserInput
+  likes?: Prisma.LikeUncheckedCreateNestedManyWithoutUserInput
+  comments?: Prisma.CommentUncheckedCreateNestedManyWithoutUserInput
+  activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  sentNotifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutActorInput
+  following?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowerInput
+  followers?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowingInput
+  badges?: Prisma.UserBadgeUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutUserGamePlayLogsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutUserGamePlayLogsInput, Prisma.UserUncheckedCreateWithoutUserGamePlayLogsInput>
+}
+
+export type UserUpsertWithoutUserGamePlayLogsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutUserGamePlayLogsInput, Prisma.UserUncheckedUpdateWithoutUserGamePlayLogsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutUserGamePlayLogsInput, Prisma.UserUncheckedCreateWithoutUserGamePlayLogsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutUserGamePlayLogsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutUserGamePlayLogsInput, Prisma.UserUncheckedUpdateWithoutUserGamePlayLogsInput>
+}
+
+export type UserUpdateWithoutUserGamePlayLogsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  background?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profileColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  accentColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  privacy?: Prisma.StringFieldUpdateOperationsInput | string
+  libraryPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  logsPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  activityPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  contactEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  socials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferences?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  widgets?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  commentsHidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  roles?: Prisma.UserUpdaterolesInput | $Enums.UserRole[]
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  games?: Prisma.UserGameEntryUpdateManyWithoutUserNestedInput
+  gameLists?: Prisma.GameListUpdateManyWithoutUserNestedInput
+  likes?: Prisma.LikeUpdateManyWithoutUserNestedInput
+  comments?: Prisma.CommentUpdateManyWithoutUserNestedInput
+  activities?: Prisma.ActivityUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  sentNotifications?: Prisma.NotificationUpdateManyWithoutActorNestedInput
+  following?: Prisma.UserFollowUpdateManyWithoutFollowerNestedInput
+  followers?: Prisma.UserFollowUpdateManyWithoutFollowingNestedInput
+  badges?: Prisma.UserBadgeUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutUserGamePlayLogsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  background?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profileColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  accentColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  privacy?: Prisma.StringFieldUpdateOperationsInput | string
+  libraryPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  logsPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  activityPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  contactEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  socials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferences?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  widgets?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  commentsHidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  roles?: Prisma.UserUpdaterolesInput | $Enums.UserRole[]
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  games?: Prisma.UserGameEntryUncheckedUpdateManyWithoutUserNestedInput
   gameLists?: Prisma.GameListUncheckedUpdateManyWithoutUserNestedInput
   likes?: Prisma.LikeUncheckedUpdateManyWithoutUserNestedInput
   comments?: Prisma.CommentUncheckedUpdateManyWithoutUserNestedInput
@@ -1398,6 +1701,9 @@ export type UserCreateWithoutGameListsInput = {
   profileColor?: string | null
   accentColor?: string | null
   privacy?: string
+  libraryPrivacy?: string
+  logsPrivacy?: string
+  activityPrivacy?: string
   contactEmail?: string | null
   website?: string | null
   socials?: string | null
@@ -1418,6 +1724,7 @@ export type UserCreateWithoutGameListsInput = {
   following?: Prisma.UserFollowCreateNestedManyWithoutFollowerInput
   followers?: Prisma.UserFollowCreateNestedManyWithoutFollowingInput
   badges?: Prisma.UserBadgeCreateNestedManyWithoutUserInput
+  userGamePlayLogs?: Prisma.UserGamePlayLogCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutGameListsInput = {
@@ -1432,6 +1739,9 @@ export type UserUncheckedCreateWithoutGameListsInput = {
   profileColor?: string | null
   accentColor?: string | null
   privacy?: string
+  libraryPrivacy?: string
+  logsPrivacy?: string
+  activityPrivacy?: string
   contactEmail?: string | null
   website?: string | null
   socials?: string | null
@@ -1452,6 +1762,7 @@ export type UserUncheckedCreateWithoutGameListsInput = {
   following?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowerInput
   followers?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowingInput
   badges?: Prisma.UserBadgeUncheckedCreateNestedManyWithoutUserInput
+  userGamePlayLogs?: Prisma.UserGamePlayLogUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutGameListsInput = {
@@ -1482,6 +1793,9 @@ export type UserUpdateWithoutGameListsInput = {
   profileColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accentColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacy?: Prisma.StringFieldUpdateOperationsInput | string
+  libraryPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  logsPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  activityPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
   contactEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   socials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1502,6 +1816,7 @@ export type UserUpdateWithoutGameListsInput = {
   following?: Prisma.UserFollowUpdateManyWithoutFollowerNestedInput
   followers?: Prisma.UserFollowUpdateManyWithoutFollowingNestedInput
   badges?: Prisma.UserBadgeUpdateManyWithoutUserNestedInput
+  userGamePlayLogs?: Prisma.UserGamePlayLogUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutGameListsInput = {
@@ -1516,6 +1831,9 @@ export type UserUncheckedUpdateWithoutGameListsInput = {
   profileColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accentColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacy?: Prisma.StringFieldUpdateOperationsInput | string
+  libraryPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  logsPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  activityPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
   contactEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   socials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1536,6 +1854,7 @@ export type UserUncheckedUpdateWithoutGameListsInput = {
   following?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowerNestedInput
   followers?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowingNestedInput
   badges?: Prisma.UserBadgeUncheckedUpdateManyWithoutUserNestedInput
+  userGamePlayLogs?: Prisma.UserGamePlayLogUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutActivitiesInput = {
@@ -1550,6 +1869,9 @@ export type UserCreateWithoutActivitiesInput = {
   profileColor?: string | null
   accentColor?: string | null
   privacy?: string
+  libraryPrivacy?: string
+  logsPrivacy?: string
+  activityPrivacy?: string
   contactEmail?: string | null
   website?: string | null
   socials?: string | null
@@ -1570,6 +1892,7 @@ export type UserCreateWithoutActivitiesInput = {
   following?: Prisma.UserFollowCreateNestedManyWithoutFollowerInput
   followers?: Prisma.UserFollowCreateNestedManyWithoutFollowingInput
   badges?: Prisma.UserBadgeCreateNestedManyWithoutUserInput
+  userGamePlayLogs?: Prisma.UserGamePlayLogCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutActivitiesInput = {
@@ -1584,6 +1907,9 @@ export type UserUncheckedCreateWithoutActivitiesInput = {
   profileColor?: string | null
   accentColor?: string | null
   privacy?: string
+  libraryPrivacy?: string
+  logsPrivacy?: string
+  activityPrivacy?: string
   contactEmail?: string | null
   website?: string | null
   socials?: string | null
@@ -1604,6 +1930,7 @@ export type UserUncheckedCreateWithoutActivitiesInput = {
   following?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowerInput
   followers?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowingInput
   badges?: Prisma.UserBadgeUncheckedCreateNestedManyWithoutUserInput
+  userGamePlayLogs?: Prisma.UserGamePlayLogUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutActivitiesInput = {
@@ -1634,6 +1961,9 @@ export type UserUpdateWithoutActivitiesInput = {
   profileColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accentColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacy?: Prisma.StringFieldUpdateOperationsInput | string
+  libraryPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  logsPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  activityPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
   contactEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   socials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1654,6 +1984,7 @@ export type UserUpdateWithoutActivitiesInput = {
   following?: Prisma.UserFollowUpdateManyWithoutFollowerNestedInput
   followers?: Prisma.UserFollowUpdateManyWithoutFollowingNestedInput
   badges?: Prisma.UserBadgeUpdateManyWithoutUserNestedInput
+  userGamePlayLogs?: Prisma.UserGamePlayLogUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutActivitiesInput = {
@@ -1668,6 +1999,9 @@ export type UserUncheckedUpdateWithoutActivitiesInput = {
   profileColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accentColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacy?: Prisma.StringFieldUpdateOperationsInput | string
+  libraryPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  logsPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  activityPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
   contactEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   socials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1688,6 +2022,7 @@ export type UserUncheckedUpdateWithoutActivitiesInput = {
   following?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowerNestedInput
   followers?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowingNestedInput
   badges?: Prisma.UserBadgeUncheckedUpdateManyWithoutUserNestedInput
+  userGamePlayLogs?: Prisma.UserGamePlayLogUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutLikesInput = {
@@ -1702,6 +2037,9 @@ export type UserCreateWithoutLikesInput = {
   profileColor?: string | null
   accentColor?: string | null
   privacy?: string
+  libraryPrivacy?: string
+  logsPrivacy?: string
+  activityPrivacy?: string
   contactEmail?: string | null
   website?: string | null
   socials?: string | null
@@ -1722,6 +2060,7 @@ export type UserCreateWithoutLikesInput = {
   following?: Prisma.UserFollowCreateNestedManyWithoutFollowerInput
   followers?: Prisma.UserFollowCreateNestedManyWithoutFollowingInput
   badges?: Prisma.UserBadgeCreateNestedManyWithoutUserInput
+  userGamePlayLogs?: Prisma.UserGamePlayLogCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutLikesInput = {
@@ -1736,6 +2075,9 @@ export type UserUncheckedCreateWithoutLikesInput = {
   profileColor?: string | null
   accentColor?: string | null
   privacy?: string
+  libraryPrivacy?: string
+  logsPrivacy?: string
+  activityPrivacy?: string
   contactEmail?: string | null
   website?: string | null
   socials?: string | null
@@ -1756,6 +2098,7 @@ export type UserUncheckedCreateWithoutLikesInput = {
   following?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowerInput
   followers?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowingInput
   badges?: Prisma.UserBadgeUncheckedCreateNestedManyWithoutUserInput
+  userGamePlayLogs?: Prisma.UserGamePlayLogUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutLikesInput = {
@@ -1786,6 +2129,9 @@ export type UserUpdateWithoutLikesInput = {
   profileColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accentColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacy?: Prisma.StringFieldUpdateOperationsInput | string
+  libraryPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  logsPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  activityPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
   contactEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   socials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1806,6 +2152,7 @@ export type UserUpdateWithoutLikesInput = {
   following?: Prisma.UserFollowUpdateManyWithoutFollowerNestedInput
   followers?: Prisma.UserFollowUpdateManyWithoutFollowingNestedInput
   badges?: Prisma.UserBadgeUpdateManyWithoutUserNestedInput
+  userGamePlayLogs?: Prisma.UserGamePlayLogUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutLikesInput = {
@@ -1820,6 +2167,9 @@ export type UserUncheckedUpdateWithoutLikesInput = {
   profileColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accentColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacy?: Prisma.StringFieldUpdateOperationsInput | string
+  libraryPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  logsPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  activityPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
   contactEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   socials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1840,6 +2190,7 @@ export type UserUncheckedUpdateWithoutLikesInput = {
   following?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowerNestedInput
   followers?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowingNestedInput
   badges?: Prisma.UserBadgeUncheckedUpdateManyWithoutUserNestedInput
+  userGamePlayLogs?: Prisma.UserGamePlayLogUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutCommentsInput = {
@@ -1854,6 +2205,9 @@ export type UserCreateWithoutCommentsInput = {
   profileColor?: string | null
   accentColor?: string | null
   privacy?: string
+  libraryPrivacy?: string
+  logsPrivacy?: string
+  activityPrivacy?: string
   contactEmail?: string | null
   website?: string | null
   socials?: string | null
@@ -1874,6 +2228,7 @@ export type UserCreateWithoutCommentsInput = {
   following?: Prisma.UserFollowCreateNestedManyWithoutFollowerInput
   followers?: Prisma.UserFollowCreateNestedManyWithoutFollowingInput
   badges?: Prisma.UserBadgeCreateNestedManyWithoutUserInput
+  userGamePlayLogs?: Prisma.UserGamePlayLogCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutCommentsInput = {
@@ -1888,6 +2243,9 @@ export type UserUncheckedCreateWithoutCommentsInput = {
   profileColor?: string | null
   accentColor?: string | null
   privacy?: string
+  libraryPrivacy?: string
+  logsPrivacy?: string
+  activityPrivacy?: string
   contactEmail?: string | null
   website?: string | null
   socials?: string | null
@@ -1908,6 +2266,7 @@ export type UserUncheckedCreateWithoutCommentsInput = {
   following?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowerInput
   followers?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowingInput
   badges?: Prisma.UserBadgeUncheckedCreateNestedManyWithoutUserInput
+  userGamePlayLogs?: Prisma.UserGamePlayLogUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutCommentsInput = {
@@ -1938,6 +2297,9 @@ export type UserUpdateWithoutCommentsInput = {
   profileColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accentColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacy?: Prisma.StringFieldUpdateOperationsInput | string
+  libraryPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  logsPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  activityPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
   contactEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   socials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1958,6 +2320,7 @@ export type UserUpdateWithoutCommentsInput = {
   following?: Prisma.UserFollowUpdateManyWithoutFollowerNestedInput
   followers?: Prisma.UserFollowUpdateManyWithoutFollowingNestedInput
   badges?: Prisma.UserBadgeUpdateManyWithoutUserNestedInput
+  userGamePlayLogs?: Prisma.UserGamePlayLogUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCommentsInput = {
@@ -1972,6 +2335,9 @@ export type UserUncheckedUpdateWithoutCommentsInput = {
   profileColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accentColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacy?: Prisma.StringFieldUpdateOperationsInput | string
+  libraryPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  logsPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  activityPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
   contactEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   socials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1992,6 +2358,7 @@ export type UserUncheckedUpdateWithoutCommentsInput = {
   following?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowerNestedInput
   followers?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowingNestedInput
   badges?: Prisma.UserBadgeUncheckedUpdateManyWithoutUserNestedInput
+  userGamePlayLogs?: Prisma.UserGamePlayLogUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutFollowingInput = {
@@ -2006,6 +2373,9 @@ export type UserCreateWithoutFollowingInput = {
   profileColor?: string | null
   accentColor?: string | null
   privacy?: string
+  libraryPrivacy?: string
+  logsPrivacy?: string
+  activityPrivacy?: string
   contactEmail?: string | null
   website?: string | null
   socials?: string | null
@@ -2026,6 +2396,7 @@ export type UserCreateWithoutFollowingInput = {
   sentNotifications?: Prisma.NotificationCreateNestedManyWithoutActorInput
   followers?: Prisma.UserFollowCreateNestedManyWithoutFollowingInput
   badges?: Prisma.UserBadgeCreateNestedManyWithoutUserInput
+  userGamePlayLogs?: Prisma.UserGamePlayLogCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutFollowingInput = {
@@ -2040,6 +2411,9 @@ export type UserUncheckedCreateWithoutFollowingInput = {
   profileColor?: string | null
   accentColor?: string | null
   privacy?: string
+  libraryPrivacy?: string
+  logsPrivacy?: string
+  activityPrivacy?: string
   contactEmail?: string | null
   website?: string | null
   socials?: string | null
@@ -2060,6 +2434,7 @@ export type UserUncheckedCreateWithoutFollowingInput = {
   sentNotifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutActorInput
   followers?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowingInput
   badges?: Prisma.UserBadgeUncheckedCreateNestedManyWithoutUserInput
+  userGamePlayLogs?: Prisma.UserGamePlayLogUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutFollowingInput = {
@@ -2079,6 +2454,9 @@ export type UserCreateWithoutFollowersInput = {
   profileColor?: string | null
   accentColor?: string | null
   privacy?: string
+  libraryPrivacy?: string
+  logsPrivacy?: string
+  activityPrivacy?: string
   contactEmail?: string | null
   website?: string | null
   socials?: string | null
@@ -2099,6 +2477,7 @@ export type UserCreateWithoutFollowersInput = {
   sentNotifications?: Prisma.NotificationCreateNestedManyWithoutActorInput
   following?: Prisma.UserFollowCreateNestedManyWithoutFollowerInput
   badges?: Prisma.UserBadgeCreateNestedManyWithoutUserInput
+  userGamePlayLogs?: Prisma.UserGamePlayLogCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutFollowersInput = {
@@ -2113,6 +2492,9 @@ export type UserUncheckedCreateWithoutFollowersInput = {
   profileColor?: string | null
   accentColor?: string | null
   privacy?: string
+  libraryPrivacy?: string
+  logsPrivacy?: string
+  activityPrivacy?: string
   contactEmail?: string | null
   website?: string | null
   socials?: string | null
@@ -2133,6 +2515,7 @@ export type UserUncheckedCreateWithoutFollowersInput = {
   sentNotifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutActorInput
   following?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowerInput
   badges?: Prisma.UserBadgeUncheckedCreateNestedManyWithoutUserInput
+  userGamePlayLogs?: Prisma.UserGamePlayLogUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutFollowersInput = {
@@ -2163,6 +2546,9 @@ export type UserUpdateWithoutFollowingInput = {
   profileColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accentColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacy?: Prisma.StringFieldUpdateOperationsInput | string
+  libraryPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  logsPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  activityPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
   contactEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   socials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2183,6 +2569,7 @@ export type UserUpdateWithoutFollowingInput = {
   sentNotifications?: Prisma.NotificationUpdateManyWithoutActorNestedInput
   followers?: Prisma.UserFollowUpdateManyWithoutFollowingNestedInput
   badges?: Prisma.UserBadgeUpdateManyWithoutUserNestedInput
+  userGamePlayLogs?: Prisma.UserGamePlayLogUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutFollowingInput = {
@@ -2197,6 +2584,9 @@ export type UserUncheckedUpdateWithoutFollowingInput = {
   profileColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accentColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacy?: Prisma.StringFieldUpdateOperationsInput | string
+  libraryPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  logsPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  activityPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
   contactEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   socials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2217,6 +2607,7 @@ export type UserUncheckedUpdateWithoutFollowingInput = {
   sentNotifications?: Prisma.NotificationUncheckedUpdateManyWithoutActorNestedInput
   followers?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowingNestedInput
   badges?: Prisma.UserBadgeUncheckedUpdateManyWithoutUserNestedInput
+  userGamePlayLogs?: Prisma.UserGamePlayLogUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserUpsertWithoutFollowersInput = {
@@ -2242,6 +2633,9 @@ export type UserUpdateWithoutFollowersInput = {
   profileColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accentColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacy?: Prisma.StringFieldUpdateOperationsInput | string
+  libraryPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  logsPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  activityPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
   contactEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   socials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2262,6 +2656,7 @@ export type UserUpdateWithoutFollowersInput = {
   sentNotifications?: Prisma.NotificationUpdateManyWithoutActorNestedInput
   following?: Prisma.UserFollowUpdateManyWithoutFollowerNestedInput
   badges?: Prisma.UserBadgeUpdateManyWithoutUserNestedInput
+  userGamePlayLogs?: Prisma.UserGamePlayLogUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutFollowersInput = {
@@ -2276,6 +2671,9 @@ export type UserUncheckedUpdateWithoutFollowersInput = {
   profileColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accentColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacy?: Prisma.StringFieldUpdateOperationsInput | string
+  libraryPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  logsPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  activityPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
   contactEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   socials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2296,6 +2694,7 @@ export type UserUncheckedUpdateWithoutFollowersInput = {
   sentNotifications?: Prisma.NotificationUncheckedUpdateManyWithoutActorNestedInput
   following?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowerNestedInput
   badges?: Prisma.UserBadgeUncheckedUpdateManyWithoutUserNestedInput
+  userGamePlayLogs?: Prisma.UserGamePlayLogUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutBadgesInput = {
@@ -2310,6 +2709,9 @@ export type UserCreateWithoutBadgesInput = {
   profileColor?: string | null
   accentColor?: string | null
   privacy?: string
+  libraryPrivacy?: string
+  logsPrivacy?: string
+  activityPrivacy?: string
   contactEmail?: string | null
   website?: string | null
   socials?: string | null
@@ -2330,6 +2732,7 @@ export type UserCreateWithoutBadgesInput = {
   sentNotifications?: Prisma.NotificationCreateNestedManyWithoutActorInput
   following?: Prisma.UserFollowCreateNestedManyWithoutFollowerInput
   followers?: Prisma.UserFollowCreateNestedManyWithoutFollowingInput
+  userGamePlayLogs?: Prisma.UserGamePlayLogCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutBadgesInput = {
@@ -2344,6 +2747,9 @@ export type UserUncheckedCreateWithoutBadgesInput = {
   profileColor?: string | null
   accentColor?: string | null
   privacy?: string
+  libraryPrivacy?: string
+  logsPrivacy?: string
+  activityPrivacy?: string
   contactEmail?: string | null
   website?: string | null
   socials?: string | null
@@ -2364,6 +2770,7 @@ export type UserUncheckedCreateWithoutBadgesInput = {
   sentNotifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutActorInput
   following?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowerInput
   followers?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowingInput
+  userGamePlayLogs?: Prisma.UserGamePlayLogUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutBadgesInput = {
@@ -2394,6 +2801,9 @@ export type UserUpdateWithoutBadgesInput = {
   profileColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accentColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacy?: Prisma.StringFieldUpdateOperationsInput | string
+  libraryPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  logsPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  activityPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
   contactEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   socials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2414,6 +2824,7 @@ export type UserUpdateWithoutBadgesInput = {
   sentNotifications?: Prisma.NotificationUpdateManyWithoutActorNestedInput
   following?: Prisma.UserFollowUpdateManyWithoutFollowerNestedInput
   followers?: Prisma.UserFollowUpdateManyWithoutFollowingNestedInput
+  userGamePlayLogs?: Prisma.UserGamePlayLogUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutBadgesInput = {
@@ -2428,6 +2839,9 @@ export type UserUncheckedUpdateWithoutBadgesInput = {
   profileColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accentColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacy?: Prisma.StringFieldUpdateOperationsInput | string
+  libraryPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  logsPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  activityPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
   contactEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   socials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2448,6 +2862,7 @@ export type UserUncheckedUpdateWithoutBadgesInput = {
   sentNotifications?: Prisma.NotificationUncheckedUpdateManyWithoutActorNestedInput
   following?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowerNestedInput
   followers?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowingNestedInput
+  userGamePlayLogs?: Prisma.UserGamePlayLogUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutNotificationsInput = {
@@ -2462,6 +2877,9 @@ export type UserCreateWithoutNotificationsInput = {
   profileColor?: string | null
   accentColor?: string | null
   privacy?: string
+  libraryPrivacy?: string
+  logsPrivacy?: string
+  activityPrivacy?: string
   contactEmail?: string | null
   website?: string | null
   socials?: string | null
@@ -2482,6 +2900,7 @@ export type UserCreateWithoutNotificationsInput = {
   following?: Prisma.UserFollowCreateNestedManyWithoutFollowerInput
   followers?: Prisma.UserFollowCreateNestedManyWithoutFollowingInput
   badges?: Prisma.UserBadgeCreateNestedManyWithoutUserInput
+  userGamePlayLogs?: Prisma.UserGamePlayLogCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -2496,6 +2915,9 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   profileColor?: string | null
   accentColor?: string | null
   privacy?: string
+  libraryPrivacy?: string
+  logsPrivacy?: string
+  activityPrivacy?: string
   contactEmail?: string | null
   website?: string | null
   socials?: string | null
@@ -2516,6 +2938,7 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   following?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowerInput
   followers?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowingInput
   badges?: Prisma.UserBadgeUncheckedCreateNestedManyWithoutUserInput
+  userGamePlayLogs?: Prisma.UserGamePlayLogUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -2535,6 +2958,9 @@ export type UserCreateWithoutSentNotificationsInput = {
   profileColor?: string | null
   accentColor?: string | null
   privacy?: string
+  libraryPrivacy?: string
+  logsPrivacy?: string
+  activityPrivacy?: string
   contactEmail?: string | null
   website?: string | null
   socials?: string | null
@@ -2555,6 +2981,7 @@ export type UserCreateWithoutSentNotificationsInput = {
   following?: Prisma.UserFollowCreateNestedManyWithoutFollowerInput
   followers?: Prisma.UserFollowCreateNestedManyWithoutFollowingInput
   badges?: Prisma.UserBadgeCreateNestedManyWithoutUserInput
+  userGamePlayLogs?: Prisma.UserGamePlayLogCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutSentNotificationsInput = {
@@ -2569,6 +2996,9 @@ export type UserUncheckedCreateWithoutSentNotificationsInput = {
   profileColor?: string | null
   accentColor?: string | null
   privacy?: string
+  libraryPrivacy?: string
+  logsPrivacy?: string
+  activityPrivacy?: string
   contactEmail?: string | null
   website?: string | null
   socials?: string | null
@@ -2589,6 +3019,7 @@ export type UserUncheckedCreateWithoutSentNotificationsInput = {
   following?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowerInput
   followers?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowingInput
   badges?: Prisma.UserBadgeUncheckedCreateNestedManyWithoutUserInput
+  userGamePlayLogs?: Prisma.UserGamePlayLogUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutSentNotificationsInput = {
@@ -2619,6 +3050,9 @@ export type UserUpdateWithoutNotificationsInput = {
   profileColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accentColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacy?: Prisma.StringFieldUpdateOperationsInput | string
+  libraryPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  logsPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  activityPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
   contactEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   socials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2639,6 +3073,7 @@ export type UserUpdateWithoutNotificationsInput = {
   following?: Prisma.UserFollowUpdateManyWithoutFollowerNestedInput
   followers?: Prisma.UserFollowUpdateManyWithoutFollowingNestedInput
   badges?: Prisma.UserBadgeUpdateManyWithoutUserNestedInput
+  userGamePlayLogs?: Prisma.UserGamePlayLogUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -2653,6 +3088,9 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   profileColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accentColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacy?: Prisma.StringFieldUpdateOperationsInput | string
+  libraryPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  logsPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  activityPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
   contactEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   socials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2673,6 +3111,7 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   following?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowerNestedInput
   followers?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowingNestedInput
   badges?: Prisma.UserBadgeUncheckedUpdateManyWithoutUserNestedInput
+  userGamePlayLogs?: Prisma.UserGamePlayLogUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserUpsertWithoutSentNotificationsInput = {
@@ -2698,6 +3137,9 @@ export type UserUpdateWithoutSentNotificationsInput = {
   profileColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accentColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacy?: Prisma.StringFieldUpdateOperationsInput | string
+  libraryPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  logsPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  activityPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
   contactEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   socials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2718,6 +3160,7 @@ export type UserUpdateWithoutSentNotificationsInput = {
   following?: Prisma.UserFollowUpdateManyWithoutFollowerNestedInput
   followers?: Prisma.UserFollowUpdateManyWithoutFollowingNestedInput
   badges?: Prisma.UserBadgeUpdateManyWithoutUserNestedInput
+  userGamePlayLogs?: Prisma.UserGamePlayLogUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSentNotificationsInput = {
@@ -2732,6 +3175,9 @@ export type UserUncheckedUpdateWithoutSentNotificationsInput = {
   profileColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accentColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacy?: Prisma.StringFieldUpdateOperationsInput | string
+  libraryPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  logsPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  activityPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
   contactEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   socials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2752,6 +3198,7 @@ export type UserUncheckedUpdateWithoutSentNotificationsInput = {
   following?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowerNestedInput
   followers?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowingNestedInput
   badges?: Prisma.UserBadgeUncheckedUpdateManyWithoutUserNestedInput
+  userGamePlayLogs?: Prisma.UserGamePlayLogUncheckedUpdateManyWithoutUserNestedInput
 }
 
 
@@ -2772,6 +3219,7 @@ export type UserCountOutputType = {
   following: number
   followers: number
   badges: number
+  userGamePlayLogs: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2787,6 +3235,7 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   following?: boolean | UserCountOutputTypeCountFollowingArgs
   followers?: boolean | UserCountOutputTypeCountFollowersArgs
   badges?: boolean | UserCountOutputTypeCountBadgesArgs
+  userGamePlayLogs?: boolean | UserCountOutputTypeCountUserGamePlayLogsArgs
 }
 
 /**
@@ -2883,6 +3332,13 @@ export type UserCountOutputTypeCountBadgesArgs<ExtArgs extends runtime.Types.Ext
   where?: Prisma.UserBadgeWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountUserGamePlayLogsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.UserGamePlayLogWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -2896,6 +3352,9 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   profileColor?: boolean
   accentColor?: boolean
   privacy?: boolean
+  libraryPrivacy?: boolean
+  logsPrivacy?: boolean
+  activityPrivacy?: boolean
   contactEmail?: boolean
   website?: boolean
   socials?: boolean
@@ -2917,6 +3376,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   following?: boolean | Prisma.User$followingArgs<ExtArgs>
   followers?: boolean | Prisma.User$followersArgs<ExtArgs>
   badges?: boolean | Prisma.User$badgesArgs<ExtArgs>
+  userGamePlayLogs?: boolean | Prisma.User$userGamePlayLogsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -2932,6 +3392,9 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   profileColor?: boolean
   accentColor?: boolean
   privacy?: boolean
+  libraryPrivacy?: boolean
+  logsPrivacy?: boolean
+  activityPrivacy?: boolean
   contactEmail?: boolean
   website?: boolean
   socials?: boolean
@@ -2955,6 +3418,9 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   profileColor?: boolean
   accentColor?: boolean
   privacy?: boolean
+  libraryPrivacy?: boolean
+  logsPrivacy?: boolean
+  activityPrivacy?: boolean
   contactEmail?: boolean
   website?: boolean
   socials?: boolean
@@ -2978,6 +3444,9 @@ export type UserSelectScalar = {
   profileColor?: boolean
   accentColor?: boolean
   privacy?: boolean
+  libraryPrivacy?: boolean
+  logsPrivacy?: boolean
+  activityPrivacy?: boolean
   contactEmail?: boolean
   website?: boolean
   socials?: boolean
@@ -2989,7 +3458,7 @@ export type UserSelectScalar = {
   updatedAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "emailVerified" | "passwordHash" | "image" | "background" | "bio" | "profileColor" | "accentColor" | "privacy" | "contactEmail" | "website" | "socials" | "preferences" | "widgets" | "commentsHidden" | "roles" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "emailVerified" | "passwordHash" | "image" | "background" | "bio" | "profileColor" | "accentColor" | "privacy" | "libraryPrivacy" | "logsPrivacy" | "activityPrivacy" | "contactEmail" | "website" | "socials" | "preferences" | "widgets" | "commentsHidden" | "roles" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   accounts?: boolean | Prisma.User$accountsArgs<ExtArgs>
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
@@ -3003,6 +3472,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   following?: boolean | Prisma.User$followingArgs<ExtArgs>
   followers?: boolean | Prisma.User$followersArgs<ExtArgs>
   badges?: boolean | Prisma.User$badgesArgs<ExtArgs>
+  userGamePlayLogs?: boolean | Prisma.User$userGamePlayLogsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -3023,6 +3493,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     following: Prisma.$UserFollowPayload<ExtArgs>[]
     followers: Prisma.$UserFollowPayload<ExtArgs>[]
     badges: Prisma.$UserBadgePayload<ExtArgs>[]
+    userGamePlayLogs: Prisma.$UserGamePlayLogPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -3036,6 +3507,9 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     profileColor: string | null
     accentColor: string | null
     privacy: string
+    libraryPrivacy: string
+    logsPrivacy: string
+    activityPrivacy: string
     contactEmail: string | null
     website: string | null
     socials: string | null
@@ -3451,6 +3925,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   following<T extends Prisma.User$followingArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$followingArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserFollowPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   followers<T extends Prisma.User$followersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$followersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserFollowPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   badges<T extends Prisma.User$badgesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$badgesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserBadgePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  userGamePlayLogs<T extends Prisma.User$userGamePlayLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$userGamePlayLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserGamePlayLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3491,6 +3966,9 @@ export interface UserFieldRefs {
   readonly profileColor: Prisma.FieldRef<"User", 'String'>
   readonly accentColor: Prisma.FieldRef<"User", 'String'>
   readonly privacy: Prisma.FieldRef<"User", 'String'>
+  readonly libraryPrivacy: Prisma.FieldRef<"User", 'String'>
+  readonly logsPrivacy: Prisma.FieldRef<"User", 'String'>
+  readonly activityPrivacy: Prisma.FieldRef<"User", 'String'>
   readonly contactEmail: Prisma.FieldRef<"User", 'String'>
   readonly website: Prisma.FieldRef<"User", 'String'>
   readonly socials: Prisma.FieldRef<"User", 'String'>
@@ -4178,6 +4656,30 @@ export type User$badgesArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
   take?: number
   skip?: number
   distinct?: Prisma.UserBadgeScalarFieldEnum | Prisma.UserBadgeScalarFieldEnum[]
+}
+
+/**
+ * User.userGamePlayLogs
+ */
+export type User$userGamePlayLogsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the UserGamePlayLog
+   */
+  select?: Prisma.UserGamePlayLogSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the UserGamePlayLog
+   */
+  omit?: Prisma.UserGamePlayLogOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserGamePlayLogInclude<ExtArgs> | null
+  where?: Prisma.UserGamePlayLogWhereInput
+  orderBy?: Prisma.UserGamePlayLogOrderByWithRelationInput | Prisma.UserGamePlayLogOrderByWithRelationInput[]
+  cursor?: Prisma.UserGamePlayLogWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.UserGamePlayLogScalarFieldEnum | Prisma.UserGamePlayLogScalarFieldEnum[]
 }
 
 /**

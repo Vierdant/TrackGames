@@ -16,7 +16,12 @@ const listSelect = {
     accentColor: true,
     privacy: true,
     commentsHidden: true,
-    entries: true
+    entries: true,
+    user: {
+        select: {
+            libraryPrivacy: true,
+        },
+    },
 }
 
 export async function ensureAndGetUserLibrary(slug: string) {
@@ -26,7 +31,8 @@ export async function ensureAndGetUserLibrary(slug: string) {
         },
         select: {
             id: true,
-            name: true
+            name: true,
+            libraryPrivacy: true,
         }
     })
 
@@ -49,6 +55,7 @@ export async function ensureAndGetUserLibrary(slug: string) {
             name: `${user.name}'s Library`,
             slug: `${user.name}`,
             privacy: "public"
-        }
+        },
+        select: listSelect
     })
 }

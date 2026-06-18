@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { auth } from "../auth";
 import db from "../db";
 import { getOwnedGames, getSteamProfile } from "../external/steam/api";
+import { ActivityType, InteractionTargetType } from "../generated/prisma/enums";
 
 function gameSlug(name: string) {
     return name
@@ -52,7 +53,7 @@ export async function getSteamProfileImportPreview(steamId: string) {
     };
 }
 
-export async function importSteamLibrary(steamId: string) {
+export async function importSteamLibrary(steamId: string, skipImportedLogs = true) {
     const id = steamId.trim();
 
     if (!/^\d{17}$/.test(id)) {
@@ -119,29 +120,59 @@ export async function importSteamLibrary(steamId: string) {
         });
     }
 
-    const writes = Array.from(matchedGames.values()).map((game) => {
-        return db.userGameEntry.upsert({
-            where: {
-                userId_gameId: {
-                    userId,
-                    gameId: game.id,
-                },
-            },
-            update: {
-                timePlayed: game.hours,
-            },
-            create: {
-                userId,
-                gameId: game.id,
-                timePlayed: game.hours,
-            },
-        });
-    });
+    const matched = Array.from(matchedGames.values());
+    const playedAt = new Date();
 
-    for (let index = 0; index < writes.length; index += 50) {
-        await db.$transaction(writes.slice(index, index + 50));
+    for (let index = 0; index < matched.length; index += 50) {
+        await db.$transaction(async (tx) => {
+            for (const game of matched.slice(index, index + 50)) {
+                const entry = await tx.userGameEntry.upsert({
+                    where: {
+                        userId_gameId: {
+                            userId,
+                            gameId: game.id,
+                        },
+                    },
+                    update: {
+                        timePlayed: game.hours,
+                    },
+                    create: {
+                        userId,
+                        gameId: game.id,
+                        timePlayed: game.hours,
+                    },
+                    select: {
+                        id: true,
+                    },
+                });
+
+                await tx.userGamePlayLog.create({
+                    data: {
+                        userId,
+                        entryId: entry.id,
+                        gameId: game.id,
+                        hours: game.hours,
+                        note: "Imported from Steam.",
+                        skip: skipImportedLogs,
+                        playedAt,
+                    },
+                });
+
+                await tx.activity.create({
+                    data: {
+                        userId,
+                        type: ActivityType.LOGGED_GAME_PLAY,
+                        targetType: InteractionTargetType.GAME,
+                        targetId: String(game.id),
+                        gameId: game.id,
+                        message: "Imported from Steam.",
+                    },
+                });
+            }
+        });
     }
 
     revalidatePath("/library/[slug]", "page");
+    revalidatePath("/u/[user]", "page");
     return { imported: matchedGames.size, failed };
 }

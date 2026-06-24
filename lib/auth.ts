@@ -10,6 +10,7 @@ import { verifyPassword } from "./util/password";
 
 export const { auth, handlers, signIn, signOut } = NextAuth({
     adapter: PrismaAdapter(db),
+    trustHost: true,
     session: {
         strategy: "jwt",
     },

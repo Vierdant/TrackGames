@@ -7,7 +7,7 @@ import LoginClient from "./LoginClient";
 export default async function Page() {
     const [session] = await Promise.all([auth()]);
 
-    if (session) redirect("/");
+    if (session?.user?.id) redirect("/");
 
     return (
         <Suspense fallback={null}>

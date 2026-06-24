@@ -2,7 +2,7 @@
 
 import { logout } from "@/lib/actions/auth";
 import ThemeSwitch from "./ThemeSwitch";
-import { Book, CircleQuestionMark, LogOut, Menu, User as UserIcon, X } from "lucide-react";
+import { Book, CircleQuestionMark, LogOut, Menu, Settings, User as UserIcon, X } from "lucide-react";
 import type { User } from "next-auth";
 import Link from "next/link";
 import { useRef, useState } from "react";
@@ -101,6 +101,16 @@ export function UserMenu({ user }: UserMenuProps) {
                     >
                         <UserIcon size={17} aria-hidden="true" />
                         Profile
+                    </Link>
+                    <Link
+                        role="menuitem"
+                        tabIndex={isOpen ? undefined : -1}
+                        href={`/settings`}
+                        onClick={() => setIsOpen(false)}
+                        className="flex items-center gap-3 rounded px-3 py-3 font-medium text-text-muted transition-colors hover:bg-primary hover:text-text focus:bg-primary focus:text-text focus:outline-none md:py-2.5"
+                    >
+                        <Settings size={17} aria-hidden="true" />
+                        Settings
                     </Link>
 
                     <form action={logout} className="mt-auto border-t border-border pt-2 md:mt-1 md:pt-1">

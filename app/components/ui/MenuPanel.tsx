@@ -2,8 +2,8 @@
 
 import { X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { createPortal } from "react-dom";
 import type { CSSProperties, RefObject, ReactNode } from "react";
+import HighLevelIsland from "./HighLevelIsland";
 
 type MenuPanelProps = {
     open: boolean;
@@ -81,8 +81,8 @@ export default function MenuPanel({ open, onClose, title, children, footer, vari
             }}
             className={join(
                 variant === "modal"
-                    ? "max-h-[calc(100vh-2rem)] w-[min(var(--menu-panel-width,32rem),calc(100vw-2rem))] max-w-none overflow-y-auto rounded bg-bg p-5 shadow-main"
-                    : "absolute right-0 top-full z-50 mt-3 w-80 rounded border border-border bg-bg-secondary p-2 text-sm shadow-main",
+                    ? "pointer-events-auto max-h-[calc(100vh-2rem)] w-[min(var(--menu-panel-width,32rem),calc(100vw-2rem))] max-w-none overflow-y-auto rounded bg-bg p-5 shadow-main"
+                    : "pointer-events-auto absolute right-0 top-full z-50 mt-3 w-80 rounded border border-border bg-bg-secondary p-2 text-sm shadow-main",
                 `${open ? "animate-menu-panel-in" : "animate-menu-panel-out"} ${panelClassName ?? ""}`,
             )}
         >
@@ -101,19 +101,34 @@ export default function MenuPanel({ open, onClose, title, children, footer, vari
         </div>
     );
 
-    const content = variant === "modal" ? (
-        <div
-            className={join("fixed inset-0 z-100 flex items-center justify-center bg-overlay p-4", `${open ? "animate-menu-overlay-in" : "animate-menu-overlay-out"} ${className ?? ""}`)}
-            onMouseDown={(event) => {
-                if (event.target === event.currentTarget) onClose();
-            }}
-        >
-            {panel}
-        </div>
-    ) : panel;
+    let content = panel;
 
-    if (shouldPortal && typeof document !== "undefined") {
-        return createPortal(content, document.body);
+    if (variant === "modal") {
+        content = (
+            <div
+                className={join("pointer-events-auto fixed inset-0 flex items-center justify-center bg-overlay p-4", `${open ? "animate-menu-overlay-in" : "animate-menu-overlay-out"} ${className ?? ""}`)}
+                onMouseDown={(event) => {
+                    if (event.target === event.currentTarget) onClose();
+                }}
+            >
+                {panel}
+            </div>
+        );
+    } else if (shouldPortal) {
+        content = (
+            <div
+                className={join("fixed inset-0 pointer-events-auto", className)}
+                onMouseDown={(event) => {
+                    if (event.target === event.currentTarget) onClose();
+                }}
+            >
+                {panel}
+            </div>
+        );
+    }
+
+    if (shouldPortal) {
+        return <HighLevelIsland>{content}</HighLevelIsland>;
     }
 
     return content;

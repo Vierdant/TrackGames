@@ -215,6 +215,30 @@ h3 {
   }
 }
 
+@keyframes menu-drawer-in {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes menu-drawer-out {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  to {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+}
+
 .animate-menu-panel-in {
   animation: menu-panel-in 160ms ease-out;
 }
@@ -229,6 +253,14 @@ h3 {
 
 .animate-menu-overlay-out {
   animation: menu-overlay-out 140ms ease-in forwards;
+}
+
+.animate-menu-drawer-in {
+  animation: menu-drawer-in 180ms ease-out;
+}
+
+.animate-menu-drawer-out {
+  animation: menu-drawer-out 160ms ease-in forwards;
 }
 
 @utility no-scrollbar {

@@ -1,363 +1,5 @@
 [
   {
-    "id": 267086,
-    "cover": {
-      "id": 331026,
-      "image_id": "co73f6"
-    },
-    "first_release_date": 1782345600,
-    "name": "All one click",
-    "slug": "all-one-click"
-  },
-  {
-    "id": 349271,
-    "cover": {
-      "id": 465390,
-      "image_id": "co9z3i"
-    },
-    "first_release_date": 1782345600,
-    "name": "Love Confessions on the Adventure",
-    "slug": "love-confessions-on-the-adventure"
-  },
-  {
-    "id": 356562,
-    "cover": {
-      "id": 474014,
-      "image_id": "coa5r2"
-    },
-    "first_release_date": 1782345600,
-    "name": "Kiyo: Bunny Tyranny",
-    "slug": "kiyo-bunny-tyranny"
-  },
-  {
-    "id": 369651,
-    "cover": {
-      "id": 515680,
-      "image_id": "cob1wg"
-    },
-    "first_release_date": 1782345600,
-    "name": "Nophenia",
-    "slug": "nophenia"
-  },
-  {
-    "id": 377402,
-    "cover": {
-      "id": 505586,
-      "image_id": "coau42"
-    },
-    "first_release_date": 1782345600,
-    "name": "7 Nights with Vroombi",
-    "slug": "7-nights-with-vroombi--1"
-  },
-  {
-    "id": 383579,
-    "cover": {
-      "id": 535585,
-      "image_id": "cobh9d"
-    },
-    "first_release_date": 1782345600,
-    "name": "Exofinity Clicker",
-    "slug": "exofinity-clicker"
-  },
-  {
-    "id": 386594,
-    "cover": {
-      "id": 569493,
-      "image_id": "coc7f9"
-    },
-    "first_release_date": 1782345600,
-    "name": "Bobble and the Tri-Crystal",
-    "slug": "bobble-and-the-tri-crystal"
-  },
-  {
-    "id": 387425,
-    "cover": {
-      "id": 541477,
-      "image_id": "coblt1"
-    },
-    "first_release_date": 1782345600,
-    "name": "Villion:Code",
-    "slug": "villion-code"
-  },
-  {
-    "id": 388584,
-    "cover": {
-      "id": 540784,
-      "image_id": "cobl9s"
-    },
-    "first_release_date": 1782345600,
-    "name": "Tiny Terra Spaces",
-    "slug": "tiny-terra-spaces"
-  },
-  {
-    "id": 389185,
-    "cover": {
-      "id": 536028,
-      "image_id": "cobhlo"
-    },
-    "first_release_date": 1782345600,
-    "name": "Wheel Balance",
-    "slug": "wheel-balance"
-  },
-  {
-    "id": 390961,
-    "first_release_date": 1782345600,
-    "name": "Medabots Card Robattle RB",
-    "slug": "medabots-card-robattle-rb"
-  },
-  {
-    "id": 391694,
-    "cover": {
-      "id": 540971,
-      "image_id": "coblez"
-    },
-    "first_release_date": 1782345600,
-    "name": "Slot or Die",
-    "slug": "slot-or-die"
-  },
-  {
-    "id": 398251,
-    "cover": {
-      "id": 556233,
-      "image_id": "cobx6x"
-    },
-    "first_release_date": 1782345600,
-    "name": "Project XZ",
-    "slug": "project-xz"
-  },
-  {
-    "id": 401883,
-    "cover": {
-      "id": 563353,
-      "image_id": "coc2op"
-    },
-    "first_release_date": 1782345600,
-    "name": "Bring The Rift",
-    "slug": "bring-the-rift"
-  },
-  {
-    "id": 403511,
-    "cover": {
-      "id": 570608,
-      "image_id": "coc8a8"
-    },
-    "first_release_date": 1782345600,
-    "name": "Type or Die",
-    "slug": "type-or-die"
-  },
-  {
-    "id": 405381,
-    "cover": {
-      "id": 569650,
-      "image_id": "coc7jm"
-    },
-    "first_release_date": 1782345600,
-    "name": "Sands and Relics",
-    "slug": "sands-and-relics"
-  },
-  {
-    "id": 405798,
-    "cover": {
-      "id": 570213,
-      "image_id": "coc7z9"
-    },
-    "first_release_date": 1782345600,
-    "name": "Escape From Vlogger: Runaway",
-    "slug": "escape-from-vlogger-runaway"
-  },
-  {
-    "id": 405904,
-    "cover": {
-      "id": 570390,
-      "image_id": "coc846"
-    },
-    "first_release_date": 1782345600,
-    "name": "Namco Legendary Mountains",
-    "slug": "namco-legendary-mountains"
-  },
-  {
-    "id": 406007,
-    "cover": {
-      "id": 570543,
-      "image_id": "coc88f"
-    },
-    "first_release_date": 1782345600,
-    "name": "Glowbot Tower Defense",
-    "slug": "glowbot-tower-defense"
-  },
-  {
-    "id": 406017,
-    "cover": {
-      "id": 571549,
-      "image_id": "coc90d"
-    },
-    "first_release_date": 1782345600,
-    "name": "Directors Cut: Train",
-    "slug": "directors-cut-train"
-  },
-  {
-    "id": 406018,
-    "cover": {
-      "id": 570565,
-      "image_id": "coc891"
-    },
-    "first_release_date": 1782345600,
-    "name": "The Life You Missed",
-    "slug": "the-life-you-missed"
-  },
-  {
-    "id": 406054,
-    "cover": {
-      "id": 570635,
-      "image_id": "coc8az"
-    },
-    "first_release_date": 1782345600,
-    "name": "Murder on the Disorient Express",
-    "slug": "murder-on-the-disorient-express"
-  },
-  {
-    "id": 406063,
-    "cover": {
-      "id": 570645,
-      "image_id": "coc8b9"
-    },
-    "first_release_date": 1782345600,
-    "name": "Love Island: Forbidden Boys Temptation",
-    "slug": "love-island-forbidden-boys-temptation"
-  },
-  {
-    "id": 406067,
-    "cover": {
-      "id": 570649,
-      "image_id": "coc8bd"
-    },
-    "first_release_date": 1782345600,
-    "name": "Escape game R00m14",
-    "slug": "escape-game-r00m14"
-  },
-  {
-    "id": 406304,
-    "cover": {
-      "id": 574007,
-      "image_id": "cocawn"
-    },
-    "first_release_date": 1782345600,
-    "name": "Storm Clan",
-    "slug": "storm-clan"
-  },
-  {
-    "id": 406309,
-    "cover": {
-      "id": 571221,
-      "image_id": "coc8r9"
-    },
-    "first_release_date": 1782345600,
-    "name": "Necromancer Delivery Service",
-    "slug": "necromancer-delivery-service"
-  },
-  {
-    "id": 406324,
-    "cover": {
-      "id": 572599,
-      "image_id": "coc9tj"
-    },
-    "first_release_date": 1782345600,
-    "name": "Deliver Together",
-    "slug": "deliver-together"
-  },
-  {
-    "id": 406325,
-    "cover": {
-      "id": 571069,
-      "image_id": "coc8n1"
-    },
-    "first_release_date": 1782345600,
-    "name": "Invisible Ascent",
-    "slug": "invisible-ascent"
-  },
-  {
-    "id": 406646,
-    "cover": {
-      "id": 571570,
-      "image_id": "coc90y"
-    },
-    "first_release_date": 1782345600,
-    "name": "Left Fore Dead: Zombie Battle Golf",
-    "slug": "left-fore-dead-zombie-battle-golf"
-  },
-  {
-    "id": 406960,
-    "cover": {
-      "id": 572249,
-      "image_id": "coc9jt"
-    },
-    "first_release_date": 1782345600,
-    "name": "Glorpotron",
-    "slug": "glorpotron"
-  },
-  {
-    "id": 407014,
-    "cover": {
-      "id": 572404,
-      "image_id": "coc9o4"
-    },
-    "first_release_date": 1782345600,
-    "name": "Not Sleep Hero",
-    "slug": "not-sleep-hero"
-  },
-  {
-    "id": 407016,
-    "cover": {
-      "id": 572405,
-      "image_id": "coc9o5"
-    },
-    "first_release_date": 1782345600,
-    "name": "Gamba God",
-    "slug": "gamba-god"
-  },
-  {
-    "id": 407050,
-    "cover": {
-      "id": 572459,
-      "image_id": "coc9pn"
-    },
-    "first_release_date": 1782345600,
-    "name": "Rogue Breaker",
-    "slug": "rogue-breaker"
-  },
-  {
-    "id": 407105,
-    "first_release_date": 1782345600,
-    "name": "Saeko: Giantess Dating Sim - Digital Deluxe Edition",
-    "slug": "saeko-giantess-dating-sim-digital-deluxe-edition"
-  },
-  {
-    "id": 407285,
-    "first_release_date": 1782345600,
-    "name": "Love Island: Forbidden Girls Temptation",
-    "slug": "love-island-forbidden-girls-temptation"
-  },
-  {
-    "id": 407923,
-    "cover": {
-      "id": 574158,
-      "image_id": "cocb0u"
-    },
-    "first_release_date": 1782345600,
-    "name": "Gone Me",
-    "slug": "gone-me"
-  },
-  {
-    "id": 408074,
-    "cover": {
-      "id": 574494,
-      "image_id": "cocba6"
-    },
-    "first_release_date": 1782345600,
-    "name": "Floor 12",
-    "slug": "floor-12"
-  },
-  {
     "id": 272575,
     "cover": {
       "id": 573894,
@@ -974,5 +616,375 @@
     "first_release_date": 1782691200,
     "name": "Electric Sheep",
     "slug": "electric-sheep"
+  },
+  {
+    "id": 407024,
+    "cover": {
+      "id": 572415,
+      "image_id": "coc9of"
+    },
+    "first_release_date": 1782691200,
+    "name": "Professional Cats",
+    "slug": "professional-cats"
+  },
+  {
+    "id": 407048,
+    "cover": {
+      "id": 572472,
+      "image_id": "coc9q0"
+    },
+    "first_release_date": 1782691200,
+    "name": "Rift Rumble",
+    "slug": "rift-rumble"
+  },
+  {
+    "id": 407052,
+    "cover": {
+      "id": 572471,
+      "image_id": "coc9pz"
+    },
+    "first_release_date": 1782691200,
+    "name": "Bōnin",
+    "slug": "bonin"
+  },
+  {
+    "id": 114115,
+    "cover": {
+      "id": 169041,
+      "image_id": "co3mfl"
+    },
+    "first_release_date": 1782777600,
+    "name": "Blossoming Yandere",
+    "slug": "blossoming-yandere"
+  },
+  {
+    "id": 123765,
+    "cover": {
+      "id": 555228,
+      "image_id": "cobwf0"
+    },
+    "first_release_date": 1782777600,
+    "name": "Airport Contraband",
+    "slug": "airport-contraband"
+  },
+  {
+    "id": 135987,
+    "cover": {
+      "id": 131217,
+      "image_id": "co2t8x"
+    },
+    "first_release_date": 1782777600,
+    "name": "ExoMecha",
+    "slug": "exomecha"
+  },
+  {
+    "id": 147345,
+    "cover": {
+      "id": 140333,
+      "image_id": "co30a5"
+    },
+    "first_release_date": 1782777600,
+    "name": "Redemption of the Damned",
+    "slug": "redemption-of-the-damned"
+  },
+  {
+    "id": 152427,
+    "cover": {
+      "id": 393058,
+      "image_id": "co8faa"
+    },
+    "first_release_date": 1782777600,
+    "name": "Sparkball",
+    "slug": "sparkball"
+  },
+  {
+    "id": 158561,
+    "cover": {
+      "id": 170786,
+      "image_id": "co3ns2"
+    },
+    "first_release_date": 1782777600,
+    "name": "MegaBattle",
+    "slug": "megabattle"
+  },
+  {
+    "id": 163134,
+    "cover": {
+      "id": 540700,
+      "image_id": "cobl7g"
+    },
+    "first_release_date": 1782777600,
+    "name": "Dystopicon",
+    "slug": "dystopicon"
+  },
+  {
+    "id": 168601,
+    "cover": {
+      "id": 251169,
+      "image_id": "co5dsx"
+    },
+    "first_release_date": 1782777600,
+    "name": "Gowf: A Golf Adventure",
+    "slug": "gowf-a-golf-adventure"
+  },
+  {
+    "id": 199257,
+    "cover": {
+      "id": 317470,
+      "image_id": "co6sym"
+    },
+    "first_release_date": 1782777600,
+    "name": "Galactic Diner",
+    "slug": "galactic-diner"
+  },
+  {
+    "id": 201516,
+    "cover": {
+      "id": 256058,
+      "image_id": "co5hkq"
+    },
+    "first_release_date": 1782777600,
+    "name": "Dreaming Worlds",
+    "slug": "dreaming-worlds"
+  },
+  {
+    "id": 202129,
+    "cover": {
+      "id": 462222,
+      "image_id": "co9wni"
+    },
+    "first_release_date": 1782777600,
+    "name": "Athanasia",
+    "slug": "athanasia"
+  },
+  {
+    "id": 211671,
+    "cover": {
+      "id": 251016,
+      "image_id": "co5doo"
+    },
+    "first_release_date": 1782777600,
+    "name": "Glaciered",
+    "slug": "glaciered"
+  },
+  {
+    "id": 211702,
+    "cover": {
+      "id": 499617,
+      "image_id": "coapi9"
+    },
+    "first_release_date": 1782777600,
+    "name": "Adventures of Ruby Rabbit",
+    "slug": "adventures-of-ruby-rabbit"
+  },
+  {
+    "id": 217044,
+    "cover": {
+      "id": 401477,
+      "image_id": "co8ls5"
+    },
+    "first_release_date": 1782777600,
+    "name": "Daomei Village",
+    "slug": "daomei-village"
+  },
+  {
+    "id": 219805,
+    "cover": {
+      "id": 252863,
+      "image_id": "co5f3z"
+    },
+    "first_release_date": 1782777600,
+    "name": "Grapple Gunners",
+    "slug": "grapple-gunners"
+  },
+  {
+    "id": 223721,
+    "cover": {
+      "id": 298742,
+      "image_id": "co6eie"
+    },
+    "first_release_date": 1782777600,
+    "name": "Nowhere Manor",
+    "slug": "nowhere-manor"
+  },
+  {
+    "id": 226009,
+    "cover": {
+      "id": 305316,
+      "image_id": "co6jl0"
+    },
+    "first_release_date": 1782777600,
+    "name": "Huni Kuin: Beya Xinã Bena",
+    "slug": "huni-kuin-beya-xina-bena"
+  },
+  {
+    "id": 235402,
+    "cover": {
+      "id": 387743,
+      "image_id": "co8b6n"
+    },
+    "first_release_date": 1782777600,
+    "name": "Vampire Rancher",
+    "slug": "vampire-rancher"
+  },
+  {
+    "id": 235427,
+    "cover": {
+      "id": 422092,
+      "image_id": "co91os"
+    },
+    "first_release_date": 1782777600,
+    "name": "Shark Rain",
+    "slug": "shark-rain"
+  },
+  {
+    "id": 240757,
+    "cover": {
+      "id": 392051,
+      "image_id": "co8eib"
+    },
+    "first_release_date": 1782777600,
+    "name": "Changer Seven",
+    "slug": "changer-seven"
+  },
+  {
+    "id": 242328,
+    "cover": {
+      "id": 293143,
+      "image_id": "co6a6v"
+    },
+    "first_release_date": 1782777600,
+    "name": "Robo Frenzy",
+    "slug": "robo-frenzy"
+  },
+  {
+    "id": 243672,
+    "cover": {
+      "id": 349948,
+      "image_id": "co7i0s"
+    },
+    "first_release_date": 1782777600,
+    "name": "Not Only Nine",
+    "slug": "not-only-nine"
+  },
+  {
+    "id": 250838,
+    "cover": {
+      "id": 548833,
+      "image_id": "cobrhd"
+    },
+    "first_release_date": 1782777600,
+    "name": "The Battle for Vega",
+    "slug": "the-battle-for-vega"
+  },
+  {
+    "id": 258283,
+    "cover": {
+      "id": 417955,
+      "image_id": "co8yhv"
+    },
+    "first_release_date": 1782777600,
+    "name": "The Hungry Town",
+    "slug": "the-hungry-town"
+  },
+  {
+    "id": 263193,
+    "cover": {
+      "id": 349736,
+      "image_id": "co7huw"
+    },
+    "first_release_date": 1782777600,
+    "name": "Little Cheese Works",
+    "slug": "little-cheese-works"
+  },
+  {
+    "id": 264665,
+    "cover": {
+      "id": 327837,
+      "image_id": "co70yl"
+    },
+    "first_release_date": 1782777600,
+    "name": "Peacemaker: Bloody Emperor",
+    "slug": "peacemaker-bloody-emperor"
+  },
+  {
+    "id": 265500,
+    "cover": {
+      "id": 418774,
+      "image_id": "co8z4m"
+    },
+    "first_release_date": 1782777600,
+    "name": "Elemdian",
+    "slug": "elemdian"
+  },
+  {
+    "id": 266577,
+    "cover": {
+      "id": 430130,
+      "image_id": "co97w2"
+    },
+    "first_release_date": 1782777600,
+    "name": "Amp",
+    "slug": "amp--1"
+  },
+  {
+    "id": 274947,
+    "cover": {
+      "id": 341300,
+      "image_id": "co7bck"
+    },
+    "first_release_date": 1782777600,
+    "name": "Mainland",
+    "slug": "mainland--1"
+  },
+  {
+    "id": 275839,
+    "cover": {
+      "id": 354597,
+      "image_id": "co7llx"
+    },
+    "first_release_date": 1782777600,
+    "name": "Pight",
+    "slug": "pight"
+  },
+  {
+    "id": 282210,
+    "cover": {
+      "id": 507043,
+      "image_id": "coav8j"
+    },
+    "first_release_date": 1782777600,
+    "name": "Wildsite",
+    "slug": "wildsite"
+  },
+  {
+    "id": 283898,
+    "cover": {
+      "id": 357908,
+      "image_id": "co7o5w"
+    },
+    "first_release_date": 1782777600,
+    "name": "Advaria: Chronicles of Immortality",
+    "slug": "advaria-chronicles-of-immortality"
+  },
+  {
+    "id": 289302,
+    "cover": {
+      "id": 566020,
+      "image_id": "coc4qs"
+    },
+    "first_release_date": 1782777600,
+    "name": "Infinity Knights: Xross",
+    "slug": "infinity-knights-xross"
+  },
+  {
+    "id": 293603,
+    "cover": {
+      "id": 372158,
+      "image_id": "co7z5q"
+    },
+    "first_release_date": 1782777600,
+    "name": "Head Chef",
+    "slug": "head-chef"
   }
 ]

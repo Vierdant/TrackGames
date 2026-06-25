@@ -17,7 +17,7 @@ export default function GameCard({ game, size = 140, effect, hover, slugged = fa
     const isFullSize = size === "full";
     const height = isFullSize ? "100%" : Math.round(size * 1.4);
     const imageSizes = isFullSize ? "(max-width: 640px) 42vw, 140px" : `${size}px`;
-    const src = ImageIdToURL(game.cover ?? undefined, "cover_big");
+    const src = ImageIdToURL(game.cover ?? undefined, "cover_big") ?? "/assets/no_cover.png";
 
     const createRipple = useCallback((event: React.PointerEvent<HTMLDivElement>) => {
         if (!effect) return;
@@ -40,16 +40,14 @@ export default function GameCard({ game, size = 140, effect, hover, slugged = fa
             style={{ width: isFullSize ? "100%" : size, height }}
             onPointerDown={createRipple}
         >
-            {src ?
-                <Image
-                    src={src ? src : "/assets/no_cover.png"}
-                    alt={game.slug ?? "game cover"}
-                    fill
-                    sizes={imageSizes}
-                    preload={preload}
-                    className={imageClass}
-                />
-                : null}
+            <Image
+                src={src}
+                alt={game.slug ?? "game cover"}
+                fill
+                sizes={imageSizes}
+                preload={preload}
+                className={imageClass}
+            />
             {hover == "name" ?
                 <p className="bg-bg/80 h-full flex items-center justify-center text-md font-bold text-center select-none">{game.name}</p>
                 : null

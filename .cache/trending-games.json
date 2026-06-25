@@ -37,7 +37,7 @@
     },
     "name": "Forza Horizon 6",
     "slug": "forza-horizon-6",
-    "total_rating": 85.24706938707153
+    "total_rating": 85.2400038841886
   },
   {
     "id": 407331,
@@ -66,17 +66,7 @@
     },
     "name": "LEGO Batman: Legacy of the Dark Knight",
     "slug": "lego-batman-legacy-of-the-dark-knight",
-    "total_rating": 86.97822874949537
-  },
-  {
-    "id": 393398,
-    "cover": {
-      "id": 545399,
-      "image_id": "cobotz"
-    },
-    "name": "Librarian: Tidy Up the Arcane Library!",
-    "slug": "librarian-tidy-up-the-arcane-library",
-    "total_rating": 83.26707790724241
+    "total_rating": 86.97173275329975
   },
   {
     "id": 358534,
@@ -89,6 +79,25 @@
     "total_rating": 78.75
   },
   {
+    "id": 406644,
+    "cover": {
+      "id": 571556,
+      "image_id": "coc90k"
+    },
+    "name": "Poem of the Starherd",
+    "slug": "poem-of-the-starherd"
+  },
+  {
+    "id": 393398,
+    "cover": {
+      "id": 545399,
+      "image_id": "cobotz"
+    },
+    "name": "Librarian: Tidy Up the Arcane Library!",
+    "slug": "librarian-tidy-up-the-arcane-library",
+    "total_rating": 83.26707790724241
+  },
+  {
     "id": 361890,
     "cover": {
       "id": 565449,
@@ -97,15 +106,6 @@
     "name": "World of Tanks: Heat",
     "slug": "world-of-tanks-heat",
     "total_rating": 79.36
-  },
-  {
-    "id": 406644,
-    "cover": {
-      "id": 571556,
-      "image_id": "coc90k"
-    },
-    "name": "Poem of the Starherd",
-    "slug": "poem-of-the-starherd"
   },
   {
     "id": 399673,
@@ -178,13 +178,13 @@
     "total_rating": 79.93517265094137
   },
   {
-    "id": 312791,
+    "id": 304745,
     "cover": {
-      "id": 461967,
-      "image_id": "co9wgf"
+      "id": 387859,
+      "image_id": "co8b9v"
     },
-    "name": "Thank You For Your Application",
-    "slug": "thank-you-for-your-application",
-    "total_rating": 90
+    "name": "Motorslice",
+    "slug": "motorslice",
+    "total_rating": 74.79160354901536
   }
 ]

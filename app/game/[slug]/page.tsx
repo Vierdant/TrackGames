@@ -207,7 +207,6 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
                         </section>
 
                         {/* MEDIA */}
-                        { /* TODO: make the media gallary arrows select the next image instead of moving the slider. Moving the slider only when last image in view is reached. */}
                         <section className="flex flex-col mt-4">
                             <div className="w-full min-w-0 overflow-hidden">
                                 <MediaGallary media={media} />

@@ -4,6 +4,7 @@ import { ImageIdToURL } from "@/lib/external/igdb/util";
 import Image from "next/image";
 import { useState } from "react";
 import HorizontalScroller from "./HorizontalScroller";
+import { ChevronLeft, ChevronRight, Play } from "lucide-react";
 
 type MediaItem =
     | {
@@ -40,14 +41,38 @@ export default function MediaGallery({ media }: { media: MediaItem[] }) {
                         src={`https://images.igdb.com/igdb/image/upload/t_screenshot_big/${activeItem.id}.jpg`}
                         alt=""
                         fill
-                        sizes="(min-width: 1024px) 768px, 100vw"
+                        sizes="(min-width: 1024px) 768px, calc(100vw - 2rem)"
                         className="object-cover"
                     />
+                )}
+                {mediaActive > 0 && (
+                    <button
+                        type="button"
+                        aria-label="Show previous media"
+                        onClick={() => setMediaActive(mediaActive - 1)}
+                        className="absolute left-3 top-1/2 z-10 grid size-10 -translate-y-1/2 place-items-center cursor-pointer"
+                    >
+                        <ChevronLeft size={30} strokeWidth={3} />
+                    </button>
+                )}
+                {mediaActive < media.length - 1 && (
+                    <button
+                        type="button"
+                        aria-label="Show next media"
+                        onClick={() => setMediaActive(mediaActive + 1)}
+                        className="absolute right-3 top-1/2 z-10 grid size-10 -translate-y-1/2 place-items-center cursor-pointer"
+                    >
+                        <ChevronRight size={30} strokeWidth={3} />
+                    </button>
                 )}
             </div>
 
             <div className="pb-2">
-                <HorizontalScroller className="w-full min-w-0 max-w-full gap-3 px-0">
+                <HorizontalScroller
+                    className="w-full min-w-0 max-w-full gap-3 px-0"
+                    selectedIndex={mediaActive}
+                    onSelectedIndexChange={setMediaActive}
+                >
                     {media.map((item, index) => (
                         <button
                             key={`${item.type}-${item.id}`}
@@ -69,9 +94,7 @@ export default function MediaGallery({ media }: { media: MediaItem[] }) {
                                         className="object-cover"
                                     />
                                     <span className="absolute inset-0 flex items-center justify-center">
-                                        <span className="bg-black/60 rounded-full p-2 text-white text-lg">
-                                            Play
-                                        </span>
+                                        <Play color="var(--secondary)" strokeWidth={3} size={24}/>
                                     </span>
                                 </span>
                             ) : (

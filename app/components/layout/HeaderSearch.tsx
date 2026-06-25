@@ -1,9 +1,10 @@
 "use client";
 
 import { Game } from "@/lib/types";
-import { Search, X } from "lucide-react";
+import { ArrowRight, Search, X } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
+import HighLevelIsland from "../ui/HighLevelIsland";
 
 function SearchBox({ autoFocus = false, onPick }: { autoFocus?: boolean; onPick?: () => void }) {
     const [query, setQuery] = useState("");
@@ -131,30 +132,34 @@ export default function HeaderSearch() {
 
     return (
         <>
-            <div className="hidden w-full max-w-md md:block">
+            <div className="hidden w-full max-w-md lg:block">
                 <SearchBox />
             </div>
             <button
                 type="button"
                 onClick={() => setOpen(true)}
-                className="grid size-11 cursor-pointer place-items-center rounded border border-border bg-bg-secondary text-text-muted transition-colors hover:border-primary hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary md:hidden"
+                className="grid size-11 cursor-pointer place-items-center text-text-muted transition-colors hover:border-primary hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary lg:hidden"
                 aria-label="Search games"
             >
                 <Search size={20} aria-hidden="true" />
             </button>
-            <div className={`fixed inset-0 z-50 bg-bg/95 p-4 transition-opacity md:hidden ${open ? "opacity-100" : "pointer-events-none opacity-0"}`}>
-                <div className="flex items-center gap-3">
-                    <SearchBox autoFocus={open} onPick={() => setOpen(false)} />
-                    <button
-                        type="button"
-                        onClick={() => setOpen(false)}
-                        className="grid size-11 shrink-0 cursor-pointer place-items-center rounded border border-border bg-bg-secondary text-text-muted transition-colors hover:border-primary hover:text-primary"
-                        aria-label="Close search"
-                    >
-                        <X size={20} aria-hidden="true" />
-                    </button>
+            <HighLevelIsland className="lg:hidden">
+                <div className={`pointer-events-auto fixed inset-0 bg-overlay transition-opacity ${open ? "opacity-100" : "pointer-events-none opacity-0"}`}>
+                    <div className={`fixed inset-y-0 right-0 w-full bg-bg p-4 shadow-main transition-transform duration-200 ease-out ${open ? "translate-x-0" : "translate-x-full"}`}>
+                        <div className="flex items-center gap-3">
+                            <SearchBox autoFocus={open} onPick={() => setOpen(false)} />
+                            <button
+                                type="button"
+                                onClick={() => setOpen(false)}
+                                className="grid size-11 shrink-0 cursor-pointer place-items-center text-text-muted transition-colors hover:border-primary hover:text-primary"
+                                aria-label="Close search"
+                            >
+                                <ArrowRight size={20} aria-hidden="true" />
+                            </button>
+                        </div>
+                    </div>
                 </div>
-            </div>
+            </HighLevelIsland>
         </>
     );
 }

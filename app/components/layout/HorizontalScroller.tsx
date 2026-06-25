@@ -3,8 +3,9 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { ReactNode, useRef, useState, Children, useEffect } from "react";
 
-export default function HorizontalScroller({ children, className = "" }: { children: ReactNode, className?: string }) {
+export default function HorizontalScroller({ children, className = "", selectedIndex, onSelectedIndexChange }: { children: ReactNode, className?: string, selectedIndex?: number, onSelectedIndexChange?: (index: number) => void }) {
     const containerRef = useRef<HTMLDivElement>(null);
+    const childRefs = useRef<HTMLDivElement[]>([]);
     const didDragRef = useRef(false);
     const isPointerDownRef = useRef(false);
     const startXRef = useRef(0);
@@ -32,6 +33,25 @@ export default function HorizontalScroller({ children, className = "" }: { child
         };
     }, []);
 
+    useEffect(() => {
+        if (selectedIndex === undefined) return;
+
+        const container = containerRef.current;
+        const child = childRefs.current[selectedIndex];
+        if (!container || !child) return;
+
+        const containerLeft = container.scrollLeft;
+        const containerRight = containerLeft + container.clientWidth;
+        const childLeft = child.offsetLeft;
+        const childRight = childLeft + child.offsetWidth;
+
+        if (childLeft < containerLeft) {
+            container.scrollTo({ left: childLeft, behavior: "smooth" });
+        } else if (childRight > containerRight) {
+            container.scrollTo({ left: childRight - container.clientWidth, behavior: "smooth" });
+        }
+    }, [selectedIndex]);
+
 
     function update() {
         const container = containerRef.current;
@@ -51,6 +71,22 @@ export default function HorizontalScroller({ children, className = "" }: { child
             left: direction === "left" ? -container.offsetWidth * 0.8 : container.offsetWidth * 0.8,
             behavior: "smooth",
         });
+    }
+
+
+    function select(direction: "left" | "right") {
+        if (selectedIndex === undefined || !onSelectedIndexChange) {
+            scroll(direction);
+            return;
+        }
+
+        const childrenCount = Children.count(children);
+        const nextIndex = direction === "left"
+            ? Math.max(selectedIndex - 1, 0)
+            : Math.min(selectedIndex + 1, childrenCount - 1);
+
+        onSelectedIndexChange(nextIndex);
+
     }
 
 
@@ -98,15 +134,19 @@ export default function HorizontalScroller({ children, className = "" }: { child
         } catch {}
     }
 
+    const hasSelectedMode = selectedIndex !== undefined && Boolean(onSelectedIndexChange);
+    const canGoLeft = hasSelectedMode ? selectedIndex > 0 : canScrollLeft;
+    const canGoRight = hasSelectedMode ? selectedIndex < Children.count(children) - 1 : canScrollRight;
+
     return (
         <div className={`relative w-full min-w-0 max-w-full no-scrollbar ${className}`}>
-            {canScrollLeft && (
+            {canGoLeft && (
                 <button
                     type="button"
-                    aria-label={"Scroll left"}
-                    onClick={() => scroll("left")}
-                    className="absolute left-1 top-1/2 z-10 grid size-9 -translate-y-1/2 place-items-center rounded-full border border-white/20 bg-surface/85 text-text shadow-lg backdrop-blur transition hover:bg-background">
-                    <ChevronLeft size={18} />
+                    aria-label={onSelectedIndexChange ? "Show previous media" : "Scroll left"}
+                    onClick={() => select("left")}
+                    className="absolute left-0 top-1/2 z-10 grid size-10 h-50 md:h-10 -translate-y-1/2 place-items-center cursor-pointer bg-bg-secondary/80 rounded hover:bg-secondary/80 hover:text-text-inverse transition-colors">
+                    <ChevronLeft size={20} strokeWidth={2} />
                 </button>
             )}
 
@@ -126,21 +166,27 @@ export default function HorizontalScroller({ children, className = "" }: { child
                 }}
             >
                 {Children.map(children, (child, i) => (
-                    <div key={i} className="flex-none">
+                    <div
+                        key={i}
+                        ref={(element) => {
+                            if (element) childRefs.current[i] = element;
+                        }}
+                        className="flex-none"
+                    >
                         {child}
                     </div>
                 ))}
 
             </div>
 
-            {canScrollRight && (
+            {canGoRight && (
                 <button
                     type="button"
-                    aria-label={"Scroll right"}
-                    onClick={() => scroll("right")}
-                    className="absolute right-1 top-1/2 z-10 grid size-9 -translate-y-1/2 place-items-center rounded-full border border-white/20 bg-surface/85 text-text shadow-lg backdrop-blur transition hover:bg-background"
+                    aria-label={onSelectedIndexChange ? "Show next media" : "Scroll right"}
+                    onClick={() => select("right")}
+                    className="absolute right-0 top-1/2 z-10 grid size-10 h-50 md:h-10 -translate-y-1/2 place-items-center cursor-pointer bg-bg-secondary/80 rounded hover:bg-secondary/80 hover:text-text-inverse transition-colors"
                 >
-                    <ChevronRight size={18} />
+                    <ChevronRight size={20} strokeWidth={2} />
                 </button>
             )}
         </div>

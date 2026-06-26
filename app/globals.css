@@ -13,23 +13,23 @@
   --font-weight-logo: 700;
 
   /* ===== Backgrounds ===== */
-  --bg: #F4F1EA;
-  --bg-secondary: #E8E2D6;
+  --bg: #e9e4dd;
+  --bg-secondary: #f1f1f1;
   --surface: #FFFFFF;
   --surface-hover: #F0EAF8;
   --overlay: rgba(25, 27, 35, 0.45);
 
   /* ===== Text ===== */
-  --text: #191B23;
-  --text-muted: #555160;
-  --text-faint: #7A7485;
+  --text: #0b0c0f;
+  --text-muted: #42404b;
+  --text-faint: #5e5b64;
   --text-inverse: #F4F0FF;
 
   /* ===== Accent ===== */
-  --primary: #7B5CDB;
+  --primary: #8768e2;
   --primary-hover: #684AC8;
-  --secondary: #B8842F;
-  --secondary-hover: #9E6F24;
+  --secondary: #6A4A16;
+  --secondary-hover: rgb(172, 124, 46);
 
   /* ===== Structure ===== */
   --border: #D3CADF;
@@ -48,7 +48,7 @@
 
 :root.dark {
   /* ===== Backgrounds ===== */
-  --bg: #191B23;
+  --bg: #14151a;
   --bg-secondary: #232633;
   --surface: #2D3040;
   --surface-hover: #383C50;
@@ -67,7 +67,7 @@
   --secondary-hover: #E7BD73;
 
   /* ===== Structure ===== */
-  --border: #44485C;
+  --border: #38384b;
   --border-strong: #8F7BCA;
 
   /* ===== States ===== */

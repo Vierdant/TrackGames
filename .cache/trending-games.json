@@ -10,16 +10,6 @@
     "total_rating": 70.17652046558237
   },
   {
-    "id": 141114,
-    "cover": {
-      "id": 498347,
-      "image_id": "coaoiz"
-    },
-    "name": "007 First Light",
-    "slug": "007-first-light",
-    "total_rating": 80.99282884804501
-  },
-  {
     "id": 308535,
     "cover": {
       "id": 559609,
@@ -28,6 +18,16 @@
     "name": "Neverness to Everness",
     "slug": "neverness-to-everness",
     "total_rating": 57.20761353736919
+  },
+  {
+    "id": 141114,
+    "cover": {
+      "id": 498347,
+      "image_id": "coaoiz"
+    },
+    "name": "007 First Light",
+    "slug": "007-first-light",
+    "total_rating": 80.99282884804501
   },
   {
     "id": 348330,
@@ -49,14 +49,13 @@
     "slug": "tales-beyond-the-tomb-no-witnesses"
   },
   {
-    "id": 320140,
+    "id": 406644,
     "cover": {
-      "id": 417780,
-      "image_id": "co8yd0"
+      "id": 571556,
+      "image_id": "coc90k"
     },
-    "name": "Subnautica 2",
-    "slug": "subnautica-2",
-    "total_rating": 90.02264041609132
+    "name": "Poem of the Starherd",
+    "slug": "poem-of-the-starherd"
   },
   {
     "id": 361855,
@@ -69,6 +68,16 @@
     "total_rating": 86.97173275329975
   },
   {
+    "id": 320140,
+    "cover": {
+      "id": 417780,
+      "image_id": "co8yd0"
+    },
+    "name": "Subnautica 2",
+    "slug": "subnautica-2",
+    "total_rating": 90.02264041609132
+  },
+  {
     "id": 358534,
     "cover": {
       "id": 541422,
@@ -77,15 +86,6 @@
     "name": "The Adventures of Elliot: The Millennium Tales",
     "slug": "the-adventures-of-elliot-the-millennium-tales",
     "total_rating": 78.75
-  },
-  {
-    "id": 406644,
-    "cover": {
-      "id": 571556,
-      "image_id": "coc90k"
-    },
-    "name": "Poem of the Starherd",
-    "slug": "poem-of-the-starherd"
   },
   {
     "id": 393398,
@@ -108,14 +108,14 @@
     "total_rating": 79.36
   },
   {
-    "id": 399673,
+    "id": 189781,
     "cover": {
-      "id": 559237,
-      "image_id": "cobzid"
+      "id": 207401,
+      "image_id": "co4g15"
     },
-    "name": "The Amazing Digital Dating Sim",
-    "slug": "the-amazing-digital-dating-sim",
-    "total_rating": 87.58620689655173
+    "name": "Mina the Hollower",
+    "slug": "mina-the-hollower",
+    "total_rating": 86.75983239423262
   },
   {
     "id": 400095,
@@ -128,16 +128,6 @@
     "total_rating": 85
   },
   {
-    "id": 189781,
-    "cover": {
-      "id": 207401,
-      "image_id": "co4g15"
-    },
-    "name": "Mina the Hollower",
-    "slug": "mina-the-hollower",
-    "total_rating": 86.75983239423262
-  },
-  {
     "id": 237780,
     "cover": {
       "id": 411162,
@@ -146,16 +136,6 @@
     "name": "Directive 8020",
     "slug": "directive-8020",
     "total_rating": 75.56541542089774
-  },
-  {
-    "id": 305157,
-    "cover": {
-      "id": 563634,
-      "image_id": "coc2wi"
-    },
-    "name": "Mixtape",
-    "slug": "mixtape--1",
-    "total_rating": 73.63133098253374
   },
   {
     "id": 331215,
@@ -168,14 +148,14 @@
     "total_rating": 84.71583305882089
   },
   {
-    "id": 314543,
+    "id": 305157,
     "cover": {
-      "id": 500872,
-      "image_id": "coaqh4"
+      "id": 563634,
+      "image_id": "coc2wi"
     },
-    "name": "Heroes of Might & Magic: Olden Era",
-    "slug": "heroes-of-might-and-magic-olden-era",
-    "total_rating": 79.93517265094137
+    "name": "Mixtape",
+    "slug": "mixtape--1",
+    "total_rating": 73.63133098253374
   },
   {
     "id": 304745,
@@ -186,5 +166,25 @@
     "name": "Motorslice",
     "slug": "motorslice",
     "total_rating": 74.79160354901536
+  },
+  {
+    "id": 213620,
+    "cover": {
+      "id": 468507,
+      "image_id": "coa1i3"
+    },
+    "name": "Luna Abyss",
+    "slug": "luna-abyss",
+    "total_rating": 80.70563810778997
+  },
+  {
+    "id": 314543,
+    "cover": {
+      "id": 500872,
+      "image_id": "coaqh4"
+    },
+    "name": "Heroes of Might & Magic: Olden Era",
+    "slug": "heroes-of-might-and-magic-olden-era",
+    "total_rating": 79.93517265094137
   }
 ]

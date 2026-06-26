@@ -64,12 +64,12 @@ export default function Gallary({
                 type="button"
                 aria-label="Previous item"
                 onClick={() => move(-1)}
-                className="absolute bottom-9 left-0 top-0 z-20 grid w-14 place-items-center rounded border-border/70 bg-bg text-text backdrop-blur hover:bg-bg-secondary/50 hover:border transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                className="absolute left-0 top-6 z-20 grid h-66 w-8 place-items-center rounded text-text transition-all hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary md:bottom-9 md:top-0 md:h-auto md:w-14 md:border-border/70 md:bg-bg md:backdrop-blur md:hover:border md:hover:bg-bg-secondary/50"
             >
-                <ChevronLeft size={28} />
+                <ChevronLeft className="size-5 md:size-7" />
             </button>
 
-            <div className="overflow-hidden px-14">
+            <div className="overflow-hidden px-3 md:px-14">
                 {mode === "fade" ? (
                     <div className="grid">
                         {items.map((child, itemIndex) => (
@@ -99,9 +99,9 @@ export default function Gallary({
                 type="button"
                 aria-label="Next item"
                 onClick={() => move(1)}
-                className="absolute bottom-9 right-0 top-0 z-20 grid w-14 place-items-center rounded border-border/70 bg-bg text-text backdrop-blur hover:bg-bg-secondary/50 hover:border transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                className="absolute right-0 top-6 z-20 grid h-66 w-8 place-items-center rounded text-text transition-all hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary md:bottom-9 md:top-0 md:h-auto md:w-14 md:border-border/70 md:bg-bg md:backdrop-blur md:hover:border md:hover:bg-bg-secondary/50"
             >
-                <ChevronRight size={28} />
+                <ChevronRight className="size-5 md:size-7" />
             </button>
 
             <div className="absolute bottom-0 left-1/2 flex -translate-x-1/2 gap-2">

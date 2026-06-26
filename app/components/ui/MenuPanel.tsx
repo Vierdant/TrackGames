@@ -82,7 +82,7 @@ export default function MenuPanel({ open, onClose, title, children, footer, vari
             className={join(
                 variant === "modal"
                     ? "pointer-events-auto max-h-[calc(100vh-2rem)] w-[min(var(--menu-panel-width,32rem),calc(100vw-2rem))] max-w-none overflow-y-auto rounded bg-bg p-5 shadow-main"
-                    : "pointer-events-auto absolute right-0 top-full z-50 mt-3 w-80 rounded border border-border bg-bg-secondary p-2 text-sm shadow-main",
+                    : "pointer-events-auto absolute right-0 top-full z-50 mt-3 w-80 rounded border border-border bg-bg p-2 text-sm shadow-main",
                 `${open ? "animate-menu-panel-in" : "animate-menu-panel-out"} ${panelClassName ?? ""}`,
             )}
         >

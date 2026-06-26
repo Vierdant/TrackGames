@@ -16,9 +16,16 @@ function GameList({ widget, games }: { widget: Widget; games: Game[] }) {
                     <p className="font-bold text-xl mb-3 border-b border-border pb-3">
                         {widget.title}
                     </p>
-                    <HorizontalScroller className="overflow-clip gap-5 max-w-full p-6">
+                    <HorizontalScroller className="overflow-clip gap-1 md:gap-5 max-w-full p-2 md:p-6">
                         {games.length > 0 ? games.map((game) => (
-                            <GameCard key={game.id} game={game} size={160} effect="ripple" hover="name" slugged={true} />
+                            <div key={game.id}>
+                                <div className="flex md:hidden">
+                                    <GameCard game={game} size={100} effect="ripple" slugged={true} />
+                                </div>
+                                <div className="hidden md:flex">
+                                    <GameCard game={game} size={160} effect="ripple" hover="name" slugged={true} />
+                                </div>
+                            </div>
                         )) : (
                             <p className="text-sm text-text-muted">No games selected.</p>
                         )}
@@ -32,7 +39,7 @@ function GameList({ widget, games }: { widget: Widget; games: Game[] }) {
 
 function StatsBlock({ label, value }: { label: string; value: string }) {
     return (
-        <div className="bg-primary/10 p-10 border-2 border-primary/40 flex flex-col gap-2 justify-start items-center text-center font-bold text-2xl rounded-md w-full h-32">
+        <div className="bg-primary/10 p-10 border-2 border-primary/40 flex flex-col gap-2 justify-center items-center text-center font-bold text-2xl rounded-md w-full h-16 md:h-32">
 
             <p className="flex-1 flex items-center">{value}</p>
             <p className="text-sm h-6">{label}</p>
@@ -44,7 +51,7 @@ function Stats({ widget, stats }: { widget: Widget; stats: Awaited<ReturnType<ty
     return (
         <div>
             {widget.stats ?
-                <div className="flex flex-col items-center bg-bg md:flex-row md:justify-between gap-2">
+                <div className="grid grid-cols-2 items-center bg-bg md:flex md:flex-row md:justify-between gap-2">
                     {
                         widget.stats.map((stat, index) => {
                             const name = stat === "reviews" ? "dropped" : stat;

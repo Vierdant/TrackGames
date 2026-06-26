@@ -21,7 +21,7 @@ export default function ProfileSwitcherPanel({user, defaultTab, children}: {user
     const [activeTab, setActiveTab] = useState(defaultTab);
 
     return (
-        <SubTabs tabs={tabs} active={activeTab} setter={setTab}>
+        <SubTabs tabs={tabs} active={activeTab} setter={setTab} compact>
             {children}
         </SubTabs>
     )

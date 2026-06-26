@@ -32,6 +32,7 @@ function statusColor(status: GameStatus) {
 
 export default function PlaylistCard({ entry, mode, canEdit, onUpdate, onRemove, themeStyle }: { entry: UserLibraryEntry; mode: "grid" | "list"; canEdit: boolean; onUpdate: (entry: UserLibraryEntry) => void; onRemove: (entryId: string) => void; themeStyle?: CSSProperties }) {
     const [editing, setEditing] = useState(false);
+    const [showInfo, setShowInfo] = useState(false);
     const [showNotes, setShowNotes] = useState(false);
     const [confirmingRemove, setConfirmingRemove] = useState(false);
     const [activeTab, setActiveTab] = useState<"entry" | "log" | "history" | "time">("entry");
@@ -113,6 +114,7 @@ export default function PlaylistCard({ entry, mode, canEdit, onUpdate, onRemove,
     }
 
     function openEditor() {
+        setShowInfo(false);
         setActiveTab("entry");
         setSelectedLogId("");
         setLogDate("");
@@ -125,10 +127,15 @@ export default function PlaylistCard({ entry, mode, canEdit, onUpdate, onRemove,
         <>
             {mode === "grid" ? (
                 <div className="group relative min-w-0 overflow-hidden rounded border border-border bg-bg-secondary">
-                    <span className={`absolute select-none left-2 top-2 z-10 rounded px-2 py-1 text-[0.65rem] font-bold uppercase text-text opacity-0 group-hover:opacity-100 ${statusColor(entry.status)}/50`}>
+                    <span className={`absolute left-2 top-2 z-10 rounded px-2 py-1 text-[0.65rem] font-bold uppercase text-text opacity-100 select-none md:opacity-0 md:group-hover:opacity-100 ${statusColor(entry.status)}/50`}>
                         {statusLabel(entry.status)}
                     </span>
-                    <Link href={`/game/${game.slug}`} className="block">
+                    <button type="button" onClick={() => setShowInfo(true)} className="block w-full cursor-pointer md:hidden">
+                        <div className="relative aspect-5/7 bg-bg">
+                            {src && <Image src={src} alt={game.name ?? "game cover"} fill sizes="160px" className="object-cover" />}
+                        </div>
+                    </button>
+                    <Link href={`/game/${game.slug}`} className="hidden md:block">
                         <div className="relative aspect-5/7 bg-bg">
                             {src && <Image src={src} alt={game.name ?? "game cover"} fill sizes="160px" className="object-cover" />}
                             <div className="absolute inset-0 flex flex-col justify-end bg-bg/85 p-3 opacity-0 transition-opacity group-hover:opacity-100">
@@ -157,7 +164,7 @@ export default function PlaylistCard({ entry, mode, canEdit, onUpdate, onRemove,
                         <button
                             type="button"
                             onClick={openEditor}
-                            className="absolute right-2 top-2 grid size-8 cursor-pointer place-items-center rounded bg-bg-secondary/90 text-text-muted opacity-0 transition hover:text-primary group-hover:opacity-100"
+                            className="absolute right-2 top-2 hidden size-8 cursor-pointer place-items-center rounded bg-bg-secondary/90 text-text-muted opacity-0 transition hover:text-primary group-hover:opacity-100 md:grid"
                             aria-label="Edit library entry"
                         >
                             <Edit3 size={16} aria-hidden="true" />
@@ -165,42 +172,83 @@ export default function PlaylistCard({ entry, mode, canEdit, onUpdate, onRemove,
                     )}
                 </div>
             ) : (
-                <div className="flex min-w-0 flex-row items-center gap-4 not-last:border-b border-border p-2">
-                    <Link href={`/game/${game.slug}`} className="relative h-20 w-14 shrink-0 overflow-hidden rounded bg-bg">
+                <div className="flex min-w-0 flex-row items-center gap-2 border-border p-2 not-last:border-b md:gap-4">
+                    <Link href={`/game/${game.slug}`} className="relative h-18 w-12 shrink-0 overflow-hidden rounded bg-bg md:h-20 md:w-14">
                         {src && <Image src={src} alt={game.name ?? "game cover"} fill sizes="56px" className="object-cover" />}
                     </Link>
                     <div className="min-w-0 flex-1">
-                        <div className="grid min-w-0 grid-cols-[minmax(0,2fr)_minmax(0,1fr)_minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-4 text-xs text-text-muted">
-                            <p className="truncate text-sm font-bold text-text">{game.name}</p>
-                            <span className="flex items-center justify-end gap-2 capitalize">
+                        <div className="grid min-w-0 grid-cols-[minmax(0,1fr)_auto_auto_auto] items-center gap-2 text-xs text-text-muted md:grid-cols-[minmax(0,2fr)_minmax(0,1fr)_minmax(0,1fr)_auto_minmax(0,1fr)] md:gap-4">
+                            <p className="hidden truncate text-sm font-bold text-text md:block">{game.name}</p>
+                            <span className="flex min-w-0 items-center gap-2 capitalize md:justify-end">
                                 <span className={`size-2 rounded-full ${statusColor(entry.status)}`} aria-hidden="true" />
-                                {statusLabel(entry.status)}
+                                <span className="truncate">{statusLabel(entry.status)}</span>
                             </span>
-                            <span className="flex min-w-18 justify-end">
+                            <span className="hidden min-w-18 justify-end md:flex">
                                 <StarRating rating={ratingToFive(entry.rating ?? 0)} />
                             </span>
-                            <span className="grid size-8 place-items-center justify-self-end">
+                            <span className="justify-self-end font-bold text-text md:hidden">{(ratingToFive(entry.rating ?? 0) ?? 0).toFixed(1)}/5</span>
+                            <span className="justify-self-end text-right md:hidden">{entry.timePlayed != null ? `${entry.timePlayed}h` : "No time"}</span>
+                            <span className="grid size-7 place-items-center justify-self-end md:size-8">
                                 {hasNotes && (
                                     <button
                                         type="button"
                                         onClick={() => setShowNotes(true)}
-                                        className="grid size-8 cursor-pointer place-items-center rounded text-text-muted transition hover:text-primary"
+                                        className="grid size-7 cursor-pointer place-items-center rounded text-text-muted transition hover:text-primary md:size-8"
                                         aria-label="View notes"
                                     >
                                         <NotebookText size={16} aria-hidden="true" />
                                     </button>
                                 )}
                             </span>
-                            <span className="min-w-16 text-right">{entry.timePlayed != null ? `${entry.timePlayed}h` : "No time"}</span>
+                            <span className="hidden min-w-16 text-right md:block">{entry.timePlayed != null ? `${entry.timePlayed}h` : "No time"}</span>
                         </div>
                     </div>
                     {canEdit && (
-                        <GhostButton type="button" onClick={openEditor} className="px-3 py-2">
-                            <Edit3 size={16} aria-hidden="true" />
-                        </GhostButton>
+                        <>
+                            <button type="button" onClick={openEditor} className="grid size-8 shrink-0 cursor-pointer place-items-center rounded border border-text-faint text-text-muted transition-colors hover:border-primary hover:text-primary md:hidden" aria-label="Edit library entry">
+                                <Edit3 size={14} aria-hidden="true" />
+                            </button>
+                            <GhostButton type="button" onClick={openEditor} className="hidden px-3 py-2 md:flex">
+                                <Edit3 size={16} aria-hidden="true" />
+                            </GhostButton>
+                        </>
                     )}
                 </div>
             )}
+
+            <MenuPanel open={showInfo} onClose={() => setShowInfo(false)} title={game.name} closeLabel="Close game info" panelClassName="md:hidden" style={themeStyle}>
+                <div className="flex gap-4">
+                    <Link href={`/game/${game.slug}`} className="relative h-32 w-22 shrink-0 overflow-hidden rounded bg-bg">
+                        {src && <Image src={src} alt={game.name ?? "game cover"} fill sizes="88px" className="object-cover" />}
+                    </Link>
+                    <div className="flex min-w-0 flex-1 flex-col gap-2 text-sm text-text-muted">
+                        <p className="flex items-center gap-2 capitalize">
+                            <span className={`size-2 rounded-full ${statusColor(entry.status)}`} aria-hidden="true" />
+                            {statusLabel(entry.status)}
+                        </p>
+                        <p><span className="font-bold text-text">Rating:</span> {(ratingToFive(entry.rating ?? 0) ?? 0).toFixed(1)}/5</p>
+                        <p><span className="font-bold text-text">Time:</span> {entry.timePlayed != null ? `${entry.timePlayed}h` : "No time"}</p>
+                        {hasNotes && (
+                            <button type="button" onClick={() => {
+                                setShowInfo(false);
+                                setShowNotes(true);
+                            }} className="w-fit cursor-pointer font-bold text-primary hover:text-primary-hover">
+                                View notes
+                            </button>
+                        )}
+                    </div>
+                </div>
+                <div className="mt-5 flex justify-end gap-2">
+                    <GhostButton href={`/game/${game.slug}`} className="px-4 py-2">
+                        Visit game
+                    </GhostButton>
+                    {canEdit && (
+                        <PrimaryButton type="button" onClick={openEditor} className="px-4 py-2">
+                            Edit
+                        </PrimaryButton>
+                    )}
+                </div>
+            </MenuPanel>
 
             <MenuPanel open={showNotes} onClose={() => setShowNotes(false)} title={`Notes for: ${game.name}`} closeLabel="Close notes" style={themeStyle}>
                 <p className="whitespace-pre-wrap text-sm text-text-muted">{entry.notes}</p>
@@ -232,6 +280,7 @@ export default function PlaylistCard({ entry, mode, canEdit, onUpdate, onRemove,
                             ]}
                             active={activeTab}
                             setter={setActiveTab}
+                            compact
                         />
                     </div>
                     {error && (
@@ -267,9 +316,9 @@ export default function PlaylistCard({ entry, mode, canEdit, onUpdate, onRemove,
                                 <Textarea name="notes" rows={3} defaultValue={entry.notes ?? ""} />
                             </label>
                             <div className="mt-auto flex justify-end gap-2 pt-2">
-                                <GhostButton type="button" onClick={() => setActiveTab("log")}>Create Log</GhostButton>
-                                <GhostButton type="button" onClick={() => setEditing(false)}>Cancel</GhostButton>
-                                <PrimaryButton type="submit" disabled={pending}>{pending ? "Saving..." : "Save"}</PrimaryButton>
+                                <GhostButton type="button" className="text-sm md:text-md" onClick={() => setActiveTab("log")}>Create Log</GhostButton>
+                                <GhostButton type="button" className="text-sm md:text-md" onClick={() => setEditing(false)}>Cancel</GhostButton>
+                                <PrimaryButton type="submit" className="text-sm md:text-md" disabled={pending}>{pending ? "Saving..." : "Save"}</PrimaryButton>
                             </div>
                         </form>
                         {activeTab === "log" && (

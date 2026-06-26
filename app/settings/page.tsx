@@ -7,17 +7,18 @@ import { Bell, Download, LayoutGrid, Settings, Shield, UserIcon } from "lucide-r
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import SettingsPanel from "./SettingsPanel";
+import SettingsTabs from "./SettingsTabs";
 import type { ReactNode } from "react";
 import ProfileHeader from "@/app/components/user/ProfileHeader";
 import { parseSocials } from "@/lib/account/socials";
 
-const tabs: { id: string; label: string; description: string; icon: typeof UserIcon }[] = [
-    { id: "profile", label: "Profile", description: "Bio, avatar, background, and colors", icon: UserIcon },
-    { id: "privacy", label: "Privacy", description: "Who can view and interact", icon: Shield },
-    { id: "widgets", label: "Widgets", description: "Profile blocks and per-widget settings", icon: LayoutGrid },
-    { id: "preferences", label: "Preferences", description: "Site defaults and notifications", icon: Bell },
-    { id: "import", label: "Import", description: "Import external libraries", icon: Download },
-    { id: "account", label: "Account", description: "Email and account metadata", icon: Settings },
+const tabs: { id: string; label: string; icon: typeof UserIcon }[] = [
+    { id: "profile", label: "Profile", icon: UserIcon },
+    { id: "privacy", label: "Privacy", icon: Shield },
+    { id: "widgets", label: "Widgets", icon: LayoutGrid },
+    { id: "preferences", label: "Preferences", icon: Bell },
+    { id: "import", label: "Import", icon: Download },
+    { id: "account", label: "Account", icon: Settings },
 ];
 
 function SectionShell({ title, children }: { title: string; children: ReactNode }) {
@@ -81,7 +82,9 @@ export default async function SettingsPage({ searchParams }: { searchParams: Pro
 
                 <section className="relative z-10 bg-bg/95 py-5">
                     <Container className="grid gap-5 lg:grid-cols-[15rem_minmax(0,1fr)] lg:items-start">
-                        <aside className="border-r border-border">
+                        <SettingsTabs tabs={tabs.map(({ id, label }) => ({ id, label }))} activeTab={activeTab} />
+
+                        <aside className="hidden border-r border-border lg:block">
                             <nav className="flex flex-col">
                                 {tabs.map((tab) => {
                                     const Icon = tab.icon;

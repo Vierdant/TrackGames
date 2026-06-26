@@ -1,23 +1,36 @@
 "use server";
 
 import * as zod from "zod";
-import { auth, signIn, signOut } from "../auth";
+import { auth, OAUTH_USERNAME_COOKIE, signIn, signOut } from "../auth";
 import { AuthError } from "next-auth";
 import { redirect } from "next/navigation";
 import db from "../db";
 import { hashPassword } from "../util/password";
 import { Prisma } from "../generated/prisma/client";
+import { cookies } from "next/headers";
 
 const SIGN_IN_REDIRECT = "/";
 const ACCOUNT_SETTINGS_REDIRECT = "/settings?tab=account";
+const MIN_PASSWORD_LENGTH = 8;
 const loginProviders = new Set(["google", "github", "twitch", "discord"]);
+const usernameSchema = zod.string().trim().min(1).max(24);
+
+type AuthActionResult = {
+    error?: string;
+    fieldErrors?: {
+        name?: string;
+        email?: string;
+        password?: string;
+        passwordConfirm?: string;
+    };
+};
 
 export async function logout() {
     await signOut();
 }
 
 
-export async function loginProvider(provider: string) {
+export async function loginProvider(provider: string, formData?: FormData): Promise<AuthActionResult> {
     const session = await auth();
     if (session?.user) {
         redirect(SIGN_IN_REDIRECT)
@@ -27,7 +40,44 @@ export async function loginProvider(provider: string) {
         redirect("/login?error=OAuthSignInError");
     }
 
+    const cookieStore = await cookies();
+    const mode = formData?.get("mode");
+
+    if (mode === "register") {
+        const name = usernameSchema.safeParse(formData?.get("name"));
+
+        if (!name.success) {
+            return {
+                error: "Enter a username before registering with a provider.",
+                fieldErrors: { name: "Enter a username between 1 and 24 characters." },
+            };
+        }
+
+        const existingName = await db.user.findFirst({
+            where: { name: name.data },
+            select: { id: true },
+        });
+
+        if (existingName) {
+            return {
+                error: "That username is already in use.",
+                fieldErrors: { name: "That username is already in use." },
+            };
+        }
+
+        cookieStore.set(OAUTH_USERNAME_COOKIE, name.data, {
+            httpOnly: true,
+            sameSite: "lax",
+            path: "/",
+            maxAge: 10 * 60,
+        });
+    } else {
+        cookieStore.delete(OAUTH_USERNAME_COOKIE);
+    }
+
     await signIn(provider, { redirectTo: SIGN_IN_REDIRECT });
+
+    return {};
 }
 
 export async function linkProvider(provider: string) {
@@ -91,7 +141,7 @@ export async function unlinkProvider(provider: string) {
 }
 
 
-export async function login(formData: FormData): Promise<{ error?: string }> {
+export async function login(formData: FormData): Promise<AuthActionResult> {
     const session = await auth();
     if (session?.user) {
         redirect(SIGN_IN_REDIRECT)
@@ -120,27 +170,43 @@ export async function login(formData: FormData): Promise<{ error?: string }> {
 }
 
 
-export async function signup(formData: FormData): Promise<{ error?: string }> {
+export async function signup(formData: FormData): Promise<AuthActionResult> {
     const session = await auth();
     if (session?.user) {
         redirect(SIGN_IN_REDIRECT)
     }
 
-    const name = zod.string().safeParse(formData.get("name"));
+    const name = usernameSchema.safeParse(formData.get("name"));
     const email = zod.email().safeParse(formData.get("email"));
     const password = zod.string().safeParse(formData.get("password"));
     const passwordConfirm = zod.string().safeParse(formData.get("passwordConfirm"));
 
-    if (!name.success || name.data?.length === 0 || name.data?.length > 16 ) {
-        return { error: "Invalid name." }
+    if (!name.success) {
+        return {
+            error: "Please fix the highlighted fields.",
+            fieldErrors: { name: "Enter a username between 1 and 24 characters." },
+        }
     }
 
-    if (!email.success || !password.success || password.data?.length === 0 || password.data?.length > 128) {
-        return { error: "Invalid email or password." }
+    if (!email.success) {
+        return {
+            error: "Please fix the highlighted fields.",
+            fieldErrors: { email: "Enter a valid email address." },
+        }
     }
 
-    if (password.data !== passwordConfirm.data) {
-        return { error: "Passwords don't match." }
+    if (!password.success || password.data.length < MIN_PASSWORD_LENGTH || password.data.length > 128) {
+        return {
+            error: "Please fix the highlighted fields.",
+            fieldErrors: { password: `Password must be at least ${MIN_PASSWORD_LENGTH} characters.` },
+        }
+    }
+
+    if (!passwordConfirm.success || password.data !== passwordConfirm.data) {
+        return {
+            error: "Please fix the highlighted fields.",
+            fieldErrors: { passwordConfirm: "Passwords don't match." },
+        }
     }
 
     const existingEmail = await db.user.findUnique({
@@ -154,11 +220,17 @@ export async function signup(formData: FormData): Promise<{ error?: string }> {
     });
 
     if (existingEmail) {
-        return { error: "An account already exists for this email." };
+        return {
+            error: "Please fix the highlighted fields.",
+            fieldErrors: { email: "An account already exists for this email." },
+        };
     }
 
     if (existingName) {
-        return { error: "An account already exists for this name." };
+        return {
+            error: "Please fix the highlighted fields.",
+            fieldErrors: { name: "That username is already in use." },
+        };
     }
 
     try {
@@ -174,7 +246,14 @@ export async function signup(formData: FormData): Promise<{ error?: string }> {
             error instanceof Prisma.PrismaClientKnownRequestError &&
             error.code === "P2002"
         ) {
-            return { error: "An account already exists for this email." };
+            const target = Array.isArray(error.meta?.target) ? error.meta.target : [];
+
+            return {
+                error: "Please fix the highlighted fields.",
+                fieldErrors: target.includes("name")
+                    ? { name: "That username is already in use." }
+                    : { email: "An account already exists for this email." },
+            };
         }
 
         throw error;

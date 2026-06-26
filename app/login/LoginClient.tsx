@@ -22,6 +22,8 @@ const authErrorMessages: Record<string, string> = {
     OAuthAccountNotLinked: "An account with this email already exists. Sign in first, then link this provider.",
     OAuthCallbackError: "The provider sign-in failed. Please try again.",
     OAuthSignInError: "The provider sign-in failed. Please try again.",
+    OAuthUsernameRequired: "Enter a username before registering with a provider.",
+    OAuthUsernameTaken: "That username is already in use.",
 };
 
 export default function LoginClient() {
@@ -30,7 +32,11 @@ export default function LoginClient() {
     const [mode, setMode] = useState<"login" | "register">("login");
     const [showPassword, setShowPassword] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
+    const [fieldErrors, setFieldErrors] = useState<{ name?: string; email?: string; password?: string; passwordConfirm?: string }>({});
+    const [name, setName] = useState("");
+    const [password, setPassword] = useState("");
     const isRegister = mode === "register";
+    const passwordMessage = isRegister && password.length > 0 && password.length < 8 ? "Password must be at least 8 characters." : fieldErrors.password;
 
     useEffect(() => {
         setMode(searchParams.get("mode") === "register" ? "register" : "login");
@@ -43,6 +49,8 @@ export default function LoginClient() {
 
     function switchTo(nextMode: "login" | "register") {
         setErrorMessage("");
+        setFieldErrors({});
+        setPassword("");
         setMode(nextMode);
         router.replace(`/login?mode=${nextMode}`);
     }
@@ -52,10 +60,29 @@ export default function LoginClient() {
 
         if (response?.error) {
             setErrorMessage(response.error);
+            setFieldErrors(response.fieldErrors ?? {});
             return;
         }
 
         setErrorMessage("");
+        setFieldErrors({});
+    }
+
+    async function handleProvider(slug: string) {
+        const formData = new FormData();
+        formData.set("mode", mode);
+        formData.set("name", name);
+
+        const response = await loginProvider(slug, formData);
+
+        if (response?.error) {
+            setErrorMessage(response.error);
+            setFieldErrors(response.fieldErrors ?? {});
+            return;
+        }
+
+        setErrorMessage("");
+        setFieldErrors({});
     }
 
     return (
@@ -86,9 +113,14 @@ export default function LoginClient() {
                                 type="text"
                                 autoComplete="username"
                                 placeholder="Your display name"
+                                value={name}
+                                onChange={(event) => setName(event.target.value)}
+                                aria-invalid={Boolean(fieldErrors.name)}
+                                aria-describedby={fieldErrors.name ? "name-error" : undefined}
                                 className="h-10 w-full rounded border border-border bg-surface px-10 text-text outline-none transition-colors placeholder:text-text-faint focus:border-primary"
                             />
                         </span>
+                        {fieldErrors.name && <span id="name-error" className="text-xs font-bold text-error">{fieldErrors.name}</span>}
                     </label>
                 )}
 
@@ -102,9 +134,12 @@ export default function LoginClient() {
                             type="email"
                             autoComplete="email"
                             placeholder="Email address"
+                            aria-invalid={Boolean(fieldErrors.email)}
+                            aria-describedby={fieldErrors.email ? "email-error" : undefined}
                             className="h-10 w-full rounded border border-border bg-surface px-10 text-text outline-none transition-colors placeholder:text-text-faint focus:border-primary"
                         />
                     </span>
+                    {fieldErrors.email && <span id="email-error" className="text-xs font-bold text-error">{fieldErrors.email}</span>}
                 </label>
 
                 <label className="flex flex-col gap-2 text-sm font-bold text-text-muted">
@@ -117,6 +152,10 @@ export default function LoginClient() {
                             type={showPassword ? "text" : "password"}
                             autoComplete={isRegister ? "new-password" : "current-password"}
                             placeholder={isRegister ? "Create a password" : "Password"}
+                            value={password}
+                            onChange={(event) => setPassword(event.target.value)}
+                            aria-invalid={Boolean(passwordMessage)}
+                            aria-describedby={passwordMessage ? "password-error" : undefined}
                             className="h-10 w-full rounded border border-border bg-surface px-10 pr-12 text-text outline-none transition-colors placeholder:text-text-faint focus:border-primary"
                         />
                         <button
@@ -128,6 +167,7 @@ export default function LoginClient() {
                             {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                         </button>
                     </span>
+                    {passwordMessage && <span id="password-error" className="text-xs font-bold text-error">{passwordMessage}</span>}
                 </label>
 
                 {isRegister && (
@@ -141,9 +181,12 @@ export default function LoginClient() {
                                 type={showPassword ? "text" : "password"}
                                 autoComplete="new-password"
                                 placeholder="Repeat your password"
+                                aria-invalid={Boolean(fieldErrors.passwordConfirm)}
+                                aria-describedby={fieldErrors.passwordConfirm ? "passwordConfirm-error" : undefined}
                                 className="h-10 w-full rounded border border-border bg-surface px-10 text-text outline-none transition-colors placeholder:text-text-faint focus:border-primary"
                             />
                         </span>
+                        {fieldErrors.passwordConfirm && <span id="passwordConfirm-error" className="text-xs font-bold text-error">{fieldErrors.passwordConfirm}</span>}
                     </label>
                 )}
 
@@ -169,7 +212,7 @@ export default function LoginClient() {
 
             <div className="grid grid-cols-2 gap-2 sm:gap-3">
                 {providers.map(({ name, icon: Icon, slug }) => (
-                    <GhostButton key={slug} onClick={() => loginProvider(slug)}>
+                    <GhostButton key={slug} type="button" onClick={() => handleProvider(slug)}>
                         <Icon size={16} aria-hidden="true" />
                         <span>{name}</span>
                     </GhostButton>

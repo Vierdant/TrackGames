@@ -5,8 +5,12 @@ import Discord from "next-auth/providers/discord";
 import Twitch from "next-auth/providers/twitch";
 import Google from "next-auth/providers/google";
 import Credentials from "next-auth/providers/credentials";
+import { cookies } from "next/headers";
 import db from "./db";
 import { verifyPassword } from "./util/password";
+
+export const OAUTH_USERNAME_COOKIE = "trackgames-oauth-username";
+const loginProviders = new Set(["google", "github", "twitch", "discord"]);
 
 export const { auth, handlers, signIn, signOut } = NextAuth({
     adapter: PrismaAdapter(db),
@@ -61,6 +65,61 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         }),
     ],
     callbacks: {
+        async signIn({ user, account }) {
+            if (!account || account.provider === "credentials" || !loginProviders.has(account.provider)) {
+                return true;
+            }
+
+            const linkedAccount = await db.account.findUnique({
+                where: {
+                    provider_providerAccountId: {
+                        provider: account.provider,
+                        providerAccountId: account.providerAccountId,
+                    },
+                },
+                select: { id: true },
+            });
+
+            if (linkedAccount) {
+                return true;
+            }
+
+            const session = await auth();
+
+            if (session?.user?.id) {
+                return true;
+            }
+
+            if (user.email) {
+                const existingEmail = await db.user.findUnique({
+                    where: { email: user.email },
+                    select: { id: true },
+                });
+
+                if (existingEmail) {
+                    return true;
+                }
+            }
+
+            const username = (await cookies()).get(OAUTH_USERNAME_COOKIE)?.value.trim();
+
+            if (!username || username.length > 24) {
+                return "/login?mode=register&error=OAuthUsernameRequired";
+            }
+
+            const existingName = await db.user.findFirst({
+                where: { name: username },
+                select: { id: true },
+            });
+
+            if (existingName) {
+                return "/login?mode=register&error=OAuthUsernameTaken";
+            }
+
+            user.name = username;
+
+            return true;
+        },
         jwt({ token, user }) {
             if (user?.id) {
                 token.sub = user.id;

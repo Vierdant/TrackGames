@@ -6,6 +6,7 @@ import { GhostButton } from "../components/ui/Buttons";
 import { GoogleIcon, TwitchIcon, GithubIcon, DiscordIcon } from "../components/SVG";
 import { Mail, User, Lock, EyeOff, Eye } from "lucide-react";
 import { login, loginProvider, signup } from "@/lib/actions/auth";
+import MenuPanel from "../components/ui/MenuPanel";
 
 const providers = [
     { name: "Google", icon: GoogleIcon, slug: "google" },
@@ -35,6 +36,9 @@ export default function LoginClient() {
     const [fieldErrors, setFieldErrors] = useState<{ name?: string; email?: string; password?: string; passwordConfirm?: string }>({});
     const [name, setName] = useState("");
     const [password, setPassword] = useState("");
+    const [providerSignup, setProviderSignup] = useState<(typeof providers)[number] | null>(null);
+    const [providerUsername, setProviderUsername] = useState("");
+    const [providerUsernameError, setProviderUsernameError] = useState("");
     const isRegister = mode === "register";
     const passwordMessage = isRegister && password.length > 0 && password.length < 8 ? "Password must be at least 8 characters." : fieldErrors.password;
 
@@ -51,6 +55,9 @@ export default function LoginClient() {
         setErrorMessage("");
         setFieldErrors({});
         setPassword("");
+        setProviderSignup(null);
+        setProviderUsername("");
+        setProviderUsernameError("");
         setMode(nextMode);
         router.replace(`/login?mode=${nextMode}`);
     }
@@ -68,12 +75,20 @@ export default function LoginClient() {
         setFieldErrors({});
     }
 
-    async function handleProvider(slug: string) {
+    async function handleProvider(provider: (typeof providers)[number]) {
+        if (isRegister) {
+            setErrorMessage("");
+            setFieldErrors({});
+            setProviderSignup(provider);
+            setProviderUsername("");
+            setProviderUsernameError("");
+            return;
+        }
+
         const formData = new FormData();
         formData.set("mode", mode);
-        formData.set("name", name);
 
-        const response = await loginProvider(slug, formData);
+        const response = await loginProvider(provider.slug, formData);
 
         if (response?.error) {
             setErrorMessage(response.error);
@@ -83,6 +98,20 @@ export default function LoginClient() {
 
         setErrorMessage("");
         setFieldErrors({});
+    }
+
+    async function handleProviderSignup(formData: FormData) {
+        if (!providerSignup) return;
+
+        formData.set("mode", "register");
+        const response = await loginProvider(providerSignup.slug, formData);
+
+        if (response?.error) {
+            setProviderUsernameError(response.fieldErrors?.name ?? response.error);
+            return;
+        }
+
+        setProviderUsernameError("");
     }
 
     return (
@@ -213,12 +242,16 @@ export default function LoginClient() {
             </div>
 
             <div className="grid grid-cols-2 gap-2 sm:gap-3">
-                {providers.map(({ name, icon: Icon, slug }) => (
-                    <GhostButton key={slug} type="button" onClick={() => handleProvider(slug)}>
-                        <Icon size={16} aria-hidden="true" />
-                        <span>{name}</span>
-                    </GhostButton>
-                ))}
+                {providers.map((provider) => {
+                    const Icon = provider.icon;
+
+                    return (
+                        <GhostButton key={provider.slug} type="button" onClick={() => handleProvider(provider)}>
+                            <Icon size={16} aria-hidden="true" />
+                            <span>{provider.name}</span>
+                        </GhostButton>
+                    );
+                })}
             </div>
 
             <p className="mt-4 text-center text-sm text-text-muted">
@@ -231,6 +264,40 @@ export default function LoginClient() {
                     {isRegister ? "Log in" : "Register"}
                 </button>
             </p>
+
+            <MenuPanel open={Boolean(providerSignup)} onClose={() => setProviderSignup(null)} title={providerSignup ? `Register with ${providerSignup.name}` : ""} width="24rem">
+                <form action={handleProviderSignup}>
+                    <label className="flex flex-col gap-2 text-sm font-bold text-text-muted">
+                        Username
+                        <span className="relative">
+                            <User className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-text-faint" size={18} aria-hidden="true" />
+                            <input
+                                name="name"
+                                type="text"
+                                autoComplete="username"
+                                placeholder="profile-name"
+                                maxLength={32}
+                                pattern="[A-Za-z0-9_-]+"
+                                value={providerUsername}
+                                onChange={(event) => {
+                                    setProviderUsername(event.target.value);
+                                    setProviderUsernameError("");
+                                }}
+                                aria-invalid={Boolean(providerUsernameError)}
+                                aria-describedby={providerUsernameError ? "provider-username-error" : undefined}
+                                className="h-10 w-full rounded border border-border bg-surface px-10 text-text outline-none transition-colors placeholder:text-text-faint focus:border-primary"
+                            />
+                        </span>
+                        {providerUsernameError && <span id="provider-username-error" className="text-xs font-bold text-error">{providerUsernameError}</span>}
+                    </label>
+                    <div className="mt-5 flex justify-end gap-2">
+                        <GhostButton type="button" onClick={() => setProviderSignup(null)} className="px-4 py-2">Cancel</GhostButton>
+                        <button type="submit" className="cursor-pointer rounded bg-primary px-4 py-2 text-sm font-bold text-text transition-colors hover:bg-primary-hover">
+                            Continue with {providerSignup?.name ?? "provider"}
+                        </button>
+                    </div>
+                </form>
+            </MenuPanel>
         </div>
     )
 }

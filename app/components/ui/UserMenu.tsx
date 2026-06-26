@@ -89,7 +89,7 @@ export function UserMenu({ user, notifications }: UserMenuProps) {
                 aria-expanded={isOpen}
                 aria-controls="user-menu"
             >
-                <AvatarPreview image={user.image} size={8} priority alt={`${user.name ?? "user"} profile image`} className="hidden md:flex" />
+                <AvatarPreview image={user.image} size={7} priority alt={`${user.name ?? "user"} profile image`} className="hidden md:flex" />
                 {isOpen ? <ArrowRight size={18} className="md:hidden" aria-hidden="true" /> : <Menu size={18} className="md:hidden" aria-hidden="true" />}
                 {unread && (
                     <span className="absolute right-0 left-8 top-0 grid size-5 place-items-center rounded-full bg-error text-text">

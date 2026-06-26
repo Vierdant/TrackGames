@@ -12,7 +12,9 @@ export default function AddPlaylistGameForm({ playlistId, mode, tiers }: { playl
     const [results, setResults] = useState<Game[]>([]);
     const [game, setGame] = useState<Game | null>(null);
     const [loading, setLoading] = useState(false);
-    const action = addGameToPlaylist.bind(null, playlistId);
+    const action = async (formData: FormData) => {
+        await addGameToPlaylist(playlistId, formData);
+    };
 
     useEffect(() => {
         const search = query.trim();

@@ -103,6 +103,16 @@ export type Company = Prisma.CompanyModel
  */
 export type Keyword = Prisma.KeywordModel
 /**
+ * Model Theme
+ * 
+ */
+export type Theme = Prisma.ThemeModel
+/**
+ * Model MultiplayerMode
+ * 
+ */
+export type MultiplayerMode = Prisma.MultiplayerModeModel
+/**
  * Model Activity
  * 
  */

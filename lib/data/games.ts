@@ -40,6 +40,7 @@ const searchSelect = {
     name: true,
     totalRating: true,
     releaseDate: true,
+    cover: true,
     gameType: true,
 };
 
@@ -152,11 +153,12 @@ export async function getMinifiedGameBySlug(slug: string | string[]): Promise<Ga
     return Array.isArray(slug) ? res : res[0] ?? null;
 }
 
-export async function searchGames(query: string): Promise<Game[]> {
+export async function searchGames(query: string, limit = 8): Promise<Game[]> {
     const search = query.trim();
 
     if (search.length < 2) return [];
 
+    const resultLimit = Math.max(1, Math.min(limit, 64));
     const lowerSearch = search.toLowerCase();
     const contains = `%${lowerSearch}%`;
     const startsWith = `${lowerSearch}%`;
@@ -168,6 +170,7 @@ export async function searchGames(query: string): Promise<Game[]> {
                 "name",
                 "totalRating",
                 "releaseDate",
+                "cover",
                 "gameType"
             FROM "Game"
             WHERE lower("name") LIKE ${contains}
@@ -184,7 +187,7 @@ export async function searchGames(query: string): Promise<Game[]> {
                 END,
                 "totalRating" DESC NULLS LAST,
                 lower("name") ASC
-            LIMIT 16
+            LIMIT ${Math.max(16, resultLimit * 2)}
         `,
         db.keyword.findMany({
             where: {
@@ -194,7 +197,7 @@ export async function searchGames(query: string): Promise<Game[]> {
                 },
             },
             select: { id: true },
-            take: 16,
+            take: Math.max(16, resultLimit * 2),
         }),
     ]);
     const keywordMatches = keywordIds.length ? await db.game.findMany({
@@ -208,7 +211,7 @@ export async function searchGames(query: string): Promise<Game[]> {
             { totalRating: "desc" },
             { name: "asc" },
         ],
-        take: 12,
+        take: Math.max(12, resultLimit),
     }) : [];
     const games = new Map<number, Game>();
 
@@ -234,7 +237,7 @@ export async function searchGames(query: string): Promise<Game[]> {
             || aType - bType
             || (b.totalRating ?? 0) - (a.totalRating ?? 0)
             || aName.localeCompare(bName);
-    }).slice(0, 8);
+    }).slice(0, resultLimit);
 
     return rows.map((game) => ({
         ...game,

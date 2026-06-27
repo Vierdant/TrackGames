@@ -1,5 +1,5 @@
-import { GameType } from "../../generated/prisma/enums";
-import type { Collection, Company, Franchise, Game, Genre, Keyword, Platform, RawCollection, RawCompany, RawFranchise, RawGame, RawGenre, RawKeyword, RawPlatform } from "../../types";
+import { GameDevStatus, GameType, PlayerPerspective } from "../../generated/prisma/enums";
+import type { Collection, Company, Franchise, Game, Genre, Keyword, MultiplayerMode, Platform, RawCollection, RawCompany, RawFranchise, RawGame, RawGenre, RawKeyword, RawMultiplayerMode, RawPlatform, RawTheme, Theme } from "../../types";
 
 export function ImageIdToURL(id?: string, type: "cover_small" | "cover" | "cover_big" | "screenshot_big" | "1080" | "720" = "cover_big"): string | null {
     if (id != null) {
@@ -50,6 +50,33 @@ function getGameType(id: number): GameType {
     }
 }
 
+function getGameDevStatus(id: number): GameDevStatus {
+    switch (id) {
+        case 0: return GameDevStatus.RELEASED;
+        case 2: return GameDevStatus.ALPHA;
+        case 3: return GameDevStatus.BETA;
+        case 4: return GameDevStatus.EARLY_ACCESS;
+        case 5: return GameDevStatus.OFFLINE;
+        case 6: return GameDevStatus.CANCELLED;
+        case 7: return GameDevStatus.RUMORED;
+        case 8: return GameDevStatus.DELISTED;
+        default: throw new Error(`Unknown game status id: ${id}`);
+    }
+}
+
+function getPlayerPerspective(slug: string): PlayerPerspective {
+    switch (slug) {
+        case "first-person": return PlayerPerspective.FIRST_PERSON;
+        case "third-person": return PlayerPerspective.THIRD_PERSON;
+        case "bird-view-slash-isometric": return PlayerPerspective.BIRD_VIEW__SLASH_ISOMETRIC;
+        case "side-view": return PlayerPerspective.SIDE_VIEW;
+        case "text": return PlayerPerspective.TEXT;
+        case "auditory": return PlayerPerspective.AUDITORY;
+        case "virtual-reality": return PlayerPerspective.VIRTUAL_REALITY;
+        default: throw new Error(`Unknown player perspective slug: ${slug}`);
+    }
+}
+
 export function formatRawGame(game: RawGame): Game {
     if (!game.id || !game.name || !game.slug) {
         throw new Error("Cannot format an API game without an id, name, and slug.");
@@ -61,6 +88,7 @@ export function formatRawGame(game: RawGame): Game {
         name: game.name,
         summary: game.summary,
         totalRating: game.total_rating,
+        totalRatingCount: game.total_rating_count,
         releaseDate: game.first_release_date ? new Date(game.first_release_date * 1000) : undefined,
         cover: game.cover?.image_id,
         screenshots: game.screenshots ? game.screenshots.map((item) => item.image_id) : [],
@@ -72,7 +100,17 @@ export function formatRawGame(game: RawGame): Game {
         franchises: game.franchises ? game.franchises.map((item) => item.id) : [],
         collections: game.collections ? game.collections.map((item) => item.id) : [],
         similarGames: game.similar_games,
+        standaloneExpansions: game.standalone_expansions ?? [],
+        dlcs: game.dlcs ?? [],
+        expandedGames: game.expanded_games ?? [],
+        expansions: game.expansions ?? [],
+        themes: game.themes ?? [],
+        playerPerspectives: game.player_perspectives ? game.player_perspectives.map((item) => getPlayerPerspective(item.slug)) : [],
+        multiplayerModes: game.multiplayer_modes ?? [],
         keywords: game.keywords ? game.keywords : [],
+        versionParent: game.version_parent,
+        parentGame: game.parent_game,
+        gameStatus: typeof game.game_status === "number" ? getGameDevStatus(game.game_status) : GameDevStatus.RELEASED,
         gameType: game.game_type ? getGameType(game.game_type) : undefined,
     }
 }
@@ -108,6 +146,32 @@ export function formatRawKeyword(keyword: RawKeyword): Keyword {
         id: keyword.id!,
         name: keyword.name!,
         slug: keyword.slug ?? "unknown"
+    };
+}
+
+export function formatRawTheme(theme: RawTheme): Theme {
+    return requireBaseEntity(theme, "theme");
+}
+
+export function formatRawMultiplayerMode(multiplayerMode: RawMultiplayerMode): MultiplayerMode {
+    if (!multiplayerMode.id || !multiplayerMode.game || typeof multiplayerMode.platform !== "number") {
+        throw new Error("Cannot format an API multiplayer mode without an id, game, and platform.");
+    }
+
+    return {
+        id: multiplayerMode.id,
+        game: multiplayerMode.game,
+        campaignCoop: multiplayerMode.campaigncoop ?? false,
+        dropIn: multiplayerMode.dropin ?? false,
+        lanCoop: multiplayerMode.lancoop ?? false,
+        offlineCoop: multiplayerMode.offlinecoop ?? false,
+        offlineCoopMax: multiplayerMode.offlinecoopmax ?? 0,
+        offlineMax: multiplayerMode.offlinemax ?? 0,
+        onlineCoop: multiplayerMode.onlinecoop ?? false,
+        onlineCoopMax: multiplayerMode.onlinecoopmax ?? 0,
+        onlineMax: multiplayerMode.onlinemax ?? 0,
+        platform: multiplayerMode.platform,
+        splitscreen: multiplayerMode.splitscreen ?? false,
     };
 }
 

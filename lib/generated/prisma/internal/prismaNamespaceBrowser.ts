@@ -68,6 +68,8 @@ export const ModelName = {
   Platform: 'Platform',
   Company: 'Company',
   Keyword: 'Keyword',
+  Theme: 'Theme',
+  MultiplayerMode: 'MultiplayerMode',
   Activity: 'Activity',
   Like: 'Like',
   Comment: 'Comment',
@@ -184,6 +186,7 @@ export const GameScalarFieldEnum = {
   name: 'name',
   summary: 'summary',
   totalRating: 'totalRating',
+  totalRatingCount: 'totalRatingCount',
   releaseDate: 'releaseDate',
   cover: 'cover',
   screenshots: 'screenshots',
@@ -195,7 +198,17 @@ export const GameScalarFieldEnum = {
   franchises: 'franchises',
   collections: 'collections',
   similarGames: 'similarGames',
+  standaloneExpansions: 'standaloneExpansions',
+  dlcs: 'dlcs',
+  expandedGames: 'expandedGames',
+  expansions: 'expansions',
+  themes: 'themes',
+  multiplayerModes: 'multiplayerModes',
   keywords: 'keywords',
+  versionParent: 'versionParent',
+  parentGame: 'parentGame',
+  playerPerspectives: 'playerPerspectives',
+  gameStatus: 'gameStatus',
   gameType: 'gameType',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -367,6 +380,36 @@ export const KeywordScalarFieldEnum = {
 } as const
 
 export type KeywordScalarFieldEnum = (typeof KeywordScalarFieldEnum)[keyof typeof KeywordScalarFieldEnum]
+
+
+export const ThemeScalarFieldEnum = {
+  id: 'id',
+  slug: 'slug',
+  name: 'name',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ThemeScalarFieldEnum = (typeof ThemeScalarFieldEnum)[keyof typeof ThemeScalarFieldEnum]
+
+
+export const MultiplayerModeScalarFieldEnum = {
+  id: 'id',
+  game: 'game',
+  campaignCoop: 'campaignCoop',
+  dropIn: 'dropIn',
+  lanCoop: 'lanCoop',
+  offlineCoop: 'offlineCoop',
+  offlineCoopMax: 'offlineCoopMax',
+  offlineMax: 'offlineMax',
+  onlineCoop: 'onlineCoop',
+  onlineCoopMax: 'onlineCoopMax',
+  onlineMax: 'onlineMax',
+  platform: 'platform',
+  splitscreen: 'splitscreen'
+} as const
+
+export type MultiplayerModeScalarFieldEnum = (typeof MultiplayerModeScalarFieldEnum)[keyof typeof MultiplayerModeScalarFieldEnum]
 
 
 export const ActivityScalarFieldEnum = {

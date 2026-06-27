@@ -3,10 +3,12 @@
 import type { Game } from "@/lib/types";
 import { ArrowRight, Search, X } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import HighLevelIsland from "../ui/HighLevelIsland";
 
 function SearchBox({ autoFocus = false, onPick }: { autoFocus?: boolean; onPick?: () => void }) {
+    const router = useRouter();
     const [query, setQuery] = useState("");
     const [results, setResults] = useState<Game[]>([]);
     const [loading, setLoading] = useState(false);
@@ -46,6 +48,8 @@ function SearchBox({ autoFocus = false, onPick }: { autoFocus?: boolean; onPick?
         const search = query.trim();
 
         if (search.length < 2) {
+            setResults([]);
+            setOpen(false);
             return;
         }
 
@@ -75,13 +79,27 @@ function SearchBox({ autoFocus = false, onPick }: { autoFocus?: boolean; onPick?
         };
     }, [query]);
 
+    const search = query.trim();
+    const searchHref = `/search?q=${encodeURIComponent(search)}`;
+
     return (
         <div ref={boxRef} className="relative w-full">
             <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-text-faint" size={18} aria-hidden="true" />
             <input
                 ref={inputRef}
                 value={query}
-                onChange={(event) => setQuery(event.target.value)}
+                onChange={(event) => {
+                    setQuery(event.target.value);
+                    setOpen(event.target.value.trim().length >= 2);
+                }}
+                onKeyDown={(event) => {
+                    if (event.key === "Enter" && search.length >= 2) {
+                        event.preventDefault();
+                        setOpen(false);
+                        onPick?.();
+                        router.push(searchHref);
+                    }
+                }}
                 onFocus={() => {
                     if (query.trim().length >= 2) setOpen(true);
                 }}
@@ -103,8 +121,20 @@ function SearchBox({ autoFocus = false, onPick }: { autoFocus?: boolean; onPick?
                 </button>
             )}
 
-            {open && query.trim().length >= 2 && (
+            {open && search.length >= 2 && (
                 <div className="absolute left-0 right-0 top-full z-50 mt-2 overflow-hidden rounded border border-border bg-bg-secondary shadow-main">
+                    <Link
+                        href={searchHref}
+                        prefetch={false}
+                        onClick={() => {
+                            setOpen(false);
+                            onPick?.();
+                        }}
+                        className="flex min-w-0 items-center gap-2 border-b border-border px-3 py-2 text-sm font-bold text-primary transition-colors hover:bg-surface"
+                    >
+                        <Search size={15} aria-hidden="true" />
+                        <span className="truncate">Search all for &quot;{search}&quot;</span>
+                    </Link>
                     {loading && <p className="p-3 text-sm text-text-muted">Searching...</p>}
                     {!loading && results.length === 0 && <p className="p-3 text-sm text-text-muted">No games found.</p>}
                     {!loading && results.map((game) => (

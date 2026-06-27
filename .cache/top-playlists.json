@@ -1015,6 +1015,82 @@
           "createdAt": "2026-06-13T19:52:38.493Z",
           "updatedAt": "2026-06-15T13:41:39.098Z"
         }
+      },
+      {
+        "id": "cmqwj4e2i0006f4f8yniy25cg",
+        "listId": "cmqvjxzqc00i548f8wv9p9fjk",
+        "gameId": 242408,
+        "position": 7,
+        "tier": "S",
+        "addedAt": "2026-06-27T15:43:06.042Z",
+        "game": {
+          "id": 242408,
+          "slug": "counter-strike-2",
+          "name": "Counter-Strike 2",
+          "summary": "For over two decades, Counter-Strike has offered an elite competitive experience, one shaped by millions of players from across the globe. And now the next chapter in the CS story is about to begin. This is Counter-Strike 2.\n\nA free upgrade to CS:GO, Counter-Strike 2 marks the largest technical leap in Counter-Strike’s history. Built on the Source 2 engine, Counter-Strike 2 is modernized with realistic physically-based rendering, state of the art networking, and upgraded Community Workshop tools.",
+          "totalRating": 68.45579702558103,
+          "releaseDate": "2023-09-27T00:00:00.000Z",
+          "cover": "coaczd",
+          "screenshots": [
+            "scoqi1",
+            "scoqi3",
+            "scoqi4",
+            "scoqi5",
+            "scoqi7",
+            "scoqi8",
+            "scoqi9",
+            "scoqia",
+            "scoqic",
+            "scoqid",
+            "scoqie",
+            "scoqif",
+            "scoqig",
+            "scoqih",
+            "scoqii",
+            "sc12mk3"
+          ],
+          "videos": [
+            "s6BNHro0vSg",
+            "nSE38xjMLqE",
+            "GqhhFl5zgA0",
+            "ExZtISgOxEQ",
+            "_y9MpNcAitQ"
+          ],
+          "developers": [
+            56
+          ],
+          "publishers": [
+            56
+          ],
+          "platforms": [
+            3,
+            6
+          ],
+          "genres": [
+            5,
+            24
+          ],
+          "franchises": [],
+          "collections": [
+            58
+          ],
+          "similarGames": [
+            38030,
+            119177,
+            106805,
+            19549,
+            83727,
+            102868,
+            8422,
+            64311,
+            10964,
+            68287
+          ],
+          "keywords": [],
+          "gameType": "MAINGAME",
+          "createdAt": "2026-06-13T20:14:08.437Z",
+          "updatedAt": "2026-06-15T14:01:55.935Z"
+        }
       }
     ]
   }

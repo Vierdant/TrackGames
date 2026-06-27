@@ -1,5 +1,5 @@
 import type { LinkType, MarkdownAlign, WidgetType } from "./enums";
-import type { GameStatus, GameType, UserRole } from "./generated/prisma/enums";
+import type { GameDevStatus, GameStatus, GameType, PlayerPerspective, UserRole } from "./generated/prisma/enums";
 
 export type PopScoreEntry = {
     game_id: number;
@@ -21,6 +21,7 @@ export type RawGame = {
     name?: string;
     summary?: string;
     total_rating?: number;
+    total_rating_count?: number;
     first_release_date?: number;
     cover?: { image_id: string };
     screenshots?: { image_id: string }[];
@@ -31,7 +32,17 @@ export type RawGame = {
     franchises?: { id: number; name: string; slug: string; games: number[] }[];
     collections?: { id: number; name: string; slug: string; games: number[] }[];
     similar_games?: number[];
+    standalone_expansions?: number[];
+    dlcs?: number[];
+    expanded_games?: number[];
+    expansions?: number[];
+    themes?: number[];
+    player_perspectives?: { id: number; slug: string }[];
+    multiplayer_modes?: number[];
     keywords?: number[];
+    version_parent?: number;
+    parent_game?: number;
+    game_status?: number;
     game_type: number;
 }
 
@@ -77,12 +88,35 @@ export type RawKeyword = {
     slug?: string;
 }
 
+export type RawTheme = {
+    id?: number;
+    name?: string;
+    slug?: string;
+}
+
+export type RawMultiplayerMode = {
+    id?: number;
+    campaigncoop?: boolean;
+    dropin?: boolean;
+    game?: number;
+    lancoop?: boolean;
+    offlinecoop?: boolean;
+    offlinecoopmax?: number;
+    offlinemax?: number;
+    onlinecoop?: boolean;
+    onlinecoopmax?: number;
+    onlinemax?: number;
+    platform?: number;
+    splitscreen?: boolean;
+}
+
 export type Game = {
     id?: number;
     slug?: string;
     name?: string;
     summary?: string;
     totalRating?: number;
+    totalRatingCount?: number;
     releaseDate?: Date;
     cover?: string;
     screenshots?: string[];
@@ -94,7 +128,17 @@ export type Game = {
     franchises?: number[];
     collections?: number[];
     similarGames?: number[];
+    standaloneExpansions?: number[];
+    dlcs?: number[];
+    expandedGames?: number[];
+    expansions?: number[];
+    themes?: number[];
+    playerPerspectives?: PlayerPerspective[];
+    multiplayerModes?: number[];
     keywords?: number[];
+    versionParent?: number;
+    parentGame?: number;
+    gameStatus?: GameDevStatus;
     gameType?: GameType;
 }
 
@@ -207,6 +251,28 @@ export type Keyword = {
     id: number;
     name: string;
     slug?: string;
+}
+
+export type Theme = {
+    id: number;
+    name: string;
+    slug: string;
+}
+
+export type MultiplayerMode = {
+    id: number;
+    game: number;
+    campaignCoop: boolean;
+    dropIn: boolean;
+    lanCoop: boolean;
+    offlineCoop: boolean;
+    offlineCoopMax: number;
+    offlineMax: number;
+    onlineCoop: boolean;
+    onlineCoopMax: number;
+    onlineMax: number;
+    platform: number;
+    splitscreen: boolean;
 }
 
 export type User = {

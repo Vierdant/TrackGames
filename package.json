@@ -8,7 +8,8 @@
     "build": "prisma generate && next build",
     "start": "next start",
     "lint": "eslint",
-    "import:api": "tsx scripts/import-api.ts"
+    "import:api": "tsx scripts/import-api.ts",
+    "import:clear-data": "tsx scripts/clear-import-data.ts"
   },
   "engines": {
     "node": "22.13.x"

@@ -82,6 +82,16 @@
     "slug": "backrooms-exit-8"
   },
   {
+    "id": 407355,
+    "cover": {
+      "id": 575190,
+      "image_id": "cocbti"
+    },
+    "first_release_date": 1782432000,
+    "name": "You Are the Loading Screen",
+    "slug": "you-are-the-loading-screen"
+  },
+  {
     "id": 407281,
     "first_release_date": 1782432000,
     "name": "Acorn Avengers",
@@ -597,16 +607,6 @@
     "first_release_date": 1782432000,
     "name": "Rapta",
     "slug": "rapta"
-  },
-  {
-    "id": 286531,
-    "cover": {
-      "id": 361713,
-      "image_id": "co7r3l"
-    },
-    "first_release_date": 1782432000,
-    "name": "The Wedding",
-    "slug": "the-wedding"
   },
   {
     "id": 272575,

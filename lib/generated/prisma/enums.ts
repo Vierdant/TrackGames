@@ -50,6 +50,20 @@ export const GameType = {
 export type GameType = (typeof GameType)[keyof typeof GameType]
 
 
+export const GameDevStatus = {
+  RELEASED: 'RELEASED',
+  ALPHA: 'ALPHA',
+  BETA: 'BETA',
+  EARLY_ACCESS: 'EARLY_ACCESS',
+  OFFLINE: 'OFFLINE',
+  CANCELLED: 'CANCELLED',
+  RUMORED: 'RUMORED',
+  DELISTED: 'DELISTED'
+} as const
+
+export type GameDevStatus = (typeof GameDevStatus)[keyof typeof GameDevStatus]
+
+
 export const ActivityType = {
   ADDED_GAME_TO_LIBRARY: 'ADDED_GAME_TO_LIBRARY',
   RATED_GAME: 'RATED_GAME',
@@ -105,3 +119,16 @@ export const UserRole = {
 } as const
 
 export type UserRole = (typeof UserRole)[keyof typeof UserRole]
+
+
+export const PlayerPerspective = {
+  FIRST_PERSON: 'FIRST_PERSON',
+  THIRD_PERSON: 'THIRD_PERSON',
+  BIRD_VIEW__SLASH_ISOMETRIC: 'BIRD_VIEW__SLASH_ISOMETRIC',
+  SIDE_VIEW: 'SIDE_VIEW',
+  TEXT: 'TEXT',
+  AUDITORY: 'AUDITORY',
+  VIRTUAL_REALITY: 'VIRTUAL_REALITY'
+} as const
+
+export type PlayerPerspective = (typeof PlayerPerspective)[keyof typeof PlayerPerspective]

@@ -29,6 +29,7 @@ export type AggregateGame = {
 export type GameAvgAggregateOutputType = {
   id: number | null
   totalRating: number | null
+  totalRatingCount: number | null
   developers: number | null
   publishers: number | null
   platforms: number | null
@@ -36,12 +37,21 @@ export type GameAvgAggregateOutputType = {
   franchises: number | null
   collections: number | null
   similarGames: number | null
+  standaloneExpansions: number | null
+  dlcs: number | null
+  expandedGames: number | null
+  expansions: number | null
+  themes: number | null
+  multiplayerModes: number | null
   keywords: number | null
+  versionParent: number | null
+  parentGame: number | null
 }
 
 export type GameSumAggregateOutputType = {
   id: number | null
   totalRating: number | null
+  totalRatingCount: number | null
   developers: number[]
   publishers: number[]
   platforms: number[]
@@ -49,7 +59,15 @@ export type GameSumAggregateOutputType = {
   franchises: number[]
   collections: number[]
   similarGames: number[]
+  standaloneExpansions: number[]
+  dlcs: number[]
+  expandedGames: number[]
+  expansions: number[]
+  themes: number[]
+  multiplayerModes: number[]
   keywords: number[]
+  versionParent: number | null
+  parentGame: number | null
 }
 
 export type GameMinAggregateOutputType = {
@@ -58,8 +76,12 @@ export type GameMinAggregateOutputType = {
   name: string | null
   summary: string | null
   totalRating: number | null
+  totalRatingCount: number | null
   releaseDate: Date | null
   cover: string | null
+  versionParent: number | null
+  parentGame: number | null
+  gameStatus: $Enums.GameDevStatus | null
   gameType: $Enums.GameType | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -71,8 +93,12 @@ export type GameMaxAggregateOutputType = {
   name: string | null
   summary: string | null
   totalRating: number | null
+  totalRatingCount: number | null
   releaseDate: Date | null
   cover: string | null
+  versionParent: number | null
+  parentGame: number | null
+  gameStatus: $Enums.GameDevStatus | null
   gameType: $Enums.GameType | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -84,6 +110,7 @@ export type GameCountAggregateOutputType = {
   name: number
   summary: number
   totalRating: number
+  totalRatingCount: number
   releaseDate: number
   cover: number
   screenshots: number
@@ -95,7 +122,17 @@ export type GameCountAggregateOutputType = {
   franchises: number
   collections: number
   similarGames: number
+  standaloneExpansions: number
+  dlcs: number
+  expandedGames: number
+  expansions: number
+  themes: number
+  multiplayerModes: number
   keywords: number
+  versionParent: number
+  parentGame: number
+  playerPerspectives: number
+  gameStatus: number
   gameType: number
   createdAt: number
   updatedAt: number
@@ -106,6 +143,7 @@ export type GameCountAggregateOutputType = {
 export type GameAvgAggregateInputType = {
   id?: true
   totalRating?: true
+  totalRatingCount?: true
   developers?: true
   publishers?: true
   platforms?: true
@@ -113,12 +151,21 @@ export type GameAvgAggregateInputType = {
   franchises?: true
   collections?: true
   similarGames?: true
+  standaloneExpansions?: true
+  dlcs?: true
+  expandedGames?: true
+  expansions?: true
+  themes?: true
+  multiplayerModes?: true
   keywords?: true
+  versionParent?: true
+  parentGame?: true
 }
 
 export type GameSumAggregateInputType = {
   id?: true
   totalRating?: true
+  totalRatingCount?: true
   developers?: true
   publishers?: true
   platforms?: true
@@ -126,7 +173,15 @@ export type GameSumAggregateInputType = {
   franchises?: true
   collections?: true
   similarGames?: true
+  standaloneExpansions?: true
+  dlcs?: true
+  expandedGames?: true
+  expansions?: true
+  themes?: true
+  multiplayerModes?: true
   keywords?: true
+  versionParent?: true
+  parentGame?: true
 }
 
 export type GameMinAggregateInputType = {
@@ -135,8 +190,12 @@ export type GameMinAggregateInputType = {
   name?: true
   summary?: true
   totalRating?: true
+  totalRatingCount?: true
   releaseDate?: true
   cover?: true
+  versionParent?: true
+  parentGame?: true
+  gameStatus?: true
   gameType?: true
   createdAt?: true
   updatedAt?: true
@@ -148,8 +207,12 @@ export type GameMaxAggregateInputType = {
   name?: true
   summary?: true
   totalRating?: true
+  totalRatingCount?: true
   releaseDate?: true
   cover?: true
+  versionParent?: true
+  parentGame?: true
+  gameStatus?: true
   gameType?: true
   createdAt?: true
   updatedAt?: true
@@ -161,6 +224,7 @@ export type GameCountAggregateInputType = {
   name?: true
   summary?: true
   totalRating?: true
+  totalRatingCount?: true
   releaseDate?: true
   cover?: true
   screenshots?: true
@@ -172,7 +236,17 @@ export type GameCountAggregateInputType = {
   franchises?: true
   collections?: true
   similarGames?: true
+  standaloneExpansions?: true
+  dlcs?: true
+  expandedGames?: true
+  expansions?: true
+  themes?: true
+  multiplayerModes?: true
   keywords?: true
+  versionParent?: true
+  parentGame?: true
+  playerPerspectives?: true
+  gameStatus?: true
   gameType?: true
   createdAt?: true
   updatedAt?: true
@@ -271,6 +345,7 @@ export type GameGroupByOutputType = {
   name: string
   summary: string | null
   totalRating: number | null
+  totalRatingCount: number | null
   releaseDate: Date | null
   cover: string | null
   screenshots: string[]
@@ -282,7 +357,17 @@ export type GameGroupByOutputType = {
   franchises: number[]
   collections: number[]
   similarGames: number[]
+  standaloneExpansions: number[]
+  dlcs: number[]
+  expandedGames: number[]
+  expansions: number[]
+  themes: number[]
+  multiplayerModes: number[]
   keywords: number[]
+  versionParent: number | null
+  parentGame: number | null
+  playerPerspectives: $Enums.PlayerPerspective[]
+  gameStatus: $Enums.GameDevStatus
   gameType: $Enums.GameType
   createdAt: Date
   updatedAt: Date
@@ -317,6 +402,7 @@ export type GameWhereInput = {
   name?: Prisma.StringFilter<"Game"> | string
   summary?: Prisma.StringNullableFilter<"Game"> | string | null
   totalRating?: Prisma.FloatNullableFilter<"Game"> | number | null
+  totalRatingCount?: Prisma.IntNullableFilter<"Game"> | number | null
   releaseDate?: Prisma.DateTimeNullableFilter<"Game"> | Date | string | null
   cover?: Prisma.StringNullableFilter<"Game"> | string | null
   screenshots?: Prisma.StringNullableListFilter<"Game">
@@ -328,7 +414,17 @@ export type GameWhereInput = {
   franchises?: Prisma.IntNullableListFilter<"Game">
   collections?: Prisma.IntNullableListFilter<"Game">
   similarGames?: Prisma.IntNullableListFilter<"Game">
+  standaloneExpansions?: Prisma.IntNullableListFilter<"Game">
+  dlcs?: Prisma.IntNullableListFilter<"Game">
+  expandedGames?: Prisma.IntNullableListFilter<"Game">
+  expansions?: Prisma.IntNullableListFilter<"Game">
+  themes?: Prisma.IntNullableListFilter<"Game">
+  multiplayerModes?: Prisma.IntNullableListFilter<"Game">
   keywords?: Prisma.IntNullableListFilter<"Game">
+  versionParent?: Prisma.IntNullableFilter<"Game"> | number | null
+  parentGame?: Prisma.IntNullableFilter<"Game"> | number | null
+  playerPerspectives?: Prisma.EnumPlayerPerspectiveNullableListFilter<"Game">
+  gameStatus?: Prisma.EnumGameDevStatusFilter<"Game"> | $Enums.GameDevStatus
   gameType?: Prisma.EnumGameTypeFilter<"Game"> | $Enums.GameType
   createdAt?: Prisma.DateTimeFilter<"Game"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Game"> | Date | string
@@ -344,6 +440,7 @@ export type GameOrderByWithRelationInput = {
   name?: Prisma.SortOrder
   summary?: Prisma.SortOrderInput | Prisma.SortOrder
   totalRating?: Prisma.SortOrderInput | Prisma.SortOrder
+  totalRatingCount?: Prisma.SortOrderInput | Prisma.SortOrder
   releaseDate?: Prisma.SortOrderInput | Prisma.SortOrder
   cover?: Prisma.SortOrderInput | Prisma.SortOrder
   screenshots?: Prisma.SortOrder
@@ -355,7 +452,17 @@ export type GameOrderByWithRelationInput = {
   franchises?: Prisma.SortOrder
   collections?: Prisma.SortOrder
   similarGames?: Prisma.SortOrder
+  standaloneExpansions?: Prisma.SortOrder
+  dlcs?: Prisma.SortOrder
+  expandedGames?: Prisma.SortOrder
+  expansions?: Prisma.SortOrder
+  themes?: Prisma.SortOrder
+  multiplayerModes?: Prisma.SortOrder
   keywords?: Prisma.SortOrder
+  versionParent?: Prisma.SortOrderInput | Prisma.SortOrder
+  parentGame?: Prisma.SortOrderInput | Prisma.SortOrder
+  playerPerspectives?: Prisma.SortOrder
+  gameStatus?: Prisma.SortOrder
   gameType?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -374,6 +481,7 @@ export type GameWhereUniqueInput = Prisma.AtLeast<{
   name?: Prisma.StringFilter<"Game"> | string
   summary?: Prisma.StringNullableFilter<"Game"> | string | null
   totalRating?: Prisma.FloatNullableFilter<"Game"> | number | null
+  totalRatingCount?: Prisma.IntNullableFilter<"Game"> | number | null
   releaseDate?: Prisma.DateTimeNullableFilter<"Game"> | Date | string | null
   cover?: Prisma.StringNullableFilter<"Game"> | string | null
   screenshots?: Prisma.StringNullableListFilter<"Game">
@@ -385,7 +493,17 @@ export type GameWhereUniqueInput = Prisma.AtLeast<{
   franchises?: Prisma.IntNullableListFilter<"Game">
   collections?: Prisma.IntNullableListFilter<"Game">
   similarGames?: Prisma.IntNullableListFilter<"Game">
+  standaloneExpansions?: Prisma.IntNullableListFilter<"Game">
+  dlcs?: Prisma.IntNullableListFilter<"Game">
+  expandedGames?: Prisma.IntNullableListFilter<"Game">
+  expansions?: Prisma.IntNullableListFilter<"Game">
+  themes?: Prisma.IntNullableListFilter<"Game">
+  multiplayerModes?: Prisma.IntNullableListFilter<"Game">
   keywords?: Prisma.IntNullableListFilter<"Game">
+  versionParent?: Prisma.IntNullableFilter<"Game"> | number | null
+  parentGame?: Prisma.IntNullableFilter<"Game"> | number | null
+  playerPerspectives?: Prisma.EnumPlayerPerspectiveNullableListFilter<"Game">
+  gameStatus?: Prisma.EnumGameDevStatusFilter<"Game"> | $Enums.GameDevStatus
   gameType?: Prisma.EnumGameTypeFilter<"Game"> | $Enums.GameType
   createdAt?: Prisma.DateTimeFilter<"Game"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Game"> | Date | string
@@ -401,6 +519,7 @@ export type GameOrderByWithAggregationInput = {
   name?: Prisma.SortOrder
   summary?: Prisma.SortOrderInput | Prisma.SortOrder
   totalRating?: Prisma.SortOrderInput | Prisma.SortOrder
+  totalRatingCount?: Prisma.SortOrderInput | Prisma.SortOrder
   releaseDate?: Prisma.SortOrderInput | Prisma.SortOrder
   cover?: Prisma.SortOrderInput | Prisma.SortOrder
   screenshots?: Prisma.SortOrder
@@ -412,7 +531,17 @@ export type GameOrderByWithAggregationInput = {
   franchises?: Prisma.SortOrder
   collections?: Prisma.SortOrder
   similarGames?: Prisma.SortOrder
+  standaloneExpansions?: Prisma.SortOrder
+  dlcs?: Prisma.SortOrder
+  expandedGames?: Prisma.SortOrder
+  expansions?: Prisma.SortOrder
+  themes?: Prisma.SortOrder
+  multiplayerModes?: Prisma.SortOrder
   keywords?: Prisma.SortOrder
+  versionParent?: Prisma.SortOrderInput | Prisma.SortOrder
+  parentGame?: Prisma.SortOrderInput | Prisma.SortOrder
+  playerPerspectives?: Prisma.SortOrder
+  gameStatus?: Prisma.SortOrder
   gameType?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -432,6 +561,7 @@ export type GameScalarWhereWithAggregatesInput = {
   name?: Prisma.StringWithAggregatesFilter<"Game"> | string
   summary?: Prisma.StringNullableWithAggregatesFilter<"Game"> | string | null
   totalRating?: Prisma.FloatNullableWithAggregatesFilter<"Game"> | number | null
+  totalRatingCount?: Prisma.IntNullableWithAggregatesFilter<"Game"> | number | null
   releaseDate?: Prisma.DateTimeNullableWithAggregatesFilter<"Game"> | Date | string | null
   cover?: Prisma.StringNullableWithAggregatesFilter<"Game"> | string | null
   screenshots?: Prisma.StringNullableListFilter<"Game">
@@ -443,7 +573,17 @@ export type GameScalarWhereWithAggregatesInput = {
   franchises?: Prisma.IntNullableListFilter<"Game">
   collections?: Prisma.IntNullableListFilter<"Game">
   similarGames?: Prisma.IntNullableListFilter<"Game">
+  standaloneExpansions?: Prisma.IntNullableListFilter<"Game">
+  dlcs?: Prisma.IntNullableListFilter<"Game">
+  expandedGames?: Prisma.IntNullableListFilter<"Game">
+  expansions?: Prisma.IntNullableListFilter<"Game">
+  themes?: Prisma.IntNullableListFilter<"Game">
+  multiplayerModes?: Prisma.IntNullableListFilter<"Game">
   keywords?: Prisma.IntNullableListFilter<"Game">
+  versionParent?: Prisma.IntNullableWithAggregatesFilter<"Game"> | number | null
+  parentGame?: Prisma.IntNullableWithAggregatesFilter<"Game"> | number | null
+  playerPerspectives?: Prisma.EnumPlayerPerspectiveNullableListFilter<"Game">
+  gameStatus?: Prisma.EnumGameDevStatusWithAggregatesFilter<"Game"> | $Enums.GameDevStatus
   gameType?: Prisma.EnumGameTypeWithAggregatesFilter<"Game"> | $Enums.GameType
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Game"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Game"> | Date | string
@@ -455,6 +595,7 @@ export type GameCreateInput = {
   name: string
   summary?: string | null
   totalRating?: number | null
+  totalRatingCount?: number | null
   releaseDate?: Date | string | null
   cover?: string | null
   screenshots?: Prisma.GameCreatescreenshotsInput | string[]
@@ -466,7 +607,17 @@ export type GameCreateInput = {
   franchises?: Prisma.GameCreatefranchisesInput | number[]
   collections?: Prisma.GameCreatecollectionsInput | number[]
   similarGames?: Prisma.GameCreatesimilarGamesInput | number[]
+  standaloneExpansions?: Prisma.GameCreatestandaloneExpansionsInput | number[]
+  dlcs?: Prisma.GameCreatedlcsInput | number[]
+  expandedGames?: Prisma.GameCreateexpandedGamesInput | number[]
+  expansions?: Prisma.GameCreateexpansionsInput | number[]
+  themes?: Prisma.GameCreatethemesInput | number[]
+  multiplayerModes?: Prisma.GameCreatemultiplayerModesInput | number[]
   keywords?: Prisma.GameCreatekeywordsInput | number[]
+  versionParent?: number | null
+  parentGame?: number | null
+  playerPerspectives?: Prisma.GameCreateplayerPerspectivesInput | $Enums.PlayerPerspective[]
+  gameStatus: $Enums.GameDevStatus
   gameType?: $Enums.GameType
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -482,6 +633,7 @@ export type GameUncheckedCreateInput = {
   name: string
   summary?: string | null
   totalRating?: number | null
+  totalRatingCount?: number | null
   releaseDate?: Date | string | null
   cover?: string | null
   screenshots?: Prisma.GameCreatescreenshotsInput | string[]
@@ -493,7 +645,17 @@ export type GameUncheckedCreateInput = {
   franchises?: Prisma.GameCreatefranchisesInput | number[]
   collections?: Prisma.GameCreatecollectionsInput | number[]
   similarGames?: Prisma.GameCreatesimilarGamesInput | number[]
+  standaloneExpansions?: Prisma.GameCreatestandaloneExpansionsInput | number[]
+  dlcs?: Prisma.GameCreatedlcsInput | number[]
+  expandedGames?: Prisma.GameCreateexpandedGamesInput | number[]
+  expansions?: Prisma.GameCreateexpansionsInput | number[]
+  themes?: Prisma.GameCreatethemesInput | number[]
+  multiplayerModes?: Prisma.GameCreatemultiplayerModesInput | number[]
   keywords?: Prisma.GameCreatekeywordsInput | number[]
+  versionParent?: number | null
+  parentGame?: number | null
+  playerPerspectives?: Prisma.GameCreateplayerPerspectivesInput | $Enums.PlayerPerspective[]
+  gameStatus: $Enums.GameDevStatus
   gameType?: $Enums.GameType
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -509,6 +671,7 @@ export type GameUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   summary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalRating?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  totalRatingCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   releaseDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cover?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   screenshots?: Prisma.GameUpdatescreenshotsInput | string[]
@@ -520,7 +683,17 @@ export type GameUpdateInput = {
   franchises?: Prisma.GameUpdatefranchisesInput | number[]
   collections?: Prisma.GameUpdatecollectionsInput | number[]
   similarGames?: Prisma.GameUpdatesimilarGamesInput | number[]
+  standaloneExpansions?: Prisma.GameUpdatestandaloneExpansionsInput | number[]
+  dlcs?: Prisma.GameUpdatedlcsInput | number[]
+  expandedGames?: Prisma.GameUpdateexpandedGamesInput | number[]
+  expansions?: Prisma.GameUpdateexpansionsInput | number[]
+  themes?: Prisma.GameUpdatethemesInput | number[]
+  multiplayerModes?: Prisma.GameUpdatemultiplayerModesInput | number[]
   keywords?: Prisma.GameUpdatekeywordsInput | number[]
+  versionParent?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  parentGame?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  playerPerspectives?: Prisma.GameUpdateplayerPerspectivesInput | $Enums.PlayerPerspective[]
+  gameStatus?: Prisma.EnumGameDevStatusFieldUpdateOperationsInput | $Enums.GameDevStatus
   gameType?: Prisma.EnumGameTypeFieldUpdateOperationsInput | $Enums.GameType
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -536,6 +709,7 @@ export type GameUncheckedUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   summary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalRating?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  totalRatingCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   releaseDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cover?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   screenshots?: Prisma.GameUpdatescreenshotsInput | string[]
@@ -547,7 +721,17 @@ export type GameUncheckedUpdateInput = {
   franchises?: Prisma.GameUpdatefranchisesInput | number[]
   collections?: Prisma.GameUpdatecollectionsInput | number[]
   similarGames?: Prisma.GameUpdatesimilarGamesInput | number[]
+  standaloneExpansions?: Prisma.GameUpdatestandaloneExpansionsInput | number[]
+  dlcs?: Prisma.GameUpdatedlcsInput | number[]
+  expandedGames?: Prisma.GameUpdateexpandedGamesInput | number[]
+  expansions?: Prisma.GameUpdateexpansionsInput | number[]
+  themes?: Prisma.GameUpdatethemesInput | number[]
+  multiplayerModes?: Prisma.GameUpdatemultiplayerModesInput | number[]
   keywords?: Prisma.GameUpdatekeywordsInput | number[]
+  versionParent?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  parentGame?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  playerPerspectives?: Prisma.GameUpdateplayerPerspectivesInput | $Enums.PlayerPerspective[]
+  gameStatus?: Prisma.EnumGameDevStatusFieldUpdateOperationsInput | $Enums.GameDevStatus
   gameType?: Prisma.EnumGameTypeFieldUpdateOperationsInput | $Enums.GameType
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -563,6 +747,7 @@ export type GameCreateManyInput = {
   name: string
   summary?: string | null
   totalRating?: number | null
+  totalRatingCount?: number | null
   releaseDate?: Date | string | null
   cover?: string | null
   screenshots?: Prisma.GameCreatescreenshotsInput | string[]
@@ -574,7 +759,17 @@ export type GameCreateManyInput = {
   franchises?: Prisma.GameCreatefranchisesInput | number[]
   collections?: Prisma.GameCreatecollectionsInput | number[]
   similarGames?: Prisma.GameCreatesimilarGamesInput | number[]
+  standaloneExpansions?: Prisma.GameCreatestandaloneExpansionsInput | number[]
+  dlcs?: Prisma.GameCreatedlcsInput | number[]
+  expandedGames?: Prisma.GameCreateexpandedGamesInput | number[]
+  expansions?: Prisma.GameCreateexpansionsInput | number[]
+  themes?: Prisma.GameCreatethemesInput | number[]
+  multiplayerModes?: Prisma.GameCreatemultiplayerModesInput | number[]
   keywords?: Prisma.GameCreatekeywordsInput | number[]
+  versionParent?: number | null
+  parentGame?: number | null
+  playerPerspectives?: Prisma.GameCreateplayerPerspectivesInput | $Enums.PlayerPerspective[]
+  gameStatus: $Enums.GameDevStatus
   gameType?: $Enums.GameType
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -586,6 +781,7 @@ export type GameUpdateManyMutationInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   summary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalRating?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  totalRatingCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   releaseDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cover?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   screenshots?: Prisma.GameUpdatescreenshotsInput | string[]
@@ -597,7 +793,17 @@ export type GameUpdateManyMutationInput = {
   franchises?: Prisma.GameUpdatefranchisesInput | number[]
   collections?: Prisma.GameUpdatecollectionsInput | number[]
   similarGames?: Prisma.GameUpdatesimilarGamesInput | number[]
+  standaloneExpansions?: Prisma.GameUpdatestandaloneExpansionsInput | number[]
+  dlcs?: Prisma.GameUpdatedlcsInput | number[]
+  expandedGames?: Prisma.GameUpdateexpandedGamesInput | number[]
+  expansions?: Prisma.GameUpdateexpansionsInput | number[]
+  themes?: Prisma.GameUpdatethemesInput | number[]
+  multiplayerModes?: Prisma.GameUpdatemultiplayerModesInput | number[]
   keywords?: Prisma.GameUpdatekeywordsInput | number[]
+  versionParent?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  parentGame?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  playerPerspectives?: Prisma.GameUpdateplayerPerspectivesInput | $Enums.PlayerPerspective[]
+  gameStatus?: Prisma.EnumGameDevStatusFieldUpdateOperationsInput | $Enums.GameDevStatus
   gameType?: Prisma.EnumGameTypeFieldUpdateOperationsInput | $Enums.GameType
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -609,6 +815,7 @@ export type GameUncheckedUpdateManyInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   summary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalRating?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  totalRatingCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   releaseDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cover?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   screenshots?: Prisma.GameUpdatescreenshotsInput | string[]
@@ -620,7 +827,17 @@ export type GameUncheckedUpdateManyInput = {
   franchises?: Prisma.GameUpdatefranchisesInput | number[]
   collections?: Prisma.GameUpdatecollectionsInput | number[]
   similarGames?: Prisma.GameUpdatesimilarGamesInput | number[]
+  standaloneExpansions?: Prisma.GameUpdatestandaloneExpansionsInput | number[]
+  dlcs?: Prisma.GameUpdatedlcsInput | number[]
+  expandedGames?: Prisma.GameUpdateexpandedGamesInput | number[]
+  expansions?: Prisma.GameUpdateexpansionsInput | number[]
+  themes?: Prisma.GameUpdatethemesInput | number[]
+  multiplayerModes?: Prisma.GameUpdatemultiplayerModesInput | number[]
   keywords?: Prisma.GameUpdatekeywordsInput | number[]
+  versionParent?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  parentGame?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  playerPerspectives?: Prisma.GameUpdateplayerPerspectivesInput | $Enums.PlayerPerspective[]
+  gameStatus?: Prisma.EnumGameDevStatusFieldUpdateOperationsInput | $Enums.GameDevStatus
   gameType?: Prisma.EnumGameTypeFieldUpdateOperationsInput | $Enums.GameType
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -642,12 +859,21 @@ export type IntNullableListFilter<$PrismaModel = never> = {
   isEmpty?: boolean
 }
 
+export type EnumPlayerPerspectiveNullableListFilter<$PrismaModel = never> = {
+  equals?: $Enums.PlayerPerspective[] | Prisma.ListEnumPlayerPerspectiveFieldRefInput<$PrismaModel> | null
+  has?: $Enums.PlayerPerspective | Prisma.EnumPlayerPerspectiveFieldRefInput<$PrismaModel> | null
+  hasEvery?: $Enums.PlayerPerspective[] | Prisma.ListEnumPlayerPerspectiveFieldRefInput<$PrismaModel>
+  hasSome?: $Enums.PlayerPerspective[] | Prisma.ListEnumPlayerPerspectiveFieldRefInput<$PrismaModel>
+  isEmpty?: boolean
+}
+
 export type GameCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   slug?: Prisma.SortOrder
   name?: Prisma.SortOrder
   summary?: Prisma.SortOrder
   totalRating?: Prisma.SortOrder
+  totalRatingCount?: Prisma.SortOrder
   releaseDate?: Prisma.SortOrder
   cover?: Prisma.SortOrder
   screenshots?: Prisma.SortOrder
@@ -659,7 +885,17 @@ export type GameCountOrderByAggregateInput = {
   franchises?: Prisma.SortOrder
   collections?: Prisma.SortOrder
   similarGames?: Prisma.SortOrder
+  standaloneExpansions?: Prisma.SortOrder
+  dlcs?: Prisma.SortOrder
+  expandedGames?: Prisma.SortOrder
+  expansions?: Prisma.SortOrder
+  themes?: Prisma.SortOrder
+  multiplayerModes?: Prisma.SortOrder
   keywords?: Prisma.SortOrder
+  versionParent?: Prisma.SortOrder
+  parentGame?: Prisma.SortOrder
+  playerPerspectives?: Prisma.SortOrder
+  gameStatus?: Prisma.SortOrder
   gameType?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -668,6 +904,7 @@ export type GameCountOrderByAggregateInput = {
 export type GameAvgOrderByAggregateInput = {
   id?: Prisma.SortOrder
   totalRating?: Prisma.SortOrder
+  totalRatingCount?: Prisma.SortOrder
   developers?: Prisma.SortOrder
   publishers?: Prisma.SortOrder
   platforms?: Prisma.SortOrder
@@ -675,7 +912,15 @@ export type GameAvgOrderByAggregateInput = {
   franchises?: Prisma.SortOrder
   collections?: Prisma.SortOrder
   similarGames?: Prisma.SortOrder
+  standaloneExpansions?: Prisma.SortOrder
+  dlcs?: Prisma.SortOrder
+  expandedGames?: Prisma.SortOrder
+  expansions?: Prisma.SortOrder
+  themes?: Prisma.SortOrder
+  multiplayerModes?: Prisma.SortOrder
   keywords?: Prisma.SortOrder
+  versionParent?: Prisma.SortOrder
+  parentGame?: Prisma.SortOrder
 }
 
 export type GameMaxOrderByAggregateInput = {
@@ -684,8 +929,12 @@ export type GameMaxOrderByAggregateInput = {
   name?: Prisma.SortOrder
   summary?: Prisma.SortOrder
   totalRating?: Prisma.SortOrder
+  totalRatingCount?: Prisma.SortOrder
   releaseDate?: Prisma.SortOrder
   cover?: Prisma.SortOrder
+  versionParent?: Prisma.SortOrder
+  parentGame?: Prisma.SortOrder
+  gameStatus?: Prisma.SortOrder
   gameType?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -697,8 +946,12 @@ export type GameMinOrderByAggregateInput = {
   name?: Prisma.SortOrder
   summary?: Prisma.SortOrder
   totalRating?: Prisma.SortOrder
+  totalRatingCount?: Prisma.SortOrder
   releaseDate?: Prisma.SortOrder
   cover?: Prisma.SortOrder
+  versionParent?: Prisma.SortOrder
+  parentGame?: Prisma.SortOrder
+  gameStatus?: Prisma.SortOrder
   gameType?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -707,6 +960,7 @@ export type GameMinOrderByAggregateInput = {
 export type GameSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
   totalRating?: Prisma.SortOrder
+  totalRatingCount?: Prisma.SortOrder
   developers?: Prisma.SortOrder
   publishers?: Prisma.SortOrder
   platforms?: Prisma.SortOrder
@@ -714,7 +968,15 @@ export type GameSumOrderByAggregateInput = {
   franchises?: Prisma.SortOrder
   collections?: Prisma.SortOrder
   similarGames?: Prisma.SortOrder
+  standaloneExpansions?: Prisma.SortOrder
+  dlcs?: Prisma.SortOrder
+  expandedGames?: Prisma.SortOrder
+  expansions?: Prisma.SortOrder
+  themes?: Prisma.SortOrder
+  multiplayerModes?: Prisma.SortOrder
   keywords?: Prisma.SortOrder
+  versionParent?: Prisma.SortOrder
+  parentGame?: Prisma.SortOrder
 }
 
 export type GameScalarRelationFilter = {
@@ -763,8 +1025,36 @@ export type GameCreatesimilarGamesInput = {
   set: number[]
 }
 
+export type GameCreatestandaloneExpansionsInput = {
+  set: number[]
+}
+
+export type GameCreatedlcsInput = {
+  set: number[]
+}
+
+export type GameCreateexpandedGamesInput = {
+  set: number[]
+}
+
+export type GameCreateexpansionsInput = {
+  set: number[]
+}
+
+export type GameCreatethemesInput = {
+  set: number[]
+}
+
+export type GameCreatemultiplayerModesInput = {
+  set: number[]
+}
+
 export type GameCreatekeywordsInput = {
   set: number[]
+}
+
+export type GameCreateplayerPerspectivesInput = {
+  set: $Enums.PlayerPerspective[]
 }
 
 export type IntFieldUpdateOperationsInput = {
@@ -828,9 +1118,48 @@ export type GameUpdatesimilarGamesInput = {
   push?: number | number[]
 }
 
+export type GameUpdatestandaloneExpansionsInput = {
+  set?: number[]
+  push?: number | number[]
+}
+
+export type GameUpdatedlcsInput = {
+  set?: number[]
+  push?: number | number[]
+}
+
+export type GameUpdateexpandedGamesInput = {
+  set?: number[]
+  push?: number | number[]
+}
+
+export type GameUpdateexpansionsInput = {
+  set?: number[]
+  push?: number | number[]
+}
+
+export type GameUpdatethemesInput = {
+  set?: number[]
+  push?: number | number[]
+}
+
+export type GameUpdatemultiplayerModesInput = {
+  set?: number[]
+  push?: number | number[]
+}
+
 export type GameUpdatekeywordsInput = {
   set?: number[]
   push?: number | number[]
+}
+
+export type GameUpdateplayerPerspectivesInput = {
+  set?: $Enums.PlayerPerspective[]
+  push?: $Enums.PlayerPerspective | $Enums.PlayerPerspective[]
+}
+
+export type EnumGameDevStatusFieldUpdateOperationsInput = {
+  set?: $Enums.GameDevStatus
 }
 
 export type EnumGameTypeFieldUpdateOperationsInput = {
@@ -901,6 +1230,7 @@ export type GameCreateWithoutUsersInput = {
   name: string
   summary?: string | null
   totalRating?: number | null
+  totalRatingCount?: number | null
   releaseDate?: Date | string | null
   cover?: string | null
   screenshots?: Prisma.GameCreatescreenshotsInput | string[]
@@ -912,7 +1242,17 @@ export type GameCreateWithoutUsersInput = {
   franchises?: Prisma.GameCreatefranchisesInput | number[]
   collections?: Prisma.GameCreatecollectionsInput | number[]
   similarGames?: Prisma.GameCreatesimilarGamesInput | number[]
+  standaloneExpansions?: Prisma.GameCreatestandaloneExpansionsInput | number[]
+  dlcs?: Prisma.GameCreatedlcsInput | number[]
+  expandedGames?: Prisma.GameCreateexpandedGamesInput | number[]
+  expansions?: Prisma.GameCreateexpansionsInput | number[]
+  themes?: Prisma.GameCreatethemesInput | number[]
+  multiplayerModes?: Prisma.GameCreatemultiplayerModesInput | number[]
   keywords?: Prisma.GameCreatekeywordsInput | number[]
+  versionParent?: number | null
+  parentGame?: number | null
+  playerPerspectives?: Prisma.GameCreateplayerPerspectivesInput | $Enums.PlayerPerspective[]
+  gameStatus: $Enums.GameDevStatus
   gameType?: $Enums.GameType
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -927,6 +1267,7 @@ export type GameUncheckedCreateWithoutUsersInput = {
   name: string
   summary?: string | null
   totalRating?: number | null
+  totalRatingCount?: number | null
   releaseDate?: Date | string | null
   cover?: string | null
   screenshots?: Prisma.GameCreatescreenshotsInput | string[]
@@ -938,7 +1279,17 @@ export type GameUncheckedCreateWithoutUsersInput = {
   franchises?: Prisma.GameCreatefranchisesInput | number[]
   collections?: Prisma.GameCreatecollectionsInput | number[]
   similarGames?: Prisma.GameCreatesimilarGamesInput | number[]
+  standaloneExpansions?: Prisma.GameCreatestandaloneExpansionsInput | number[]
+  dlcs?: Prisma.GameCreatedlcsInput | number[]
+  expandedGames?: Prisma.GameCreateexpandedGamesInput | number[]
+  expansions?: Prisma.GameCreateexpansionsInput | number[]
+  themes?: Prisma.GameCreatethemesInput | number[]
+  multiplayerModes?: Prisma.GameCreatemultiplayerModesInput | number[]
   keywords?: Prisma.GameCreatekeywordsInput | number[]
+  versionParent?: number | null
+  parentGame?: number | null
+  playerPerspectives?: Prisma.GameCreateplayerPerspectivesInput | $Enums.PlayerPerspective[]
+  gameStatus: $Enums.GameDevStatus
   gameType?: $Enums.GameType
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -969,6 +1320,7 @@ export type GameUpdateWithoutUsersInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   summary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalRating?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  totalRatingCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   releaseDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cover?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   screenshots?: Prisma.GameUpdatescreenshotsInput | string[]
@@ -980,7 +1332,17 @@ export type GameUpdateWithoutUsersInput = {
   franchises?: Prisma.GameUpdatefranchisesInput | number[]
   collections?: Prisma.GameUpdatecollectionsInput | number[]
   similarGames?: Prisma.GameUpdatesimilarGamesInput | number[]
+  standaloneExpansions?: Prisma.GameUpdatestandaloneExpansionsInput | number[]
+  dlcs?: Prisma.GameUpdatedlcsInput | number[]
+  expandedGames?: Prisma.GameUpdateexpandedGamesInput | number[]
+  expansions?: Prisma.GameUpdateexpansionsInput | number[]
+  themes?: Prisma.GameUpdatethemesInput | number[]
+  multiplayerModes?: Prisma.GameUpdatemultiplayerModesInput | number[]
   keywords?: Prisma.GameUpdatekeywordsInput | number[]
+  versionParent?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  parentGame?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  playerPerspectives?: Prisma.GameUpdateplayerPerspectivesInput | $Enums.PlayerPerspective[]
+  gameStatus?: Prisma.EnumGameDevStatusFieldUpdateOperationsInput | $Enums.GameDevStatus
   gameType?: Prisma.EnumGameTypeFieldUpdateOperationsInput | $Enums.GameType
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -995,6 +1357,7 @@ export type GameUncheckedUpdateWithoutUsersInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   summary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalRating?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  totalRatingCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   releaseDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cover?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   screenshots?: Prisma.GameUpdatescreenshotsInput | string[]
@@ -1006,7 +1369,17 @@ export type GameUncheckedUpdateWithoutUsersInput = {
   franchises?: Prisma.GameUpdatefranchisesInput | number[]
   collections?: Prisma.GameUpdatecollectionsInput | number[]
   similarGames?: Prisma.GameUpdatesimilarGamesInput | number[]
+  standaloneExpansions?: Prisma.GameUpdatestandaloneExpansionsInput | number[]
+  dlcs?: Prisma.GameUpdatedlcsInput | number[]
+  expandedGames?: Prisma.GameUpdateexpandedGamesInput | number[]
+  expansions?: Prisma.GameUpdateexpansionsInput | number[]
+  themes?: Prisma.GameUpdatethemesInput | number[]
+  multiplayerModes?: Prisma.GameUpdatemultiplayerModesInput | number[]
   keywords?: Prisma.GameUpdatekeywordsInput | number[]
+  versionParent?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  parentGame?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  playerPerspectives?: Prisma.GameUpdateplayerPerspectivesInput | $Enums.PlayerPerspective[]
+  gameStatus?: Prisma.EnumGameDevStatusFieldUpdateOperationsInput | $Enums.GameDevStatus
   gameType?: Prisma.EnumGameTypeFieldUpdateOperationsInput | $Enums.GameType
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1021,6 +1394,7 @@ export type GameCreateWithoutUserGamePlayLogsInput = {
   name: string
   summary?: string | null
   totalRating?: number | null
+  totalRatingCount?: number | null
   releaseDate?: Date | string | null
   cover?: string | null
   screenshots?: Prisma.GameCreatescreenshotsInput | string[]
@@ -1032,7 +1406,17 @@ export type GameCreateWithoutUserGamePlayLogsInput = {
   franchises?: Prisma.GameCreatefranchisesInput | number[]
   collections?: Prisma.GameCreatecollectionsInput | number[]
   similarGames?: Prisma.GameCreatesimilarGamesInput | number[]
+  standaloneExpansions?: Prisma.GameCreatestandaloneExpansionsInput | number[]
+  dlcs?: Prisma.GameCreatedlcsInput | number[]
+  expandedGames?: Prisma.GameCreateexpandedGamesInput | number[]
+  expansions?: Prisma.GameCreateexpansionsInput | number[]
+  themes?: Prisma.GameCreatethemesInput | number[]
+  multiplayerModes?: Prisma.GameCreatemultiplayerModesInput | number[]
   keywords?: Prisma.GameCreatekeywordsInput | number[]
+  versionParent?: number | null
+  parentGame?: number | null
+  playerPerspectives?: Prisma.GameCreateplayerPerspectivesInput | $Enums.PlayerPerspective[]
+  gameStatus: $Enums.GameDevStatus
   gameType?: $Enums.GameType
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1047,6 +1431,7 @@ export type GameUncheckedCreateWithoutUserGamePlayLogsInput = {
   name: string
   summary?: string | null
   totalRating?: number | null
+  totalRatingCount?: number | null
   releaseDate?: Date | string | null
   cover?: string | null
   screenshots?: Prisma.GameCreatescreenshotsInput | string[]
@@ -1058,7 +1443,17 @@ export type GameUncheckedCreateWithoutUserGamePlayLogsInput = {
   franchises?: Prisma.GameCreatefranchisesInput | number[]
   collections?: Prisma.GameCreatecollectionsInput | number[]
   similarGames?: Prisma.GameCreatesimilarGamesInput | number[]
+  standaloneExpansions?: Prisma.GameCreatestandaloneExpansionsInput | number[]
+  dlcs?: Prisma.GameCreatedlcsInput | number[]
+  expandedGames?: Prisma.GameCreateexpandedGamesInput | number[]
+  expansions?: Prisma.GameCreateexpansionsInput | number[]
+  themes?: Prisma.GameCreatethemesInput | number[]
+  multiplayerModes?: Prisma.GameCreatemultiplayerModesInput | number[]
   keywords?: Prisma.GameCreatekeywordsInput | number[]
+  versionParent?: number | null
+  parentGame?: number | null
+  playerPerspectives?: Prisma.GameCreateplayerPerspectivesInput | $Enums.PlayerPerspective[]
+  gameStatus: $Enums.GameDevStatus
   gameType?: $Enums.GameType
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1089,6 +1484,7 @@ export type GameUpdateWithoutUserGamePlayLogsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   summary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalRating?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  totalRatingCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   releaseDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cover?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   screenshots?: Prisma.GameUpdatescreenshotsInput | string[]
@@ -1100,7 +1496,17 @@ export type GameUpdateWithoutUserGamePlayLogsInput = {
   franchises?: Prisma.GameUpdatefranchisesInput | number[]
   collections?: Prisma.GameUpdatecollectionsInput | number[]
   similarGames?: Prisma.GameUpdatesimilarGamesInput | number[]
+  standaloneExpansions?: Prisma.GameUpdatestandaloneExpansionsInput | number[]
+  dlcs?: Prisma.GameUpdatedlcsInput | number[]
+  expandedGames?: Prisma.GameUpdateexpandedGamesInput | number[]
+  expansions?: Prisma.GameUpdateexpansionsInput | number[]
+  themes?: Prisma.GameUpdatethemesInput | number[]
+  multiplayerModes?: Prisma.GameUpdatemultiplayerModesInput | number[]
   keywords?: Prisma.GameUpdatekeywordsInput | number[]
+  versionParent?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  parentGame?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  playerPerspectives?: Prisma.GameUpdateplayerPerspectivesInput | $Enums.PlayerPerspective[]
+  gameStatus?: Prisma.EnumGameDevStatusFieldUpdateOperationsInput | $Enums.GameDevStatus
   gameType?: Prisma.EnumGameTypeFieldUpdateOperationsInput | $Enums.GameType
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1115,6 +1521,7 @@ export type GameUncheckedUpdateWithoutUserGamePlayLogsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   summary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalRating?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  totalRatingCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   releaseDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cover?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   screenshots?: Prisma.GameUpdatescreenshotsInput | string[]
@@ -1126,7 +1533,17 @@ export type GameUncheckedUpdateWithoutUserGamePlayLogsInput = {
   franchises?: Prisma.GameUpdatefranchisesInput | number[]
   collections?: Prisma.GameUpdatecollectionsInput | number[]
   similarGames?: Prisma.GameUpdatesimilarGamesInput | number[]
+  standaloneExpansions?: Prisma.GameUpdatestandaloneExpansionsInput | number[]
+  dlcs?: Prisma.GameUpdatedlcsInput | number[]
+  expandedGames?: Prisma.GameUpdateexpandedGamesInput | number[]
+  expansions?: Prisma.GameUpdateexpansionsInput | number[]
+  themes?: Prisma.GameUpdatethemesInput | number[]
+  multiplayerModes?: Prisma.GameUpdatemultiplayerModesInput | number[]
   keywords?: Prisma.GameUpdatekeywordsInput | number[]
+  versionParent?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  parentGame?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  playerPerspectives?: Prisma.GameUpdateplayerPerspectivesInput | $Enums.PlayerPerspective[]
+  gameStatus?: Prisma.EnumGameDevStatusFieldUpdateOperationsInput | $Enums.GameDevStatus
   gameType?: Prisma.EnumGameTypeFieldUpdateOperationsInput | $Enums.GameType
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1141,6 +1558,7 @@ export type GameCreateWithoutListEntriesInput = {
   name: string
   summary?: string | null
   totalRating?: number | null
+  totalRatingCount?: number | null
   releaseDate?: Date | string | null
   cover?: string | null
   screenshots?: Prisma.GameCreatescreenshotsInput | string[]
@@ -1152,7 +1570,17 @@ export type GameCreateWithoutListEntriesInput = {
   franchises?: Prisma.GameCreatefranchisesInput | number[]
   collections?: Prisma.GameCreatecollectionsInput | number[]
   similarGames?: Prisma.GameCreatesimilarGamesInput | number[]
+  standaloneExpansions?: Prisma.GameCreatestandaloneExpansionsInput | number[]
+  dlcs?: Prisma.GameCreatedlcsInput | number[]
+  expandedGames?: Prisma.GameCreateexpandedGamesInput | number[]
+  expansions?: Prisma.GameCreateexpansionsInput | number[]
+  themes?: Prisma.GameCreatethemesInput | number[]
+  multiplayerModes?: Prisma.GameCreatemultiplayerModesInput | number[]
   keywords?: Prisma.GameCreatekeywordsInput | number[]
+  versionParent?: number | null
+  parentGame?: number | null
+  playerPerspectives?: Prisma.GameCreateplayerPerspectivesInput | $Enums.PlayerPerspective[]
+  gameStatus: $Enums.GameDevStatus
   gameType?: $Enums.GameType
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1167,6 +1595,7 @@ export type GameUncheckedCreateWithoutListEntriesInput = {
   name: string
   summary?: string | null
   totalRating?: number | null
+  totalRatingCount?: number | null
   releaseDate?: Date | string | null
   cover?: string | null
   screenshots?: Prisma.GameCreatescreenshotsInput | string[]
@@ -1178,7 +1607,17 @@ export type GameUncheckedCreateWithoutListEntriesInput = {
   franchises?: Prisma.GameCreatefranchisesInput | number[]
   collections?: Prisma.GameCreatecollectionsInput | number[]
   similarGames?: Prisma.GameCreatesimilarGamesInput | number[]
+  standaloneExpansions?: Prisma.GameCreatestandaloneExpansionsInput | number[]
+  dlcs?: Prisma.GameCreatedlcsInput | number[]
+  expandedGames?: Prisma.GameCreateexpandedGamesInput | number[]
+  expansions?: Prisma.GameCreateexpansionsInput | number[]
+  themes?: Prisma.GameCreatethemesInput | number[]
+  multiplayerModes?: Prisma.GameCreatemultiplayerModesInput | number[]
   keywords?: Prisma.GameCreatekeywordsInput | number[]
+  versionParent?: number | null
+  parentGame?: number | null
+  playerPerspectives?: Prisma.GameCreateplayerPerspectivesInput | $Enums.PlayerPerspective[]
+  gameStatus: $Enums.GameDevStatus
   gameType?: $Enums.GameType
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1209,6 +1648,7 @@ export type GameUpdateWithoutListEntriesInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   summary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalRating?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  totalRatingCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   releaseDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cover?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   screenshots?: Prisma.GameUpdatescreenshotsInput | string[]
@@ -1220,7 +1660,17 @@ export type GameUpdateWithoutListEntriesInput = {
   franchises?: Prisma.GameUpdatefranchisesInput | number[]
   collections?: Prisma.GameUpdatecollectionsInput | number[]
   similarGames?: Prisma.GameUpdatesimilarGamesInput | number[]
+  standaloneExpansions?: Prisma.GameUpdatestandaloneExpansionsInput | number[]
+  dlcs?: Prisma.GameUpdatedlcsInput | number[]
+  expandedGames?: Prisma.GameUpdateexpandedGamesInput | number[]
+  expansions?: Prisma.GameUpdateexpansionsInput | number[]
+  themes?: Prisma.GameUpdatethemesInput | number[]
+  multiplayerModes?: Prisma.GameUpdatemultiplayerModesInput | number[]
   keywords?: Prisma.GameUpdatekeywordsInput | number[]
+  versionParent?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  parentGame?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  playerPerspectives?: Prisma.GameUpdateplayerPerspectivesInput | $Enums.PlayerPerspective[]
+  gameStatus?: Prisma.EnumGameDevStatusFieldUpdateOperationsInput | $Enums.GameDevStatus
   gameType?: Prisma.EnumGameTypeFieldUpdateOperationsInput | $Enums.GameType
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1235,6 +1685,7 @@ export type GameUncheckedUpdateWithoutListEntriesInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   summary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalRating?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  totalRatingCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   releaseDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cover?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   screenshots?: Prisma.GameUpdatescreenshotsInput | string[]
@@ -1246,7 +1697,17 @@ export type GameUncheckedUpdateWithoutListEntriesInput = {
   franchises?: Prisma.GameUpdatefranchisesInput | number[]
   collections?: Prisma.GameUpdatecollectionsInput | number[]
   similarGames?: Prisma.GameUpdatesimilarGamesInput | number[]
+  standaloneExpansions?: Prisma.GameUpdatestandaloneExpansionsInput | number[]
+  dlcs?: Prisma.GameUpdatedlcsInput | number[]
+  expandedGames?: Prisma.GameUpdateexpandedGamesInput | number[]
+  expansions?: Prisma.GameUpdateexpansionsInput | number[]
+  themes?: Prisma.GameUpdatethemesInput | number[]
+  multiplayerModes?: Prisma.GameUpdatemultiplayerModesInput | number[]
   keywords?: Prisma.GameUpdatekeywordsInput | number[]
+  versionParent?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  parentGame?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  playerPerspectives?: Prisma.GameUpdateplayerPerspectivesInput | $Enums.PlayerPerspective[]
+  gameStatus?: Prisma.EnumGameDevStatusFieldUpdateOperationsInput | $Enums.GameDevStatus
   gameType?: Prisma.EnumGameTypeFieldUpdateOperationsInput | $Enums.GameType
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1261,6 +1722,7 @@ export type GameCreateWithoutActivitiesInput = {
   name: string
   summary?: string | null
   totalRating?: number | null
+  totalRatingCount?: number | null
   releaseDate?: Date | string | null
   cover?: string | null
   screenshots?: Prisma.GameCreatescreenshotsInput | string[]
@@ -1272,7 +1734,17 @@ export type GameCreateWithoutActivitiesInput = {
   franchises?: Prisma.GameCreatefranchisesInput | number[]
   collections?: Prisma.GameCreatecollectionsInput | number[]
   similarGames?: Prisma.GameCreatesimilarGamesInput | number[]
+  standaloneExpansions?: Prisma.GameCreatestandaloneExpansionsInput | number[]
+  dlcs?: Prisma.GameCreatedlcsInput | number[]
+  expandedGames?: Prisma.GameCreateexpandedGamesInput | number[]
+  expansions?: Prisma.GameCreateexpansionsInput | number[]
+  themes?: Prisma.GameCreatethemesInput | number[]
+  multiplayerModes?: Prisma.GameCreatemultiplayerModesInput | number[]
   keywords?: Prisma.GameCreatekeywordsInput | number[]
+  versionParent?: number | null
+  parentGame?: number | null
+  playerPerspectives?: Prisma.GameCreateplayerPerspectivesInput | $Enums.PlayerPerspective[]
+  gameStatus: $Enums.GameDevStatus
   gameType?: $Enums.GameType
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1287,6 +1759,7 @@ export type GameUncheckedCreateWithoutActivitiesInput = {
   name: string
   summary?: string | null
   totalRating?: number | null
+  totalRatingCount?: number | null
   releaseDate?: Date | string | null
   cover?: string | null
   screenshots?: Prisma.GameCreatescreenshotsInput | string[]
@@ -1298,7 +1771,17 @@ export type GameUncheckedCreateWithoutActivitiesInput = {
   franchises?: Prisma.GameCreatefranchisesInput | number[]
   collections?: Prisma.GameCreatecollectionsInput | number[]
   similarGames?: Prisma.GameCreatesimilarGamesInput | number[]
+  standaloneExpansions?: Prisma.GameCreatestandaloneExpansionsInput | number[]
+  dlcs?: Prisma.GameCreatedlcsInput | number[]
+  expandedGames?: Prisma.GameCreateexpandedGamesInput | number[]
+  expansions?: Prisma.GameCreateexpansionsInput | number[]
+  themes?: Prisma.GameCreatethemesInput | number[]
+  multiplayerModes?: Prisma.GameCreatemultiplayerModesInput | number[]
   keywords?: Prisma.GameCreatekeywordsInput | number[]
+  versionParent?: number | null
+  parentGame?: number | null
+  playerPerspectives?: Prisma.GameCreateplayerPerspectivesInput | $Enums.PlayerPerspective[]
+  gameStatus: $Enums.GameDevStatus
   gameType?: $Enums.GameType
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1329,6 +1812,7 @@ export type GameUpdateWithoutActivitiesInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   summary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalRating?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  totalRatingCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   releaseDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cover?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   screenshots?: Prisma.GameUpdatescreenshotsInput | string[]
@@ -1340,7 +1824,17 @@ export type GameUpdateWithoutActivitiesInput = {
   franchises?: Prisma.GameUpdatefranchisesInput | number[]
   collections?: Prisma.GameUpdatecollectionsInput | number[]
   similarGames?: Prisma.GameUpdatesimilarGamesInput | number[]
+  standaloneExpansions?: Prisma.GameUpdatestandaloneExpansionsInput | number[]
+  dlcs?: Prisma.GameUpdatedlcsInput | number[]
+  expandedGames?: Prisma.GameUpdateexpandedGamesInput | number[]
+  expansions?: Prisma.GameUpdateexpansionsInput | number[]
+  themes?: Prisma.GameUpdatethemesInput | number[]
+  multiplayerModes?: Prisma.GameUpdatemultiplayerModesInput | number[]
   keywords?: Prisma.GameUpdatekeywordsInput | number[]
+  versionParent?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  parentGame?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  playerPerspectives?: Prisma.GameUpdateplayerPerspectivesInput | $Enums.PlayerPerspective[]
+  gameStatus?: Prisma.EnumGameDevStatusFieldUpdateOperationsInput | $Enums.GameDevStatus
   gameType?: Prisma.EnumGameTypeFieldUpdateOperationsInput | $Enums.GameType
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1355,6 +1849,7 @@ export type GameUncheckedUpdateWithoutActivitiesInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   summary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalRating?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  totalRatingCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   releaseDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cover?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   screenshots?: Prisma.GameUpdatescreenshotsInput | string[]
@@ -1366,7 +1861,17 @@ export type GameUncheckedUpdateWithoutActivitiesInput = {
   franchises?: Prisma.GameUpdatefranchisesInput | number[]
   collections?: Prisma.GameUpdatecollectionsInput | number[]
   similarGames?: Prisma.GameUpdatesimilarGamesInput | number[]
+  standaloneExpansions?: Prisma.GameUpdatestandaloneExpansionsInput | number[]
+  dlcs?: Prisma.GameUpdatedlcsInput | number[]
+  expandedGames?: Prisma.GameUpdateexpandedGamesInput | number[]
+  expansions?: Prisma.GameUpdateexpansionsInput | number[]
+  themes?: Prisma.GameUpdatethemesInput | number[]
+  multiplayerModes?: Prisma.GameUpdatemultiplayerModesInput | number[]
   keywords?: Prisma.GameUpdatekeywordsInput | number[]
+  versionParent?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  parentGame?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  playerPerspectives?: Prisma.GameUpdateplayerPerspectivesInput | $Enums.PlayerPerspective[]
+  gameStatus?: Prisma.EnumGameDevStatusFieldUpdateOperationsInput | $Enums.GameDevStatus
   gameType?: Prisma.EnumGameTypeFieldUpdateOperationsInput | $Enums.GameType
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1439,6 +1944,7 @@ export type GameSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   name?: boolean
   summary?: boolean
   totalRating?: boolean
+  totalRatingCount?: boolean
   releaseDate?: boolean
   cover?: boolean
   screenshots?: boolean
@@ -1450,7 +1956,17 @@ export type GameSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   franchises?: boolean
   collections?: boolean
   similarGames?: boolean
+  standaloneExpansions?: boolean
+  dlcs?: boolean
+  expandedGames?: boolean
+  expansions?: boolean
+  themes?: boolean
+  multiplayerModes?: boolean
   keywords?: boolean
+  versionParent?: boolean
+  parentGame?: boolean
+  playerPerspectives?: boolean
+  gameStatus?: boolean
   gameType?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1467,6 +1983,7 @@ export type GameSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   name?: boolean
   summary?: boolean
   totalRating?: boolean
+  totalRatingCount?: boolean
   releaseDate?: boolean
   cover?: boolean
   screenshots?: boolean
@@ -1478,7 +1995,17 @@ export type GameSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   franchises?: boolean
   collections?: boolean
   similarGames?: boolean
+  standaloneExpansions?: boolean
+  dlcs?: boolean
+  expandedGames?: boolean
+  expansions?: boolean
+  themes?: boolean
+  multiplayerModes?: boolean
   keywords?: boolean
+  versionParent?: boolean
+  parentGame?: boolean
+  playerPerspectives?: boolean
+  gameStatus?: boolean
   gameType?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1490,6 +2017,7 @@ export type GameSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   name?: boolean
   summary?: boolean
   totalRating?: boolean
+  totalRatingCount?: boolean
   releaseDate?: boolean
   cover?: boolean
   screenshots?: boolean
@@ -1501,7 +2029,17 @@ export type GameSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   franchises?: boolean
   collections?: boolean
   similarGames?: boolean
+  standaloneExpansions?: boolean
+  dlcs?: boolean
+  expandedGames?: boolean
+  expansions?: boolean
+  themes?: boolean
+  multiplayerModes?: boolean
   keywords?: boolean
+  versionParent?: boolean
+  parentGame?: boolean
+  playerPerspectives?: boolean
+  gameStatus?: boolean
   gameType?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1513,6 +2051,7 @@ export type GameSelectScalar = {
   name?: boolean
   summary?: boolean
   totalRating?: boolean
+  totalRatingCount?: boolean
   releaseDate?: boolean
   cover?: boolean
   screenshots?: boolean
@@ -1524,13 +2063,23 @@ export type GameSelectScalar = {
   franchises?: boolean
   collections?: boolean
   similarGames?: boolean
+  standaloneExpansions?: boolean
+  dlcs?: boolean
+  expandedGames?: boolean
+  expansions?: boolean
+  themes?: boolean
+  multiplayerModes?: boolean
   keywords?: boolean
+  versionParent?: boolean
+  parentGame?: boolean
+  playerPerspectives?: boolean
+  gameStatus?: boolean
   gameType?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type GameOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "slug" | "name" | "summary" | "totalRating" | "releaseDate" | "cover" | "screenshots" | "videos" | "developers" | "publishers" | "platforms" | "genres" | "franchises" | "collections" | "similarGames" | "keywords" | "gameType" | "createdAt" | "updatedAt", ExtArgs["result"]["game"]>
+export type GameOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "slug" | "name" | "summary" | "totalRating" | "totalRatingCount" | "releaseDate" | "cover" | "screenshots" | "videos" | "developers" | "publishers" | "platforms" | "genres" | "franchises" | "collections" | "similarGames" | "standaloneExpansions" | "dlcs" | "expandedGames" | "expansions" | "themes" | "multiplayerModes" | "keywords" | "versionParent" | "parentGame" | "playerPerspectives" | "gameStatus" | "gameType" | "createdAt" | "updatedAt", ExtArgs["result"]["game"]>
 export type GameInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   users?: boolean | Prisma.Game$usersArgs<ExtArgs>
   listEntries?: boolean | Prisma.Game$listEntriesArgs<ExtArgs>
@@ -1555,6 +2104,7 @@ export type $GamePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     name: string
     summary: string | null
     totalRating: number | null
+    totalRatingCount: number | null
     releaseDate: Date | null
     cover: string | null
     screenshots: string[]
@@ -1566,7 +2116,17 @@ export type $GamePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     franchises: number[]
     collections: number[]
     similarGames: number[]
+    standaloneExpansions: number[]
+    dlcs: number[]
+    expandedGames: number[]
+    expansions: number[]
+    themes: number[]
+    multiplayerModes: number[]
     keywords: number[]
+    versionParent: number | null
+    parentGame: number | null
+    playerPerspectives: $Enums.PlayerPerspective[]
+    gameStatus: $Enums.GameDevStatus
     gameType: $Enums.GameType
     createdAt: Date
     updatedAt: Date
@@ -2002,6 +2562,7 @@ export interface GameFieldRefs {
   readonly name: Prisma.FieldRef<"Game", 'String'>
   readonly summary: Prisma.FieldRef<"Game", 'String'>
   readonly totalRating: Prisma.FieldRef<"Game", 'Float'>
+  readonly totalRatingCount: Prisma.FieldRef<"Game", 'Int'>
   readonly releaseDate: Prisma.FieldRef<"Game", 'DateTime'>
   readonly cover: Prisma.FieldRef<"Game", 'String'>
   readonly screenshots: Prisma.FieldRef<"Game", 'String[]'>
@@ -2013,7 +2574,17 @@ export interface GameFieldRefs {
   readonly franchises: Prisma.FieldRef<"Game", 'Int[]'>
   readonly collections: Prisma.FieldRef<"Game", 'Int[]'>
   readonly similarGames: Prisma.FieldRef<"Game", 'Int[]'>
+  readonly standaloneExpansions: Prisma.FieldRef<"Game", 'Int[]'>
+  readonly dlcs: Prisma.FieldRef<"Game", 'Int[]'>
+  readonly expandedGames: Prisma.FieldRef<"Game", 'Int[]'>
+  readonly expansions: Prisma.FieldRef<"Game", 'Int[]'>
+  readonly themes: Prisma.FieldRef<"Game", 'Int[]'>
+  readonly multiplayerModes: Prisma.FieldRef<"Game", 'Int[]'>
   readonly keywords: Prisma.FieldRef<"Game", 'Int[]'>
+  readonly versionParent: Prisma.FieldRef<"Game", 'Int'>
+  readonly parentGame: Prisma.FieldRef<"Game", 'Int'>
+  readonly playerPerspectives: Prisma.FieldRef<"Game", 'PlayerPerspective[]'>
+  readonly gameStatus: Prisma.FieldRef<"Game", 'GameDevStatus'>
   readonly gameType: Prisma.FieldRef<"Game", 'GameType'>
   readonly createdAt: Prisma.FieldRef<"Game", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Game", 'DateTime'>

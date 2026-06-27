@@ -401,6 +401,8 @@ export const ModelName = {
   Platform: 'Platform',
   Company: 'Company',
   Keyword: 'Keyword',
+  Theme: 'Theme',
+  MultiplayerMode: 'MultiplayerMode',
   Activity: 'Activity',
   Like: 'Like',
   Comment: 'Comment',
@@ -423,7 +425,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "account" | "session" | "verificationToken" | "game" | "userGameEntry" | "userTag" | "userGameEntryTag" | "userGamePlayLog" | "gameList" | "gameListEntry" | "collection" | "franchise" | "genre" | "platform" | "company" | "keyword" | "activity" | "like" | "comment" | "userFollow" | "badge" | "userBadge" | "notification"
+    modelProps: "user" | "account" | "session" | "verificationToken" | "game" | "userGameEntry" | "userTag" | "userGameEntryTag" | "userGamePlayLog" | "gameList" | "gameListEntry" | "collection" | "franchise" | "genre" | "platform" | "company" | "keyword" | "theme" | "multiplayerMode" | "activity" | "like" | "comment" | "userFollow" | "badge" | "userBadge" | "notification"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1685,6 +1687,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Theme: {
+      payload: Prisma.$ThemePayload<ExtArgs>
+      fields: Prisma.ThemeFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ThemeFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ThemePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ThemeFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ThemePayload>
+        }
+        findFirst: {
+          args: Prisma.ThemeFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ThemePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ThemeFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ThemePayload>
+        }
+        findMany: {
+          args: Prisma.ThemeFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ThemePayload>[]
+        }
+        create: {
+          args: Prisma.ThemeCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ThemePayload>
+        }
+        createMany: {
+          args: Prisma.ThemeCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ThemeCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ThemePayload>[]
+        }
+        delete: {
+          args: Prisma.ThemeDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ThemePayload>
+        }
+        update: {
+          args: Prisma.ThemeUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ThemePayload>
+        }
+        deleteMany: {
+          args: Prisma.ThemeDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ThemeUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ThemeUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ThemePayload>[]
+        }
+        upsert: {
+          args: Prisma.ThemeUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ThemePayload>
+        }
+        aggregate: {
+          args: Prisma.ThemeAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateTheme>
+        }
+        groupBy: {
+          args: Prisma.ThemeGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ThemeGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ThemeCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ThemeCountAggregateOutputType> | number
+        }
+      }
+    }
+    MultiplayerMode: {
+      payload: Prisma.$MultiplayerModePayload<ExtArgs>
+      fields: Prisma.MultiplayerModeFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.MultiplayerModeFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MultiplayerModePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.MultiplayerModeFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MultiplayerModePayload>
+        }
+        findFirst: {
+          args: Prisma.MultiplayerModeFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MultiplayerModePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.MultiplayerModeFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MultiplayerModePayload>
+        }
+        findMany: {
+          args: Prisma.MultiplayerModeFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MultiplayerModePayload>[]
+        }
+        create: {
+          args: Prisma.MultiplayerModeCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MultiplayerModePayload>
+        }
+        createMany: {
+          args: Prisma.MultiplayerModeCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.MultiplayerModeCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MultiplayerModePayload>[]
+        }
+        delete: {
+          args: Prisma.MultiplayerModeDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MultiplayerModePayload>
+        }
+        update: {
+          args: Prisma.MultiplayerModeUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MultiplayerModePayload>
+        }
+        deleteMany: {
+          args: Prisma.MultiplayerModeDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.MultiplayerModeUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.MultiplayerModeUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MultiplayerModePayload>[]
+        }
+        upsert: {
+          args: Prisma.MultiplayerModeUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MultiplayerModePayload>
+        }
+        aggregate: {
+          args: Prisma.MultiplayerModeAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateMultiplayerMode>
+        }
+        groupBy: {
+          args: Prisma.MultiplayerModeGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MultiplayerModeGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.MultiplayerModeCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MultiplayerModeCountAggregateOutputType> | number
+        }
+      }
+    }
     Activity: {
       payload: Prisma.$ActivityPayload<ExtArgs>
       fields: Prisma.ActivityFieldRefs
@@ -2333,6 +2483,7 @@ export const GameScalarFieldEnum = {
   name: 'name',
   summary: 'summary',
   totalRating: 'totalRating',
+  totalRatingCount: 'totalRatingCount',
   releaseDate: 'releaseDate',
   cover: 'cover',
   screenshots: 'screenshots',
@@ -2344,7 +2495,17 @@ export const GameScalarFieldEnum = {
   franchises: 'franchises',
   collections: 'collections',
   similarGames: 'similarGames',
+  standaloneExpansions: 'standaloneExpansions',
+  dlcs: 'dlcs',
+  expandedGames: 'expandedGames',
+  expansions: 'expansions',
+  themes: 'themes',
+  multiplayerModes: 'multiplayerModes',
   keywords: 'keywords',
+  versionParent: 'versionParent',
+  parentGame: 'parentGame',
+  playerPerspectives: 'playerPerspectives',
+  gameStatus: 'gameStatus',
   gameType: 'gameType',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -2516,6 +2677,36 @@ export const KeywordScalarFieldEnum = {
 } as const
 
 export type KeywordScalarFieldEnum = (typeof KeywordScalarFieldEnum)[keyof typeof KeywordScalarFieldEnum]
+
+
+export const ThemeScalarFieldEnum = {
+  id: 'id',
+  slug: 'slug',
+  name: 'name',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ThemeScalarFieldEnum = (typeof ThemeScalarFieldEnum)[keyof typeof ThemeScalarFieldEnum]
+
+
+export const MultiplayerModeScalarFieldEnum = {
+  id: 'id',
+  game: 'game',
+  campaignCoop: 'campaignCoop',
+  dropIn: 'dropIn',
+  lanCoop: 'lanCoop',
+  offlineCoop: 'offlineCoop',
+  offlineCoopMax: 'offlineCoopMax',
+  offlineMax: 'offlineMax',
+  onlineCoop: 'onlineCoop',
+  onlineCoopMax: 'onlineCoopMax',
+  onlineMax: 'onlineMax',
+  platform: 'platform',
+  splitscreen: 'splitscreen'
+} as const
+
+export type MultiplayerModeScalarFieldEnum = (typeof MultiplayerModeScalarFieldEnum)[keyof typeof MultiplayerModeScalarFieldEnum]
 
 
 export const ActivityScalarFieldEnum = {
@@ -2714,6 +2905,34 @@ export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, '
  * Reference to a field of type 'Float[]'
  */
 export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
+    
+
+
+/**
+ * Reference to a field of type 'PlayerPerspective[]'
+ */
+export type ListEnumPlayerPerspectiveFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PlayerPerspective[]'>
+    
+
+
+/**
+ * Reference to a field of type 'PlayerPerspective'
+ */
+export type EnumPlayerPerspectiveFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PlayerPerspective'>
+    
+
+
+/**
+ * Reference to a field of type 'GameDevStatus'
+ */
+export type EnumGameDevStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'GameDevStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'GameDevStatus[]'
+ */
+export type ListEnumGameDevStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'GameDevStatus[]'>
     
 
 
@@ -2941,6 +3160,8 @@ export type GlobalOmitConfig = {
   platform?: Prisma.PlatformOmit
   company?: Prisma.CompanyOmit
   keyword?: Prisma.KeywordOmit
+  theme?: Prisma.ThemeOmit
+  multiplayerMode?: Prisma.MultiplayerModeOmit
   activity?: Prisma.ActivityOmit
   like?: Prisma.LikeOmit
   comment?: Prisma.CommentOmit

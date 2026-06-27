@@ -105,24 +105,35 @@ model VerificationToken {
 }
 
 model Game {
-  id           Int       @id
-  slug         String    @unique
-  name         String
-  summary      String?
-  totalRating  Float?
-  releaseDate  DateTime?
-  cover        String?
-  screenshots  String[]
-  videos       String[]
-  developers   Int[]
-  publishers   Int[]
-  platforms    Int[]
-  genres       Int[]
-  franchises   Int[]
-  collections  Int[]
-  similarGames Int[]
-  keywords     Int[]     @default([])
-  gameType     GameType  @default(MAINGAME)
+  id                   Int           @id
+  slug                 String        @unique
+  name                 String
+  summary              String?
+  totalRating          Float?
+  totalRatingCount     Int?
+  releaseDate          DateTime?
+  cover                String?
+  screenshots          String[]
+  videos               String[]
+  developers           Int[]
+  publishers           Int[]
+  platforms            Int[]
+  genres               Int[]
+  franchises           Int[]
+  collections          Int[]
+  similarGames         Int[]
+  standaloneExpansions Int[]
+  dlcs                 Int[]
+  expandedGames        Int[]
+  expansions           Int[]
+  themes               Int[]
+  multiplayerModes     Int[]
+  keywords             Int[]         @default([])
+  versionParent        Int?
+  parentGame           Int?
+  playerPerspectives   PlayerPerspective[]
+  gameStatus           GameDevStatus
+  gameType             GameType      @default(MAINGAME)
 
   createdAt        DateTime          @default(now())
   updatedAt        DateTime          @updatedAt
@@ -313,6 +324,33 @@ model Keyword {
   @@index([name])
 }
 
+model Theme {
+  id   Int    @id
+  slug String @unique
+  name String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([name])
+}
+
+model MultiplayerMode {
+  id             Int     @id
+  game           Int
+  campaignCoop   Boolean
+  dropIn         Boolean
+  lanCoop        Boolean
+  offlineCoop    Boolean
+  offlineCoopMax Int
+  offlineMax     Int
+  onlineCoop     Boolean
+  onlineCoopMax  Int
+  onlineMax      Int
+  platform       Int
+  splitscreen    Boolean
+}
+
 model Activity {
   id String @id @default(cuid())
 
@@ -483,6 +521,17 @@ enum GameType {
   UPDATE
 }
 
+enum GameDevStatus {
+  RELEASED
+  ALPHA
+  BETA
+  EARLY_ACCESS
+  OFFLINE
+  CANCELLED
+  RUMORED
+  DELISTED
+}
+
 enum ActivityType {
   ADDED_GAME_TO_LIBRARY
   RATED_GAME
@@ -523,4 +572,14 @@ enum UserRole {
   ADMIN
   STAFF
   VIP
+}
+
+enum PlayerPerspective {
+  FIRST_PERSON
+  THIRD_PERSON
+  BIRD_VIEW__SLASH_ISOMETRIC
+  SIDE_VIEW
+  TEXT
+  AUDITORY
+  VIRTUAL_REALITY
 }

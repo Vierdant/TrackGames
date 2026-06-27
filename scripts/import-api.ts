@@ -1,5 +1,5 @@
-import { RawCollection, RawCompany, RawFranchise, RawGame, RawGenre, RawKeyword, RawPlatform } from "@/lib/types";
-import { formatRawCollection, formatRawCompany, formatRawFranchise, formatRawGame, formatRawGenre, formatRawKeyword, formatRawPlatform } from "@/lib/external/igdb/util";
+import { RawCollection, RawCompany, RawFranchise, RawGame, RawGenre, RawKeyword, RawMultiplayerMode, RawPlatform, RawTheme } from "@/lib/types";
+import { formatRawCollection, formatRawCompany, formatRawFranchise, formatRawGame, formatRawGenre, formatRawKeyword, formatRawMultiplayerMode, formatRawPlatform, formatRawTheme } from "@/lib/external/igdb/util";
 import { loadEnvConfig } from "@next/env";
 import fs from "fs/promises";
 
@@ -10,7 +10,7 @@ const LIMIT = 500;
 const CHECKPOINT_FILE = "igdb-import-checkpoint.json";
 
 type DbClient = typeof import("@/lib/db").default;
-type ImportKind = "collections" | "franchises" | "genres" | "platforms" | "companies" | "keywords" | "games";
+type ImportKind = "collections" | "franchises" | "genres" | "platforms" | "companies" | "keywords" | "themes" | "multiplayerModes" | "games";
 type Checkpoint = Partial<Record<ImportKind, number>>;
 type ImportConfig<Raw, Formatted> = {
     kind: ImportKind;
@@ -23,6 +23,34 @@ type ImportConfig<Raw, Formatted> = {
 };
 
 let db: DbClient | null = null;
+
+function isSlugUniqueError(error: unknown) {
+    if (typeof error !== "object" || error === null || !("code" in error) || error.code !== "P2002") {
+        return false;
+    }
+
+    if ("message" in error && typeof error.message === "string" && error.message.includes("`slug`")) {
+        return true;
+    }
+
+    return "meta" in error
+        && typeof error.meta === "object"
+        && error.meta !== null
+        && "target" in error.meta
+        && Array.isArray(error.meta.target)
+        && error.meta.target.includes("slug");
+}
+
+async function upsertById(model: { upsert: (args: any) => Promise<unknown>; update: (args: any) => Promise<unknown> }, item: { id: number; slug: string }) {
+    try {
+        return await model.upsert({ where: { id: item.id }, update: item, create: item });
+    } catch (error) {
+        if (!isSlugUniqueError(error)) throw error;
+
+        console.log(`[import] Replacing stale row for slug "${item.slug}" with IGDB id ${item.id}.`);
+        return model.update({ where: { slug: item.slug }, data: item });
+    }
+}
 
 function sleep(ms: number) {
     return new Promise((resolve) => setTimeout(resolve, ms));
@@ -136,7 +164,7 @@ const importConfigs: ImportConfig<unknown, unknown>[] = [
         fields: "slug, name, games",
         where: "name != null & slug != null",
         format: (raw) => formatRawCollection(raw as RawCollection),
-        save: (db, item) => db.collection.upsert({ where: { id: (item as { id: number }).id }, update: item as any, create: item as any }),
+        save: (db, item) => upsertById(db.collection, item as { id: number; slug: string }),
     },
     {
         kind: "franchises",
@@ -144,7 +172,7 @@ const importConfigs: ImportConfig<unknown, unknown>[] = [
         fields: "slug, name, games",
         where: "name != null & slug != null",
         format: (raw) => formatRawFranchise(raw as RawFranchise),
-        save: (db, item) => db.franchise.upsert({ where: { id: (item as { id: number }).id }, update: item as any, create: item as any }),
+        save: (db, item) => upsertById(db.franchise, item as { id: number; slug: string }),
     },
     {
         kind: "genres",
@@ -152,7 +180,7 @@ const importConfigs: ImportConfig<unknown, unknown>[] = [
         fields: "slug, name",
         where: "name != null & slug != null",
         format: (raw) => formatRawGenre(raw as RawGenre),
-        save: (db, item) => db.genre.upsert({ where: { id: (item as { id: number }).id }, update: item as any, create: item as any }),
+        save: (db, item) => upsertById(db.genre, item as { id: number; slug: string }),
     },
     {
         kind: "platforms",
@@ -160,7 +188,7 @@ const importConfigs: ImportConfig<unknown, unknown>[] = [
         fields: "slug, name",
         where: "name != null & slug != null",
         format: (raw) => formatRawPlatform(raw as RawPlatform),
-        save: (db, item) => db.platform.upsert({ where: { id: (item as { id: number }).id }, update: item as any, create: item as any }),
+        save: (db, item) => upsertById(db.platform, item as { id: number; slug: string }),
     },
     {
         kind: "companies",
@@ -168,23 +196,39 @@ const importConfigs: ImportConfig<unknown, unknown>[] = [
         fields: "slug, name, logo.image_id, description, developed, published",
         where: "name != null & slug != null",
         format: (raw) => formatRawCompany(raw as RawCompany),
-        save: (db, item) => db.company.upsert({ where: { id: (item as { id: number }).id }, update: item as any, create: item as any }),
+        save: (db, item) => upsertById(db.company, item as { id: number; slug: string }),
     },
     {
         kind: "keywords",
         endpoint: "keywords",
         fields: "slug, name",
-        where: "name != null",
+        where: "name != null & slug != null",
         format: (raw) => formatRawKeyword(raw as RawKeyword),
-        save: (db, item) => db.keyword.upsert({ where: { id: (item as { id: number }).id }, update: item as any, create: item as any }),
+        save: (db, item) => upsertById(db.keyword, item as { id: number; slug: string }),
+    },
+    {
+        kind: "themes",
+        endpoint: "themes",
+        fields: "slug, name",
+        where: "name != null & slug != null",
+        format: (raw) => formatRawTheme(raw as RawTheme),
+        save: (db, item) => upsertById(db.theme, item as { id: number; slug: string }),
+    },
+    {
+        kind: "multiplayerModes",
+        endpoint: "multiplayer_modes",
+        fields: "campaigncoop, dropin, game, lancoop, offlinecoop, offlinecoopmax, offlinemax, onlinecoop, onlinecoopmax, onlinemax, platform, splitscreen",
+        where: "game != null & platform != null",
+        format: (raw) => formatRawMultiplayerMode(raw as RawMultiplayerMode),
+        save: (db, item) => db.multiplayerMode.upsert({ where: { id: (item as { id: number }).id }, update: item as any, create: item as any }),
     },
     {
         kind: "games",
         endpoint: "games",
-        fields: "slug, name, summary, total_rating, first_release_date, cover.image_id, screenshots.image_id, videos.video_id, platforms.name, platforms.slug, involved_companies.company, involved_companies.developer, involved_companies.publisher, genres.name, genres.slug, franchises.name, franchises.slug, franchises.games, similar_games, collections.name, collections.slug, collections.games, keywords, game_type",
+        fields: "slug, name, summary, total_rating, total_rating_count, first_release_date, cover.image_id, screenshots.image_id, videos.video_id, platforms.name, platforms.slug, involved_companies.company, involved_companies.developer, involved_companies.publisher, genres.name, genres.slug, franchises.name, franchises.slug, franchises.games, similar_games, collections.name, collections.slug, collections.games, standalone_expansions, dlcs, expanded_games, expansions, themes, player_perspectives.slug, multiplayer_modes, keywords, version_parent, parent_game, game_status, game_type",
         where: "name != null & slug != null",
         format: (raw) => formatRawGame(raw as RawGame),
-        save: (db, item) => db.game.upsert({ where: { id: (item as { id: number }).id }, update: item as any, create: item as any }),
+        save: (db, item) => upsertById(db.game, item as { id: number; slug: string }),
     },
 ];
 

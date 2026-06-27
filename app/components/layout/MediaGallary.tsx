@@ -31,7 +31,7 @@ export default function MediaGallery({ media }: { media: MediaItem[] }) {
             <div className="relative aspect-video bg-black/50 rounded-md overflow-hidden mb-4">
                 {activeItem.type === "video" ? (
                     <iframe
-                        src={`https://www.youtube.com/embed/${activeItem.id}`}
+                        src={`https://www.youtube-nocookie.com/embed/${activeItem.id}`}
                         title="Game video"
                         className="w-full h-full"
                         allowFullScreen

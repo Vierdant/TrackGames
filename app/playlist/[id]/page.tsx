@@ -168,7 +168,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                             </div>
                             {canEdit && (
                                 <>
-                                    <AddPlaylistGameForm playlistId={playlist.id} mode={playlist.displayMode} tiers={tiers} />
+                                    <AddPlaylistGameForm playlistId={playlist.id} mode={playlist.displayMode} tiers={tiers} existingGameIds={gameIds} />
                                     <form action={modeAction} className="rounded bg-bg p-4 text-sm font-bold">
                                         <h2 className="border-b border-border pb-2 text-sm font-bold">Change display</h2>
                                         <div className="mt-2 flex gap-2 text-text-muted">

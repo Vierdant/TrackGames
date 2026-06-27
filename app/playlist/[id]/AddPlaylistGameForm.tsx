@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { PrimaryButton } from "../../components/ui/Buttons";
 import { Input, Select } from "../../components/ui/Inputs";
 
-export default function AddPlaylistGameForm({ playlistId, mode, tiers }: { playlistId: string; mode: string; tiers: string[] }) {
+export default function AddPlaylistGameForm({ playlistId, mode, tiers, existingGameIds }: { playlistId: string; mode: string; tiers: string[]; existingGameIds: number[] }) {
     const [query, setQuery] = useState("");
     const [results, setResults] = useState<Game[]>([]);
     const [game, setGame] = useState<Game | null>(null);
@@ -30,11 +30,13 @@ export default function AddPlaylistGameForm({ playlistId, mode, tiers }: { playl
             setLoading(true);
 
             try {
-                const response = await fetch(`/api/games/library?q=${encodeURIComponent(search)}`, {
+                const response = await fetch(`/api/games/search?q=${encodeURIComponent(search)}`, {
                     signal: controller.signal,
                 });
 
-                setResults(response.ok ? await response.json() : []);
+                const games = response.ok ? await response.json() as Game[] : [];
+
+                setResults(games.filter((game) => game.id && !existingGameIds.includes(game.id)));
             } catch {
                 if (!controller.signal.aborted) setResults([]);
             } finally {
@@ -46,7 +48,7 @@ export default function AddPlaylistGameForm({ playlistId, mode, tiers }: { playl
             controller.abort();
             window.clearTimeout(timer);
         };
-    }, [query]);
+    }, [existingGameIds, query]);
 
     return (
         <form action={action} className="rounded bg-bg p-4">
@@ -58,7 +60,7 @@ export default function AddPlaylistGameForm({ playlistId, mode, tiers }: { playl
                     <Input value={game?.name ?? query} onChange={(event) => {
                         setGame(null);
                         setQuery(event.target.value);
-                    }} placeholder="Lookup library games" className="pl-9 pr-9" />
+                    }} placeholder="Search games" className="pl-9 pr-9" />
                     {(query || game) && (
                         <button type="button" onClick={() => {
                             setQuery("");
@@ -73,7 +75,7 @@ export default function AddPlaylistGameForm({ playlistId, mode, tiers }: { playl
                 {!game && query.trim().length >= 2 && (
                     <div className="overflow-hidden rounded border border-border bg-bg-secondary">
                         {loading && <p className="p-3 text-sm text-text-muted">Searching...</p>}
-                        {!loading && results.length === 0 && <p className="p-3 text-sm text-text-muted">No library games found.</p>}
+                        {!loading && results.length === 0 && <p className="p-3 text-sm text-text-muted">No games found.</p>}
                         {!loading && results.map((result) => (
                             <button key={result.id} type="button" onClick={() => {
                                 setGame(result);

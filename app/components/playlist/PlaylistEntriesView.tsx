@@ -208,11 +208,14 @@ export default function PlaylistEntriesView({ listId, entries, mode, canEdit, ti
                 onReset={() => setAdvancedFilters(emptyAdvancedLibraryFilters)}
             />
             {filtered.length ? (
-                <div className="grid gap-3 grid-cols-[repeat(auto-fill,6rem)] justify-center items-center md:gap-4 md:grid-cols-[repeat(auto-fill,8rem)]">
+                <div className="w-full grid gap-2 grid-cols-[repeat(auto-fill,5rem)] justify-center items-center md:gap-4 md:grid-cols-[repeat(auto-fill,8rem)]">
                     {filtered.map((entry) => (
                         <EntryShell key={entry.id} listId={listId} entry={entry} canEdit={canEdit} tiers={tiers}>
-                            <div className="h-[8.4rem] w-24 md:h-[11.2rem] md:w-32">
-                                <GameCard game={entry.game} size="full" hover="name" slugged={true} />
+                            <div className="hidden md:flex">
+                                <GameCard game={entry.game} size={130} hover="name" slugged={true} />
+                            </div>
+                            <div className="flex md:hidden">
+                                <GameCard game={entry.game} size={80} hover="name" slugged={true} />
                             </div>
                         </EntryShell>
                     ))}

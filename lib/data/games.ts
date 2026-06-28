@@ -52,23 +52,25 @@ const fetching = {
     `
 }
 
-export async function getGame(id: number): Promise<Game | null>;
-export async function getGame(id: number[]): Promise<Game[]>;
-export async function getGame(id: number | number[]): Promise<Game | Game[] | null> {
+type GameUnion = Game | Game[] | null;
+
+export async function getGame(id: number): Promise<GameUnion>;
+export async function getGame(id: number[]): Promise<GameUnion>;
+export async function getGame(id: number | number[]): Promise<GameUnion> {
     const res = await getByIds(Array.isArray(id) ? id : [id], gameSelect, db.game, fetching, formatRawGame);
     return Array.isArray(id) ? res : res[0] ?? null;
 }
 
-export async function getMinifiedGame(id: number): Promise<Game | null>;
-export async function getMinifiedGame(id: number[]): Promise<Game[]>;
-export async function getMinifiedGame(id: number | number[]): Promise<Game | Game[] | null> {
+export async function getMinifiedGame(id: number): Promise<GameUnion>;
+export async function getMinifiedGame(id: number[]): Promise<GameUnion>;
+export async function getMinifiedGame(id: number | number[]): Promise<GameUnion> {
     const res = await getByIds(Array.isArray(id) ? id : [id], minifiedSelect, db.game, fetching, formatRawGame);
     return Array.isArray(id) ? res : res[0] ?? null;
 }
 
-export async function getGameBySlug(slug: string): Promise<Game | null>;
-export async function getGameBySlug(slug: string[]): Promise<Game[]>;
-export async function getGameBySlug(slug: string | string[]): Promise<Game | Game[] | null> {
+export async function getGameBySlug(slug: string): Promise<GameUnion>;
+export async function getGameBySlug(slug: string[]): Promise<GameUnion>;
+export async function getGameBySlug(slug: string | string[]): Promise<GameUnion> {
     const res = await getBySlugs(Array.isArray(slug) ? slug : [slug], gameSelect, db.game, fetching, formatRawGame);
     return Array.isArray(slug) ? res : res[0] ?? null;
 }
@@ -234,12 +236,18 @@ export async function searchGames(query: string, limit = 8): Promise<Game[]> {
     const rows = Array.from(games.values()).sort((a, b) => {
         const aName = a.name?.toLowerCase() ?? "";
         const bName = b.name?.toLowerCase() ?? "";
-        const aType = a.gameType === "MAINGAME" ? 0 : a.gameType === "DLC" ? 1 : 2;
-        const bType = b.gameType === "MAINGAME" ? 0 : b.gameType === "DLC" ? 1 : 2;
+        const aTypeDLC = a.gameType === "DLC" ? 1 : 2;
+        const aType = a.gameType === "MAINGAME" ? 0 : aTypeDLC;
+        const bTypeDLC = b.gameType === "DLC" ? 1 : 2;
+        const bType = b.gameType === "MAINGAME" ? 0 : bTypeDLC;
         const aEdition = a.versionParent == null ? 0 : 1;
         const bEdition = b.versionParent == null ? 0 : 1;
-        const aMatch = aName === lowerSearch ? 0 : aName.startsWith(lowerSearch) ? 1 : aName.includes(lowerSearch) ? 2 : 3;
-        const bMatch = bName === lowerSearch ? 0 : bName.startsWith(lowerSearch) ? 1 : bName.includes(lowerSearch) ? 2 : 3;
+        const aNIncludesMatch = aName.includes(lowerSearch) ? 2 : 3;
+        const aNMatch = aName.startsWith(lowerSearch) ? 1 : aNIncludesMatch;
+        const aMatch = aName === lowerSearch ? 0 : aNMatch;
+        const bNIncludesMatch = bName.includes(lowerSearch) ? 2 : 3;
+        const bNMatch = bName.startsWith(lowerSearch) ? 1 : bNIncludesMatch;
+        const bMatch = bName === lowerSearch ? 0 : bNMatch;
 
         return aMatch - bMatch
             || aEdition - bEdition

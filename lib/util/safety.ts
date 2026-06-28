@@ -37,5 +37,7 @@ export function isSafeLinkHref(href: unknown) {
 
 /** Detects local video file extensions in a URL-like string. */
 export function isVideoUrl(value: string) {
-    return /\.(mp4|webm|ogg)(\?.*)?$/i.test(value);
+    const path = value.split("?", 1)[0].toLowerCase();
+
+    return path.endsWith(".mp4") || path.endsWith(".webm") || path.endsWith(".ogg");
 }

@@ -27,7 +27,7 @@ CLAUDE.md
 *.pem
 .sonarlint
 .vscode
-.cache
+/.cache/
 
 # debug
 npm-debug.log*
@@ -40,6 +40,8 @@ yarn-error.log*
 
 # vercel
 .vercel
+.codex
+.agents
 
 # typescript
 *.tsbuildinfo

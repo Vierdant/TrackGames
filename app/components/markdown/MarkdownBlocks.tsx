@@ -35,17 +35,42 @@ function groupClassName(align: MarkdownAlign, inline = false) {
     }
 }
 
+function renderColoredTextString(value: string) {
+    const parts: ReactNode[] = [];
+    let index = 0;
+
+    while (index < value.length) {
+        const start = value.indexOf("[", index);
+
+        if (start === -1) {
+            parts.push(value.slice(index));
+            break;
+        }
+
+        const textEnd = value.indexOf("]{color=", start);
+        const colorEnd = textEnd === -1 ? -1 : value.indexOf("}", textEnd + 8);
+
+        if (textEnd === -1 || colorEnd === -1) {
+            parts.push(value.slice(index));
+            break;
+        }
+
+        if (start > index) parts.push(value.slice(index, start));
+
+        const text = value.slice(start + 1, textEnd);
+        const color = normalize.hexColor(value.slice(textEnd + 8, colorEnd));
+
+        parts.push(color ? <span key={`${text}-${start}`} style={{ color }}>{text}</span> : value.slice(start, colorEnd + 1));
+        index = colorEnd + 1;
+    }
+
+    return parts;
+}
+
 function renderColoredText(children: ReactNode): ReactNode {
     return Children.map(children, (child) => {
         if (typeof child === "string") {
-            return child.split(/(\[[^\]]+\]\{color=[^}]+\})/g).map((part, index) => {
-                const match = part.match(/^\[([^\]]+)\]\{color=([^}]+)\}$/);
-                const color = normalize.hexColor(match?.[2]);
-
-                if (!match || !color) return part;
-
-                return <span key={`${match[1]}-${index}`} style={{ color }}>{match[1]}</span>;
-            });
+            return renderColoredTextString(child);
         }
 
         if (isValidElement<{ children?: ReactNode }>(child)) {

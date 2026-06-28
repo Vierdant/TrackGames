@@ -2,6 +2,26 @@ import "server-only";
 
 import { deflateSync } from "node:zlib";
 
+type GifColorTable = number[][];
+
+type GifHeader = {
+    screenWidth: number;
+    screenHeight: number;
+    hasGlobalColorTable: boolean;
+    globalColorCount: number;
+    offset: number;
+};
+
+type GifImageDescriptor = {
+    left: number;
+    top: number;
+    width: number;
+    height: number;
+    interlaced: boolean;
+    colors: GifColorTable;
+    offset: number;
+};
+
 function crc32(bytes: Uint8Array) {
     let crc = 0xffffffff;
 
@@ -69,6 +89,79 @@ function readGifSubBlocks(bytes: Uint8Array, offset: number) {
     return { data: Uint8Array.from(blocks), offset: cursor };
 }
 
+function readGifHeader(bytes: Uint8Array): GifHeader | null {
+    if (String.fromCodePoint(...bytes.subarray(0, 3)) !== "GIF") return null;
+
+    const offset = 6;
+    const screenWidth = bytes[offset] | (bytes[offset + 1] << 8);
+    const screenHeight = bytes[offset + 2] | (bytes[offset + 3] << 8);
+    const packed = bytes[offset + 4];
+
+    return {
+        screenWidth,
+        screenHeight,
+        hasGlobalColorTable: Boolean(packed & 0x80),
+        globalColorCount: 1 << ((packed & 0x07) + 1),
+        offset: offset + 7,
+    };
+}
+
+function readGifColorTable(bytes: Uint8Array, offset: number, count: number) {
+    const colors = Array.from({ length: count }, (_, index) => {
+        const colorOffset = offset + index * 3;
+
+        return [bytes[colorOffset], bytes[colorOffset + 1], bytes[colorOffset + 2]];
+    });
+
+    return { colors, offset: offset + count * 3 };
+}
+
+function readGifExtension(bytes: Uint8Array, offset: number, currentTransparentIndex: number | null) {
+    const label = bytes[offset++];
+
+    if (label !== 0xf9) {
+        return {
+            transparentIndex: currentTransparentIndex,
+            offset: readGifSubBlocks(bytes, offset).offset,
+        };
+    }
+
+    const blockSize = bytes[offset++];
+    const flags = bytes[offset];
+    const transparent = bytes[offset + 3];
+
+    return {
+        transparentIndex: flags & 1 ? transparent : null,
+        offset: offset + blockSize + 1,
+    };
+}
+
+function readGifImageDescriptor(bytes: Uint8Array, offset: number, globalColors: GifColorTable): GifImageDescriptor {
+    const left = bytes[offset] | (bytes[offset + 1] << 8);
+    const top = bytes[offset + 2] | (bytes[offset + 3] << 8);
+    const width = bytes[offset + 4] | (bytes[offset + 5] << 8);
+    const height = bytes[offset + 6] | (bytes[offset + 7] << 8);
+    const imagePacked = bytes[offset + 8];
+    const hasLocalColorTable = Boolean(imagePacked & 0x80);
+    const localColorCount = 1 << ((imagePacked & 0x07) + 1);
+    const colorTableOffset = offset + 9;
+    const colorTable = hasLocalColorTable ? readGifColorTable(bytes, colorTableOffset, localColorCount) : null;
+
+    return {
+        left,
+        top,
+        width,
+        height,
+        interlaced: Boolean(imagePacked & 0x40),
+        colors: colorTable?.colors ?? globalColors,
+        offset: colorTable?.offset ?? colorTableOffset,
+    };
+}
+
+function entryCode(dictionary: number[][], code: number, nextCode: number, previous: number[] | null) {
+    return dictionary[code] ?? (code === nextCode && previous ? [...previous, previous[0]] : null);
+}
+
 function decodeGifLzw(minCodeSize: number, data: Uint8Array, pixelCount: number) {
     const clearCode = 1 << minCodeSize;
     const endCode = clearCode + 1;
@@ -113,7 +206,7 @@ function decodeGifLzw(minCodeSize: number, data: Uint8Array, pixelCount: number)
 
         if (code === endCode) break;
 
-        const entry: number[] | null = dictionary[code] ?? (code === nextCode && previous ? [...previous, previous[0]] : null);
+        const entry: number[] | null = entryCode(dictionary, code, nextCode, previous);
 
         if (!entry) break;
 
@@ -133,112 +226,96 @@ function decodeGifLzw(minCodeSize: number, data: Uint8Array, pixelCount: number)
     return pixels.slice(0, pixelCount);
 }
 
+function gifFrameIndices(width: number, height: number, interlaced: boolean, decoded: number[]) {
+    const indices = new Array<number>(width * height);
+
+    if (!interlaced) {
+        for (let index = 0; index < width * height; index++) {
+            indices[index] = decoded[index] ?? 0;
+        }
+
+        return indices;
+    }
+
+    let sourceRow = 0;
+
+    for (const [start, step] of [[0, 8], [4, 8], [2, 4], [1, 2]]) {
+        for (let row = start; row < height; row += step) {
+            for (let column = 0; column < width; column++) {
+                indices[row * width + column] = decoded[sourceRow * width + column] ?? 0;
+            }
+            sourceRow++;
+        }
+    }
+
+    return indices;
+}
+
+function gifFrameToCanvas(
+    screenWidth: number,
+    screenHeight: number,
+    frame: GifImageDescriptor,
+    indices: number[],
+    transparentIndex: number | null,
+) {
+    const canvas = new Uint8Array(screenWidth * screenHeight * 4);
+
+    for (let index = 0; index < indices.length; index++) {
+        const colorIndex = indices[index];
+        const x = frame.left + (index % frame.width);
+        const y = frame.top + Math.floor(index / frame.width);
+        const target = (y * screenWidth + x) * 4;
+        const color = frame.colors[colorIndex] ?? [0, 0, 0];
+
+        canvas[target] = color[0];
+        canvas[target + 1] = color[1];
+        canvas[target + 2] = color[2];
+        canvas[target + 3] = colorIndex === transparentIndex ? 0 : 255;
+    }
+
+    return canvas;
+}
+
 export function gifFirstFrameToPngDataUrl(buffer: ArrayBuffer) {
     const bytes = new Uint8Array(buffer);
+    const header = readGifHeader(bytes);
 
-    if (String.fromCharCode(...bytes.subarray(0, 3)) !== "GIF") return null;
+    if (!header) return null;
 
-    let offset = 6;
-    const screenWidth = bytes[offset] | (bytes[offset + 1] << 8);
-    const screenHeight = bytes[offset + 2] | (bytes[offset + 3] << 8);
-    const packed = bytes[offset + 4];
-    const hasGlobalColorTable = Boolean(packed & 0x80);
-    const globalColorCount = 1 << ((packed & 0x07) + 1);
-    let globalColors: number[][] = [];
+    let offset = header.offset;
+    let globalColors: GifColorTable = [];
     let transparentIndex: number | null = null;
 
-    offset += 7;
+    if (header.hasGlobalColorTable) {
+        const colorTable = readGifColorTable(bytes, offset, header.globalColorCount);
 
-    if (hasGlobalColorTable) {
-        globalColors = Array.from({ length: globalColorCount }, (_, index) => {
-            const colorOffset = offset + index * 3;
-
-            return [bytes[colorOffset], bytes[colorOffset + 1], bytes[colorOffset + 2]];
-        });
-        offset += globalColorCount * 3;
+        globalColors = colorTable.colors;
+        offset = colorTable.offset;
     }
 
     while (offset < bytes.length) {
         const block = bytes[offset++];
 
         if (block === 0x21) {
-            const label = bytes[offset++];
+            const extension = readGifExtension(bytes, offset, transparentIndex);
 
-            if (label === 0xf9) {
-                const blockSize = bytes[offset++];
-                const flags = bytes[offset];
-                const transparent = bytes[offset + 3];
-
-                transparentIndex = flags & 1 ? transparent : null;
-                offset += blockSize + 1;
-            } else {
-                const result = readGifSubBlocks(bytes, offset);
-                offset = result.offset;
-            }
+            transparentIndex = extension.transparentIndex;
+            offset = extension.offset;
             continue;
         }
 
         if (block !== 0x2c) break;
 
-        const left = bytes[offset] | (bytes[offset + 1] << 8);
-        const top = bytes[offset + 2] | (bytes[offset + 3] << 8);
-        const width = bytes[offset + 4] | (bytes[offset + 5] << 8);
-        const height = bytes[offset + 6] | (bytes[offset + 7] << 8);
-        const imagePacked = bytes[offset + 8];
-        const hasLocalColorTable = Boolean(imagePacked & 0x80);
-        const interlaced = Boolean(imagePacked & 0x40);
-        const localColorCount = 1 << ((imagePacked & 0x07) + 1);
-        let colors = globalColors;
-
-        offset += 9;
-
-        if (hasLocalColorTable) {
-            colors = Array.from({ length: localColorCount }, (_, index) => {
-                const colorOffset = offset + index * 3;
-
-                return [bytes[colorOffset], bytes[colorOffset + 1], bytes[colorOffset + 2]];
-            });
-            offset += localColorCount * 3;
-        }
+        const frame = readGifImageDescriptor(bytes, offset, globalColors);
+        offset = frame.offset;
 
         const minCodeSize = bytes[offset++];
         const imageData = readGifSubBlocks(bytes, offset);
-        const decoded = decodeGifLzw(minCodeSize, imageData.data, width * height);
-        const indices = new Array<number>(width * height);
+        const decoded = decodeGifLzw(minCodeSize, imageData.data, frame.width * frame.height);
+        const indices = gifFrameIndices(frame.width, frame.height, frame.interlaced, decoded);
+        const canvas = gifFrameToCanvas(header.screenWidth, header.screenHeight, frame, indices, transparentIndex);
 
-        if (interlaced) {
-            let sourceRow = 0;
-
-            for (const [start, step] of [[0, 8], [4, 8], [2, 4], [1, 2]]) {
-                for (let row = start; row < height; row += step) {
-                    for (let column = 0; column < width; column++) {
-                        indices[row * width + column] = decoded[sourceRow * width + column] ?? 0;
-                    }
-                    sourceRow++;
-                }
-            }
-        } else {
-            for (let index = 0; index < width * height; index++) {
-                indices[index] = decoded[index] ?? 0;
-            }
-        }
-
-        const canvas = new Uint8Array(screenWidth * screenHeight * 4);
-
-        for (let index = 0; index < indices.length; index++) {
-            const colorIndex = indices[index];
-            const x = left + (index % width);
-            const y = top + Math.floor(index / width);
-            const target = (y * screenWidth + x) * 4;
-            const color = colors[colorIndex] ?? [0, 0, 0];
-
-            canvas[target] = color[0];
-            canvas[target + 1] = color[1];
-            canvas[target + 2] = color[2];
-            canvas[target + 3] = colorIndex === transparentIndex ? 0 : 255;
-        }
-
-        return rgbaToPngDataUrl(screenWidth, screenHeight, canvas);
+        return rgbaToPngDataUrl(header.screenWidth, header.screenHeight, canvas);
     }
 
     return null;

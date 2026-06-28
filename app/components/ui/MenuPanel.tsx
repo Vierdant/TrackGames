@@ -5,131 +5,156 @@ import { useEffect, useRef, useState } from "react";
 import type { CSSProperties, RefObject, ReactNode } from "react";
 import HighLevelIsland from "./HighLevelIsland";
 
-type MenuPanelProps = {
-    open: boolean;
-    onClose: () => void;
-    title?: ReactNode;
-    children: ReactNode;
-    footer?: ReactNode;
-    variant?: "modal" | "anchored";
-    panelClassName?: string;
-    className?: string;
-    closeLabel?: string;
-    portal?: boolean;
-    showClose?: boolean;
-    role?: string;
-    id?: string;
-    anchorRef?: RefObject<HTMLElement | null>;
-    width?: string;
-    style?: CSSProperties;
-};
+type MenuPanelProps = Readonly<{
+	open: boolean;
+	onClose: () => void;
+	title?: ReactNode;
+	children: ReactNode;
+	footer?: ReactNode;
+	variant?: "modal" | "anchored";
+	panelClassName?: string;
+	className?: string;
+	closeLabel?: string;
+	portal?: boolean;
+	showClose?: boolean;
+	role?: string;
+	id?: string;
+	anchorRef?: RefObject<HTMLElement | null>;
+	width?: string;
+	style?: CSSProperties;
+}>;
 
 function join(base: string, extra?: string) {
-    return [base, extra].filter(Boolean).join(" ");
+	return [base, extra].filter(Boolean).join(" ");
 }
 
-export default function MenuPanel({ open, onClose, title, children, footer, variant = "modal", panelClassName, className, closeLabel = "Close", portal = false, showClose = true, role = "dialog", id, anchorRef, width, style }: MenuPanelProps) {
-    const [rendered, setRendered] = useState(open);
-    const panelRef = useRef<HTMLDivElement>(null);
-    const panelStyle = variant === "modal" && width ? { ...style, "--menu-panel-width": width } as CSSProperties : style;
-    const shouldPortal = portal || variant === "modal";
+export default function MenuPanel({
+	open,
+	onClose,
+	title,
+	children,
+	footer,
+	variant = "modal",
+	panelClassName,
+	className,
+	closeLabel = "Close",
+	portal = false,
+	showClose = true,
+	role = "dialog",
+	id,
+	anchorRef,
+	width,
+	style,
+}: MenuPanelProps) {
+	const [rendered, setRendered] = useState(open);
+	const panelRef = useRef<HTMLDivElement>(null);
+	const panelStyle = variant === "modal" && width ? ({ ...style, "--menu-panel-width": width } as CSSProperties) : style;
+	const shouldPortal = portal || variant === "modal";
 
-    useEffect(() => {
-        if (!open) return;
+	useEffect(() => {
+		if (!open) return;
 
-        const frame = window.requestAnimationFrame(() => setRendered(true));
-        return () => window.cancelAnimationFrame(frame);
-    }, [open]);
+		const frame = globalThis.requestAnimationFrame(() => setRendered(true));
+		return () => globalThis.cancelAnimationFrame(frame);
+	}, [open]);
 
-    useEffect(() => {
-        if (!rendered) return;
+	useEffect(() => {
+		if (!rendered) return;
 
-        function closeOnEscape(event: KeyboardEvent) {
-            if (event.key === "Escape") onClose();
-        }
+		function closeOnEscape(event: KeyboardEvent) {
+			if (event.key === "Escape") onClose();
+		}
 
-        function closeOnOutsideClick(event: PointerEvent) {
-            if (
-                variant === "anchored" &&
-                !panelRef.current?.contains(event.target as Node) &&
-                !anchorRef?.current?.contains(event.target as Node)
-            ) {
-                onClose();
-            }
-        }
+		function closeOnOutsideClick(event: PointerEvent) {
+			if (
+				variant === "anchored" &&
+				!panelRef.current?.contains(event.target as Node) &&
+				!anchorRef?.current?.contains(event.target as Node)
+			) {
+				onClose();
+			}
+		}
 
-        document.addEventListener("keydown", closeOnEscape);
-        document.addEventListener("pointerdown", closeOnOutsideClick);
+		document.addEventListener("keydown", closeOnEscape);
+		document.addEventListener("pointerdown", closeOnOutsideClick);
 
-        return () => {
-            document.removeEventListener("keydown", closeOnEscape);
-            document.removeEventListener("pointerdown", closeOnOutsideClick);
-        };
-    }, [anchorRef, onClose, rendered, variant]);
+		return () => {
+			document.removeEventListener("keydown", closeOnEscape);
+			document.removeEventListener("pointerdown", closeOnOutsideClick);
+		};
+	}, [anchorRef, onClose, rendered, variant]);
 
-    if (!rendered) return null;
+	if (!rendered) return null;
 
-    const panel = (
-        <div
-            ref={panelRef}
-            id={id}
-            role={role}
-            aria-modal={variant === "modal" ? true : undefined}
-            style={panelStyle}
-            onAnimationEnd={() => {
-                if (!open) setRendered(false);
-            }}
-            className={join(
-                variant === "modal"
-                    ? "pointer-events-auto max-h-[calc(100vh-2rem)] w-[min(var(--menu-panel-width,32rem),calc(100vw-2rem))] max-w-none overflow-y-auto rounded bg-bg p-5 shadow-main"
-                    : "pointer-events-auto absolute right-0 top-full z-50 mt-3 w-80 rounded border border-border bg-bg p-2 text-sm shadow-main",
-                `${open ? "animate-menu-panel-in" : "animate-menu-panel-out"} ${panelClassName ?? ""}`,
-            )}
-        >
-            {(title || showClose) && (
-                <div className="mb-4 flex shrink-0 items-center justify-between gap-3">
-                    {title && <h3 className="min-w-0 truncate text-lg font-bold">{title}</h3>}
-                    {showClose && (
-                        <button type="button" onClick={onClose} className="ml-auto grid size-8 shrink-0 cursor-pointer place-items-center rounded text-text-muted hover:text-primary" aria-label={closeLabel}>
-                            <X size={18} aria-hidden="true" />
-                        </button>
-                    )}
-                </div>
-            )}
-            {children}
-            {footer}
-        </div>
-    );
+	const panel = (
+		<div
+			ref={panelRef}
+			id={id}
+			role={role}
+			aria-modal={variant === "modal" ? true : undefined}
+			style={panelStyle}
+			onAnimationEnd={() => {
+				if (!open) setRendered(false);
+			}}
+			className={join(
+				variant === "modal"
+					? "pointer-events-auto max-h-[calc(100vh-2rem)] w-[min(var(--menu-panel-width,32rem),calc(100vw-2rem))] max-w-none overflow-y-auto rounded bg-bg p-5 shadow-main"
+					: "pointer-events-auto absolute right-0 top-full z-50 mt-3 w-80 rounded border border-border bg-bg p-2 text-sm shadow-main",
+				`${open ? "animate-menu-panel-in" : "animate-menu-panel-out"} ${panelClassName ?? ""}`,
+			)}
+		>
+			{(title || showClose) && (
+				<div className="mb-4 flex shrink-0 items-center justify-between gap-3">
+					{title && <h3 className="min-w-0 truncate text-lg font-bold">{title}</h3>}
+					{showClose && (
+						<button
+							type="button"
+							onClick={onClose}
+							className="ml-auto grid size-8 shrink-0 cursor-pointer place-items-center rounded text-text-muted hover:text-primary"
+							aria-label={closeLabel}
+						>
+							<X size={18} aria-hidden="true" />
+						</button>
+					)}
+				</div>
+			)}
+			{children}
+			{footer}
+		</div>
+	);
 
-    let content = panel;
+	let content = panel;
 
-    if (variant === "modal") {
-        content = (
-            <div
-                className={join("pointer-events-auto fixed inset-0 flex items-center justify-center bg-overlay p-4", `${open ? "animate-menu-overlay-in" : "animate-menu-overlay-out"} ${className ?? ""}`)}
-                onMouseDown={(event) => {
-                    if (event.target === event.currentTarget) onClose();
-                }}
-            >
-                {panel}
-            </div>
-        );
-    } else if (shouldPortal) {
-        content = (
-            <div
-                className={join("fixed inset-0 pointer-events-auto", className)}
-                onMouseDown={(event) => {
-                    if (event.target === event.currentTarget) onClose();
-                }}
-            >
-                {panel}
-            </div>
-        );
-    }
+	if (variant === "modal") {
+		content = (
+			<dialog
+				className={join(
+					"pointer-events-auto fixed inset-0 flex items-center justify-center bg-overlay p-4",
+					`${open ? "animate-menu-overlay-in" : "animate-menu-overlay-out"} ${className ?? ""}`,
+				)}
+				onPointerDown={(event) => {
+					if (event.target === event.currentTarget) onClose();
+				}}
+			>
+				{panel}
+			</dialog>
+		);
+	} else if (shouldPortal) {
+		content = (
+			<dialog
+				className={join("fixed inset-0 pointer-events-auto", className)}
+				onPointerDown={(event) => {
+					if (event.target === event.currentTarget) onClose();
+				}}
+			>
+				{panel}
+			</dialog>
+		);
+	}
 
-    if (shouldPortal) {
-        return <HighLevelIsland>{content}</HighLevelIsland>;
-    }
+	if (shouldPortal) {
+		return <HighLevelIsland>{content}</HighLevelIsland>;
+	}
 
-    return content;
+	return content;
 }

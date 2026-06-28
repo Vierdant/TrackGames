@@ -389,7 +389,7 @@ export async function importTgLibrary(contents: string) {
 					continue;
 				}
 
-                item.timeMode = item.timeMode === "manual" ? "manual" : "logs";
+				item.timeMode = item.timeMode === "manual" ? "manual" : "logs";
 
 				const entry = await tx.userGameEntry.upsert({
 					where: {

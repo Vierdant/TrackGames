@@ -1,6 +1,8 @@
 import type { LinkType, MarkdownAlign, WidgetType } from "./enums";
 import type { GameDevStatus, GameStatus, GameType, PlayerPerspective, UserRole } from "./generated/prisma/enums";
 
+export type MaybeArray<T> = T | T[];
+
 export type PopScoreEntry = {
     game_id: number;
     popularity_type: number;

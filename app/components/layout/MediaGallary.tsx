@@ -16,7 +16,7 @@ type MediaItem =
         id: string;
     };
 
-export default function MediaGallery({ media }: { media: MediaItem[] }) {
+export default function MediaGallery({ media }: Readonly<{ media: MediaItem[] }>) {
     const [mediaActive, setMediaActive] = useState(0);
     const activeItem = media[mediaActive];
 

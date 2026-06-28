@@ -1,4 +1,6 @@
-export default function StatBlock({ color, title, value }: { color: string, title: string, value: number }) {
+type StatBlockProps = Readonly<{ color: string, title: string, value: number }>
+
+export default function StatBlock({ color, title, value }: StatBlockProps) {
   return (
     <div className="z-1 w-fit min-w-24 justify-self-start bg-bg-secondary/80 rounded-md text-text">
       <div className="px-3 py-2 flex flex-col items-start">

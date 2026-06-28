@@ -7,61 +7,65 @@ import { rippleEffect } from "@/lib/util/effects";
 import Link from "next/link";
 
 type GameCardGame = {
-    cover?: string | null;
-    name?: string | null;
-    slug?: string | null;
+	cover?: string | null;
+	name?: string | null;
+	slug?: string | null;
 };
 
-export default function GameCard({ game, size = 140, effect, hover, slugged = false, preload = false }: { game: GameCardGame; size?: number | "full"; effect?: "ripple", hover?: "name", slugged?: boolean; preload?: boolean }) {
-    const cardRef = useRef<HTMLDivElement>(null);
-    const isFullSize = size === "full";
-    const height = isFullSize ? "100%" : Math.round(size * 1.4);
-    const imageSizes = isFullSize ? "(max-width: 640px) 42vw, 140px" : `${size}px`;
-    const src = ImageIdToURL(game.cover ?? undefined, "cover_big") ?? "/assets/no_cover.png";
+type GameCardProps = Readonly<{
+	game: GameCardGame;
+	size?: number | "full";
+	effect?: "ripple";
+	hover?: "name";
+	slugged?: boolean;
+	preload?: boolean;
+}>;
 
-    const createRipple = useCallback((event: React.PointerEvent<HTMLDivElement>) => {
-        if (!effect) return;
+export default function GameCard({ game, size = 140, effect, hover, slugged = false, preload = false }: GameCardProps) {
+	const cardRef = useRef<HTMLDivElement>(null);
+	const isFullSize = size === "full";
+	const height = isFullSize ? "100%" : Math.round(size * 1.4);
+	const imageSizes = isFullSize ? "(max-width: 640px) 42vw, 140px" : `${size}px`;
+	const src = ImageIdToURL(game.cover ?? undefined, "cover_big") ?? "/assets/no_cover.png";
 
-        if (effect == "ripple") {
-            rippleEffect(cardRef, event);
-        }
-    }, [effect]);
+	const createRipple = useCallback(
+		(event: React.PointerEvent<HTMLDivElement>) => {
+			if (!effect) return;
 
-    let imageClass = "object-cover object-center select-none";
+			if (effect == "ripple") {
+				rippleEffect(cardRef, event);
+			}
+		},
+		[effect],
+	);
 
-    if (hover == "name") {
-        imageClass += " " + "hover:opacity-15 transition-opacity"
-    }
+	let imageClass = "object-cover object-center select-none";
 
-    const card = (
-        <div
-            ref={cardRef}
-            className="relative overflow-hidden rounded-md border border-border bg-bg shadow-sm shrink-0"
-            style={{ width: isFullSize ? "100%" : size, height }}
-            onPointerDown={createRipple}
-        >
-            <Image
-                src={src}
-                alt={game.slug ?? "game cover"}
-                fill
-                sizes={imageSizes}
-                preload={preload}
-                className={imageClass}
-            />
-            {hover == "name" ?
-                <p className="bg-bg/80 h-full flex items-center justify-center text-md font-bold text-center select-none">{game.name}</p>
-                : null
-            }
-        </div>
-    );
+	if (hover == "name") {
+		imageClass += " " + "hover:opacity-15 transition-opacity";
+	}
 
-    if (slugged && game.slug) {
-        return (
-            <Link href={`/game/${game.slug}`} className="block cursor-pointer">
-                {card}
-            </Link>
-        );
-    }
+	const card = (
+		<div
+			ref={cardRef}
+			className="relative overflow-hidden rounded-md border border-border bg-bg shadow-sm shrink-0"
+			style={{ width: isFullSize ? "100%" : size, height }}
+			onPointerDown={createRipple}
+		>
+			<Image src={src} alt={game.slug ?? "game cover"} fill sizes={imageSizes} preload={preload} className={imageClass} />
+			{hover == "name" ? (
+				<p className="bg-bg/80 h-full flex items-center justify-center text-md font-bold text-center select-none">{game.name}</p>
+			) : null}
+		</div>
+	);
 
-    return card;
+	if (slugged && game.slug) {
+		return (
+			<Link href={`/game/${game.slug}`} className="block cursor-pointer">
+				{card}
+			</Link>
+		);
+	}
+
+	return card;
 }

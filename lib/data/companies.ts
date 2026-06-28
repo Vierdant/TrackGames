@@ -1,56 +1,52 @@
 import db from "../db";
 import { formatRawCompany } from "../external/igdb/util";
-import type { Company } from "../types";
+import type { Company, MaybeArray } from "../types";
 import { getByIds, getBySlugs } from "./getter";
 
 const select = {
-    id: true,
-    slug: true,
-    name: true,
-    logo: true,
-    description: true,
-    developed: true,
-    published: true
-}
+	id: true,
+	slug: true,
+	name: true,
+	logo: true,
+	description: true,
+	developed: true,
+	published: true,
+};
 
 const minifiedSelect = {
-    id: true,
-    slug: true,
-    name: true,
-}
+	id: true,
+	slug: true,
+	name: true,
+};
 
 const fetching = {
-    endpoint: "companies",
-    body: `fields slug, name, logo.image_id, description, developed, published;`
+	endpoint: "companies",
+	body: `fields slug, name, logo.image_id, description, developed, published;`,
+};
+
+type DataResult<T extends MaybeArray<number>> = T extends number[] ? Company[] : Company | null;
+type SlugResult<T extends string | string[]> = T extends string[] ? Company[] : Company | null;
+
+export async function getCompany<T extends MaybeArray<number>>(id: T): Promise<DataResult<T>> {
+	const ids = Array.isArray(id) ? id : [id];
+	const res = await getByIds(ids as number[], select, db.company, fetching, formatRawCompany);
+	return (Array.isArray(id) ? res : (res[0] ?? null)) as DataResult<T>;
 }
 
-export async function getCompany(id: number): Promise<Company | null>;
-export async function getCompany(id: number[]): Promise<Company[]>;
-export async function getCompany(id: number | number[]): Promise<Company | Company[] | null> {
-    const res = await getByIds(Array.isArray(id) ? id : [id], select, db.company, fetching, formatRawCompany);
-    return Array.isArray(id) ? res : res[0] ?? null;
+export async function getCompanyBySlug<T extends string | string[]>(slug: T): Promise<SlugResult<T>> {
+	const slugs = Array.isArray(slug) ? slug : [slug];
+	const res = await getBySlugs(slugs as string[], select, db.company, fetching, formatRawCompany);
+	return (Array.isArray(slug) ? res : (res[0] ?? null)) as SlugResult<T>;
 }
 
-
-export async function getCompanyBySlug(slug: string): Promise<Company | null>;
-export async function getCompanyBySlug(slug: string[]): Promise<Company[]>;
-export async function getCompanyBySlug(slug: string | string[]): Promise<Company | Company[] | null> {
-    const res = await getBySlugs(Array.isArray(slug) ? slug : [slug], select, db.company, fetching, formatRawCompany);
-    return Array.isArray(slug) ? res : res[0] ?? null;
+export async function getMinifiedCompany<T extends MaybeArray<number>>(id: T): Promise<DataResult<T>> {
+	const ids = Array.isArray(id) ? id : [id];
+	const res = await getByIds(ids as number[], minifiedSelect, db.company, fetching, formatRawCompany);
+	return (Array.isArray(id) ? res : (res[0] ?? null)) as DataResult<T>;
 }
 
-
-export async function getMinifiedCompany(id: number): Promise<Company | null>;
-export async function getMinifiedCompany(id: number[]): Promise<Company[]>;
-export async function getMinifiedCompany(id: number | number[]): Promise<Company | Company[] | null> {
-    const res = await getByIds(Array.isArray(id) ? id : [id], minifiedSelect, db.company, fetching, formatRawCompany);
-    return Array.isArray(id) ? res : res[0] ?? null;
-}
-
-
-export async function getMiniifedCompanyBySlug(slug: string): Promise<Company | null>;
-export async function getMiniifedCompanyBySlug(slug: string[]): Promise<Company[]>;
-export async function getMiniifedCompanyBySlug(slug: string | string[]): Promise<Company | Company[] | null> {
-    const res = await getBySlugs(Array.isArray(slug) ? slug : [slug], minifiedSelect, db.company, fetching, formatRawCompany);
-    return Array.isArray(slug) ? res : res[0] ?? null;
+export async function getMinifiedCompanyBySlug<T extends string | string[]>(slug: T): Promise<SlugResult<T>> {
+	const slugs = Array.isArray(slug) ? slug : [slug];
+	const res = await getBySlugs(slugs as string[], minifiedSelect, db.company, fetching, formatRawCompany);
+	return (Array.isArray(slug) ? res : (res[0] ?? null)) as SlugResult<T>;
 }

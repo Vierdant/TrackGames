@@ -9,7 +9,7 @@ import { useState } from "react";
 import { GhostButton, PrimaryButton } from "../../components/ui/Buttons";
 import { Input, Textarea } from "../../components/ui/Inputs";
 
-export default function ProfilePlaylists({ playlists, canCreate }: { playlists: Playlist[]; canCreate: boolean }) {
+export default function ProfilePlaylists({ playlists, canCreate }: Readonly<{ playlists: Playlist[]; canCreate: boolean }>) {
     const [open, setOpen] = useState(false);
 
     return (

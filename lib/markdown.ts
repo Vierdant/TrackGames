@@ -67,7 +67,7 @@ function readAttributeKey(input: string, index: number) {
 }
 
 function readAttributeValue(input: string, index: number) {
-	const quote = input[index] === "\"" || input[index] === "'" ? input[index] : "";
+	const quote = input[index] === '"' || input[index] === "'" ? input[index] : "";
 	const start = quote ? index + 1 : index;
 	let end = start;
 
@@ -280,7 +280,7 @@ export function parseMarkdownBlocks(markdown: string): MarkdownBlock[] {
 
 		if (trimmed === "::" && active) {
 			pushActiveBlock(blocks, active);
-            active = null;
+			active = null;
 			continue;
 		}
 

@@ -1,6 +1,6 @@
 import db from "../db";
 import { formatRawKeyword } from "../external/igdb/util";
-import type { Keyword } from "../types";
+import type { Keyword, MaybeArray } from "../types";
 import { getByIds, getBySlugs } from "./getter";
 
 const select = {
@@ -14,19 +14,19 @@ const fetching = {
     body: `fields slug, name;`
 }
 
-export async function getKeyword(id: number): Promise<Keyword | null>;
-export async function getKeyword(id: number[]): Promise<Keyword[]>;
-export async function getKeyword(id: number | number[]): Promise<Keyword | Keyword[] | null> {
-    const res = await getByIds(Array.isArray(id) ? id : [id], select, db.keyword, fetching, formatRawKeyword);
-    return Array.isArray(id) ? res : res[0] ?? null;
+type DataResult<T extends MaybeArray<number>> = T extends number[] ? Keyword[] : Keyword | null;
+type SlugResult<T extends string | string[]> = T extends string[] ? Keyword[] : Keyword | null;
+
+export async function getKeyword<T extends MaybeArray<number>>(id: T): Promise<DataResult<T>> {
+	const ids = Array.isArray(id) ? id : [id];
+	const res = await getByIds(ids as number[], select, db.keyword, fetching, formatRawKeyword);
+	return (Array.isArray(id) ? res : (res[0] ?? null)) as DataResult<T>;
 }
 
-
-export async function getKeywordBySlug(slug: string): Promise<Keyword | null>;
-export async function getKeywordBySlug(slug: string[]): Promise<Keyword[]>;
-export async function getKeywordBySlug(slug: string | string[]): Promise<Keyword | Keyword[] | null> {
-    const res = await getBySlugs(Array.isArray(slug) ? slug : [slug], select, db.keyword, fetching, formatRawKeyword);
-    return Array.isArray(slug) ? res : res[0] ?? null;
+export async function getKeywordBySlug<T extends string | string[]>(slug: T): Promise<SlugResult<T>> {
+	const slugs = Array.isArray(slug) ? slug : [slug];
+	const res = await getBySlugs(slugs as string[], select, db.keyword, fetching, formatRawKeyword);
+	return (Array.isArray(slug) ? res : (res[0] ?? null)) as SlugResult<T>;
 }
 
 export async function searchKeywords(query: string): Promise<Keyword[]> {

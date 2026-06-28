@@ -6,7 +6,9 @@ import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { PrimaryButton, GhostButton } from "../ui/Buttons";
 
-export default function FollowButton({ userId, initiallyFollowing, loggedIn }: { userId: string; initiallyFollowing: boolean; loggedIn: boolean }) {
+type FollowButtonProps = Readonly<{ userId: string; initiallyFollowing: boolean; loggedIn: boolean }>
+
+export default function FollowButton({ userId, initiallyFollowing, loggedIn }: FollowButtonProps) {
     const [following, setFollowing] = useState(initiallyFollowing);
     const [error, setError] = useState<string | null>(null);
     const [pending, startTransition] = useTransition();
@@ -40,7 +42,7 @@ export default function FollowButton({ userId, initiallyFollowing, loggedIn }: {
                 {following ? <UserCheck size={16} /> : <UserPlus size={16} />}
                 {following ? "Following" : "Follow"}
             </Button>
-            {error && <p className="text-xs text-error" role="status">{error}</p>}
+            {error && <output className="text-xs text-error">{error}</output>}
         </div>
     );
 }

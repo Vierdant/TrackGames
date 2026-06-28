@@ -1,172 +1,163 @@
 import db from "../db";
 import { formatRawGame } from "../external/igdb/util";
 import { GameListType, GameStatus } from "../generated/prisma/enums";
-import type { Game } from "../types";
+import type { Game, MaybeArray } from "../types";
 import { getByIds, getBySlugs } from "./getter";
 
 const gameSelect = {
-    id: true,
-    slug: true,
-    name: true,
-    summary: true,
-    totalRating: true,
-    releaseDate: true,
-    cover: true,
-    screenshots: true,
-    videos: true,
-    developers: true,
-    publishers: true,
-    platforms: true,
-    genres: true,
-    franchises: true,
-    collections: true,
-    similarGames: true,
+	id: true,
+	slug: true,
+	name: true,
+	summary: true,
+	totalRating: true,
+	releaseDate: true,
+	cover: true,
+	screenshots: true,
+	videos: true,
+	developers: true,
+	publishers: true,
+	platforms: true,
+	genres: true,
+	franchises: true,
+	collections: true,
+	similarGames: true,
 };
 
 const minifiedSelect = {
-    id: true,
-    slug: true,
-    name: true,
-    totalRating: true,
-    releaseDate: true,
-    cover: true,
-    keywords: true,
-    gameType: true,
+	id: true,
+	slug: true,
+	name: true,
+	totalRating: true,
+	releaseDate: true,
+	cover: true,
+	keywords: true,
+	gameType: true,
 };
 
 const searchSelect = {
-    id: true,
-    slug: true,
-    name: true,
-    totalRating: true,
-    releaseDate: true,
-    cover: true,
-    gameType: true,
-    versionParent: true,
+	id: true,
+	slug: true,
+	name: true,
+	totalRating: true,
+	releaseDate: true,
+	cover: true,
+	gameType: true,
+	versionParent: true,
 };
 
 const fetching = {
-    endpoint: "games",
-    body: `
+	endpoint: "games",
+	body: `
         fields slug, name, summary, total_rating, first_release_date, cover.image_id, screenshots.image_id, videos.video_id, platforms.name, platforms.slug, involved_companies.company, involved_companies.developer, involved_companies.publisher, genres.name, genres.slug, franchises.name, franchises.slug, franchises.games, similar_games, collections.name, collections.slug, collections.games;
-    `
+    `,
+};
+
+type DataResult<T extends MaybeArray<number>> = T extends number[] ? Game[] : Game | null;
+type SlugResult<T extends string | string[]> = T extends string[] ? Game[] : Game | null;
+
+export async function getGame<T extends MaybeArray<number>>(id: T): Promise<DataResult<T>> {
+	const ids = Array.isArray(id) ? id : [id];
+	const res = await getByIds(ids as number[], gameSelect, db.game, fetching, formatRawGame);
+	return (Array.isArray(id) ? res : (res[0] ?? null)) as DataResult<T>;
 }
 
-type GameUnion = Game | Game[] | null;
-
-export async function getGame(id: number): Promise<GameUnion>;
-export async function getGame(id: number[]): Promise<GameUnion>;
-export async function getGame(id: number | number[]): Promise<GameUnion> {
-    const res = await getByIds(Array.isArray(id) ? id : [id], gameSelect, db.game, fetching, formatRawGame);
-    return Array.isArray(id) ? res : res[0] ?? null;
+export async function getMinifiedGame<T extends MaybeArray<number>>(id: T): Promise<DataResult<T>> {
+	const ids = Array.isArray(id) ? id : [id];
+	const res = await getByIds(ids as number[], minifiedSelect, db.game, fetching, formatRawGame);
+	return (Array.isArray(id) ? res : (res[0] ?? null)) as DataResult<T>;
 }
 
-export async function getMinifiedGame(id: number): Promise<GameUnion>;
-export async function getMinifiedGame(id: number[]): Promise<GameUnion>;
-export async function getMinifiedGame(id: number | number[]): Promise<GameUnion> {
-    const res = await getByIds(Array.isArray(id) ? id : [id], minifiedSelect, db.game, fetching, formatRawGame);
-    return Array.isArray(id) ? res : res[0] ?? null;
-}
-
-export async function getGameBySlug(slug: string): Promise<GameUnion>;
-export async function getGameBySlug(slug: string[]): Promise<GameUnion>;
-export async function getGameBySlug(slug: string | string[]): Promise<GameUnion> {
-    const res = await getBySlugs(Array.isArray(slug) ? slug : [slug], gameSelect, db.game, fetching, formatRawGame);
-    return Array.isArray(slug) ? res : res[0] ?? null;
+export async function getGameBySlug<T extends string | string[]>(slug: T): Promise<SlugResult<T>> {
+	const slugs = Array.isArray(slug) ? slug : [slug];
+	const res = await getBySlugs(slugs as string[], gameSelect, db.game, fetching, formatRawGame);
+	return (Array.isArray(slug) ? res : (res[0] ?? null)) as SlugResult<T>;
 }
 
 export async function getGameStats(gameId: number) {
-    const [
-        plays,
-        backlog,
-        wishlisted,
-        publicPlaylistEntries,
-        averageTimes,
-        ratings,
-    ] = await Promise.all([
-        db.userGamePlayLog.count({ where: { gameId } }),
-        db.userGameEntry.count({
-            where: {
-                gameId,
-                status: GameStatus.BACKLOG,
-            },
-        }),
-        db.userGameEntry.count({
-            where: {
-                gameId,
-                status: GameStatus.WISHLIST,
-            },
-        }),
-        db.gameListEntry.count({
-            where: {
-                gameId,
-                list: {
-                    type: GameListType.PLAYLIST,
-                    privacy: "public",
-                },
-            },
-        }),
-        db.userGameEntry.aggregate({
-            where: { gameId },
-            _avg: {
-                timePlayed: true,
-                timeFinished: true,
-                timeMastered: true,
-            },
-        }),
-        db.userGameEntry.groupBy({
-            by: ["rating"],
-            where: {
-                gameId,
-                rating: {
-                    not: null,
-                },
-            },
-            _count: {
-                rating: true,
-            },
-        }),
-    ]);
-    const ratingDistribution = Array.from({ length: 11 }, (_, index) => {
-        const value = index * 0.5;
-        const count = ratings.reduce((total, rating) => {
-            const stars = rating.rating == null ? 0 : Math.round(rating.rating / 20 * 2) / 2;
-            return stars === value ? total + rating._count.rating : total;
-        }, 0);
+	const [plays, backlog, wishlisted, publicPlaylistEntries, averageTimes, ratings] = await Promise.all([
+		db.userGamePlayLog.count({ where: { gameId } }),
+		db.userGameEntry.count({
+			where: {
+				gameId,
+				status: GameStatus.BACKLOG,
+			},
+		}),
+		db.userGameEntry.count({
+			where: {
+				gameId,
+				status: GameStatus.WISHLIST,
+			},
+		}),
+		db.gameListEntry.count({
+			where: {
+				gameId,
+				list: {
+					type: GameListType.PLAYLIST,
+					privacy: "public",
+				},
+			},
+		}),
+		db.userGameEntry.aggregate({
+			where: { gameId },
+			_avg: {
+				timePlayed: true,
+				timeFinished: true,
+				timeMastered: true,
+			},
+		}),
+		db.userGameEntry.groupBy({
+			by: ["rating"],
+			where: {
+				gameId,
+				rating: {
+					not: null,
+				},
+			},
+			_count: {
+				rating: true,
+			},
+		}),
+	]);
+	const ratingDistribution = Array.from({ length: 11 }, (_, index) => {
+		const value = index * 0.5;
+		const count = ratings.reduce((total, rating) => {
+			const stars = rating.rating == null ? 0 : Math.round((rating.rating / 20) * 2) / 2;
+			return stars === value ? total + rating._count.rating : total;
+		}, 0);
 
-        return { rating: value, count };
-    });
+		return { rating: value, count };
+	});
 
-    return {
-        plays,
-        backlog,
-        wishlisted,
-        publicPlaylistEntries,
-        averagePlaytime: averageTimes._avg.timePlayed,
-        averageCompletionTime: averageTimes._avg.timeFinished,
-        averageMasteryTime: averageTimes._avg.timeMastered,
-        ratingDistribution,
-    };
+	return {
+		plays,
+		backlog,
+		wishlisted,
+		publicPlaylistEntries,
+		averagePlaytime: averageTimes._avg.timePlayed,
+		averageCompletionTime: averageTimes._avg.timeFinished,
+		averageMasteryTime: averageTimes._avg.timeMastered,
+		ratingDistribution,
+	};
 }
 
 export async function getMinifiedGameBySlug(slug: string): Promise<Game | null>;
 export async function getMinifiedGameBySlug(slug: string[]): Promise<Game[]>;
 export async function getMinifiedGameBySlug(slug: string | string[]): Promise<Game | Game[] | null> {
-    const res = await getBySlugs(Array.isArray(slug) ? slug : [slug], minifiedSelect, db.game, fetching, formatRawGame);
-    return Array.isArray(slug) ? res : res[0] ?? null;
+	const res = await getBySlugs(Array.isArray(slug) ? slug : [slug], minifiedSelect, db.game, fetching, formatRawGame);
+	return Array.isArray(slug) ? res : (res[0] ?? null);
 }
 
 export async function searchGames(query: string, limit = 8): Promise<Game[]> {
-    const search = query.trim();
+	const search = query.trim();
 
-    if (search.length < 2) return [];
+	if (search.length < 2) return [];
 
-    const resultLimit = Math.max(1, Math.min(limit, 320));
-    const lowerSearch = search.toLowerCase();
-    const contains = `%${lowerSearch}%`;
-    const startsWith = `${lowerSearch}%`;
-    const [nameMatches, keywordIds] = await Promise.all([
-        db.$queryRaw<Game[]>`
+	const resultLimit = Math.max(1, Math.min(limit, 320));
+	const lowerSearch = search.toLowerCase();
+	const contains = `%${lowerSearch}%`;
+	const startsWith = `${lowerSearch}%`;
+	const [nameMatches, keywordIds] = await Promise.all([
+		db.$queryRaw<Game[]>`
             SELECT
                 "id",
                 "slug",
@@ -194,71 +185,73 @@ export async function searchGames(query: string, limit = 8): Promise<Game[]> {
                 lower("name") ASC
             LIMIT ${Math.max(16, resultLimit * 2)}
         `,
-        db.keyword.findMany({
-            where: {
-                name: {
-                    contains: search,
-                    mode: "insensitive",
-                },
-            },
-            select: { id: true },
-            take: Math.max(16, resultLimit * 2),
-        }),
-    ]);
-    const keywordMatches = keywordIds.length ? await db.game.findMany({
-        where: {
-            keywords: {
-                hasSome: keywordIds.map((keyword) => keyword.id),
-            },
-        },
-        select: searchSelect,
-        orderBy: [
-            { versionParent: { sort: "asc", nulls: "first" } },
-            { totalRating: "desc" },
-            { name: "asc" },
-        ],
-        take: Math.max(12, resultLimit),
-    }) : [];
-    const games = new Map<number, Game>();
+		db.keyword.findMany({
+			where: {
+				name: {
+					contains: search,
+					mode: "insensitive",
+				},
+			},
+			select: { id: true },
+			take: Math.max(16, resultLimit * 2),
+		}),
+	]);
+	const keywordMatches = keywordIds.length
+		? await db.game.findMany({
+				where: {
+					keywords: {
+						hasSome: keywordIds.map((keyword) => keyword.id),
+					},
+				},
+				select: searchSelect,
+				orderBy: [{ versionParent: { sort: "asc", nulls: "first" } }, { totalRating: "desc" }, { name: "asc" }],
+				take: Math.max(12, resultLimit),
+			})
+		: [];
+	const games = new Map<number, Game>();
 
-    for (const game of [...nameMatches, ...keywordMatches]) {
-        if (!game.id) continue;
+	for (const game of [...nameMatches, ...keywordMatches]) {
+		if (!game.id) continue;
 
-        games.set(game.id, {
-            ...game,
-            totalRating: game.totalRating ?? undefined,
-            releaseDate: game.releaseDate ?? undefined,
-            cover: game.cover ?? undefined,
-            versionParent: game.versionParent ?? null
-        });
-    }
+		games.set(game.id, {
+			...game,
+			totalRating: game.totalRating ?? undefined,
+			releaseDate: game.releaseDate ?? undefined,
+			cover: game.cover ?? undefined,
+			versionParent: game.versionParent ?? null,
+		});
+	}
 
-    const rows = Array.from(games.values()).sort((a, b) => {
-        const aName = a.name?.toLowerCase() ?? "";
-        const bName = b.name?.toLowerCase() ?? "";
-        const aTypeDLC = a.gameType === "DLC" ? 1 : 2;
-        const aType = a.gameType === "MAINGAME" ? 0 : aTypeDLC;
-        const bTypeDLC = b.gameType === "DLC" ? 1 : 2;
-        const bType = b.gameType === "MAINGAME" ? 0 : bTypeDLC;
-        const aEdition = a.versionParent == null ? 0 : 1;
-        const bEdition = b.versionParent == null ? 0 : 1;
-        const aNIncludesMatch = aName.includes(lowerSearch) ? 2 : 3;
-        const aNMatch = aName.startsWith(lowerSearch) ? 1 : aNIncludesMatch;
-        const aMatch = aName === lowerSearch ? 0 : aNMatch;
-        const bNIncludesMatch = bName.includes(lowerSearch) ? 2 : 3;
-        const bNMatch = bName.startsWith(lowerSearch) ? 1 : bNIncludesMatch;
-        const bMatch = bName === lowerSearch ? 0 : bNMatch;
+	const rows = Array.from(games.values())
+		.sort((a, b) => {
+			const aName = a.name?.toLowerCase() ?? "";
+			const bName = b.name?.toLowerCase() ?? "";
+			const aTypeDLC = a.gameType === "DLC" ? 1 : 2;
+			const aType = a.gameType === "MAINGAME" ? 0 : aTypeDLC;
+			const bTypeDLC = b.gameType === "DLC" ? 1 : 2;
+			const bType = b.gameType === "MAINGAME" ? 0 : bTypeDLC;
+			const aEdition = a.versionParent == null ? 0 : 1;
+			const bEdition = b.versionParent == null ? 0 : 1;
+			const aNIncludesMatch = aName.includes(lowerSearch) ? 2 : 3;
+			const aNMatch = aName.startsWith(lowerSearch) ? 1 : aNIncludesMatch;
+			const aMatch = aName === lowerSearch ? 0 : aNMatch;
+			const bNIncludesMatch = bName.includes(lowerSearch) ? 2 : 3;
+			const bNMatch = bName.startsWith(lowerSearch) ? 1 : bNIncludesMatch;
+			const bMatch = bName === lowerSearch ? 0 : bNMatch;
 
-        return aMatch - bMatch
-            || aEdition - bEdition
-            || aType - bType
-            || (b.totalRating ?? 0) - (a.totalRating ?? 0)
-            || aName.localeCompare(bName);
-    }).slice(0, resultLimit);
+			return (
+				aMatch - bMatch ||
+				aEdition - bEdition ||
+				aType - bType ||
+				(b.totalRating ?? 0) - (a.totalRating ?? 0) ||
+				aName.localeCompare(bName)
+			);
+		})
+		.slice(0, resultLimit);
 
-    return rows.map((game) => ({
-        ...game,
-        totalRating: game.totalRating ?? undefined,
-        releaseDate: game.releaseDate ?? undefined,
-    }));
+	return rows.map((game) => ({
+		...game,
+		totalRating: game.totalRating ?? undefined,
+		releaseDate: game.releaseDate ?? undefined,
+	}));
 }

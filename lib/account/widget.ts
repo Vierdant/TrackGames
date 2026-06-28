@@ -1,29 +1,33 @@
 import type { Widget } from "../types";
 
 export function parseWidgets(value: string | null | undefined): Widget[] {
-    if (!value) return [];
+	if (!value) return [];
 
-    try {
-        const parsed = JSON.parse(value);
+	try {
+		const parsed = JSON.parse(value);
 
-        if (!Array.isArray(parsed)) return [];
+		if (!Array.isArray(parsed)) return [];
 
-        return parsed.map((item, index) => ({
-            id: typeof item.id === "string" ? item.id : `${Date.now()}-${index}`,
-            type: item.type,
-            title: typeof item.title === "string" ? item.title : item.type ?? "Widget",
-            visible: typeof item.visible === "boolean" ? item.visible : true,
-            content: typeof item.content === "string" ? item.content : "",
-            stats: Array.isArray(item.stats) ? item.stats.filter((stat: unknown) => typeof stat === "string") : [],
-            games: Array.isArray(item.games) ? item.games
-                .map((game: unknown) => typeof game === "number" ? game : typeof game === "string" ? Number(game) : NaN)
-                .filter((game: number) => Number.isInteger(game) && game > 0) : [],
-        }));
-    } catch {
-        return [];
-    }
+		return parsed.map((item, index) => ({
+			id: typeof item.id === "string" ? item.id : `${Date.now()}-${index}`,
+			type: item.type,
+			title: typeof item.title === "string" ? item.title : (item.type ?? "Widget"),
+			visible: typeof item.visible === "boolean" ? item.visible : true,
+			content: typeof item.content === "string" ? item.content : "",
+			stats: Array.isArray(item.stats) ? item.stats.filter((stat: unknown) => typeof stat === "string") : [],
+			games: Array.isArray(item.games)
+				? item.games
+						.map((game: unknown) => (typeof game === "number" ? game : typeof game === "string" ? Number(game) : Number.NaN))
+						.filter((game: number) => Number.isInteger(game) && game > 0)
+				: [],
+		}));
+	} catch {
+		return [];
+	}
 }
 
 export function serializeWidgets(widgets: Widget[]) {
-    return JSON.stringify(widgets.map(({ type, title, visible, content, stats, games }) => ({ type, title, visible, content, stats, games })));
+	return JSON.stringify(
+		widgets.map(({ type, title, visible, content, stats, games }) => ({ type, title, visible, content, stats, games })),
+	);
 }

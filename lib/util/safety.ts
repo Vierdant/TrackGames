@@ -8,36 +8,36 @@ import { ALLOWEDHOSTS } from "../constants";
 
 /** Allows HTTPS media/source URLs only from explicitly approved hosts. */
 export function isSafeUrl(src: unknown) {
-    try {
-        if (typeof src !== "string") return false;
+	try {
+		if (typeof src !== "string") return false;
 
-        const url = new URL(src);
+		const url = new URL(src);
 
-        if (url.protocol !== "https:") return false;
-        if (!ALLOWEDHOSTS.has(url.hostname.toLowerCase())) return false;
+		if (url.protocol !== "https:") return false;
+		if (!ALLOWEDHOSTS.has(url.hostname.toLowerCase())) return false;
 
-        return true;
-    } catch {
-        return false;
-    }
+		return true;
+	} catch {
+		return false;
+	}
 }
 
 /** Allows HTTPS absolute links and same-site relative paths, but rejects protocol-relative URLs. */
 export function isSafeLinkHref(href: unknown) {
-    if (typeof href !== "string") return false;
+	if (typeof href !== "string") return false;
 
-    try {
-        const url = new URL(href);
+	try {
+		const url = new URL(href);
 
-        return url.protocol === "https:";
-    } catch {
-        return href.startsWith("/") && !href.startsWith("//");
-    }
+		return url.protocol === "https:";
+	} catch {
+		return href.startsWith("/") && !href.startsWith("//");
+	}
 }
 
 /** Detects local video file extensions in a URL-like string. */
 export function isVideoUrl(value: string) {
-    const path = value.split("?", 1)[0].toLowerCase();
+	const path = value.split("?", 1)[0].toLowerCase();
 
-    return path.endsWith(".mp4") || path.endsWith(".webm") || path.endsWith(".ogg");
+	return path.endsWith(".mp4") || path.endsWith(".webm") || path.endsWith(".ogg");
 }

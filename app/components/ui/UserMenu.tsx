@@ -40,7 +40,7 @@ function notificationText(notification: Notification) {
 	return "New notification.";
 }
 
-function Notifications({notifications, onClose}: { notifications: Notification[], onClose: () => void }) {
+function Notifications({ notifications, onClose }: { notifications: Notification[]; onClose: () => void }) {
 	return notifications.length ? (
 		notifications.map((notification) => (
 			<Link
@@ -159,8 +159,8 @@ export function UserMenu({ user, notifications }: UserMenuProps) {
 						</div>
 
 						<div className="flex flex-1 flex-col overflow-y-auto p-3 md:max-h-96 md:p-1">
-                            <Notifications notifications={notifications} onClose={closeMenu}/>
-                        </div>
+							<Notifications notifications={notifications} onClose={closeMenu} />
+						</div>
 					</>
 				) : (
 					<>

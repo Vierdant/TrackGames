@@ -17,152 +17,161 @@ import { absoluteUrl, DEFAULT_OG_IMAGE, metadataDescription, SITE_NAME } from "@
 const description = metadataDescription("Manage your TrackGames profile, privacy, widgets, preferences, imports, and account settings.");
 
 export const metadata: Metadata = {
-    title: "Settings",
-    description,
-    alternates: {
-        canonical: absoluteUrl("/settings"),
-    },
-    openGraph: {
-        title: `Settings | ${SITE_NAME}`,
-        description,
-        url: absoluteUrl("/settings"),
-        siteName: SITE_NAME,
-        type: "website",
-        images: [{
-            url: DEFAULT_OG_IMAGE,
-            alt: SITE_NAME,
-        }],
-    },
-    twitter: {
-        card: "summary_large_image",
-        title: `Settings | ${SITE_NAME}`,
-        description,
-        images: [DEFAULT_OG_IMAGE],
-    },
-    robots: {
-        index: false,
-        follow: false,
-    },
+	title: "Settings",
+	description,
+	alternates: {
+		canonical: absoluteUrl("/settings"),
+	},
+	openGraph: {
+		title: `Settings | ${SITE_NAME}`,
+		description,
+		url: absoluteUrl("/settings"),
+		siteName: SITE_NAME,
+		type: "website",
+		images: [
+			{
+				url: DEFAULT_OG_IMAGE,
+				alt: SITE_NAME,
+			},
+		],
+	},
+	twitter: {
+		card: "summary_large_image",
+		title: `Settings | ${SITE_NAME}`,
+		description,
+		images: [DEFAULT_OG_IMAGE],
+	},
+	robots: {
+		index: false,
+		follow: false,
+	},
 };
 
 const tabs: { id: string; label: string; icon: typeof UserIcon }[] = [
-    { id: "profile", label: "Profile", icon: UserIcon },
-    { id: "privacy", label: "Privacy", icon: Shield },
-    { id: "widgets", label: "Widgets", icon: LayoutGrid },
-    { id: "preferences", label: "Preferences", icon: Bell },
-    { id: "import", label: "Import", icon: Download },
-    { id: "account", label: "Account", icon: Settings },
+	{ id: "profile", label: "Profile", icon: UserIcon },
+	{ id: "privacy", label: "Privacy", icon: Shield },
+	{ id: "widgets", label: "Widgets", icon: LayoutGrid },
+	{ id: "preferences", label: "Preferences", icon: Bell },
+	{ id: "import", label: "Import", icon: Download },
+	{ id: "account", label: "Account", icon: Settings },
 ];
 
-function SectionShell({ title, children }: { title: string; children: ReactNode }) {
-    return (
-        <div className="rounded bg-bg p-5">
-            <div className="mb-5 flex flex-col gap-3 border-b border-border pb-4 md:flex-row md:items-start md:justify-between">
-                <div>
-                    <h2 className="text-2xl font-bold">{title}</h2>
-                </div>
-            </div>
-            {children}
-        </div>
-    );
+function SectionShell({ title, children }: Readonly<{ title: string; children: ReactNode }>) {
+	return (
+		<div className="rounded bg-bg p-5">
+			<div className="mb-5 flex flex-col gap-3 border-b border-border pb-4 md:flex-row md:items-start md:justify-between">
+				<div>
+					<h2 className="text-2xl font-bold">{title}</h2>
+				</div>
+			</div>
+			{children}
+		</div>
+	);
 }
 
 function settingsErrorMessage(error: string) {
-    switch (error) {
-        case "duplicate":
-            return "That username or email is already in use.";
-        case "invalid-username":
-            return "Use 1-32 letters, numbers, underscores, or hyphens.";
-        case "invalid-password":
-            return "Enter matching passwords with at least 8 characters.";
-        case "current-password":
-            return "Your current password was incorrect.";
-        case "email-required":
-            return "Add an email before setting a password.";
-        case "last-login":
-            return "Add another login method before unlinking that provider.";
-        case "invalid-provider":
-            return "That provider could not be linked.";
-        default:
-            return "Some settings were invalid. Check the fields and try again.";
-    }
+	switch (error) {
+		case "duplicate":
+			return "That username or email is already in use.";
+		case "invalid-username":
+			return "Use 1-32 letters, numbers, underscores, or hyphens.";
+		case "invalid-password":
+			return "Enter matching passwords with at least 8 characters.";
+		case "current-password":
+			return "Your current password was incorrect.";
+		case "email-required":
+			return "Add an email before setting a password.";
+		case "last-login":
+			return "Add another login method before unlinking that provider.";
+		case "invalid-provider":
+			return "That provider could not be linked.";
+		default:
+			return "Some settings were invalid. Check the fields and try again.";
+	}
 }
 
-export default async function SettingsPage({ searchParams }: { searchParams: Promise<{ tab?: string; edit?: string; saved?: string; error?: string }> }) {
-    const params = await searchParams;
-    const activeTab = normalize.value(params.tab, tabs, "id", "profile");
-    const session = await auth();
+type SearchPageProps = Readonly<{
+	searchParams: Promise<{ tab?: string; edit?: string; saved?: string; error?: string }>;
+}>;
 
-    if (!session?.user) {
-        redirect("/login");
-    }
+export default async function SettingsPage({ searchParams }: SearchPageProps) {
+	const params = await searchParams;
+	const activeTab = normalize.value(params.tab, tabs, "id", "profile");
+	const session = await auth();
 
-    const profile = await getUser(session.user);
+	if (!session?.user) {
+		redirect("/login");
+	}
 
-    if (!profile) {
-        redirect("/login");
-    }
+	const profile = await getUser(session.user);
 
-    const background = profile.background;
-    const active = normalize.byKey(tabs, "id", activeTab) ?? tabs[0];
-    const bio = profile.bio ?? "No bio yet."
-    const socials = parseSocials(profile.socials);
+	if (!profile) {
+		redirect("/login");
+	}
 
-    return (
-        <main className="relative z-0 flex-1" style={profileThemeStyle(profile.profileColor, profile.accentColor)}>
-            <ProfileBackground src={background} />
+	const background = profile.background;
+	const active = normalize.byKey(tabs, "id", activeTab) ?? tabs[0];
+	const bio = profile.bio ?? "No bio yet.";
+	const socials = parseSocials(profile.socials);
 
-            <Container>
-                <ProfileHeader isSettings={true} profileImage={profile.image} displayName={profile.name ?? "Player"} socials={socials} bio={bio} />
+	return (
+		<main className="relative z-0 flex-1" style={profileThemeStyle(profile.profileColor, profile.accentColor)}>
+			<ProfileBackground src={background} />
 
-                <section className="relative z-10 bg-bg/95 py-5">
-                    <Container className="grid gap-5 lg:grid-cols-[15rem_minmax(0,1fr)] lg:items-start">
-                        <SettingsTabs tabs={tabs.map(({ id, label }) => ({ id, label }))} activeTab={activeTab} />
+			<Container>
+				<ProfileHeader
+					isSettings={true}
+					profileImage={profile.image}
+					displayName={profile.name ?? "Player"}
+					socials={socials}
+					bio={bio}
+				/>
 
-                        <aside className="hidden border-r border-border lg:block">
-                            <nav className="flex flex-col">
-                                {tabs.map((tab) => {
-                                    const Icon = tab.icon;
-                                    const selected = tab.id === activeTab;
+				<section className="relative z-10 bg-bg/95 py-5">
+					<Container className="grid gap-5 lg:grid-cols-[15rem_minmax(0,1fr)] lg:items-start">
+						<SettingsTabs tabs={tabs.map(({ id, label }) => ({ id, label }))} activeTab={activeTab} />
 
-                                    return (
-                                        <Link
-                                            key={tab.id}
-                                            href={`/settings?tab=${tab.id}`}
-                                            className={`flex min-w-56 items-start gap-3 p-5 border-b border-border text-left transition-colors lg:min-w-0 ${selected ? "bg-surface text-text" : "text-text-muted hover:bg-surface hover:text-text"}`}
-                                        >
-                                            <Icon size={18} aria-hidden="true" className="mt-0.5 shrink-0" />
-                                            <span className="min-w-0">
-                                                <span className="block text-md font-bold">{tab.label}</span>
-                                            </span>
-                                        </Link>
-                                    );
-                                })}
-                            </nav>
-                        </aside>
+						<aside className="hidden border-r border-border lg:block">
+							<nav className="flex flex-col">
+								{tabs.map((tab) => {
+									const Icon = tab.icon;
+									const selected = tab.id === activeTab;
 
-                        <div className="min-w-0">
-                            {params.saved === "1" && (
-                                <div className="mb-4 rounded border border-success/40 bg-success/10 px-4 py-3 text-sm font-bold text-success">
-                                    Settings saved.
-                                </div>
-                            )}
-                            {params.error && (
-                                <div className="mb-4 rounded border border-error/40 bg-error/10 px-4 py-3 text-sm font-bold text-error">
-                                    {settingsErrorMessage(params.error)}
-                                </div>
-                            )}
+									return (
+										<Link
+											key={tab.id}
+											href={`/settings?tab=${tab.id}`}
+											className={`flex min-w-56 items-start gap-3 p-5 border-b border-border text-left transition-colors lg:min-w-0 ${selected ? "bg-surface text-text" : "text-text-muted hover:bg-surface hover:text-text"}`}
+										>
+											<Icon size={18} aria-hidden="true" className="mt-0.5 shrink-0" />
+											<span className="min-w-0">
+												<span className="block text-md font-bold">{tab.label}</span>
+											</span>
+										</Link>
+									);
+								})}
+							</nav>
+						</aside>
 
-                            <SectionShell title={active.label}>
-                                <SettingsPanel
-                                    activeTab={activeTab}
-                                    profile={profile}
-                                />
-                            </SectionShell>
-                        </div>
-                    </Container>
-                </section>
-            </Container>
-        </main>
-    );
+						<div className="min-w-0">
+							{params.saved === "1" && (
+								<div className="mb-4 rounded border border-success/40 bg-success/10 px-4 py-3 text-sm font-bold text-success">
+									Settings saved.
+								</div>
+							)}
+							{params.error && (
+								<div className="mb-4 rounded border border-error/40 bg-error/10 px-4 py-3 text-sm font-bold text-error">
+									{settingsErrorMessage(params.error)}
+								</div>
+							)}
+
+							<SectionShell title={active.label}>
+								<SettingsPanel activeTab={activeTab} profile={profile} />
+							</SectionShell>
+						</div>
+					</Container>
+				</section>
+			</Container>
+		</main>
+	);
 }

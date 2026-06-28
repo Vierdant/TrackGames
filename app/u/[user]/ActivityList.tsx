@@ -71,7 +71,7 @@ function activityMessage(activity: {
 		case ActivityType.REPLIED_TO_COMMENT:
 			return name
 				? { before: "Replied to a comment on", name, after: commentTargetAfter(activity.targetType) }
-				: { before: "Replied to a comment", name: null, after: "." }
+				: { before: "Replied to a comment", name: null, after: "." };
 		case ActivityType.EARNED_BADGE:
 			return { before: "Earned a badge", name: null, after: "." };
 		default:

@@ -8,25 +8,25 @@ const KEY_LENGTH = 64;
 const PASSWORD_VERSION = process.env.PASSWORD_VERSION;
 
 export async function hashPassword(password: string) {
-  const salt = randomBytes(16).toString("hex");
-  const derivedKey = (await scryptAsync(password, salt, KEY_LENGTH)) as Buffer;
+	const salt = randomBytes(16).toString("hex");
+	const derivedKey = (await scryptAsync(password, salt, KEY_LENGTH)) as Buffer;
 
-  return `${PASSWORD_VERSION}:${salt}:${derivedKey.toString("hex")}`;
+	return `${PASSWORD_VERSION}:${salt}:${derivedKey.toString("hex")}`;
 }
 
 export async function verifyPassword(password: string, storedHash: string) {
-  const [version, salt, key] = storedHash.split(":");
+	const [version, salt, key] = storedHash.split(":");
 
-  if (version !== PASSWORD_VERSION || !salt || !key) {
-    return false;
-  }
+	if (version !== PASSWORD_VERSION || !salt || !key) {
+		return false;
+	}
 
-  const expectedKey = Buffer.from(key, "hex");
-  const actualKey = (await scryptAsync(password, salt, expectedKey.length)) as Buffer;
+	const expectedKey = Buffer.from(key, "hex");
+	const actualKey = (await scryptAsync(password, salt, expectedKey.length)) as Buffer;
 
-  if (actualKey.length !== expectedKey.length) {
-    return false;
-  }
+	if (actualKey.length !== expectedKey.length) {
+		return false;
+	}
 
-  return timingSafeEqual(actualKey, expectedKey);
+	return timingSafeEqual(actualKey, expectedKey);
 }

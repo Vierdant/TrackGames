@@ -1,16 +1,16 @@
 export enum WidgetType {
-    STATS,
-    GAMELIST,
-    MARKDOWN
+	STATS,
+	GAMELIST,
+	MARKDOWN,
 }
 
 export enum LinkType {
-    LINK,
-    COPY
+	LINK,
+	COPY,
 }
 
 export enum MarkdownAlign {
-    START, 
-    END,
-    CENTER
+	START,
+	END,
+	CENTER,
 }

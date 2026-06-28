@@ -37,7 +37,7 @@ export async function getTagsForEntries(entryIds: string[]) {
     });
     const tags = new Map<string, UserLibraryTag[]>();
 
-    for (const row of rows.sort((a, b) =>
+    for (const row of rows.toSorted((a, b) =>
         a.tag.name.toLowerCase().localeCompare(b.tag.name.toLowerCase()) || a.tag.name.localeCompare(b.tag.name)
     )) {
         tags.set(row.entryId, [...(tags.get(row.entryId) ?? []), { id: row.tag.id, name: row.tag.name }]);

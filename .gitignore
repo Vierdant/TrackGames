@@ -25,6 +25,9 @@ CLAUDE.md
 # misc
 .DS_Store
 *.pem
+.sonarlint
+.vscode
+.cache
 
 # debug
 npm-debug.log*

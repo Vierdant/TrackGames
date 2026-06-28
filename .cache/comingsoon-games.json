@@ -260,6 +260,16 @@
     "slug": "athanasia"
   },
   {
+    "id": 211543,
+    "cover": {
+      "id": 260293,
+      "image_id": "co5kud"
+    },
+    "first_release_date": 1782777600,
+    "name": "Secret of Sardinia",
+    "slug": "secret-of-sardinia"
+  },
+  {
     "id": 211702,
     "cover": {
       "id": 499617,
@@ -660,6 +670,16 @@
     "slug": "scourge-of-the-reptiles"
   },
   {
+    "id": 325712,
+    "cover": {
+      "id": 427202,
+      "image_id": "co95mq"
+    },
+    "first_release_date": 1782777600,
+    "name": "Feed The Pit",
+    "slug": "feed-the-pit"
+  },
+  {
     "id": 326918,
     "cover": {
       "id": 429729,
@@ -978,25 +998,5 @@
     "first_release_date": 1782777600,
     "name": "The Shores of Stellaluna",
     "slug": "the-shores-of-stellaluna"
-  },
-  {
-    "id": 357741,
-    "cover": {
-      "id": 551664,
-      "image_id": "cobto0"
-    },
-    "first_release_date": 1782777600,
-    "name": "Schizophrenia: R.E.M. Protocol",
-    "slug": "schizophrenia-rem-protocol"
-  },
-  {
-    "id": 360095,
-    "cover": {
-      "id": 477945,
-      "image_id": "coa8s9"
-    },
-    "first_release_date": 1782777600,
-    "name": "Papa Needs a Headshot",
-    "slug": "papa-needs-a-headshot"
   }
 ]

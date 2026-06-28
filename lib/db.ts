@@ -9,9 +9,11 @@ const prismaClientSingleton = () => {
     });
 };
 
-declare const globalThis: {
-    prismaGlobal: ReturnType<typeof prismaClientSingleton>;
-} & typeof global;
+declare global {
+    // attach a prisma client singleton to the global scope for dev hot-reload
+    // apps. Use a different name than `globalThis` to avoid redeclaration.
+    var prismaGlobal: ReturnType<typeof prismaClientSingleton> | undefined;
+}
 
 const db = globalThis.prismaGlobal ?? prismaClientSingleton();
 

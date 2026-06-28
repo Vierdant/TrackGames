@@ -1,5 +1,15 @@
 [
   {
+    "id": 405680,
+    "cover": {
+      "id": 570237,
+      "image_id": "coc7zx"
+    },
+    "first_release_date": 1782604800,
+    "name": "Mental Medicine",
+    "slug": "mental-medicine"
+  },
+  {
     "id": 387500,
     "cover": {
       "id": 530815,
@@ -18,6 +28,16 @@
     "first_release_date": 1782604800,
     "name": "Backrooms Anomaly",
     "slug": "backrooms-anomaly"
+  },
+  {
+    "id": 364519,
+    "cover": {
+      "id": 495737,
+      "image_id": "coamih"
+    },
+    "first_release_date": 1782604800,
+    "name": "When Stars Collide",
+    "slug": "when-stars-collide"
   },
   {
     "id": 347369,
@@ -959,25 +979,5 @@
     "first_release_date": 1782345600,
     "name": "Type or Die",
     "slug": "type-or-die"
-  },
-  {
-    "id": 403480,
-    "cover": {
-      "id": 566453,
-      "image_id": "coc52t"
-    },
-    "first_release_date": 1782345600,
-    "name": "OK Boomer",
-    "slug": "ok-boomer--1"
-  },
-  {
-    "id": 401883,
-    "cover": {
-      "id": 563353,
-      "image_id": "coc2op"
-    },
-    "first_release_date": 1782345600,
-    "name": "Bring The Rift",
-    "slug": "bring-the-rift"
   }
 ]

@@ -5,7 +5,7 @@ import { promisify } from "node:util";
 
 const scryptAsync = promisify(scrypt);
 const KEY_LENGTH = 64;
-const PASSWORD_VERSION = "scrypt-v1";
+const PASSWORD_VERSION = process.env.PASSWORD_VERSION;
 
 export async function hashPassword(password: string) {
   const salt = randomBytes(16).toString("hex");

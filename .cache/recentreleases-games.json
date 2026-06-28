@@ -1,5 +1,15 @@
 [
   {
+    "id": 407501,
+    "cover": {
+      "id": 575149,
+      "image_id": "cocbsd"
+    },
+    "first_release_date": 1782604800,
+    "name": "Eskinita",
+    "slug": "eskinita"
+  },
+  {
     "id": 405680,
     "cover": {
       "id": 570237,
@@ -82,6 +92,56 @@
     "slug": "v-dash-dungeon"
   },
   {
+    "id": 405991,
+    "cover": {
+      "id": 575117,
+      "image_id": "cocbrh"
+    },
+    "first_release_date": 1782518400,
+    "name": "Smile and Play",
+    "slug": "smile-and-play"
+  },
+  {
+    "id": 398112,
+    "cover": {
+      "id": 555907,
+      "image_id": "cobwxv"
+    },
+    "first_release_date": 1782518400,
+    "name": "Neodrive",
+    "slug": "neodrive"
+  },
+  {
+    "id": 397309,
+    "cover": {
+      "id": 554707,
+      "image_id": "cobw0j"
+    },
+    "first_release_date": 1782518400,
+    "name": "Luxmithar",
+    "slug": "luxmithar"
+  },
+  {
+    "id": 356019,
+    "cover": {
+      "id": 575331,
+      "image_id": "cocbxf"
+    },
+    "first_release_date": 1782518400,
+    "name": "Bilson",
+    "slug": "bilson"
+  },
+  {
+    "id": 292768,
+    "cover": {
+      "id": 370180,
+      "image_id": "co7xms"
+    },
+    "first_release_date": 1782518400,
+    "name": "Dala and The Cursed Forest",
+    "slug": "dala-and-the-cursed-forest"
+  },
+  {
     "id": 408327,
     "cover": {
       "id": 575150,
@@ -120,6 +180,16 @@
     "first_release_date": 1782432000,
     "name": "MFTK: Survivors",
     "slug": "mftk-survivors"
+  },
+  {
+    "id": 408185,
+    "cover": {
+      "id": 574738,
+      "image_id": "cocbgy"
+    },
+    "first_release_date": 1782432000,
+    "name": "Eyes of the Factory",
+    "slug": "eyes-of-the-factory"
   },
   {
     "id": 407920,
@@ -669,6 +739,16 @@
     "slug": "rapta"
   },
   {
+    "id": 295203,
+    "cover": {
+      "id": 374193,
+      "image_id": "co80q9"
+    },
+    "first_release_date": 1782432000,
+    "name": "Item Collector Ball",
+    "slug": "item-collector-ball"
+  },
+  {
     "id": 272575,
     "cover": {
       "id": 573894,
@@ -757,16 +837,6 @@
     "first_release_date": 1782345600,
     "name": "Chronime Puzzle: Girls",
     "slug": "chronime-puzzle-girls"
-  },
-  {
-    "id": 407501,
-    "cover": {
-      "id": 575149,
-      "image_id": "cocbsd"
-    },
-    "first_release_date": 1782345600,
-    "name": "Eskinita",
-    "slug": "eskinita"
   },
   {
     "id": 407285,
@@ -909,75 +979,5 @@
     "first_release_date": 1782345600,
     "name": "The Life You Missed",
     "slug": "the-life-you-missed"
-  },
-  {
-    "id": 406017,
-    "cover": {
-      "id": 571549,
-      "image_id": "coc90d"
-    },
-    "first_release_date": 1782345600,
-    "name": "Directors Cut: Train",
-    "slug": "directors-cut-train"
-  },
-  {
-    "id": 406007,
-    "cover": {
-      "id": 570543,
-      "image_id": "coc88f"
-    },
-    "first_release_date": 1782345600,
-    "name": "Glowbot Tower Defense",
-    "slug": "glowbot-tower-defense"
-  },
-  {
-    "id": 405904,
-    "cover": {
-      "id": 570390,
-      "image_id": "coc846"
-    },
-    "first_release_date": 1782345600,
-    "name": "Namco Legendary Mountains",
-    "slug": "namco-legendary-mountains"
-  },
-  {
-    "id": 405798,
-    "cover": {
-      "id": 570213,
-      "image_id": "coc7z9"
-    },
-    "first_release_date": 1782345600,
-    "name": "Escape From Vlogger: Runaway",
-    "slug": "escape-from-vlogger-runaway"
-  },
-  {
-    "id": 405793,
-    "cover": {
-      "id": 570207,
-      "image_id": "coc7z3"
-    },
-    "first_release_date": 1782345600,
-    "name": "Dead Reckoning: The Long Drift",
-    "slug": "dead-reckoning-the-long-drift"
-  },
-  {
-    "id": 405381,
-    "cover": {
-      "id": 569650,
-      "image_id": "coc7jm"
-    },
-    "first_release_date": 1782345600,
-    "name": "Sands and Relics",
-    "slug": "sands-and-relics"
-  },
-  {
-    "id": 403511,
-    "cover": {
-      "id": 570608,
-      "image_id": "coc8a8"
-    },
-    "first_release_date": 1782345600,
-    "name": "Type or Die",
-    "slug": "type-or-die"
   }
 ]

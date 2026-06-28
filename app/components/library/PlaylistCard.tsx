@@ -9,6 +9,7 @@ import {
 } from "@/lib/actions/library";
 import type { UserLibraryEntryWithTags } from "@/lib/data/library";
 import { ImageIdToURL } from "@/lib/external/igdb/util";
+import { formDataString } from "@/lib/util/formData";
 import { ratingToFive } from "@/lib/util/rating";
 import { X } from "lucide-react";
 import Image from "next/image";
@@ -60,9 +61,9 @@ export default function PlaylistCard({ entry, mode, canEdit, onUpdate, onRemove,
 	const masteredAtValue = entry.masteredAt ? new Date(entry.masteredAt).toISOString().slice(0, 10) : "";
 
 	function save(formData: FormData) {
-		const timePlayed = String(formData.get("timeplayed") ?? "").trim();
-		const timeMastered = String(formData.get("timemastered") ?? "").trim();
-		const timeMode = String(formData.get("timemode") ?? "manual");
+		const timePlayed = formDataString(formData.get("timeplayed")).trim();
+		const timeMastered = formDataString(formData.get("timemastered")).trim();
+		const timeMode = formDataString(formData.get("timemode"), "manual");
 		const mastered = formData.get("mastered") === "on";
 
 		if (mastered && !timeMastered && timeMode === "manual" && !timePlayed) {

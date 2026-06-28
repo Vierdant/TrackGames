@@ -249,7 +249,7 @@ export default function LoginClient() {
 				)}
 
 				{!isRegister && (
-					<a href="#" className="cursor-pointer w-fit text-sm font-bold text-primary transition-colors hover:text-primary-hover">
+					<a href="/login" className="cursor-pointer w-fit text-sm font-bold text-primary transition-colors hover:text-primary-hover">
 						Forgot password?
 					</a>
 				)}

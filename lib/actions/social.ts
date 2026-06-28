@@ -5,6 +5,7 @@ import { canViewPrivacy } from "../account/user";
 import { auth } from "../auth";
 import db from "../db";
 import { ActivityType, InteractionTargetType, LikeTargetType, NotificationType } from "../generated/prisma/enums";
+import { formDataString } from "../util/formData";
 
 async function getCurrentUserId() {
 	const session = await auth();
@@ -136,7 +137,7 @@ async function ensureCanInteractWithTarget(
 
 export async function addComment(targetType: InteractionTargetType, targetId: string, parentId: string | null, formData: FormData) {
 	const userId = await getCurrentUserId();
-	const content = String(formData.get("content") ?? "").trim();
+	const content = formDataString(formData.get("content")).trim();
 
 	if (!content) {
 		throw new Error("Comment is required.");

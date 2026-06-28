@@ -17,7 +17,11 @@ export function parseWidgets(value: string | null | undefined): Widget[] {
 			stats: Array.isArray(item.stats) ? item.stats.filter((stat: unknown) => typeof stat === "string") : [],
 			games: Array.isArray(item.games)
 				? item.games
-						.map((game: unknown) => (typeof game === "number" ? game : typeof game === "string" ? Number(game) : Number.NaN))
+						.map((game: unknown) => {
+						if (typeof game === "number") return game;
+						if (typeof game === "string") return Number(game);
+						return Number.NaN;
+					})
 						.filter((game: number) => Number.isInteger(game) && game > 0)
 				: [],
 		}));

@@ -6,6 +6,7 @@ import { auth } from "../auth";
 import db from "../db";
 import { getTagsForEntries } from "../data/library";
 import { ActivityType, GameStatus, InteractionTargetType } from "../generated/prisma/enums";
+import { formDataString } from "../util/formData";
 import { ratingToHundred } from "../util/rating";
 
 const DEFAULT_LOG_NOTE = "No note.";
@@ -161,15 +162,15 @@ export async function updateGameQuickRating(gameId: number, gameSlug: string, va
 
 export async function updateUserGameEntry(entryId: string, formData: FormData) {
 	const userId = await getCurrentUserId();
-	const status = String(formData.get("status"));
-	const ratingValue = String(formData.get("rating") ?? "").trim();
-	const timePlayedValue = String(formData.get("timeplayed") ?? "").trim();
-	const timeFinishedValue = String(formData.get("timefinished") ?? "").trim();
-	const timeMasteredValue = String(formData.get("timemastered") ?? "").trim();
-	const finishedAtValue = String(formData.get("finishedat") ?? "").trim();
-	const masteredAtValue = String(formData.get("masteredat") ?? "").trim();
-	const timeMode = String(formData.get("timemode") ?? "manual") === "logs" ? "logs" : "manual";
-	const notesValue = String(formData.get("notes") ?? "").trim();
+	const status = formDataString(formData.get("status"));
+	const ratingValue = formDataString(formData.get("rating")).trim();
+	const timePlayedValue = formDataString(formData.get("timeplayed")).trim();
+	const timeFinishedValue = formDataString(formData.get("timefinished")).trim();
+	const timeMasteredValue = formDataString(formData.get("timemastered")).trim();
+	const finishedAtValue = formDataString(formData.get("finishedat")).trim();
+	const masteredAtValue = formDataString(formData.get("masteredat")).trim();
+	const timeMode = formDataString(formData.get("timemode"), "manual") === "logs" ? "logs" : "manual";
+	const notesValue = formDataString(formData.get("notes")).trim();
 	const finished = formData.get("finished") === "on";
 	const mastered = formData.get("mastered") === "on";
 	const updateTags = formData.get("tagsTouched") === "1";
@@ -177,7 +178,7 @@ export async function updateUserGameEntry(entryId: string, formData: FormData) {
 		new Set(
 			formData
 				.getAll("tags")
-				.map((tag) => String(tag).trim())
+				.map((tag) => formDataString(tag).trim())
 				.filter(Boolean)
 				.map((tag) => tag.slice(0, 40)),
 		),
@@ -309,9 +310,9 @@ export async function updateUserGameEntry(entryId: string, formData: FormData) {
 
 export async function createUserGamePlayLog(entryId: string, formData: FormData) {
 	const userId = await getCurrentUserId();
-	const playedAtValue = String(formData.get("playedat") ?? "").trim();
-	const hours = Math.max(0, Number(String(formData.get("hours") ?? "").trim()));
-	const note = String(formData.get("note") ?? "").trim() || DEFAULT_LOG_NOTE;
+	const playedAtValue = formDataString(formData.get("playedat")).trim();
+	const hours = Math.max(0, Number(formDataString(formData.get("hours")).trim()));
+	const note = formDataString(formData.get("note")).trim() || DEFAULT_LOG_NOTE;
 	const skipRecap = formData.get("skipRecap") === "on";
 	const finished = formData.get("finished") === "on";
 	const mastered = formData.get("mastered") === "on";
@@ -419,9 +420,9 @@ export async function createUserGamePlayLog(entryId: string, formData: FormData)
 
 export async function updateUserGamePlayLog(logId: string, formData: FormData) {
 	const userId = await getCurrentUserId();
-	const playedAtValue = String(formData.get("playedat") ?? "").trim();
-	const hours = Math.max(0, Number(String(formData.get("hours") ?? "").trim()));
-	const note = String(formData.get("note") ?? "").trim() || DEFAULT_LOG_NOTE;
+	const playedAtValue = formDataString(formData.get("playedat")).trim();
+	const hours = Math.max(0, Number(formDataString(formData.get("hours")).trim()));
+	const note = formDataString(formData.get("note")).trim() || DEFAULT_LOG_NOTE;
 	const skipRecap = formData.get("skipRecap") === "on";
 
 	if (!Number.isFinite(hours) || hours <= 0) {

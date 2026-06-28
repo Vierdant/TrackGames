@@ -3,9 +3,10 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { auth } from "../auth";
+import { siteStats } from "../cache/resources";
 import db from "../db";
 import { ActivityType, InteractionTargetType, NotificationType, GameListType } from "../generated/prisma/enums";
-import { siteStats } from "../cache/resources";
+import { formDataString, formDataStrings } from "../util/formData";
 
 const displayModes = new Set(["GRID", "RANKING", "TIER"]);
 const fallbackTiers = ["S", "A", "B", "C", "D"];
@@ -63,17 +64,17 @@ async function getOwnedList(listId: string, userId: string) {
 }
 
 function nullableText(value: FormDataEntryValue | null, max: number) {
-	const text = String(value ?? "").trim();
+	const text = formDataString(value).trim();
 	return text ? text.slice(0, max) : null;
 }
 
 function color(value: FormDataEntryValue | null) {
-	const text = String(value ?? "").trim();
+	const text = formDataString(value).trim();
 	return /^#[0-9a-f]{6}$/i.test(text) ? text : null;
 }
 
 function url(value: FormDataEntryValue | null) {
-	const text = String(value ?? "").trim();
+	const text = formDataString(value).trim();
 	if (!text) return null;
 
 	try {
@@ -85,9 +86,9 @@ function url(value: FormDataEntryValue | null) {
 
 export async function createPlaylist(formData: FormData) {
 	const userId = await getCurrentUserId();
-	const name = String(formData.get("name") ?? "").trim();
-	const description = String(formData.get("description") ?? "").trim();
-	const displayMode = String(formData.get("displayMode") ?? "GRID");
+	const name = formDataString(formData.get("name")).trim();
+	const description = formDataString(formData.get("description")).trim();
+	const displayMode = formDataString(formData.get("displayMode"), "GRID");
 	const user = await db.user.findUnique({
 		where: { id: userId },
 		select: { playlistPrivacy: true },
@@ -150,8 +151,8 @@ export async function createPlaylist(formData: FormData) {
 
 export async function addGameToPlaylist(listId: string, formData: FormData) {
 	const userId = await getCurrentUserId();
-	const gameId = Number(formData.get("gameId"));
-	const requestedTier = String(formData.get("tier") ?? "").trim();
+	const gameId = Number(formDataString(formData.get("gameId")));
+	const requestedTier = formDataString(formData.get("tier")).trim();
 
 	if (!Number.isInteger(gameId) || gameId <= 0) {
 		throw new Error("Invalid game.");
@@ -215,8 +216,8 @@ export async function removeGameFromPlaylist(listId: string, entryId: string) {
 
 export async function updatePlaylistEntry(listId: string, entryId: string, formData: FormData) {
 	const userId = await getCurrentUserId();
-	const position = Number(formData.get("position"));
-	const tier = String(formData.get("tier") ?? "").trim();
+	const position = Number(formDataString(formData.get("position")));
+	const tier = formDataString(formData.get("tier")).trim();
 	const playlist = await getOwnedPlaylist(listId, userId);
 
 	await db.gameListEntry.update({
@@ -235,7 +236,7 @@ export async function updatePlaylistEntry(listId: string, entryId: string, formD
 
 export async function updatePlaylistDisplayMode(listId: string, formData: FormData) {
 	const userId = await getCurrentUserId();
-	const displayMode = String(formData.get("displayMode") ?? "GRID");
+	const displayMode = formDataString(formData.get("displayMode"), "GRID");
 
 	await getOwnedPlaylist(listId, userId);
 
@@ -255,11 +256,11 @@ export async function updatePlaylistTiers(listId: string, formData: FormData) {
 	const userId = await getCurrentUserId();
 	const tiers = formData
 		.getAll("tiers")
-		.map((tier) => String(tier).trim())
+		.map((tier) => formDataString(tier).trim())
 		.filter(Boolean)
 		.slice(0, 12);
 	const tierLabels = tiers.length ? tiers : fallbackTiers;
-	const colors = formData.getAll("colors").map((color) => String(color).trim());
+	const colors = formDataStrings(formData.getAll("colors")).map((color) => color.trim());
 	const tierColors = tierLabels.map((_, index) => {
 		const color = colors[index] || fallbackTierColors[index] || "#64748b";
 		return /^#[0-9a-f]{6}$/i.test(color) ? color : fallbackTierColors[index] || "#64748b";
@@ -311,7 +312,7 @@ export async function updateGameListSettings(listId: string, formData: FormData)
 			background: url(formData.get("background")),
 			color: color(formData.get("color")),
 			accentColor: color(formData.get("accentColor")),
-			privacy: String(formData.get("privacy") ?? "public") === "private" ? "private" : "public",
+			privacy: formDataString(formData.get("privacy"), "public") === "private" ? "private" : "public",
 			commentsHidden: formData.get("commentsHidden") === "on",
 		},
 	});

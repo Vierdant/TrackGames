@@ -136,7 +136,7 @@ export type Game = {
     playerPerspectives?: PlayerPerspective[];
     multiplayerModes?: number[];
     keywords?: number[];
-    versionParent?: number;
+    versionParent?: number | null;
     parentGame?: number;
     gameStatus?: GameDevStatus;
     gameType?: GameType;

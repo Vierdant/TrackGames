@@ -540,16 +540,6 @@
     "slug": "one-fenix-down"
   },
   {
-    "id": 297757,
-    "cover": {
-      "id": 460913,
-      "image_id": "co9vn5"
-    },
-    "first_release_date": 1782777600,
-    "name": "Zerra's Adventure",
-    "slug": "zerras-adventure"
-  },
-  {
     "id": 297897,
     "cover": {
       "id": 377579,
@@ -990,13 +980,23 @@
     "slug": "the-shores-of-stellaluna"
   },
   {
-    "id": 357037,
+    "id": 357741,
     "cover": {
-      "id": 474568,
-      "image_id": "coa66g"
+      "id": 551664,
+      "image_id": "cobto0"
     },
     "first_release_date": 1782777600,
-    "name": "Woodrot",
-    "slug": "woodrot"
+    "name": "Schizophrenia: R.E.M. Protocol",
+    "slug": "schizophrenia-rem-protocol"
+  },
+  {
+    "id": 360095,
+    "cover": {
+      "id": 477945,
+      "image_id": "coa8s9"
+    },
+    "first_release_date": 1782777600,
+    "name": "Papa Needs a Headshot",
+    "slug": "papa-needs-a-headshot"
   }
 ]

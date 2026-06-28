@@ -10,16 +10,6 @@
     "total_rating": 70.16333103289625
   },
   {
-    "id": 308535,
-    "cover": {
-      "id": 575146,
-      "image_id": "cocbsa"
-    },
-    "name": "Neverness to Everness",
-    "slug": "neverness-to-everness",
-    "total_rating": 57.20761353736919
-  },
-  {
     "id": 141114,
     "cover": {
       "id": 498347,
@@ -115,7 +105,7 @@
     },
     "name": "Mina the Hollower",
     "slug": "mina-the-hollower",
-    "total_rating": 86.75983239423262
+    "total_rating": 86.76715293423356
   },
   {
     "id": 237780,
@@ -176,6 +166,16 @@
     "name": "Heroes of Might & Magic: Olden Era",
     "slug": "heroes-of-might-and-magic-olden-era",
     "total_rating": 79.93517265094137
+  },
+  {
+    "id": 361880,
+    "cover": {
+      "id": 546061,
+      "image_id": "cobpcd"
+    },
+    "name": "Zero Parades: For Dead Spies",
+    "slug": "zero-parades-for-dead-spies",
+    "total_rating": 78.32733497606368
   },
   {
     "id": 322086,

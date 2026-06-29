@@ -536,7 +536,7 @@ export async function createOpenGraphImage({
 				>
 					<div style={{ display: "flex", color: "#D6A85C", fontSize: "26px", fontWeight: 900 }}>{label}</div>
 					<div style={{ display: "flex", marginTop: "6px", color: "#D8D3E6", fontSize: "24px", lineHeight: 1.25 }}>
-						{playlistGameCount == null ? "Curated game list" : `${playlistGameCount} game(s)`}
+						{playlistGameCount === null ? "Curated game list" : `${playlistGameCount} game(s)`}
 					</div>
 				</div>
 				<div

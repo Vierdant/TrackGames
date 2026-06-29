@@ -110,7 +110,7 @@ function formatCompactNumber(value: number) {
 }
 
 function formatHours(value: number | null) {
-	if (value == null) return "N/A";
+	if (value === null) return "N/A";
 
 	return `${Intl.NumberFormat("en", {
 		maximumFractionDigits: value >= 10 ? 0 : 1,

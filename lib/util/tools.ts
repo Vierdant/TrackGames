@@ -6,7 +6,7 @@ export function filterNumber(value: string) {
 }
 
 export function matchesNumberRange(value: number, min: number | null, max: number | null) {
-	return (min == null || value >= min) && (max == null || value <= max);
+	return (min === null || value >= min) && (max === null || value <= max);
 }
 
 export function isNotFilter(current: any[], notValue: any): any[] {

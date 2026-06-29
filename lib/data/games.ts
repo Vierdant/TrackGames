@@ -121,7 +121,7 @@ export async function getGameStats(gameId: number) {
 	const ratingDistribution = Array.from({ length: 11 }, (_, index) => {
 		const value = index * 0.5;
 		const count = ratings.reduce((total, rating) => {
-			const stars = rating.rating == null ? 0 : Math.round((rating.rating / 20) * 2) / 2;
+			const stars = rating.rating === null ? 0 : Math.round((rating.rating / 20) * 2) / 2;
 			return stars === value ? total + rating._count.rating : total;
 		}, 0);
 
@@ -230,8 +230,8 @@ export async function searchGames(query: string, limit = 8): Promise<Game[]> {
 			const aType = a.gameType === "MAINGAME" ? 0 : aTypeDLC;
 			const bTypeDLC = b.gameType === "DLC" ? 1 : 2;
 			const bType = b.gameType === "MAINGAME" ? 0 : bTypeDLC;
-			const aEdition = a.versionParent == null ? 0 : 1;
-			const bEdition = b.versionParent == null ? 0 : 1;
+			const aEdition = a.versionParent === null ? 0 : 1;
+			const bEdition = b.versionParent === null ? 0 : 1;
 			const aNIncludesMatch = aName.includes(lowerSearch) ? 2 : 3;
 			const aNMatch = aName.startsWith(lowerSearch) ? 1 : aNIncludesMatch;
 			const aMatch = aName === lowerSearch ? 0 : aNMatch;

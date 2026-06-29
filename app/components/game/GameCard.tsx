@@ -32,7 +32,7 @@ export default function GameCard({ game, size = 140, effect, hover, slugged = fa
 		(event: React.PointerEvent<HTMLDivElement>) => {
 			if (!effect) return;
 
-			if (effect == "ripple") {
+			if (effect === "ripple") {
 				rippleEffect(cardRef, event);
 			}
 		},
@@ -41,7 +41,7 @@ export default function GameCard({ game, size = 140, effect, hover, slugged = fa
 
 	let imageClass = "object-cover object-center select-none";
 
-	if (hover == "name") {
+	if (hover === "name") {
 		imageClass += " " + "hover:opacity-15 transition-opacity";
 	}
 
@@ -53,7 +53,7 @@ export default function GameCard({ game, size = 140, effect, hover, slugged = fa
 			onPointerDown={createRipple}
 		>
 			<Image src={src} alt={game.slug ?? "game cover"} fill sizes={imageSizes} preload={preload} className={imageClass} />
-			{hover == "name" ? (
+			{hover === "name" ? (
 				<p className="bg-bg/80 h-full flex items-center justify-center text-md font-bold text-center select-none">{game.name}</p>
 			) : null}
 		</div>

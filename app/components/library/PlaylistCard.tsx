@@ -178,7 +178,7 @@ export default function PlaylistCard({ entry, mode, canEdit, onUpdate, onRemove,
 						</p>
 						<p>
 							<span className="font-bold text-text">Time:</span>{" "}
-							{entry.timePlayed == null ? "No time" : `${entry.timePlayed}h`}
+							{entry.timePlayed === null ? "No time" : `${entry.timePlayed}h`}
 						</p>
 						{hasNotes && (
 							<button

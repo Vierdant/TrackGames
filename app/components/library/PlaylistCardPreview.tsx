@@ -69,7 +69,7 @@ export default function PlaylistCardPreview({ entry, mode, canEdit, onOpenInfo, 
 							<p className="truncate text-sm font-bold text-text">{game.name}</p>
 							<div className="mt-2 flex flex-col gap-2 text-xs text-text-muted">
 								<StarRating rating={ratingToFive(entry.rating)} />
-								<span>{entry.timePlayed == null ? "" : `${entry.timePlayed}h`}</span>
+								<span>{entry.timePlayed === null ? "" : `${entry.timePlayed}h`}</span>
 							</div>
 						</div>
 					</div>
@@ -107,7 +107,7 @@ export default function PlaylistCardPreview({ entry, mode, canEdit, onOpenInfo, 
 						{(ratingToFive(entry.rating ?? 0) ?? 0).toFixed(1)}/5
 					</span>
 					<span className="justify-self-end text-right md:hidden">
-						{entry.timePlayed == null ? "No time" : `${entry.timePlayed}h`}
+						{entry.timePlayed === null ? "No time" : `${entry.timePlayed}h`}
 					</span>
 					<span className="grid size-7 place-items-center justify-self-end md:size-8">
 						{hasNotes && (
@@ -122,7 +122,7 @@ export default function PlaylistCardPreview({ entry, mode, canEdit, onOpenInfo, 
 						)}
 					</span>
 					<span className="hidden min-w-16 text-right md:block">
-						{entry.timePlayed == null ? "No time" : `${entry.timePlayed}h`}
+						{entry.timePlayed === null ? "No time" : `${entry.timePlayed}h`}
 					</span>
 				</div>
 			</div>

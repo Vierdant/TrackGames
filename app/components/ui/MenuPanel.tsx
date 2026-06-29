@@ -128,6 +128,7 @@ export default function MenuPanel({
 	if (variant === "modal") {
 		content = (
 			<dialog
+				open
 				className={join(
 					"pointer-events-auto fixed inset-0 flex items-center justify-center bg-overlay p-4",
 					`${open ? "animate-menu-overlay-in" : "animate-menu-overlay-out"} ${className ?? ""}`,
@@ -142,6 +143,7 @@ export default function MenuPanel({
 	} else if (shouldPortal) {
 		content = (
 			<dialog
+				open
 				className={join("fixed inset-0 pointer-events-auto", className)}
 				onPointerDown={(event) => {
 					if (event.target === event.currentTarget) onClose();

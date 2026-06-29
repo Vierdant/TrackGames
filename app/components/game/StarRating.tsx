@@ -31,7 +31,7 @@ export default function StarRating({ rating, size = 12, interactive = false, sho
 			<div
 				className="flex items-center gap-0.5"
 				onPointerLeave={() => setHover(null)}
-				aria-label={rating == null ? "No rating" : `Rating ${rating} out of 5`}
+				aria-label={rating === null ? "No rating" : `Rating ${rating} out of 5`}
 			>
 				{Array.from({ length: 5 }, (_, index) => {
 					const fill = Math.round(Math.min(1, Math.max(0, shown - index)) * 100);

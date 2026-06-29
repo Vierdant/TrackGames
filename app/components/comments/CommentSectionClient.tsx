@@ -91,8 +91,6 @@ function CommentForm({ action, placeholder = "Write a comment" }: CommentFormPro
 	);
 }
 
-
-
 function CommentItem({ comment, comments, targetType, targetId, currentUserId }: CommentItemProps) {
 	const [replying, setReplying] = useState(false);
 	const [error, setError] = useState<string | null>(null);

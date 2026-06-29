@@ -20,7 +20,7 @@ import StarRating from "../game/StarRating";
 import { GhostButton, PrimaryButton } from "../ui/Buttons";
 import ConfirmAction from "../ui/ConfirmAction";
 import MenuPanel from "../ui/MenuPanel";
-import PlaylistCardEditorTabs, { type EditorTab, timeModeLabel } from "./PlaylistCardEditorTabs";
+import PlaylistCardEditorTabs, { timeModeLabel } from "./PlaylistCardEditorTabs";
 import PlaylistCardPreview, { statusColor, statusLabel } from "./PlaylistCardPreview";
 
 type PlayListCardProps = Readonly<{
@@ -37,7 +37,7 @@ export default function PlaylistCard({ entry, mode, canEdit, onUpdate, onRemove,
 	const [showInfo, setShowInfo] = useState(false);
 	const [showNotes, setShowNotes] = useState(false);
 	const [confirmingRemove, setConfirmingRemove] = useState(false);
-	const [activeTab, setActiveTab] = useState<EditorTab>("entry");
+	const [activeTab, setActiveTab] = useState<string>("entry");
 	const [selectedLogId, setSelectedLogId] = useState("");
 	const [logDate, setLogDate] = useState("");
 	const [timeMode, setTimeMode] = useState(timeModeLabel(entry.timeMode));

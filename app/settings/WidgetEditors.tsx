@@ -6,6 +6,7 @@ import GameCard from "@/app/components/game/GameCard";
 import type { Game, Widget } from "@/lib/types";
 import { WidgetType } from "@/lib/enums";
 import * as normalize from "@/lib/util/normalize";
+import { deferEffect } from "@/lib/util/effects";
 import { Input, Select } from "@/app/components/ui/Inputs";
 import { useEffect, useState } from "react";
 
@@ -184,11 +185,9 @@ function GameListEditor({ widget, onChange }: GameListEditor) {
 
 	useEffect(() => {
 		if (!widget.games.length) {
-			const shortTimer = globalThis.setTimeout(() => {
+			return deferEffect(() => {
 				setSelectedGames([]);
-			}, 0);
-
-			return () => globalThis.clearTimeout(shortTimer);
+			});
 		}
 
 		const controller = new AbortController();
@@ -209,12 +208,10 @@ function GameListEditor({ widget, onChange }: GameListEditor) {
 		const search = query.trim();
 
 		if (search.length < 2) {
-			const shortTimer = globalThis.setTimeout(() => {
+			return deferEffect(() => {
 				setResults([]);
 				setLoading(false);
-			}, 0);
-
-			return () => globalThis.clearTimeout(shortTimer);
+			});
 		}
 
 		const controller = new AbortController();

@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { GhostButton, PrimaryButton } from "./Buttons";
 import { Input } from "./Inputs";
 import MenuPanel from "./MenuPanel";
+import { deferEffect } from "@/lib/util/effects";
 
 type ConfirmActionProps = Readonly<{
 	open: boolean;
@@ -37,8 +38,10 @@ export default function ConfirmAction({
 	useEffect(() => {
 		if (!open) return;
 
-		setStep(1);
-		setText("");
+		return deferEffect(() => {
+			setStep(1);
+			setText("");
+		});
 	}, [open]);
 
 	return (

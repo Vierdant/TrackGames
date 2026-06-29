@@ -97,8 +97,6 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 	};
 }
 
-
-
 export default async function Page({ params }: Readonly<{ params: Promise<{ slug: string }> }>) {
 	const { slug } = await params;
 	const [library, session] = await Promise.all([ensureAndGetUserLibrary(slug), auth()]);

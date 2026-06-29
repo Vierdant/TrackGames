@@ -16,8 +16,6 @@ type ProfileHeaderProps = Readonly<{
 	bio?: string;
 	roles?: UserRole[];
 	followUserId?: string;
-	isFollowing?: boolean;
-	loggedIn?: boolean;
 }>;
 
 function FollowerButton({
@@ -45,8 +43,6 @@ export default function ProfileHeader({
 	bio,
 	roles = [],
 	followUserId,
-	isFollowing = false,
-	loggedIn = false,
 }: ProfileHeaderProps) {
 	return (
 		<section className="relative z-10 w-full bg-bg/95 border-b border-border">

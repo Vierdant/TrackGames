@@ -347,8 +347,6 @@ export async function exportTgLibrary() {
 	};
 }
 
-
-
 export async function importTgLibrary(contents: string) {
 	const userId = await getCurrentUserId();
 	let backup: { version?: number; entries?: TgLibraryEntry[] };

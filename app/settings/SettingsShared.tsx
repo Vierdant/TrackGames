@@ -43,8 +43,6 @@ export function ColorField({ name, value, onChange, placeholder, label }: ColorF
 	);
 }
 
-
-
 export function MediaModal({ open, title, value, onClose, onSave }: MediaModelProps) {
 	const [draft, setDraft] = useState(value);
 

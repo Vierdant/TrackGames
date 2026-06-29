@@ -12,7 +12,13 @@ type TierLabelsFormProps = Readonly<{
 	colors: string[];
 }>;
 
-function filterItems(current: any[], index: number) {
+function filterItems(
+	current: {
+		label: string;
+		color: string;
+	}[],
+	index: number,
+) {
 	return current.filter((_, itemIndex) => itemIndex !== index);
 }
 

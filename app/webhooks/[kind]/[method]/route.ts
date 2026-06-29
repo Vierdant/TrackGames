@@ -70,18 +70,6 @@ async function processWebhook(id: number, method: string, config: NonNullable<Re
 
 export const runtime = "nodejs";
 
-
-
-
-
-
-
-
-
-
-
-
-
 export async function POST(request: Request, { params }: WebhookParams) {
 	const expectedSecret = process.env.IGDB_WEBHOOK_SECRET;
 
@@ -119,7 +107,7 @@ export async function POST(request: Request, { params }: WebhookParams) {
 		try {
 			await processWebhook(id, method, config);
 		} catch (error) {
-			console.error(`[webhook:${config.kind}:${method}] Failed to process IGDB id ${id}:`, error);
+			throw new Error(`[webhook:${config.kind}:${method}] Failed to process IGDB id ${id}: ${error}`);
 		}
 	});
 

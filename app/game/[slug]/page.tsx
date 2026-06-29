@@ -140,16 +140,6 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 	};
 }
 
-
-
-
-
-
-
-
-
-
-
 export default async function Page({ params }: Readonly<{ params: Promise<{ slug: string }> }>) {
 	const { slug } = await params;
 	const [game, session] = await Promise.all([getGameBySlug(slug), auth()]);

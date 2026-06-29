@@ -1,7 +1,7 @@
 "use client";
 
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { ReactNode, useRef, useState, Children, useEffect } from "react";
+import { ReactNode, useRef, useState, Children, useEffect, PointerEvent } from "react";
 
 type HorizontalScrollerProps = Readonly<{
 	children: ReactNode;
@@ -20,6 +20,15 @@ export default function HorizontalScroller({ children, className = "", selectedI
 	const [isDragging, setIsDragging] = useState(false);
 	const [canScrollLeft, setCanScrollLeft] = useState(false);
 	const [canScrollRight, setCanScrollRight] = useState(false);
+
+	function update() {
+		const container = containerRef.current;
+		if (!container) return;
+
+		// add small tolerance to avoid off-by-one issues
+		setCanScrollLeft(container.scrollLeft > 1);
+		setCanScrollRight(container.scrollLeft + container.clientWidth < container.scrollWidth - 1);
+	}
 
 	useEffect(() => {
 		update();
@@ -59,15 +68,6 @@ export default function HorizontalScroller({ children, className = "", selectedI
 		}
 	}, [selectedIndex]);
 
-	function update() {
-		const container = containerRef.current;
-		if (!container) return;
-
-		// add small tolerance to avoid off-by-one issues
-		setCanScrollLeft(container.scrollLeft > 1);
-		setCanScrollRight(container.scrollLeft + container.clientWidth < container.scrollWidth - 1);
-	}
-
 	function scroll(direction: "left" | "right") {
 		const container = containerRef.current;
 		if (!container) return;
@@ -90,7 +90,7 @@ export default function HorizontalScroller({ children, className = "", selectedI
 		onSelectedIndexChange(nextIndex);
 	}
 
-	function handlePointerDown(e: any) {
+	function handlePointerDown(e: PointerEvent<HTMLDivElement>) {
 		const container = containerRef.current;
 		if (!container) return;
 
@@ -101,7 +101,7 @@ export default function HorizontalScroller({ children, className = "", selectedI
 		startScrollLeftRef.current = container.scrollLeft;
 	}
 
-	function handlePointerMove(e: any) {
+	function handlePointerMove(e: PointerEvent<HTMLDivElement>) {
 		const container = containerRef.current;
 		if (!container) return;
 		if (!isPointerDownRef.current) return;
@@ -124,7 +124,7 @@ export default function HorizontalScroller({ children, className = "", selectedI
 		e.preventDefault();
 	}
 
-	function handlePointerUp(e: any) {
+	function handlePointerUp(e: PointerEvent<HTMLDivElement>) {
 		isPointerDownRef.current = false;
 		setIsDragging(false);
 		try {

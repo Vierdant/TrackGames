@@ -44,15 +44,7 @@ export const IGDB_BASE_URL = "https://api.igdb.com/v4";
 
 export type DbClient = typeof import("@/lib/db").default;
 export type ImportKind =
-	| "collections"
-	| "franchises"
-	| "genres"
-	| "platforms"
-	| "companies"
-	| "keywords"
-	| "themes"
-	| "multiplayerModes"
-	| "games";
+	"collections" | "franchises" | "genres" | "platforms" | "companies" | "keywords" | "themes" | "multiplayerModes" | "games";
 export type ImportConfig<Raw, Formatted> = {
 	kind: ImportKind;
 	endpoint: string;
@@ -64,9 +56,8 @@ export type ImportConfig<Raw, Formatted> = {
 	delete: (db: DbClient, id: number) => Promise<unknown>;
 };
 
-
-
 export async function upsertById(
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	model: { upsert: (args: any) => Promise<unknown>; update: (args: any) => Promise<unknown> },
 	item: { id: number; slug: string },
 ) {
@@ -75,11 +66,7 @@ export async function upsertById(
 	} catch (error) {
 		if (!isSlugUniqueError(error)) throw error;
 
-		const { id, ...data } = item;
-
-		console.log(
-			`[import] Slug "${item.slug}" already exists with another id. Updating by slug and preserving the existing id instead of replacing it with IGDB id ${id}.`,
-		);
+		const { ...data } = item;
 		return model.update({ where: { slug: item.slug }, data });
 	}
 }
@@ -155,6 +142,7 @@ export const importConfigs: ImportConfig<unknown, unknown>[] = [
 		where: "game != null & platform != null",
 		format: (raw) => formatRawMultiplayerMode(raw as RawMultiplayerMode),
 		save: (db, item) =>
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			db.multiplayerMode.upsert({ where: { id: (item as { id: number }).id }, update: item as any, create: item as any }),
 		delete: (db, id) => db.multiplayerMode.deleteMany({ where: { id } }),
 	},

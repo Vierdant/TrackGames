@@ -13,8 +13,8 @@ import { statusLabel } from "./PlaylistCardPreview";
 
 type PlaylistCardEditorTabsProps = Readonly<{
 	entry: UserLibraryEntryWithTags;
-	activeTab: EditorTab;
-	setActiveTab: (tab: EditorTab) => void;
+	activeTab: string;
+	setActiveTab: Dispatch<SetStateAction<string>>;
 	error: string;
 	save: (formData: FormData) => void;
 	saveLog: (formData: FormData) => void;
@@ -49,7 +49,7 @@ type PlaylistCardEditorTabsProps = Readonly<{
 	masteredAtValue: string;
 }>;
 
-function playlistItemsfilter(current: any[], notValue: any): any[] {
+function playlistItemsfilter(current: string[], notValue: string): string[] {
 	return current.filter((item) => item !== notValue);
 }
 

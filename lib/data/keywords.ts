@@ -8,15 +8,15 @@ type DataResult<T extends MaybeArray<number>> = T extends number[] ? Keyword[] :
 type SlugResult<T extends string | string[]> = T extends string[] ? Keyword[] : Keyword | null;
 
 const select = {
-    id: true,
-    slug: true,
-    name: true
-}
+	id: true,
+	slug: true,
+	name: true,
+};
 
 const fetching = {
-    endpoint: "keywords",
-    body: `fields slug, name;`
-}
+	endpoint: "keywords",
+	body: `fields slug, name;`,
+};
 
 export async function getKeyword<T extends MaybeArray<number>>(id: T): Promise<DataResult<T>> {
 	const ids = Array.isArray(id) ? id : [id];
@@ -31,40 +31,40 @@ export async function getKeywordBySlug<T extends string | string[]>(slug: T): Pr
 }
 
 export async function searchKeywords(query: string): Promise<Keyword[]> {
-    const search = query.trim();
+	const search = query.trim();
 
-    if (search.length < 2) return [];
+	if (search.length < 2) return [];
 
-    const [startsWith, contains] = await Promise.all([
-        db.keyword.findMany({
-            where: {
-                name: {
-                    startsWith: search,
-                    mode: "insensitive",
-                },
-            },
-            select,
-            orderBy: { name: "asc" },
-            take: 8,
-        }),
-        db.keyword.findMany({
-            where: {
-                name: {
-                    contains: search,
-                    mode: "insensitive",
-                },
-            },
-            select,
-            orderBy: { name: "asc" },
-            take: 16,
-        }),
-    ]);
+	const [startsWith, contains] = await Promise.all([
+		db.keyword.findMany({
+			where: {
+				name: {
+					startsWith: search,
+					mode: "insensitive",
+				},
+			},
+			select,
+			orderBy: { name: "asc" },
+			take: 8,
+		}),
+		db.keyword.findMany({
+			where: {
+				name: {
+					contains: search,
+					mode: "insensitive",
+				},
+			},
+			select,
+			orderBy: { name: "asc" },
+			take: 16,
+		}),
+	]);
 
-    const keywords = new Map<number, Keyword>();
+	const keywords = new Map<number, Keyword>();
 
-    for (const keyword of [...startsWith, ...contains]) {
-        keywords.set(keyword.id, keyword);
-    }
+	for (const keyword of [...startsWith, ...contains]) {
+		keywords.set(keyword.id, keyword);
+	}
 
-    return Array.from(keywords.values()).slice(0, 12);
+	return Array.from(keywords.values()).slice(0, 12);
 }

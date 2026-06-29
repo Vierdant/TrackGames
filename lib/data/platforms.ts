@@ -8,15 +8,15 @@ type DataResult<T extends MaybeArray<number>> = T extends number[] ? Platform[] 
 type SlugResult<T extends string | string[]> = T extends string[] ? Platform[] : Platform | null;
 
 const select = {
-    id: true,
-    slug: true,
-    name: true
-}
+	id: true,
+	slug: true,
+	name: true,
+};
 
 const fetching = {
-    endpoint: "platforms",
-    body: `fields slug, name;`
-}
+	endpoint: "platforms",
+	body: `fields slug, name;`,
+};
 
 export async function getPlatform<T extends MaybeArray<number>>(id: T): Promise<DataResult<T>> {
 	const ids = Array.isArray(id) ? id : [id];

@@ -9,6 +9,7 @@ import { hashPassword } from "../util/password";
 import { Prisma } from "../generated/prisma/client";
 import { cookies } from "next/headers";
 import { USERNAME_ERROR, usernameSchema } from "../account/username";
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime/client";
 
 type AuthActionResult = {
 	error?: string;
@@ -26,7 +27,7 @@ const SIGN_IN_REDIRECT = "/";
 const ACCOUNT_SETTINGS_REDIRECT = "/settings?tab=account";
 const MIN_PASSWORD_LENGTH = 8;
 
-function getErrorObject(error: any) {
+function getErrorObject(error: PrismaClientKnownRequestError) {
 	const target = Array.isArray(error.meta?.target) ? error.meta.target : [];
 	return {
 		error: "Please fix the highlighted fields.",
@@ -179,8 +180,6 @@ export async function login(formData: FormData): Promise<AuthActionResult> {
 
 	return {};
 }
-
-
 
 export async function signup(formData: FormData): Promise<AuthActionResult> {
 	const session = await auth();

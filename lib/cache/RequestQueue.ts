@@ -5,6 +5,7 @@ type QueueItem<T> = {
 };
 
 export default class RequestQueue {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	private readonly queue: QueueItem<any>[] = [];
 	private running = false;
 

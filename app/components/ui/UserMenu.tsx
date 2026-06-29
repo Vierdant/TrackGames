@@ -9,6 +9,7 @@ import Link from "next/link";
 import { useEffect, useRef, useState, useTransition } from "react";
 import AvatarPreview from "../user/AvatarView";
 import MenuPanel from "./MenuPanel";
+import { deferEffect } from "@/lib/util/effects";
 
 type Notification = Readonly<{
 	id: string;
@@ -66,14 +67,16 @@ export function UserMenu({ user, notifications }: UserMenuProps) {
 	const [pending, startTransition] = useTransition();
 	const buttonRef = useRef<HTMLButtonElement>(null);
 
+	function update(event: MediaQueryListEvent | MediaQueryList) {
+		return deferEffect(() => {
+			setIsSmallScreen(event.matches);
+		});
+	}
+
 	useEffect(() => {
 		const query = globalThis.matchMedia("(max-width: 767px)");
 
-		setIsSmallScreen(query.matches);
-
-		function update(event: MediaQueryListEvent) {
-			setIsSmallScreen(event.matches);
-		}
+		update(query);
 
 		query.addEventListener("change", update);
 

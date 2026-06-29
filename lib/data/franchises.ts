@@ -8,16 +8,16 @@ type DataResult<T extends MaybeArray<number>> = T extends number[] ? Franchise[]
 type SlugResult<T extends string | string[]> = T extends string[] ? Franchise[] : Franchise | null;
 
 const select = {
-    id: true,
-    slug: true,
-    name: true,
-    games: true
-}
+	id: true,
+	slug: true,
+	name: true,
+	games: true,
+};
 
 const fetching = {
-    endpoint: "franchises",
-    body: `fields slug, name, games;`
-}
+	endpoint: "franchises",
+	body: `fields slug, name, games;`,
+};
 
 export async function getFranchise<T extends MaybeArray<number>>(id: T): Promise<DataResult<T>> {
 	const ids = Array.isArray(id) ? id : [id];

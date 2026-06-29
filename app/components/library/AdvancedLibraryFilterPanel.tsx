@@ -1,6 +1,7 @@
 "use client";
 
 import { GameStatus } from "@/lib/generated/prisma/enums";
+import { deferEffect } from "@/lib/util/effects";
 import { Search, X } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Input, Select } from "../ui/Inputs";
@@ -49,12 +50,6 @@ export const emptyAdvancedLibraryFilters: AdvancedLibraryFilters = {
 	excludedTags: [],
 };
 
-
-
-
-
-
-
 export default function AdvancedLibraryFilterPanel({ open, onClose, filters, onChange, tags, onReset }: AdvancedLibraryFilterPanelProps) {
 	const [rendered, setRendered] = useState(open);
 	const [filterSearch, setFilterSearch] = useState("");
@@ -70,11 +65,14 @@ export default function AdvancedLibraryFilterPanel({ open, onClose, filters, onC
 
 	useEffect(() => {
 		if (open) {
-			setRendered(true);
-			return;
+			return deferEffect(() => {
+				setRendered(true);
+			});
 		}
 
-		setPickerOpen(false);
+		return deferEffect(() => {
+			setPickerOpen(false);
+		});
 	}, [open]);
 
 	useEffect(() => {

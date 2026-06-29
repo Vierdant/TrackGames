@@ -41,10 +41,6 @@ const playlistArgs = {
 
 export type Playlist = GameListGetPayload<typeof playlistArgs>;
 
-
-
-
-
 export async function getUserPlaylists(userId: string) {
 	return await db.gameList.findMany({
 		where: {

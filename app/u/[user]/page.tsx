@@ -67,8 +67,6 @@ export async function generateMetadata({ params }: { params: Promise<{ user: str
 	};
 }
 
-
-
 export default async function Page({ params, searchParams }: UserPageProps) {
 	const { user } = await params;
 	const { tab = "profile", activityPage = "1", activityFilter } = await searchParams;
@@ -114,8 +112,6 @@ export default async function Page({ params, searchParams }: UserPageProps) {
 					bio={bio}
 					roles={profile.roles}
 					followUserId={profile.id}
-					isFollowing={socialState.isFollowing}
-					loggedIn={Boolean(session?.user?.id)}
 				/>
 
 				{/* INFO SETION */}

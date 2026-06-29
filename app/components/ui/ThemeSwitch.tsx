@@ -1,5 +1,6 @@
 "use client";
 
+import { deferEffect } from "@/lib/util/effects";
 import { Sun, Moon } from "lucide-react";
 import { useEffect, useState } from "react";
 
@@ -27,18 +28,26 @@ export default function ThemeSwitch({ className = "", variant = "plain" }: Theme
 	useEffect(() => {
 		const isDark = document.documentElement.classList.contains("dark");
 
-		setDark(isDark);
+		const deferSetter = deferEffect(() => {
+			setDark(isDark);
+		});
 
 		const saved = localStorage.getItem("theme");
 
 		if (saved === "light") {
 			document.documentElement.classList.remove("dark");
-			setDark(false);
+			return deferEffect(() => {
+				setDark(false);
+				deferSetter();
+			});
 		}
 
 		if (saved === "dark") {
 			document.documentElement.classList.add("dark");
-			setDark(true);
+			return deferEffect(() => {
+				setDark(true);
+				deferSetter();
+			});
 		}
 	}, []);
 

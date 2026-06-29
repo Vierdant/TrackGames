@@ -144,7 +144,7 @@ export async function createPlaylist(formData: FormData) {
 		});
 	}
 
-	siteStats.refresh().catch(console.error);
+	siteStats.refresh().catch(Error);
 	revalidatePath("/u/[user]", "page");
 	redirect(`/playlist/${playlist.id}`);
 }
@@ -360,7 +360,7 @@ export async function deletePlaylist(listId: string) {
 		throw new Error("Playlist not found.");
 	}
 
-	siteStats.refresh().catch(console.error);
+	siteStats.refresh().catch(Error);
 	revalidatePath(`/playlist/${playlist.id}`);
 	revalidatePath("/u/[user]", "page");
 	redirect(playlist.user.name ? `/u/${playlist.user.name}?tab=playlists` : "/");

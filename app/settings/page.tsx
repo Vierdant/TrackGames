@@ -94,12 +94,6 @@ export const metadata: Metadata = {
 	},
 };
 
-
-
-
-
-
-
 export default async function SettingsPage({ searchParams }: SearchPageProps) {
 	const params = await searchParams;
 	const activeTab = normalize.value(params.tab, tabs, "id", "profile");

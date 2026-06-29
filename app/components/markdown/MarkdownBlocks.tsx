@@ -2,6 +2,7 @@ import { MarkdownAlign } from "@/lib/enums";
 import type { MarkdownBlock } from "@/lib/types";
 import * as normalize from "@/lib/util/normalize";
 import { isSafeLinkHref, isSafeUrl } from "@/lib/util/safety";
+import Image from "next/image";
 import { Children, cloneElement, isValidElement, ReactNode } from "react";
 import ReactMarkdown, { type Components } from "react-markdown";
 import rehypeSanitize from "rehype-sanitize";
@@ -136,7 +137,7 @@ function MarkdownImage({
 	const widthPx = width ? `${width}px` : undefined;
 
 	return (
-		<img
+		<Image
 			src={src}
 			alt={alt}
 			width={width}
@@ -321,20 +322,6 @@ function mediaClassName({ rounded, align }: { rounded?: boolean; align: Markdown
 
 	return classes.join(" ");
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 function renderMarkdownComponent(name: MarkdownComponentName, { children, href, src, alt }: MarkdownComponentProps) {
 	switch (name) {

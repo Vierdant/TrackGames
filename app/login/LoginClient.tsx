@@ -7,6 +7,7 @@ import { GoogleIcon, TwitchIcon, GithubIcon, DiscordIcon } from "../components/S
 import { Mail, User, Lock, EyeOff, Eye } from "lucide-react";
 import { login, loginProvider, signup } from "@/lib/actions/auth";
 import MenuPanel from "../components/ui/MenuPanel";
+import { deferEffect } from "@/lib/util/effects";
 
 const providers = [
 	{ name: "Google", icon: GoogleIcon, slug: "google" },
@@ -44,12 +45,18 @@ export default function LoginClient() {
 		isRegister && password.length > 0 && password.length < 8 ? "Password must be at least 8 characters." : fieldErrors.password;
 
 	useEffect(() => {
-		setMode(searchParams.get("mode") === "register" ? "register" : "login");
+		const defer = deferEffect(() => {
+			setMode(searchParams.get("mode") === "register" ? "register" : "login");
+		});
 		const authError = searchParams.get("error");
 
 		if (authError) {
-			setErrorMessage(authErrorMessages[authError] ?? "Sign in failed. Please try again.");
+			return deferEffect(() => {
+				setErrorMessage(authErrorMessages[authError] ?? "Sign in failed. Please try again.");
+			});
 		}
+
+		return defer();
 	}, [searchParams]);
 
 	function switchTo(nextMode: "login" | "register") {
@@ -249,7 +256,10 @@ export default function LoginClient() {
 				)}
 
 				{!isRegister && (
-					<a href="/login" className="cursor-pointer w-fit text-sm font-bold text-primary transition-colors hover:text-primary-hover">
+					<a
+						href="/login"
+						className="cursor-pointer w-fit text-sm font-bold text-primary transition-colors hover:text-primary-hover"
+					>
 						Forgot password?
 					</a>
 				)}

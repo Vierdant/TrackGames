@@ -16,7 +16,7 @@ export default function RelatedGamesTabs({ franchiesGames, seriesGames, similarG
 		{ id: "similar" as const, label: "Similar Games", games: similarGames },
 	].filter((tab) => tab.games.length > 0);
 
-	const [activeTab, setActiveTab] = useState<"series" | "franchies" | "similar">(tabs[0]?.id ?? "similar");
+	const [activeTab, setActiveTab] = useState<string>(tabs[0]?.id ?? "similar");
 	const activeGames = normalize.byKey(tabs, "id", activeTab)?.games ?? tabs[0]?.games ?? [];
 
 	if (!tabs.length) {

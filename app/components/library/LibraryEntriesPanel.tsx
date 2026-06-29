@@ -9,7 +9,7 @@ import PaginatedList from "../layout/PaginatedList";
 import { FilterBar } from "../ui/FilterBar";
 import AdvancedLibraryFilterPanel, { emptyAdvancedLibraryFilters } from "./AdvancedLibraryFilterPanel";
 import PlaylistCard from "./PlaylistCard";
-import { advancedFilterCount, matchesAdvancedFilters } from "@/lib/util/filtering"
+import { advancedFilterCount, matchesAdvancedFilters } from "@/lib/util/filtering";
 
 type LibraryEntriesPanelProps = Readonly<{
 	entries: UserLibraryEntryWithTags[];

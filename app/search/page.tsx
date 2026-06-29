@@ -5,7 +5,7 @@ import Container from "../components/layout/Container";
 import { searchGames } from "@/lib/data/games";
 import { absoluteUrl, DEFAULT_OG_IMAGE, metadataDescription, SITE_NAME } from "@/lib/metadata";
 
-type SearchPageProps = Readonly<{ searchParams: Promise<{ q?: string | string[]; page?: string | string[] }> }>
+type SearchPageProps = Readonly<{ searchParams: Promise<{ q?: string | string[]; page?: string | string[] }> }>;
 
 const description = metadataDescription("Search TrackGames for games to rate, track, and add to your library.");
 
@@ -41,10 +41,6 @@ export const metadata: Metadata = {
 		follow: true,
 	},
 };
-
-
-
-
 
 export default async function SearchPage({ searchParams }: SearchPageProps) {
 	const params = await searchParams;

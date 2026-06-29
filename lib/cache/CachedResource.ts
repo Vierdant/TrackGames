@@ -31,7 +31,6 @@ export default class CachedResource<T> {
 
 		if (diskData != null) {
 			this.data = diskData;
-			console.log(`[Cache:${this.name}] Loaded from disk`);
 		}
 	}
 
@@ -41,7 +40,7 @@ export default class CachedResource<T> {
 		}
 
 		if ((this.data === null || this.isExpired) && !this.isUpdating) {
-			this.refresh().catch(console.error);
+			this.refresh().catch(Error);
 		}
 
 		return this.data ?? this.options.fallback;
@@ -59,16 +58,12 @@ export default class CachedResource<T> {
 		this.isUpdating = true;
 
 		try {
-			console.log(`[Cache:${this.name}] Refreshing`);
-
 			const freshData = await this.options.fetcher();
 
 			this.data = freshData;
 			this.lastUpdated = Date.now();
 
 			await writeDiskCache(this.options.name, freshData);
-
-			console.log(`[Cache:${this.name}] Updated`);
 
 			return freshData;
 		} finally {

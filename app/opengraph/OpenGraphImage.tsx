@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import { ImageResponse } from "next/og";
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
@@ -144,13 +145,7 @@ export async function createOpenGraphImage({
 							boxShadow: "0 18px 30px rgba(0,0,0,0.36)",
 						}}
 					>
-						<img
-							src={coverSrc}
-							width="170"
-							height="238"
-							alt=""
-							style={{ width: "100%", height: "100%", objectFit: "cover" }}
-						/>
+						<img src={coverSrc} width="170" height="238" alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
 					</div>
 				)}
 				<div
@@ -248,13 +243,7 @@ export async function createOpenGraphImage({
 					}}
 				>
 					{imageSrc ? (
-						<img
-							src={imageSrc}
-							width="330"
-							height="330"
-							alt=""
-							style={{ width: "100%", height: "100%", objectFit: "cover" }}
-						/>
+						<img src={imageSrc} width="330" height="330" alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
 					) : (
 						<div
 							style={{

@@ -1,6 +1,7 @@
 "use client";
 
 import type { Game } from "@/lib/types";
+import { deferEffect } from "@/lib/util/effects";
 import { ArrowRight, Search, X } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -48,12 +49,10 @@ function SearchBox({ autoFocus = false, onPick }: Readonly<{ autoFocus?: boolean
 		const search = query.trim();
 
 		if (search.length < 2) {
-			const shortTimer = globalThis.setTimeout(() => {
+			return deferEffect(() => {
 				setResults([]);
 				setOpen(false);
-			}, 0);
-
-			return () => globalThis.clearTimeout(shortTimer);
+			});
 		}
 
 		const controller = new AbortController();

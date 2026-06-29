@@ -1,0 +1,10 @@
+# Generated code
+lib/generated/
+
+# Next.js
+.next/
+out/
+build/
+
+# Dependencies
+node_modules/

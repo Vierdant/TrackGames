@@ -137,14 +137,6 @@ export function ImageIdToURL(
 	}
 }
 
-
-
-
-
-
-
-
-
 export function formatRawGame(game: RawGame): Game {
 	if (!game.id || !game.name || !game.slug) {
 		throw new Error("Cannot format an API game without an id, name, and slug.");

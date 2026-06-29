@@ -32,7 +32,7 @@ export async function fetchGameDataBySlug(slug: string) {
 
 export async function calculateTrendingGames() {
 	const unixGamesLimit = new Unix().elapse(UnixElapseMeasure.MONTHS, -2);
-	const weightedGames: { game: any; score: number }[] = [];
+	const weightedGames: { game: RawGame; score: number }[] = [];
 
 	const games = await fetchDisplayGames(
 		null,

@@ -28,8 +28,6 @@ export function getSocialPlaceholder(value: string, kind: LinkType) {
 	return getSocialPlatform(value, kind)?.placeholder ?? (kind === LinkType.COPY ? "username" : "https://...");
 }
 
-
-
 export function parseSocials(value: string | null | undefined): SocialLink[] {
 	if (!value) return [];
 

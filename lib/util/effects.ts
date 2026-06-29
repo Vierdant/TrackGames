@@ -1,5 +1,11 @@
 import { RefObject } from "react";
 
+export function deferEffect(callback: () => void) {
+	const shortTimer = globalThis.setTimeout(callback, 0);
+
+	return () => globalThis.clearTimeout(shortTimer);
+}
+
 export function rippleEffect(ref: RefObject<HTMLDivElement | null>, event: React.PointerEvent<HTMLDivElement>) {
 	const obj = ref.current;
 	if (!obj) return;

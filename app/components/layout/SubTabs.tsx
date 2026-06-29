@@ -1,12 +1,12 @@
 "use client";
 
 import { ArrowRight } from "lucide-react";
-import { Dispatch, ReactNode } from "react";
+import { Dispatch, ReactNode, SetStateAction } from "react";
 
 type SubTabsProps = Readonly<{
 	tabs: { id: string; label: string }[];
-	active: any;
-	setter: Dispatch<any> | Function;
+	active: string;
+	setter: Dispatch<SetStateAction<string>> | ((tab: string) => void);
 	viewAll?: boolean;
 	viewAllHref?: string;
 	compact?: boolean;

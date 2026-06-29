@@ -105,7 +105,7 @@ export default function MenuPanel({
 		>
 			{(title || showClose) && (
 				<div className="mb-4 flex shrink-0 items-center justify-between gap-3">
-					{title && <h3 className="min-w-0 truncate text-lg font-bold">{title}</h3>}
+					{title && <h3 className="min-w-0 truncate text-lg text-text font-bold">{title}</h3>}
 					{showClose && (
 						<button
 							type="button"
@@ -130,7 +130,7 @@ export default function MenuPanel({
 			<dialog
 				open
 				className={join(
-					"pointer-events-auto fixed inset-0 flex items-center justify-center bg-overlay p-4",
+					"pointer-events-auto fixed inset-0 m-0 flex h-dvh max-h-none w-dvw max-w-none items-center justify-center border-0 bg-overlay p-4",
 					`${open ? "animate-menu-overlay-in" : "animate-menu-overlay-out"} ${className ?? ""}`,
 				)}
 				onPointerDown={(event) => {
@@ -144,7 +144,7 @@ export default function MenuPanel({
 		content = (
 			<dialog
 				open
-				className={join("fixed inset-0 pointer-events-auto", className)}
+				className={join("fixed inset-0 m-0 h-dvh max-h-none w-dvw max-w-none border-0 pointer-events-auto", className)}
 				onPointerDown={(event) => {
 					if (event.target === event.currentTarget) onClose();
 				}}

@@ -9,18 +9,6 @@ import * as normalize from "@/lib/util/normalize";
 import { Input, Select } from "@/app/components/ui/Inputs";
 import { useEffect, useState } from "react";
 
-const statOptions = [
-	{ value: "played", label: "Played" },
-	{ value: "completed", label: "Completed" },
-	{ value: "backlog", label: "Backlog" },
-	{ value: "wishlisted", label: "Wishlist" },
-	{ value: "playing", label: "Playing" },
-	{ value: "paused", label: "Paused" },
-	{ value: "dropped", label: "Dropped" },
-	{ value: "hours", label: "Hours" },
-	{ value: "total", label: "Total" },
-];
-
 type WidgetHeaderProps = Readonly<{
 	widget: Widget;
 	onChange: (patch: Partial<Widget>) => void;
@@ -51,15 +39,17 @@ type WidgetEditorProps = Readonly<{
 	onMoveDown: () => void;
 }>;
 
-function moveItem<T>(items: T[], index: number, direction: -1 | 1) {
-	const targetIndex = index + direction;
-
-	if (targetIndex < 0 || targetIndex >= items.length) return items;
-
-	const next = [...items];
-	[next[index], next[targetIndex]] = [next[targetIndex], next[index]];
-	return next;
-}
+const statOptions = [
+	{ value: "played", label: "Played" },
+	{ value: "completed", label: "Completed" },
+	{ value: "backlog", label: "Backlog" },
+	{ value: "wishlisted", label: "Wishlist" },
+	{ value: "playing", label: "Playing" },
+	{ value: "paused", label: "Paused" },
+	{ value: "dropped", label: "Dropped" },
+	{ value: "hours", label: "Hours" },
+	{ value: "total", label: "Total" },
+];
 
 function WidgetHeader({ widget, onChange, onRemove, onMoveUp, onMoveDown, first, last }: WidgetHeaderProps) {
 	return (
@@ -185,14 +175,6 @@ function StatsEditor({ widget, onChange }: StatsEditor) {
 	);
 }
 
-function selectedGamesConFilter(games: Game[], game: Game) {
-	return games.some((item) => item.id === game.id) ? games : [...games, game];
-}
-
-function selectedGamesFilter(games: Game[], game: Game) {
-	return games.filter((item) => item.id !== game.id);
-}
-
 function GameListEditor({ widget, onChange }: GameListEditor) {
 	const [query, setQuery] = useState("");
 	const [results, setResults] = useState<Game[]>([]);
@@ -202,8 +184,11 @@ function GameListEditor({ widget, onChange }: GameListEditor) {
 
 	useEffect(() => {
 		if (!widget.games.length) {
-			setSelectedGames([]);
-			return;
+			const shortTimer = globalThis.setTimeout(() => {
+				setSelectedGames([]);
+			}, 0);
+
+			return () => globalThis.clearTimeout(shortTimer);
 		}
 
 		const controller = new AbortController();
@@ -218,15 +203,18 @@ function GameListEditor({ widget, onChange }: GameListEditor) {
 			});
 
 		return () => controller.abort();
-	}, [selectedKey]);
+	}, [selectedKey, widget.games.length]);
 
 	useEffect(() => {
 		const search = query.trim();
 
 		if (search.length < 2) {
-			setResults([]);
-			setLoading(false);
-			return;
+			const shortTimer = globalThis.setTimeout(() => {
+				setResults([]);
+				setLoading(false);
+			}, 0);
+
+			return () => globalThis.clearTimeout(shortTimer);
 		}
 
 		const controller = new AbortController();
@@ -381,6 +369,24 @@ function GameListEditor({ widget, onChange }: GameListEditor) {
 			</div>
 		</div>
 	);
+}
+
+function moveItem<T>(items: T[], index: number, direction: -1 | 1) {
+	const targetIndex = index + direction;
+
+	if (targetIndex < 0 || targetIndex >= items.length) return items;
+
+	const next = [...items];
+	[next[index], next[targetIndex]] = [next[targetIndex], next[index]];
+	return next;
+}
+
+function selectedGamesConFilter(games: Game[], game: Game) {
+	return games.some((item) => item.id === game.id) ? games : [...games, game];
+}
+
+function selectedGamesFilter(games: Game[], game: Game) {
+	return games.filter((item) => item.id !== game.id);
 }
 
 export function WidgetEditor({ widget, index, total, onChange, onRemove, onMoveUp, onMoveDown }: WidgetEditorProps) {

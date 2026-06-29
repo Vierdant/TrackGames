@@ -20,30 +20,6 @@ import type {
 	Theme,
 } from "../../types";
 
-export function ImageIdToURL(
-	id?: string,
-	type: "cover_small" | "cover" | "cover_big" | "screenshot_big" | "1080" | "720" = "cover_big",
-): string | null {
-	if (id != null) {
-		switch (type) {
-			case "cover_small":
-				return `https://images.igdb.com/igdb/image/upload/t_cover_small/${id}.webp`;
-			case "cover_big":
-				return `https://images.igdb.com/igdb/image/upload/t_cover_big/${id}.webp`;
-			case "cover":
-				return `https://images.igdb.com/igdb/image/upload/t_cover/${id}.webp`;
-			case "screenshot_big":
-				return `https://images.igdb.com/igdb/image/upload/t_screenshot_big/${id}.webp`;
-			case "1080":
-				return `https://images.igdb.com/igdb/image/upload/t_1080p/${id}.webp`;
-			case "720":
-				return `https://images.igdb.com/igdb/image/upload/t_720p/${id}.webp`;
-		}
-	} else {
-		return null;
-	}
-}
-
 function requireBaseEntity(entity: { id?: number; name?: string; slug?: string }, label: string) {
 	if (!entity.id || !entity.name || !entity.slug) {
 		throw new Error(`Cannot format an API ${label} without an id, name, and slug.`);
@@ -136,6 +112,38 @@ function getPlayerPerspective(slug: string): PlayerPerspective {
 			throw new Error(`Unknown player perspective slug: ${slug}`);
 	}
 }
+
+export function ImageIdToURL(
+	id?: string,
+	type: "cover_small" | "cover" | "cover_big" | "screenshot_big" | "1080" | "720" = "cover_big",
+): string | null {
+	if (id != null) {
+		switch (type) {
+			case "cover_small":
+				return `https://images.igdb.com/igdb/image/upload/t_cover_small/${id}.webp`;
+			case "cover_big":
+				return `https://images.igdb.com/igdb/image/upload/t_cover_big/${id}.webp`;
+			case "cover":
+				return `https://images.igdb.com/igdb/image/upload/t_cover/${id}.webp`;
+			case "screenshot_big":
+				return `https://images.igdb.com/igdb/image/upload/t_screenshot_big/${id}.webp`;
+			case "1080":
+				return `https://images.igdb.com/igdb/image/upload/t_1080p/${id}.webp`;
+			case "720":
+				return `https://images.igdb.com/igdb/image/upload/t_720p/${id}.webp`;
+		}
+	} else {
+		return null;
+	}
+}
+
+
+
+
+
+
+
+
 
 export function formatRawGame(game: RawGame): Game {
 	if (!game.id || !game.name || !game.slug) {

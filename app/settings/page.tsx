@@ -14,38 +14,11 @@ import ProfileHeader from "@/app/components/user/ProfileHeader";
 import { parseSocials } from "@/lib/account/socials";
 import { absoluteUrl, DEFAULT_OG_IMAGE, metadataDescription, SITE_NAME } from "@/lib/metadata";
 
-const description = metadataDescription("Manage your TrackGames profile, privacy, widgets, preferences, imports, and account settings.");
+type SearchPageProps = Readonly<{
+	searchParams: Promise<{ tab?: string; edit?: string; saved?: string; error?: string }>;
+}>;
 
-export const metadata: Metadata = {
-	title: "Settings",
-	description,
-	alternates: {
-		canonical: absoluteUrl("/settings"),
-	},
-	openGraph: {
-		title: `Settings | ${SITE_NAME}`,
-		description,
-		url: absoluteUrl("/settings"),
-		siteName: SITE_NAME,
-		type: "website",
-		images: [
-			{
-				url: DEFAULT_OG_IMAGE,
-				alt: SITE_NAME,
-			},
-		],
-	},
-	twitter: {
-		card: "summary_large_image",
-		title: `Settings | ${SITE_NAME}`,
-		description,
-		images: [DEFAULT_OG_IMAGE],
-	},
-	robots: {
-		index: false,
-		follow: false,
-	},
-};
+const description = metadataDescription("Manage your TrackGames profile, privacy, widgets, preferences, imports, and account settings.");
 
 const tabs: { id: string; label: string; icon: typeof UserIcon }[] = [
 	{ id: "profile", label: "Profile", icon: UserIcon },
@@ -90,9 +63,42 @@ function settingsErrorMessage(error: string) {
 	}
 }
 
-type SearchPageProps = Readonly<{
-	searchParams: Promise<{ tab?: string; edit?: string; saved?: string; error?: string }>;
-}>;
+export const metadata: Metadata = {
+	title: "Settings",
+	description,
+	alternates: {
+		canonical: absoluteUrl("/settings"),
+	},
+	openGraph: {
+		title: `Settings | ${SITE_NAME}`,
+		description,
+		url: absoluteUrl("/settings"),
+		siteName: SITE_NAME,
+		type: "website",
+		images: [
+			{
+				url: DEFAULT_OG_IMAGE,
+				alt: SITE_NAME,
+			},
+		],
+	},
+	twitter: {
+		card: "summary_large_image",
+		title: `Settings | ${SITE_NAME}`,
+		description,
+		images: [DEFAULT_OG_IMAGE],
+	},
+	robots: {
+		index: false,
+		follow: false,
+	},
+};
+
+
+
+
+
+
 
 export default async function SettingsPage({ searchParams }: SearchPageProps) {
 	const params = await searchParams;

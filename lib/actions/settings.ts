@@ -11,14 +11,16 @@ import { ActivityType } from "../generated/prisma/enums";
 import { hashPassword, verifyPassword } from "../util/password";
 import { usernameSchema } from "../account/username";
 
-const tabSchema = z.enum(["profile", "privacy", "widgets", "preferences", "account"]);
-const socialPlatformSchema = z.enum(["x", "discord", "github", "twitch", "youtube", "instagram", "tiktok", "website"]);
-const socialKindSchema = z.union([z.literal(LinkType.LINK), z.literal(LinkType.COPY)]);
 type SocialLinkValue = {
 	platform: z.infer<typeof socialPlatformSchema>;
 	kind: z.infer<typeof socialKindSchema>;
 	value: string;
 };
+
+const tabSchema = z.enum(["profile", "privacy", "widgets", "preferences", "account"]);
+const socialPlatformSchema = z.enum(["x", "discord", "github", "twitch", "youtube", "instagram", "tiktok", "website"]);
+const socialKindSchema = z.union([z.literal(LinkType.LINK), z.literal(LinkType.COPY)]);
+
 const nullableText = (max: number) =>
 	z
 		.string()

@@ -3,8 +3,6 @@ import { IGDB_BASE_URL, importConfigs } from "@/lib/external/igdb/import";
 import { getAccessToken } from "@/lib/token";
 import { after } from "next/server";
 
-export const runtime = "nodejs";
-
 type WebhookParams = {
 	params: Promise<{
 		kind: string;
@@ -69,6 +67,20 @@ async function processWebhook(id: number, method: string, config: NonNullable<Re
 
 	await config.save(db, formatted);
 }
+
+export const runtime = "nodejs";
+
+
+
+
+
+
+
+
+
+
+
+
 
 export async function POST(request: Request, { params }: WebhookParams) {
 	const expectedSecret = process.env.IGDB_WEBHOOK_SECRET;

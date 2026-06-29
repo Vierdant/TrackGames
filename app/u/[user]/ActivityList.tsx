@@ -24,6 +24,31 @@ type ActivityListProps = Readonly<{
 	canViewLogs: boolean;
 }>;
 
+function ActivityText({ activity }: Readonly<{ activity: Activity }>) {
+	const message = activityMessage(activity);
+	const spacer = message.after.startsWith(".") || message.after.startsWith("'") ? "" : " ";
+
+	return (
+		<p className="text-sm font-bold text-text">
+			{message.before}
+			{message.name && (
+				<>
+					{" "}
+					{activity.targetHref ? (
+						<Link href={activity.targetHref} className="text-primary hover:text-primary-hover">
+							{message.name}
+						</Link>
+					) : (
+						<span className="text-primary">{message.name}</span>
+					)}
+				</>
+			)}
+			{spacer}
+			{message.after}
+		</p>
+	);
+}
+
 function commentTargetAfter(targetType: InteractionTargetType | null) {
 	if (targetType === InteractionTargetType.GAME_LIST) return "playlist.";
 	if (targetType === InteractionTargetType.USER_PROFILE) return "'s profile.";
@@ -77,31 +102,6 @@ function activityMessage(activity: {
 		default:
 			return { before: "New activity", name: null, after: "." };
 	}
-}
-
-function ActivityText({ activity }: Readonly<{ activity: Activity }>) {
-	const message = activityMessage(activity);
-	const spacer = message.after.startsWith(".") || message.after.startsWith("'") ? "" : " ";
-
-	return (
-		<p className="text-sm font-bold text-text">
-			{message.before}
-			{message.name && (
-				<>
-					{" "}
-					{activity.targetHref ? (
-						<Link href={activity.targetHref} className="text-primary hover:text-primary-hover">
-							{message.name}
-						</Link>
-					) : (
-						<span className="text-primary">{message.name}</span>
-					)}
-				</>
-			)}
-			{spacer}
-			{message.after}
-		</p>
-	);
 }
 
 export default function ActivityList({ user, activities, page, totalPages, filter, canViewLogs }: ActivityListProps) {

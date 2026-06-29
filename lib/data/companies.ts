@@ -3,6 +3,10 @@ import { formatRawCompany } from "../external/igdb/util";
 import type { Company, MaybeArray } from "../types";
 import { getByIds, getBySlugs } from "./getter";
 
+type DataResult<T extends MaybeArray<number>> = T extends number[] ? Company[] : Company | null;
+
+type SlugResult<T extends string | string[]> = T extends string[] ? Company[] : Company | null;
+
 const select = {
 	id: true,
 	slug: true,
@@ -23,9 +27,6 @@ const fetching = {
 	endpoint: "companies",
 	body: `fields slug, name, logo.image_id, description, developed, published;`,
 };
-
-type DataResult<T extends MaybeArray<number>> = T extends number[] ? Company[] : Company | null;
-type SlugResult<T extends string | string[]> = T extends string[] ? Company[] : Company | null;
 
 export async function getCompany<T extends MaybeArray<number>>(id: T): Promise<DataResult<T>> {
 	const ids = Array.isArray(id) ? id : [id];

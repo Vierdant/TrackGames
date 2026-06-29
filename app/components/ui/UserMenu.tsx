@@ -28,18 +28,6 @@ type UserMenuProps = Readonly<{
 	notifications: Notification[];
 }>;
 
-function notificationText(notification: Notification) {
-	const actor = notification.actor?.name ?? "Someone";
-
-	if (notification.type === "COMMENT_REPLY") return `${actor} replied to your comment.`;
-	if (notification.type === "COMMENTED_ON_PROFILE") return `${actor} commented on your profile.`;
-	if (notification.type === "RECEIVED_LIKE") return `${actor} liked your post.`;
-	if (notification.type === "FOLLOWED_USER") return `${actor} followed you.`;
-	if (notification.type === "FOLLOWING_CREATED_LIST") return `${actor} created a new list.`;
-	if (notification.type === "EARNED_BADGE") return "You earned a badge.";
-	return "New notification.";
-}
-
 function Notifications({ notifications, onClose }: { notifications: Notification[]; onClose: () => void }) {
 	return notifications.length ? (
 		notifications.map((notification) => (
@@ -56,6 +44,18 @@ function Notifications({ notifications, onClose }: { notifications: Notification
 	) : (
 		<p className="px-3 py-4 text-text-muted">No notifications yet.</p>
 	);
+}
+
+function notificationText(notification: Notification) {
+	const actor = notification.actor?.name ?? "Someone";
+
+	if (notification.type === "COMMENT_REPLY") return `${actor} replied to your comment.`;
+	if (notification.type === "COMMENTED_ON_PROFILE") return `${actor} commented on your profile.`;
+	if (notification.type === "RECEIVED_LIKE") return `${actor} liked your post.`;
+	if (notification.type === "FOLLOWED_USER") return `${actor} followed you.`;
+	if (notification.type === "FOLLOWING_CREATED_LIST") return `${actor} created a new list.`;
+	if (notification.type === "EARNED_BADGE") return "You earned a badge.";
+	return "New notification.";
 }
 
 export function UserMenu({ user, notifications }: UserMenuProps) {

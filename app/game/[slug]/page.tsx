@@ -41,55 +41,6 @@ import type { Metadata } from "next";
 import { absoluteUrl, metadataDescription, SITE_NAME } from "@/lib/metadata";
 import { Session } from "next-auth";
 
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
-	const { slug } = await params;
-	const game = await getGameBySlug(slug);
-	const title = game?.name ?? "Game not found";
-	const description = metadataDescription(
-		game?.summary,
-		game ? `Track ratings, playtime, playlists, and community activity for ${game.name}.` : "The requested game could not be found.",
-	);
-	const image = absoluteUrl(`/game/${encodeURIComponent(game?.slug ?? slug)}/opengraph-image`);
-	const url = absoluteUrl(`/game/${game?.slug ?? slug}`);
-
-	return {
-		title,
-		description,
-		alternates: {
-			canonical: url,
-		},
-		openGraph: {
-			title: `${title} | ${SITE_NAME}`,
-			description,
-			url,
-			siteName: SITE_NAME,
-			type: "website",
-			images: [
-				{
-					url: image,
-					alt: title,
-				},
-			],
-		},
-		twitter: {
-			card: "summary_large_image",
-			title: `${title} | ${SITE_NAME}`,
-			description,
-			images: [image],
-		},
-		robots: game
-			? undefined
-			: {
-					index: false,
-					follow: false,
-					googleBot: {
-						index: false,
-						follow: false,
-					},
-				},
-	};
-}
-
 function platformIcon(name: string) {
 	const lower = name.toLowerCase();
 
@@ -139,6 +90,65 @@ async function fetchGroupedData(franchises: Franchise[], collections: Collection
 		collections.length ? getGame(collections[0].games) : [],
 	]);
 }
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+	const { slug } = await params;
+	const game = await getGameBySlug(slug);
+	const title = game?.name ?? "Game not found";
+	const description = metadataDescription(
+		game?.summary,
+		game ? `Track ratings, playtime, playlists, and community activity for ${game.name}.` : "The requested game could not be found.",
+	);
+	const image = absoluteUrl(`/game/${encodeURIComponent(game?.slug ?? slug)}/opengraph-image`);
+	const url = absoluteUrl(`/game/${game?.slug ?? slug}`);
+
+	return {
+		title,
+		description,
+		alternates: {
+			canonical: url,
+		},
+		openGraph: {
+			title: `${title} | ${SITE_NAME}`,
+			description,
+			url,
+			siteName: SITE_NAME,
+			type: "website",
+			images: [
+				{
+					url: image,
+					alt: title,
+				},
+			],
+		},
+		twitter: {
+			card: "summary_large_image",
+			title: `${title} | ${SITE_NAME}`,
+			description,
+			images: [image],
+		},
+		robots: game
+			? undefined
+			: {
+					index: false,
+					follow: false,
+					googleBot: {
+						index: false,
+						follow: false,
+					},
+				},
+	};
+}
+
+
+
+
+
+
+
+
+
+
 
 export default async function Page({ params }: Readonly<{ params: Promise<{ slug: string }> }>) {
 	const { slug } = await params;

@@ -5,7 +5,11 @@ import Container from "../components/layout/Container";
 import { searchGames } from "@/lib/data/games";
 import { absoluteUrl, DEFAULT_OG_IMAGE, metadataDescription, SITE_NAME } from "@/lib/metadata";
 
+type SearchPageProps = Readonly<{ searchParams: Promise<{ q?: string | string[]; page?: string | string[] }> }>
+
 const description = metadataDescription("Search TrackGames for games to rate, track, and add to your library.");
+
+const RESULTS_PER_PAGE = 32;
 
 export const metadata: Metadata = {
 	title: "Search",
@@ -38,9 +42,9 @@ export const metadata: Metadata = {
 	},
 };
 
-const RESULTS_PER_PAGE = 32;
 
-type SearchPageProps = Readonly<{ searchParams: Promise<{ q?: string | string[]; page?: string | string[] }> }>
+
+
 
 export default async function SearchPage({ searchParams }: SearchPageProps) {
 	const params = await searchParams;

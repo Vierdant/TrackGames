@@ -16,6 +16,29 @@ import { absoluteUrl, metadataDescription, robotsForPrivacy, SITE_NAME } from "@
 import { CSSProperties } from "react";
 import { User } from "@/lib/types";
 
+function Entries({
+	entries,
+	isOwnLibrary,
+	themeStyle,
+	viewer,
+}: {
+	entries: UserLibraryEntryWithTags[];
+	isOwnLibrary: boolean;
+	themeStyle: CSSProperties & Record<string, string>;
+	viewer: User | null;
+}) {
+	return entries.length ? (
+		<LibraryEntriesPanel
+			entries={entries}
+			canEdit={isOwnLibrary}
+			themeStyle={themeStyle}
+			defaults={viewer ? defaultLibraryFilters(viewer) : undefined}
+		/>
+	) : (
+		<p>No games found.</p>
+	);
+}
+
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
 	const { slug } = await params;
 	const library = await db.gameList.findFirst({
@@ -74,28 +97,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 	};
 }
 
-function Entries({
-	entries,
-	isOwnLibrary,
-	themeStyle,
-	viewer,
-}: {
-	entries: UserLibraryEntryWithTags[];
-	isOwnLibrary: boolean;
-	themeStyle: CSSProperties & Record<string, string>;
-	viewer: User | null;
-}) {
-	return entries.length ? (
-		<LibraryEntriesPanel
-			entries={entries}
-			canEdit={isOwnLibrary}
-			themeStyle={themeStyle}
-			defaults={viewer ? defaultLibraryFilters(viewer) : undefined}
-		/>
-	) : (
-		<p>No games found.</p>
-	);
-}
+
 
 export default async function Page({ params }: Readonly<{ params: Promise<{ slug: string }> }>) {
 	const { slug } = await params;

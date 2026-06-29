@@ -48,9 +48,12 @@ function SearchBox({ autoFocus = false, onPick }: Readonly<{ autoFocus?: boolean
 		const search = query.trim();
 
 		if (search.length < 2) {
-			setResults([]);
-			setOpen(false);
-			return;
+			const shortTimer = globalThis.setTimeout(() => {
+				setResults([]);
+				setOpen(false);
+			}, 0);
+
+			return () => globalThis.clearTimeout(shortTimer);
 		}
 
 		const controller = new AbortController();

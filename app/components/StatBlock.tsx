@@ -1,5 +1,12 @@
 type StatBlockProps = Readonly<{ color: string, title: string, value: number }>
 
+function formatNumber(num: number): string {
+  return Intl.NumberFormat("en", {
+    notation: "compact",
+    maximumFractionDigits: 1,
+  }).format(num);
+}
+
 export default function StatBlock({ color, title, value }: StatBlockProps) {
   return (
     <div className="z-1 w-fit min-w-24 justify-self-start bg-bg-secondary/80 rounded-md text-text">
@@ -14,9 +21,4 @@ export default function StatBlock({ color, title, value }: StatBlockProps) {
   )
 }
 
-function formatNumber(num: number): string {
-  return Intl.NumberFormat("en", {
-    notation: "compact",
-    maximumFractionDigits: 1,
-  }).format(num);
-}
+

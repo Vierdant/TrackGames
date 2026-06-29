@@ -3,6 +3,11 @@ import { LinkType } from "../enums";
 import type { SocialLink } from "../types";
 import * as normalize from "../util/normalize";
 
+function normalizeSocialKind(value: unknown): LinkType {
+	if (value === LinkType.COPY) return LinkType.COPY;
+	return LinkType.LINK;
+}
+
 export function isSocialPlatform(value: string): boolean {
 	return SOCIALPLATFORMS.some((platform) => platform.value === value);
 }
@@ -23,10 +28,7 @@ export function getSocialPlaceholder(value: string, kind: LinkType) {
 	return getSocialPlatform(value, kind)?.placeholder ?? (kind === LinkType.COPY ? "username" : "https://...");
 }
 
-function normalizeSocialKind(value: unknown): LinkType {
-	if (value === LinkType.COPY) return LinkType.COPY;
-	return LinkType.LINK;
-}
+
 
 export function parseSocials(value: string | null | undefined): SocialLink[] {
 	if (!value) return [];

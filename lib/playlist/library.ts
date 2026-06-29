@@ -2,11 +2,11 @@ import db from "../db";
 
 const listSelect = {
 	id: true,
-	userId: true,
 	type: true,
+	userId: true,
 	displayMode: true,
-	tierLabels: true,
 	tierColors: true,
+	tierLabels: true,
 	name: true,
 	slug: true,
 	description: true,
@@ -40,7 +40,7 @@ export async function ensureAndGetUserLibrary(slug: string) {
 
 	const library = await db.gameList.findFirst({
 		where: {
-			slug: slug,
+			slug,
 			userId: user.id,
 		},
 		select: listSelect,

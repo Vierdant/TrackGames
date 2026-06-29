@@ -21,6 +21,25 @@ import type {
 	RawTheme,
 } from "@/lib/types";
 
+function isSlugUniqueError(error: unknown) {
+	if (typeof error !== "object" || error === null || !("code" in error) || error.code !== "P2002") {
+		return false;
+	}
+
+	if ("message" in error && typeof error.message === "string" && error.message.includes("`slug`")) {
+		return true;
+	}
+
+	return (
+		"meta" in error &&
+		typeof error.meta === "object" &&
+		error.meta !== null &&
+		"target" in error.meta &&
+		Array.isArray(error.meta.target) &&
+		error.meta.target.includes("slug")
+	);
+}
+
 export const IGDB_BASE_URL = "https://api.igdb.com/v4";
 
 export type DbClient = typeof import("@/lib/db").default;
@@ -45,24 +64,7 @@ export type ImportConfig<Raw, Formatted> = {
 	delete: (db: DbClient, id: number) => Promise<unknown>;
 };
 
-function isSlugUniqueError(error: unknown) {
-	if (typeof error !== "object" || error === null || !("code" in error) || error.code !== "P2002") {
-		return false;
-	}
 
-	if ("message" in error && typeof error.message === "string" && error.message.includes("`slug`")) {
-		return true;
-	}
-
-	return (
-		"meta" in error &&
-		typeof error.meta === "object" &&
-		error.meta !== null &&
-		"target" in error.meta &&
-		Array.isArray(error.meta.target) &&
-		error.meta.target.includes("slug")
-	);
-}
 
 export async function upsertById(
 	model: { upsert: (args: any) => Promise<unknown>; update: (args: any) => Promise<unknown> },

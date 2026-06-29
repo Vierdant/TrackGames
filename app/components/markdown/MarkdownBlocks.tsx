@@ -7,6 +7,73 @@ import ReactMarkdown, { type Components } from "react-markdown";
 import rehypeSanitize from "rehype-sanitize";
 import remarkGfm from "remark-gfm";
 
+type MarkdownImageProps = Readonly<{
+	src: string;
+	alt: string;
+	width?: number;
+	height?: number;
+	fit?: string;
+	position?: string;
+	rounded?: boolean;
+	fillCell?: boolean;
+	align?: MarkdownAlign;
+}>;
+
+type MarkdownVideoProps = Readonly<{
+	src: string;
+	poster?: string;
+	width?: number;
+	height?: number;
+	rounded?: boolean;
+	fillCell?: boolean;
+	align?: MarkdownAlign;
+}>;
+
+type MarkdownGroupProps = Readonly<{
+	block: Extract<MarkdownBlock, { type: "group" }>;
+	compact: boolean;
+	fillMedia: boolean;
+	parentAlign: MarkdownAlign;
+}>;
+
+type MarkdownContentProps = Readonly<{ block: Extract<MarkdownBlock, { type: "markdown" }>; parentAlign: MarkdownAlign }>;
+
+type MarkdownComponentName =
+	| "h1"
+	| "h2"
+	| "h3"
+	| "p"
+	| "strong"
+	| "em"
+	| "del"
+	| "ul"
+	| "ol"
+	| "li"
+	| "blockquote"
+	| "hr"
+	| "table"
+	| "th"
+	| "td"
+	| "code"
+	| "pre"
+	| "a"
+	| "img";
+
+type MarkdownComponentProps = {
+	children?: ReactNode;
+	href?: string;
+	// react-markdown/img props can include non-string src (eg. Blob), so accept unknown and validate at runtime
+	src?: unknown;
+	alt?: string;
+};
+
+type MarkdownBlocksProps = Readonly<{
+	blocks: MarkdownBlock[];
+	compact?: boolean;
+	fillMedia?: boolean;
+	align?: MarkdownAlign;
+}>;
+
 const allowedTags = [
 	"p",
 	"br",
@@ -32,6 +99,140 @@ const allowedTags = [
 	"th",
 	"td",
 ];
+
+const markdownComponents: Components = {
+	h1: (props) => renderMarkdownComponent("h1", props),
+	h2: (props) => renderMarkdownComponent("h2", props),
+	h3: (props) => renderMarkdownComponent("h3", props),
+	p: (props) => renderMarkdownComponent("p", props),
+	strong: (props) => renderMarkdownComponent("strong", props),
+	em: (props) => renderMarkdownComponent("em", props),
+	del: (props) => renderMarkdownComponent("del", props),
+	ul: (props) => renderMarkdownComponent("ul", props),
+	ol: (props) => renderMarkdownComponent("ol", props),
+	li: (props) => renderMarkdownComponent("li", props),
+	blockquote: (props) => renderMarkdownComponent("blockquote", props),
+	hr: (props) => renderMarkdownComponent("hr", props),
+	table: (props) => renderMarkdownComponent("table", props),
+	th: (props) => renderMarkdownComponent("th", props),
+	td: (props) => renderMarkdownComponent("td", props),
+	code: (props) => renderMarkdownComponent("code", props),
+	pre: (props) => renderMarkdownComponent("pre", props),
+	a: (props) => renderMarkdownComponent("a", props),
+	img: (props) => renderMarkdownComponent("img", props),
+};
+
+function MarkdownImage({
+	src,
+	alt,
+	width,
+	height,
+	fit,
+	position,
+	rounded,
+	fillCell = false,
+	align = MarkdownAlign.START,
+}: MarkdownImageProps) {
+	const widthPx = width ? `${width}px` : undefined;
+
+	return (
+		<img
+			src={src}
+			alt={alt}
+			width={width}
+			height={height}
+			loading="lazy"
+			referrerPolicy="no-referrer"
+			className={mediaClassName({ rounded, align })}
+			style={{
+				width: fillCell ? "100%" : widthPx,
+				height: height ? `${height}px` : undefined,
+				objectFit: (fit as React.CSSProperties["objectFit"]) ?? (fillCell ? "cover" : undefined),
+				objectPosition: position,
+			}}
+		/>
+	);
+}
+
+function MarkdownVideo({ src, poster, width, height, rounded, fillCell = false, align = MarkdownAlign.START }: MarkdownVideoProps) {
+	const widthPx = width ? `${width}px` : undefined;
+	const heightPx = height ? `${height}px` : undefined;
+
+	return (
+		<video
+			src={src}
+			poster={poster}
+			controls
+			preload="metadata"
+			playsInline
+			suppressHydrationWarning
+			className={mediaClassName({ rounded, align })}
+			style={{ width: fillCell ? "100%" : widthPx, height: heightPx }}
+		>
+			<track kind="captions" />
+		</video>
+	);
+}
+
+function MarkdownGrid({ block }: Readonly<{ block: Extract<MarkdownBlock, { type: "grid" }> }>) {
+	return (
+		<div
+			className="grid w-full"
+			style={{
+				gridTemplateColumns: `repeat(${block.columns}, minmax(0, 1fr))`,
+				gap: `${block.gap}px`,
+			}}
+		>
+			{block.cells.map((cell, index) => (
+				<div key={index.toLocaleString()} className="min-w-0 overflow-hidden">
+					<MarkdownBlocks blocks={cell} compact fillMedia align={MarkdownAlign.START} />
+				</div>
+			))}
+		</div>
+	);
+}
+
+function MarkdownGroup({ block, compact, fillMedia, parentAlign }: MarkdownGroupProps) {
+	const align = block.align ?? parentAlign;
+	const content = (
+		<div className={block.href ? "max-w-full" : "w-full"}>
+			<MarkdownBlocks blocks={block.children} compact={compact} fillMedia={fillMedia} align={align} />
+		</div>
+	);
+	const className = groupClassName(align, Boolean(block.href));
+	const style = { color: block.color };
+
+	if (block.href) {
+		return (
+			<a href={block.href} rel="noopener noreferrer nofollow" target="_blank" className={`${className} no-underline`} style={style}>
+				{content}
+			</a>
+		);
+	}
+
+	return (
+		<div className={className} style={style}>
+			{content}
+		</div>
+	);
+}
+
+function MarkdownContent({ block, parentAlign }: MarkdownContentProps) {
+	const align = parentAlign !== MarkdownAlign.START && block.align === MarkdownAlign.START ? parentAlign : block.align;
+
+	return (
+		<div className={alignClassName(align)} style={{ color: block.color }}>
+			<ReactMarkdown
+				remarkPlugins={[remarkGfm]}
+				rehypePlugins={[rehypeSanitize]}
+				allowedElements={allowedTags}
+				components={markdownComponents}
+			>
+				{block.content}
+			</ReactMarkdown>
+		</div>
+	);
+}
 
 function alignClassName(align: MarkdownAlign) {
 	switch (align) {
@@ -121,160 +322,19 @@ function mediaClassName({ rounded, align }: { rounded?: boolean; align: Markdown
 	return classes.join(" ");
 }
 
-type MarkdownImageProps = Readonly<{
-	src: string;
-	alt: string;
-	width?: number;
-	height?: number;
-	fit?: string;
-	position?: string;
-	rounded?: boolean;
-	fillCell?: boolean;
-	align?: MarkdownAlign;
-}>;
 
-function MarkdownImage({
-	src,
-	alt,
-	width,
-	height,
-	fit,
-	position,
-	rounded,
-	fillCell = false,
-	align = MarkdownAlign.START,
-}: MarkdownImageProps) {
-	const widthPx = width ? `${width}px` : undefined;
 
-	return (
-		<img
-			src={src}
-			alt={alt}
-			width={width}
-			height={height}
-			loading="lazy"
-			referrerPolicy="no-referrer"
-			className={mediaClassName({ rounded, align })}
-			style={{
-				width: fillCell ? "100%" : widthPx,
-				height: height ? `${height}px` : undefined,
-				objectFit: (fit as React.CSSProperties["objectFit"]) ?? (fillCell ? "cover" : undefined),
-				objectPosition: position,
-			}}
-		/>
-	);
-}
 
-type MarkdownVideoProps = Readonly<{
-	src: string;
-	poster?: string;
-	width?: number;
-	height?: number;
-	rounded?: boolean;
-	fillCell?: boolean;
-	align?: MarkdownAlign;
-}>;
 
-function MarkdownVideo({ src, poster, width, height, rounded, fillCell = false, align = MarkdownAlign.START }: MarkdownVideoProps) {
-	const widthPx = width ? `${width}px` : undefined;
-	const heightPx = height ? `${height}px` : undefined;
 
-	return (
-		<video
-			src={src}
-			poster={poster}
-			controls
-			preload="metadata"
-			playsInline
-			suppressHydrationWarning
-			className={mediaClassName({ rounded, align })}
-			style={{ width: fillCell ? "100%" : widthPx, height: heightPx }}
-		>
-			<track kind="captions" />
-		</video>
-	);
-}
 
-function MarkdownGrid({ block }: Readonly<{ block: Extract<MarkdownBlock, { type: "grid" }> }>) {
-	return (
-		<div
-			className="grid w-full"
-			style={{
-				gridTemplateColumns: `repeat(${block.columns}, minmax(0, 1fr))`,
-				gap: `${block.gap}px`,
-			}}
-		>
-			{block.cells.map((cell, index) => (
-				<div key={index.toLocaleString()} className="min-w-0 overflow-hidden">
-					<MarkdownBlocks blocks={cell} compact fillMedia align={MarkdownAlign.START} />
-				</div>
-			))}
-		</div>
-	);
-}
 
-type MarkdownGroupProps = Readonly<{
-	block: Extract<MarkdownBlock, { type: "group" }>;
-	compact: boolean;
-	fillMedia: boolean;
-	parentAlign: MarkdownAlign;
-}>;
 
-function MarkdownGroup({ block, compact, fillMedia, parentAlign }: MarkdownGroupProps) {
-	const align = block.align ?? parentAlign;
-	const content = (
-		<div className={block.href ? "max-w-full" : "w-full"}>
-			<MarkdownBlocks blocks={block.children} compact={compact} fillMedia={fillMedia} align={align} />
-		</div>
-	);
-	const className = groupClassName(align, Boolean(block.href));
-	const style = { color: block.color };
 
-	if (block.href) {
-		return (
-			<a href={block.href} rel="noopener noreferrer nofollow" target="_blank" className={`${className} no-underline`} style={style}>
-				{content}
-			</a>
-		);
-	}
 
-	return (
-		<div className={className} style={style}>
-			{content}
-		</div>
-	);
-}
 
-type MarkdownContentProps = Readonly<{ block: Extract<MarkdownBlock, { type: "markdown" }>; parentAlign: MarkdownAlign }>;
 
-type MarkdownComponentName =
-	| "h1"
-	| "h2"
-	| "h3"
-	| "p"
-	| "strong"
-	| "em"
-	| "del"
-	| "ul"
-	| "ol"
-	| "li"
-	| "blockquote"
-	| "hr"
-	| "table"
-	| "th"
-	| "td"
-	| "code"
-	| "pre"
-	| "a"
-	| "img";
 
-type MarkdownComponentProps = {
-	children?: ReactNode;
-	href?: string;
-	// react-markdown/img props can include non-string src (eg. Blob), so accept unknown and validate at runtime
-	src?: unknown;
-	alt?: string;
-};
 
 function renderMarkdownComponent(name: MarkdownComponentName, { children, href, src, alt }: MarkdownComponentProps) {
 	switch (name) {
@@ -332,52 +392,6 @@ function renderMarkdownComponent(name: MarkdownComponentName, { children, href, 
 			return children;
 	}
 }
-
-const markdownComponents: Components = {
-	h1: (props) => renderMarkdownComponent("h1", props),
-	h2: (props) => renderMarkdownComponent("h2", props),
-	h3: (props) => renderMarkdownComponent("h3", props),
-	p: (props) => renderMarkdownComponent("p", props),
-	strong: (props) => renderMarkdownComponent("strong", props),
-	em: (props) => renderMarkdownComponent("em", props),
-	del: (props) => renderMarkdownComponent("del", props),
-	ul: (props) => renderMarkdownComponent("ul", props),
-	ol: (props) => renderMarkdownComponent("ol", props),
-	li: (props) => renderMarkdownComponent("li", props),
-	blockquote: (props) => renderMarkdownComponent("blockquote", props),
-	hr: (props) => renderMarkdownComponent("hr", props),
-	table: (props) => renderMarkdownComponent("table", props),
-	th: (props) => renderMarkdownComponent("th", props),
-	td: (props) => renderMarkdownComponent("td", props),
-	code: (props) => renderMarkdownComponent("code", props),
-	pre: (props) => renderMarkdownComponent("pre", props),
-	a: (props) => renderMarkdownComponent("a", props),
-	img: (props) => renderMarkdownComponent("img", props),
-};
-
-function MarkdownContent({ block, parentAlign }: MarkdownContentProps) {
-	const align = parentAlign !== MarkdownAlign.START && block.align === MarkdownAlign.START ? parentAlign : block.align;
-
-	return (
-		<div className={alignClassName(align)} style={{ color: block.color }}>
-			<ReactMarkdown
-				remarkPlugins={[remarkGfm]}
-				rehypePlugins={[rehypeSanitize]}
-				allowedElements={allowedTags}
-				components={markdownComponents}
-			>
-				{block.content}
-			</ReactMarkdown>
-		</div>
-	);
-}
-
-type MarkdownBlocksProps = Readonly<{
-	blocks: MarkdownBlock[];
-	compact?: boolean;
-	fillMedia?: boolean;
-	align?: MarkdownAlign;
-}>;
 
 export function MarkdownBlocks({ blocks, compact = false, fillMedia = false, align = MarkdownAlign.START }: MarkdownBlocksProps) {
 	return (

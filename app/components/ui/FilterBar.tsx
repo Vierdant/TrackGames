@@ -28,6 +28,8 @@ type Filter =
 
 type SelectFilter = Extract<Filter, { type: "select" }>;
 
+type FilterBarProps = Readonly<{ filters: Filter[]; actions?: ReactNode; className?: string }>;
+
 function SelectFilter({ filter }: Readonly<{ filter: SelectFilter }>) {
 	return (
 		<Select
@@ -44,8 +46,6 @@ function SelectFilter({ filter }: Readonly<{ filter: SelectFilter }>) {
 		</Select>
 	);
 }
-
-type FilterBarProps = Readonly<{ filters: Filter[]; actions?: ReactNode; className?: string }>;
 
 export function FilterBar({ filters, actions, className }: FilterBarProps) {
 	const router = useRouter();

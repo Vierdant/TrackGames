@@ -20,6 +20,11 @@ import ActivityList from "./ActivityList";
 import type { Metadata } from "next";
 import { absoluteUrl, metadataDescription, robotsForPrivacy, SITE_NAME } from "@/lib/metadata";
 
+type UserPageProps = Readonly<{
+	params: Promise<{ user: string }>;
+	searchParams: Promise<{ tab?: string; activityPage?: string; activityFilter?: string }>;
+}>;
+
 export async function generateMetadata({ params }: { params: Promise<{ user: string }> }): Promise<Metadata> {
 	const { user } = await params;
 	const profile = await getPublicUser(user);
@@ -62,10 +67,7 @@ export async function generateMetadata({ params }: { params: Promise<{ user: str
 	};
 }
 
-type UserPageProps = Readonly<{
-	params: Promise<{ user: string }>;
-	searchParams: Promise<{ tab?: string; activityPage?: string; activityFilter?: string }>;
-}>;
+
 
 export default async function Page({ params, searchParams }: UserPageProps) {
 	const { user } = await params;

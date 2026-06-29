@@ -1,12 +1,5 @@
 import { ALLOWEDHOSTS } from "../constants";
 
-/*
- * Safety checks
- * These helpers validate whether untrusted strings are allowed to be used in
- * rendered URLs or media sources. They do not rewrite input.
- */
-
-/** Allows HTTPS media/source URLs only from explicitly approved hosts. */
 export function isSafeUrl(src: unknown) {
 	try {
 		if (typeof src !== "string") return false;

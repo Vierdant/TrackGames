@@ -31,6 +31,21 @@ type Comment = {
 
 type CommentFormProps = Readonly<{ action: (formData: FormData) => Promise<void>; placeholder?: string }>;
 
+type CommentItemProps = Readonly<{
+	comment: Comment;
+	comments: Comment[];
+	targetType: InteractionTargetType;
+	targetId: string;
+	currentUserId: string | null;
+}>;
+
+type CommenSectionClientProps = Readonly<{
+	targetType: InteractionTargetType;
+	targetId: string;
+	comments: Comment[];
+	currentUserId: string | null;
+}>;
+
 function CommentForm({ action, placeholder = "Write a comment" }: CommentFormProps) {
 	const ref = useRef<HTMLFormElement>(null);
 	const [content, setContent] = useState("");
@@ -76,13 +91,7 @@ function CommentForm({ action, placeholder = "Write a comment" }: CommentFormPro
 	);
 }
 
-type CommentItemProps = Readonly<{
-	comment: Comment;
-	comments: Comment[];
-	targetType: InteractionTargetType;
-	targetId: string;
-	currentUserId: string | null;
-}>;
+
 
 function CommentItem({ comment, comments, targetType, targetId, currentUserId }: CommentItemProps) {
 	const [replying, setReplying] = useState(false);
@@ -193,13 +202,6 @@ function CommentItem({ comment, comments, targetType, targetId, currentUserId }:
 		</div>
 	);
 }
-
-type CommenSectionClientProps = Readonly<{
-	targetType: InteractionTargetType;
-	targetId: string;
-	comments: Comment[];
-	currentUserId: string | null;
-}>;
 
 export default function CommentSectionClient({ targetType, targetId, comments, currentUserId }: CommenSectionClientProps) {
 	const topLevelComments = comments.filter((comment) => !comment.parentId);

@@ -3,6 +3,24 @@ import { getTagsForEntries, type UserLibraryTag } from "./library";
 import { GameListType, LikeTargetType } from "../generated/prisma/enums";
 import type { GameListDefaultArgs, GameListGetPayload } from "../generated/prisma/models/GameList";
 
+type PlaylistLibraryEntry = {
+	id: string;
+	status: string;
+	rating: number | null;
+	timePlayed: number | null;
+	timeFinished: number | null;
+	timeMastered: number | null;
+	finishedAt: Date | null;
+	masteredAt: Date | null;
+	tags: UserLibraryTag[];
+};
+
+type PlaylistAccess = {
+	id: string;
+	userId: string;
+	privacy: string;
+};
+
 const playlistArgs = {
 	include: {
 		user: {
@@ -22,24 +40,10 @@ const playlistArgs = {
 } satisfies GameListDefaultArgs;
 
 export type Playlist = GameListGetPayload<typeof playlistArgs>;
-type PlaylistLibraryEntry = {
-	id: string;
-	status: string;
-	rating: number | null;
-	timePlayed: number | null;
-	timeFinished: number | null;
-	timeMastered: number | null;
-	finishedAt: Date | null;
-	masteredAt: Date | null;
-	tags: UserLibraryTag[];
-};
-export type PlaylistEntry = Playlist["entries"][number] & { libraryEntry?: PlaylistLibraryEntry | null };
 
-type PlaylistAccess = {
-	id: string;
-	userId: string;
-	privacy: string;
-};
+
+
+
 
 export async function getUserPlaylists(userId: string) {
 	return await db.gameList.findMany({
@@ -183,3 +187,5 @@ export async function getPlaylistLibraryCount(userId: string | undefined, gameId
 		},
 	});
 }
+
+export type PlaylistEntry = Playlist["entries"][number] & { libraryEntry?: PlaylistLibraryEntry | null };

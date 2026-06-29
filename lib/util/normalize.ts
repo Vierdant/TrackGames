@@ -6,13 +6,6 @@ type IntegerOptions = {
 	fallback?: number;
 };
 
-/*
- * Numeric normalization
- * Use these when a number must fit within a supported range before rendering,
- * storing, or sending it to another system.
- */
-
-/** Keeps a known number inside an inclusive min/max range. */
 export function clamp(value: number, min: number, max: number) {
 	return Math.min(Math.max(value, min), max);
 }

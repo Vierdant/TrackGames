@@ -8,6 +8,8 @@ import { useEffect, useState } from "react";
 
 type ColorFieldProps = Readonly<{ name: string; value: string; onChange: (value: string) => void; placeholder: string; label: string }>;
 
+type MediaModelProps = Readonly<{ open: boolean; title: string; value: string; onClose: () => void; onSave: (value: string) => void }>;
+
 export function ColorField({ name, value, onChange, placeholder, label }: ColorFieldProps) {
 	const pickerValue = normalize.hexColor(value || placeholder);
 
@@ -41,7 +43,7 @@ export function ColorField({ name, value, onChange, placeholder, label }: ColorF
 	);
 }
 
-type MediaModelProps = Readonly<{ open: boolean; title: string; value: string; onClose: () => void; onSave: (value: string) => void }>;
+
 
 export function MediaModal({ open, title, value, onClose, onSave }: MediaModelProps) {
 	const [draft, setDraft] = useState(value);

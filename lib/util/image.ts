@@ -93,15 +93,15 @@ function readGifHeader(bytes: Uint8Array): GifHeader | null {
 	if (String.fromCodePoint(...bytes.subarray(0, 3)) !== "GIF") return null;
 
 	const offset = 6;
-	const screenWidth = bytes[offset] | (bytes[offset + 1] << 8);
 	const screenHeight = bytes[offset + 2] | (bytes[offset + 3] << 8);
+	const screenWidth = bytes[offset] | (bytes[offset + 1] << 8);
 	const packed = bytes[offset + 4];
 
 	return {
-		screenWidth,
-		screenHeight,
-		hasGlobalColorTable: Boolean(packed & 0x80),
 		globalColorCount: 1 << ((packed & 0x07) + 1),
+		hasGlobalColorTable: Boolean(packed & 0x80),
+		screenHeight,
+		screenWidth,
 		offset: offset + 7,
 	};
 }
@@ -150,8 +150,8 @@ function readGifImageDescriptor(bytes: Uint8Array, offset: number, globalColors:
 	return {
 		left,
 		top,
-		width,
 		height,
+		width,
 		interlaced: Boolean(imagePacked & 0x40),
 		colors: colorTable?.colors ?? globalColors,
 		offset: colorTable?.offset ?? colorTableOffset,

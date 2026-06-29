@@ -1,12 +1,12 @@
 import { forwardRef, InputHTMLAttributes, ReactNode, SelectHTMLAttributes, TextareaHTMLAttributes } from "react";
 
+type FieldProps = Readonly<{ label: string; hint?: string; children: ReactNode; className?: string }>;
+
 const base = "bg-bg-secondary/80 p-1 rounded mt-1 pl-3 pr-3 border border-border outline-none";
 
 function join(base: string, extra?: string) {
 	return [base, extra].filter(Boolean).join(" ");
 }
-
-type FieldProps = Readonly<{ label: string; hint?: string; children: ReactNode; className?: string }>;
 
 export function Field({ label, hint, children, className }: FieldProps) {
 	return (

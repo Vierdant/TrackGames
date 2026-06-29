@@ -3,7 +3,6 @@
 import { GameStatus } from "@/lib/generated/prisma/enums";
 import type { UserLibraryEntryWithTags } from "@/lib/data/library";
 import { ratingToFive } from "@/lib/util/rating";
-import { isNotFilter } from "@/lib/util/tools";
 import { Check, CircleHelp, Clock, Crown, Plus, Trash2, X } from "lucide-react";
 import type { Dispatch, SetStateAction } from "react";
 import StarRating from "../game/StarRating";
@@ -11,12 +10,6 @@ import SubTabs from "../layout/SubTabs";
 import { GhostButton, PrimaryButton } from "../ui/Buttons";
 import { Checkbox, Input, Select, SuffixedInput, Textarea } from "../ui/Inputs";
 import { statusLabel } from "./PlaylistCardPreview";
-
-export type EditorTab = "entry" | "log" | "history" | "time";
-
-export function timeModeLabel(mode: string | undefined) {
-	return mode === "manual" ? "manual" : "logs";
-}
 
 type PlaylistCardEditorTabsProps = Readonly<{
 	entry: UserLibraryEntryWithTags;
@@ -55,6 +48,14 @@ type PlaylistCardEditorTabsProps = Readonly<{
 	finishedAtValue: string;
 	masteredAtValue: string;
 }>;
+
+function playlistItemsfilter(current: any[], notValue: any): any[] {
+	return current.filter((item) => item !== notValue);
+}
+
+export function timeModeLabel(mode: string | undefined) {
+	return mode === "manual" ? "manual" : "logs";
+}
 
 export default function PlaylistCardEditorTabs({
 	entry,
@@ -158,7 +159,11 @@ export default function PlaylistCardEditorTabs({
 					<div className="grid gap-2 text-sm font-bold text-text-muted sm:grid-cols-[minmax(0,1fr)_auto_auto] sm:items-center">
 						<StarRating rating={rating} size={28} interactive showValue name="rating" onChange={setRating} />
 						<label className="flex cursor-pointer items-center gap-2 rounded border border-border p-2">
-							<Checkbox name="finished" checked={entryFinished} onChange={(event) => setEntryFinished(event.target.checked)} />
+							<Checkbox
+								name="finished"
+								checked={entryFinished}
+								onChange={(event) => setEntryFinished(event.target.checked)}
+							/>
 							Finished
 						</label>
 						<label className="flex cursor-pointer items-center gap-2 rounded border border-border p-2">
@@ -177,7 +182,7 @@ export default function PlaylistCardEditorTabs({
 									<span className="truncate">{tag}</span>
 									<button
 										type="button"
-										onClick={() => setTags((current) => isNotFilter(current, tag))}
+										onClick={() => setTags((current) => playlistItemsfilter(current, tag))}
 										className="grid size-4 shrink-0 cursor-pointer place-items-center rounded text-text-muted hover:text-error"
 										aria-label={`Remove ${tag}`}
 									>
@@ -255,7 +260,11 @@ export default function PlaylistCardEditorTabs({
 								Finished
 							</label>
 							<label className="flex cursor-pointer items-center gap-2 rounded border border-border p-2">
-								<Checkbox name="mastered" defaultChecked={entry.timeMastered != null} disabled={entry.timeMastered != null} />
+								<Checkbox
+									name="mastered"
+									defaultChecked={entry.timeMastered != null}
+									disabled={entry.timeMastered != null}
+								/>
 								Mastered
 							</label>
 							<label className="flex cursor-pointer items-center gap-2 rounded border border-border p-2">
@@ -285,7 +294,13 @@ export default function PlaylistCardEditorTabs({
 						<div className="flex max-h-112 flex-col gap-2 overflow-y-auto pr-1">
 							<label className="text-sm font-bold text-text-muted">
 								Filter
-								<Input name="logdate" type="date" max={today} value={logDate} onChange={(event) => setLogDate(event.target.value)} />
+								<Input
+									name="logdate"
+									type="date"
+									max={today}
+									value={logDate}
+									onChange={(event) => setLogDate(event.target.value)}
+								/>
 							</label>
 							{logDate && (
 								<GhostButton type="button" onClick={() => setLogDate("")} className="justify-center py-2">
@@ -308,7 +323,9 @@ export default function PlaylistCardEditorTabs({
 									</button>
 								))
 							) : (
-								<p className="bg-bg/60 p-3 text-sm text-text-muted">{logs.length ? "No logs on this date." : "No logs yet."}</p>
+								<p className="bg-bg/60 p-3 text-sm text-text-muted">
+									{logs.length ? "No logs on this date." : "No logs yet."}
+								</p>
 							)}
 						</div>
 						{selectedLog ? (
@@ -325,7 +342,14 @@ export default function PlaylistCardEditorTabs({
 									</label>
 									<label className="text-sm font-bold text-text-muted">
 										Hours played
-										<SuffixedInput name="hours" type="number" min={0.1} step={0.1} defaultValue={selectedLog.hours} suffix="h" />
+										<SuffixedInput
+											name="hours"
+											type="number"
+											min={0.1}
+											step={0.1}
+											defaultValue={selectedLog.hours}
+											suffix="h"
+										/>
 									</label>
 								</div>
 								<label className="text-sm font-bold text-text-muted">
@@ -425,7 +449,13 @@ export default function PlaylistCardEditorTabs({
 										suffix="h"
 										aria-label="Finished time"
 									/>
-									<Input name="finishedat" type="date" max={today} defaultValue={finishedAtValue || today} aria-label="Finished date" />
+									<Input
+										name="finishedat"
+										type="date"
+										max={today}
+										defaultValue={finishedAtValue || today}
+										aria-label="Finished date"
+									/>
 								</div>
 							)}
 							{entry.timeMastered != null && (
@@ -443,7 +473,13 @@ export default function PlaylistCardEditorTabs({
 										suffix="h"
 										aria-label="Mastered time"
 									/>
-									<Input name="masteredat" type="date" max={today} defaultValue={masteredAtValue || today} aria-label="Mastered date" />
+									<Input
+										name="masteredat"
+										type="date"
+										max={today}
+										defaultValue={masteredAtValue || today}
+										aria-label="Mastered date"
+									/>
 								</div>
 							)}
 						</div>
@@ -461,3 +497,5 @@ export default function PlaylistCardEditorTabs({
 		</>
 	);
 }
+
+export type EditorTab = "entry" | "log" | "history" | "time";

@@ -4,6 +4,10 @@ import { GameListType, GameStatus } from "../generated/prisma/enums";
 import type { Game, MaybeArray } from "../types";
 import { getByIds, getBySlugs } from "./getter";
 
+type DataResult<T extends MaybeArray<number>> = T extends number[] ? Game[] : Game | null;
+
+type SlugResult<T extends string | string[]> = T extends string[] ? Game[] : Game | null;
+
 const gameSelect = {
 	id: true,
 	slug: true,
@@ -51,9 +55,6 @@ const fetching = {
         fields slug, name, summary, total_rating, first_release_date, cover.image_id, screenshots.image_id, videos.video_id, platforms.name, platforms.slug, involved_companies.company, involved_companies.developer, involved_companies.publisher, genres.name, genres.slug, franchises.name, franchises.slug, franchises.games, similar_games, collections.name, collections.slug, collections.games;
     `,
 };
-
-type DataResult<T extends MaybeArray<number>> = T extends number[] ? Game[] : Game | null;
-type SlugResult<T extends string | string[]> = T extends string[] ? Game[] : Game | null;
 
 export async function getGame<T extends MaybeArray<number>>(id: T): Promise<DataResult<T>> {
 	const ids = Array.isArray(id) ? id : [id];

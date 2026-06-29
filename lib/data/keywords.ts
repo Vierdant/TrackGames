@@ -3,6 +3,10 @@ import { formatRawKeyword } from "../external/igdb/util";
 import type { Keyword, MaybeArray } from "../types";
 import { getByIds, getBySlugs } from "./getter";
 
+type DataResult<T extends MaybeArray<number>> = T extends number[] ? Keyword[] : Keyword | null;
+
+type SlugResult<T extends string | string[]> = T extends string[] ? Keyword[] : Keyword | null;
+
 const select = {
     id: true,
     slug: true,
@@ -13,9 +17,6 @@ const fetching = {
     endpoint: "keywords",
     body: `fields slug, name;`
 }
-
-type DataResult<T extends MaybeArray<number>> = T extends number[] ? Keyword[] : Keyword | null;
-type SlugResult<T extends string | string[]> = T extends string[] ? Keyword[] : Keyword | null;
 
 export async function getKeyword<T extends MaybeArray<number>>(id: T): Promise<DataResult<T>> {
 	const ids = Array.isArray(id) ? id : [id];

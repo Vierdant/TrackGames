@@ -3,6 +3,10 @@ import { formatRawCollection } from "../external/igdb/util";
 import type { Collection, MaybeArray } from "../types";
 import { getByIds, getBySlugs } from "./getter";
 
+type DataResult<T extends MaybeArray<number>> = T extends number[] ? Collection[] : Collection | null;
+
+type SlugResult<T extends string | string[]> = T extends string[] ? Collection[] : Collection | null;
+
 const select = {
 	id: true,
 	slug: true,
@@ -14,9 +18,6 @@ const fetching = {
 	endpoint: "collections",
 	body: `fields slug, name, games;`,
 };
-
-type DataResult<T extends MaybeArray<number>> = T extends number[] ? Collection[] : Collection | null;
-type SlugResult<T extends string | string[]> = T extends string[] ? Collection[] : Collection | null;
 
 export async function getCollection<T extends MaybeArray<number>>(id: T): Promise<DataResult<T>> {
 	const ids = Array.isArray(id) ? id : [id];

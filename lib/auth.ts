@@ -10,8 +10,10 @@ import db from "./db";
 import { verifyPassword } from "./util/password";
 import { USERNAME_MAX_LENGTH, USERNAME_PATTERN } from "./account/username";
 
-export const OAUTH_USERNAME_COOKIE = "trackgames-oauth-username";
 const loginProviders = new Set(["google", "github", "twitch", "discord"]);
+
+export const OAUTH_USERNAME_COOKIE = "trackgames-oauth-username";
+
 
 export const { auth, handlers, signIn, signOut } = NextAuth({
 	adapter: PrismaAdapter(db),

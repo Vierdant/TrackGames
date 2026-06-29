@@ -68,6 +68,15 @@ function numberFromBackup(value: number | null | undefined) {
 	return Number.isFinite(value) ? value : null;
 }
 
+function getGameObject(
+	item: TgLibraryEntry,
+	gamesBySlug: Map<string, { slug: string; id: number }>,
+	gamesById: Map<number, { id: number; slug: string }>,
+) {
+	const sluggedHolder = item.game?.slug ? gamesBySlug.get(item.game.slug) : null;
+	return item.game?.id ? gamesById.get(item.game.id) : sluggedHolder;
+}
+
 export async function getSteamProfileImportPreview(steamId: string) {
 	const id = steamId.trim();
 
@@ -338,14 +347,7 @@ export async function exportTgLibrary() {
 	};
 }
 
-function getGameObject(
-	item: TgLibraryEntry,
-	gamesBySlug: Map<string, { slug: string; id: number }>,
-	gamesById: Map<number, { id: number; slug: string }>,
-) {
-	const sluggedHolder = item.game?.slug ? gamesBySlug.get(item.game.slug) : null;
-	return item.game?.id ? gamesById.get(item.game.id) : sluggedHolder;
-}
+
 
 export async function importTgLibrary(contents: string) {
 	const userId = await getCurrentUserId();

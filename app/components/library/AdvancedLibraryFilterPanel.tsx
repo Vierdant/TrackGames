@@ -6,6 +6,23 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Input, Select } from "../ui/Inputs";
 import { GhostButton, PrimaryButton } from "../ui/Buttons";
 
+type AdvancedLibraryFilterPanelProps = Readonly<{
+	open: boolean;
+	onClose: () => void;
+	filters: AdvancedLibraryFilters;
+	onChange: (filters: AdvancedLibraryFilters) => void;
+	tags: string[];
+	onReset: () => void;
+}>;
+
+function statusLabel(status: string) {
+	return status.toLowerCase().replace("_", " ");
+}
+
+function removeValue(values: string[], value: string) {
+	return values.filter((item) => item !== value);
+}
+
 export type AdvancedLibraryFilters = {
 	statuses: GameStatus[];
 	excludedStatuses: GameStatus[];
@@ -32,22 +49,11 @@ export const emptyAdvancedLibraryFilters: AdvancedLibraryFilters = {
 	excludedTags: [],
 };
 
-type AdvancedLibraryFilterPanelProps = Readonly<{
-	open: boolean;
-	onClose: () => void;
-	filters: AdvancedLibraryFilters;
-	onChange: (filters: AdvancedLibraryFilters) => void;
-	tags: string[];
-	onReset: () => void;
-}>;
 
-function statusLabel(status: string) {
-	return status.toLowerCase().replace("_", " ");
-}
 
-function removeValue(values: string[], value: string) {
-	return values.filter((item) => item !== value);
-}
+
+
+
 
 export default function AdvancedLibraryFilterPanel({ open, onClose, filters, onChange, tags, onReset }: AdvancedLibraryFilterPanelProps) {
 	const [rendered, setRendered] = useState(open);

@@ -1,3 +1,4 @@
+import { ALLOWEDTAGS } from "@/lib/constants";
 import { MarkdownAlign } from "@/lib/enums";
 import type { MarkdownBlock } from "@/lib/types";
 import * as normalize from "@/lib/util/normalize";
@@ -44,7 +45,6 @@ type MarkdownComponentName = "h1" | "h2" | "h3" | "p" | "strong" | "em" | "del" 
 type MarkdownComponentProps = {
 	children?: ReactNode;
 	href?: string;
-	// react-markdown/img props can include non-string src (eg. Blob), so accept unknown and validate at runtime
 	src?: unknown;
 	alt?: string;
 };
@@ -55,32 +55,6 @@ type MarkdownBlocksProps = Readonly<{
 	shouldFillMedia?: boolean;
 	align?: MarkdownAlign;
 }>;
-
-const allowedTags = [
-	"p",
-	"br",
-	"strong",
-	"em",
-	"del",
-	"blockquote",
-	"ul",
-	"ol",
-	"li",
-	"code",
-	"pre",
-	"h1",
-	"h2",
-	"h3",
-	"a",
-	"img",
-	"hr",
-	"table",
-	"thead",
-	"tbody",
-	"tr",
-	"th",
-	"td",
-];
 
 const markdownComponents: Components = {
 	h1: (props) => renderMarkdownComponent("h1", props),
@@ -194,7 +168,7 @@ function MarkdownContent({ block, parentAlign }: MarkdownContentProps) {
 
 	return (
 		<div className={alignClassName(align)} style={{ color: block.color }}>
-			<ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeSanitize]} allowedElements={allowedTags} components={markdownComponents}>
+			<ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeSanitize]} allowedElements={ALLOWEDTAGS} components={markdownComponents}>
 				{block.content}
 			</ReactMarkdown>
 		</div>

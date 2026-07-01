@@ -1,11 +1,11 @@
 import db from "../db";
 import { GameStatus } from "../generated/prisma/enums";
 import type { UserGameEntryGetPayload } from "../generated/prisma/models/UserGameEntry";
-import type { Game } from "../types";
+import type { Game } from "./games";
 
 const userGameEntryInclude = {
 	game: true,
-	userGamePlayLogs: {
+	logs: {
 		orderBy: {
 			playedAt: "desc" as const,
 		},

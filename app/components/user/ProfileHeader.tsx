@@ -1,41 +1,37 @@
 import { SocialIconLinks } from "@/app/components/user/SocialIconLinks";
 import Container from "@/app/components/layout/Container";
-import type { SocialLink } from "@/lib/types";
+import type { PublicUser } from "@/lib/types";
 import { GhostButton, PrimaryButton } from "../ui/Buttons";
 import AvatarPreview from "./AvatarView";
 import FollowButton from "../social/FollowButton";
 import RoleTags from "./RoleTags";
-import { UserRole } from "@/lib/generated/prisma/enums";
+import { parseSocials } from "@/lib/account/socials";
 
 type ProfileHeaderProps = Readonly<{
 	isOwned?: boolean;
 	isSettings?: boolean;
-	profileImage: string | null | undefined;
-	displayName: string;
-	socials?: SocialLink[];
-	bio?: string;
-	roles?: UserRole[];
-	followUserId?: string;
+	profile: PublicUser;
 	isFollowing?: boolean;
 	isLoggedIn?: boolean;
 }>;
 
-function FollowerButton({ followUserId, isFollowing, isLoggedIn }: { followUserId: string | undefined; isFollowing: boolean; isLoggedIn: boolean }) {
-	return followUserId ? <FollowButton userId={followUserId} hasFollowedState={isFollowing} isLoggedIn={isLoggedIn} /> : <PrimaryButton>Follow</PrimaryButton>;
-}
+type ControlsSectionProps = Readonly<{
+	displayName: string;
+	followUserId: string | undefined;
+	isFollowing?: boolean;
+	isLoggedIn?: boolean;
+	isSettings?: boolean;
+	isOwned?: boolean;
+}>;
 
-export default function ProfileHeader({
-	isOwned,
-	isSettings,
-	profileImage,
-	displayName,
-	socials = [],
-	bio,
-	roles = [],
-	followUserId,
-	isFollowing = false,
-	isLoggedIn = false,
-}: ProfileHeaderProps) {
+export default function ProfileHeader({ isOwned, isSettings, profile, isFollowing = false, isLoggedIn = false }: ProfileHeaderProps) {
+	const profileImage = profile.image;
+	const displayName = profile.name ?? "Unknown";
+	const socials = parseSocials(profile.socials);
+	const bio = profile.bio ?? "No bio yet.";
+	const roles = profile.roles;
+	const followUserId = profile.id;
+
 	return (
 		<section className="relative z-10 w-full border-b border-border bg-bg/95">
 			<Container className="relative z-1 flex flex-row items-end justify-start gap-10 pt-5 md:pt-5">
@@ -54,32 +50,41 @@ export default function ProfileHeader({
 							{bio && <p className="md:text-md max-w-full font-body text-sm wrap-break-word">{bio}</p>}
 						</div>
 						<div className="hidden shrink-0 flex-row flex-wrap justify-end gap-3 md:flex md:gap-5">
-							{isSettings ? (
-								<GhostButton href={`/u/${encodeURIComponent(displayName)}`}>View profile</GhostButton>
-							) : (
-								<>
-									{isOwned ? (
-										<GhostButton href="/settings">Settings</GhostButton>
-									) : (
-										<FollowerButton followUserId={followUserId} isFollowing={isFollowing} isLoggedIn={isLoggedIn} />
-									)}
-									<PrimaryButton href={`/library/${displayName}`}>Library</PrimaryButton>
-								</>
-							)}
+							<ControlsSection
+								displayName={displayName}
+								followUserId={followUserId}
+								isFollowing={isFollowing}
+								isLoggedIn={isLoggedIn}
+								isSettings={isSettings}
+								isOwned={isOwned}
+							/>
 						</div>
 					</div>
 				</div>
 			</Container>
 			<div className="mb-3 flex shrink-0 flex-row flex-wrap justify-center gap-3 px-5 md:hidden">
-				{isSettings ? (
-					<GhostButton href={`/u/${encodeURIComponent(displayName)}`}>View profile</GhostButton>
-				) : (
-					<>
-						{isOwned ? <GhostButton href="/settings">Settings</GhostButton> : <FollowerButton followUserId={followUserId} isFollowing isLoggedIn />}
-						<PrimaryButton href={`/library/${displayName}`}>Library</PrimaryButton>
-					</>
-				)}
+				<ControlsSection
+					displayName={displayName}
+					followUserId={followUserId}
+					isFollowing={isFollowing}
+					isLoggedIn={isLoggedIn}
+					isSettings={isSettings}
+					isOwned={isOwned}
+				/>
 			</div>
 		</section>
+	);
+}
+
+function ControlsSection({ displayName, followUserId, isFollowing, isLoggedIn, isSettings, isOwned }: ControlsSectionProps) {
+	const followerButton = followUserId ? <FollowButton userId={followUserId} hasFollowedState={isFollowing} isLoggedIn={isLoggedIn} /> : <PrimaryButton>Follow</PrimaryButton>;
+
+	return isSettings ? (
+		<GhostButton href={`/u/${encodeURIComponent(displayName)}?tab=profile`}>View profile</GhostButton>
+	) : (
+		<>
+			{isOwned ? <GhostButton href="/settings">Settings</GhostButton> : followerButton}
+			<PrimaryButton href={`/library/${displayName}`}>Library</PrimaryButton>
+		</>
 	);
 }

@@ -272,6 +272,7 @@ export type GameListWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"GameList"> | Date | string
   entries?: Prisma.GameListEntryListRelationFilter
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  likes?: Prisma.LikeListRelationFilter
 }
 
 export type GameListOrderByWithRelationInput = {
@@ -294,6 +295,7 @@ export type GameListOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   entries?: Prisma.GameListEntryOrderByRelationAggregateInput
   user?: Prisma.UserOrderByWithRelationInput
+  likes?: Prisma.LikeOrderByRelationAggregateInput
 }
 
 export type GameListWhereUniqueInput = Prisma.AtLeast<{
@@ -320,6 +322,7 @@ export type GameListWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"GameList"> | Date | string
   entries?: Prisma.GameListEntryListRelationFilter
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  likes?: Prisma.LikeListRelationFilter
 }, "id" | "userId_slug">
 
 export type GameListOrderByWithAggregationInput = {
@@ -387,6 +390,7 @@ export type GameListCreateInput = {
   updatedAt?: Date | string
   entries?: Prisma.GameListEntryCreateNestedManyWithoutListInput
   user: Prisma.UserCreateNestedOneWithoutGameListsInput
+  likes?: Prisma.LikeCreateNestedManyWithoutListInput
 }
 
 export type GameListUncheckedCreateInput = {
@@ -408,6 +412,7 @@ export type GameListUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   entries?: Prisma.GameListEntryUncheckedCreateNestedManyWithoutListInput
+  likes?: Prisma.LikeUncheckedCreateNestedManyWithoutListInput
 }
 
 export type GameListUpdateInput = {
@@ -429,6 +434,7 @@ export type GameListUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   entries?: Prisma.GameListEntryUpdateManyWithoutListNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutGameListsNestedInput
+  likes?: Prisma.LikeUpdateManyWithoutListNestedInput
 }
 
 export type GameListUncheckedUpdateInput = {
@@ -450,6 +456,7 @@ export type GameListUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   entries?: Prisma.GameListEntryUncheckedUpdateManyWithoutListNestedInput
+  likes?: Prisma.LikeUncheckedUpdateManyWithoutListNestedInput
 }
 
 export type GameListCreateManyInput = {
@@ -587,6 +594,11 @@ export type GameListScalarRelationFilter = {
   isNot?: Prisma.GameListWhereInput
 }
 
+export type GameListNullableScalarRelationFilter = {
+  is?: Prisma.GameListWhereInput | null
+  isNot?: Prisma.GameListWhereInput | null
+}
+
 export type GameListCreateNestedManyWithoutUserInput = {
   create?: Prisma.XOR<Prisma.GameListCreateWithoutUserInput, Prisma.GameListUncheckedCreateWithoutUserInput> | Prisma.GameListCreateWithoutUserInput[] | Prisma.GameListUncheckedCreateWithoutUserInput[]
   connectOrCreate?: Prisma.GameListCreateOrConnectWithoutUserInput | Prisma.GameListCreateOrConnectWithoutUserInput[]
@@ -665,6 +677,22 @@ export type GameListUpdateOneRequiredWithoutEntriesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.GameListUpdateToOneWithWhereWithoutEntriesInput, Prisma.GameListUpdateWithoutEntriesInput>, Prisma.GameListUncheckedUpdateWithoutEntriesInput>
 }
 
+export type GameListCreateNestedOneWithoutLikesInput = {
+  create?: Prisma.XOR<Prisma.GameListCreateWithoutLikesInput, Prisma.GameListUncheckedCreateWithoutLikesInput>
+  connectOrCreate?: Prisma.GameListCreateOrConnectWithoutLikesInput
+  connect?: Prisma.GameListWhereUniqueInput
+}
+
+export type GameListUpdateOneWithoutLikesNestedInput = {
+  create?: Prisma.XOR<Prisma.GameListCreateWithoutLikesInput, Prisma.GameListUncheckedCreateWithoutLikesInput>
+  connectOrCreate?: Prisma.GameListCreateOrConnectWithoutLikesInput
+  upsert?: Prisma.GameListUpsertWithoutLikesInput
+  disconnect?: Prisma.GameListWhereInput | boolean
+  delete?: Prisma.GameListWhereInput | boolean
+  connect?: Prisma.GameListWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.GameListUpdateToOneWithWhereWithoutLikesInput, Prisma.GameListUpdateWithoutLikesInput>, Prisma.GameListUncheckedUpdateWithoutLikesInput>
+}
+
 export type GameListCreateWithoutUserInput = {
   id?: string
   type: $Enums.GameListType
@@ -683,6 +711,7 @@ export type GameListCreateWithoutUserInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   entries?: Prisma.GameListEntryCreateNestedManyWithoutListInput
+  likes?: Prisma.LikeCreateNestedManyWithoutListInput
 }
 
 export type GameListUncheckedCreateWithoutUserInput = {
@@ -703,6 +732,7 @@ export type GameListUncheckedCreateWithoutUserInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   entries?: Prisma.GameListEntryUncheckedCreateNestedManyWithoutListInput
+  likes?: Prisma.LikeUncheckedCreateNestedManyWithoutListInput
 }
 
 export type GameListCreateOrConnectWithoutUserInput = {
@@ -772,6 +802,7 @@ export type GameListCreateWithoutEntriesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutGameListsInput
+  likes?: Prisma.LikeCreateNestedManyWithoutListInput
 }
 
 export type GameListUncheckedCreateWithoutEntriesInput = {
@@ -792,6 +823,7 @@ export type GameListUncheckedCreateWithoutEntriesInput = {
   commentsHidden?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  likes?: Prisma.LikeUncheckedCreateNestedManyWithoutListInput
 }
 
 export type GameListCreateOrConnectWithoutEntriesInput = {
@@ -828,6 +860,7 @@ export type GameListUpdateWithoutEntriesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutGameListsNestedInput
+  likes?: Prisma.LikeUpdateManyWithoutListNestedInput
 }
 
 export type GameListUncheckedUpdateWithoutEntriesInput = {
@@ -848,6 +881,107 @@ export type GameListUncheckedUpdateWithoutEntriesInput = {
   commentsHidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  likes?: Prisma.LikeUncheckedUpdateManyWithoutListNestedInput
+}
+
+export type GameListCreateWithoutLikesInput = {
+  id?: string
+  type: $Enums.GameListType
+  displayMode?: string
+  tierLabels?: Prisma.GameListCreatetierLabelsInput | string[]
+  tierColors?: Prisma.GameListCreatetierColorsInput | string[]
+  name: string
+  slug?: string | null
+  description?: string | null
+  image?: string | null
+  background?: string | null
+  color?: string | null
+  accentColor?: string | null
+  privacy?: string
+  commentsHidden?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  entries?: Prisma.GameListEntryCreateNestedManyWithoutListInput
+  user: Prisma.UserCreateNestedOneWithoutGameListsInput
+}
+
+export type GameListUncheckedCreateWithoutLikesInput = {
+  id?: string
+  userId: string
+  type: $Enums.GameListType
+  displayMode?: string
+  tierLabels?: Prisma.GameListCreatetierLabelsInput | string[]
+  tierColors?: Prisma.GameListCreatetierColorsInput | string[]
+  name: string
+  slug?: string | null
+  description?: string | null
+  image?: string | null
+  background?: string | null
+  color?: string | null
+  accentColor?: string | null
+  privacy?: string
+  commentsHidden?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  entries?: Prisma.GameListEntryUncheckedCreateNestedManyWithoutListInput
+}
+
+export type GameListCreateOrConnectWithoutLikesInput = {
+  where: Prisma.GameListWhereUniqueInput
+  create: Prisma.XOR<Prisma.GameListCreateWithoutLikesInput, Prisma.GameListUncheckedCreateWithoutLikesInput>
+}
+
+export type GameListUpsertWithoutLikesInput = {
+  update: Prisma.XOR<Prisma.GameListUpdateWithoutLikesInput, Prisma.GameListUncheckedUpdateWithoutLikesInput>
+  create: Prisma.XOR<Prisma.GameListCreateWithoutLikesInput, Prisma.GameListUncheckedCreateWithoutLikesInput>
+  where?: Prisma.GameListWhereInput
+}
+
+export type GameListUpdateToOneWithWhereWithoutLikesInput = {
+  where?: Prisma.GameListWhereInput
+  data: Prisma.XOR<Prisma.GameListUpdateWithoutLikesInput, Prisma.GameListUncheckedUpdateWithoutLikesInput>
+}
+
+export type GameListUpdateWithoutLikesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumGameListTypeFieldUpdateOperationsInput | $Enums.GameListType
+  displayMode?: Prisma.StringFieldUpdateOperationsInput | string
+  tierLabels?: Prisma.GameListUpdatetierLabelsInput | string[]
+  tierColors?: Prisma.GameListUpdatetierColorsInput | string[]
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  background?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  accentColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  privacy?: Prisma.StringFieldUpdateOperationsInput | string
+  commentsHidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  entries?: Prisma.GameListEntryUpdateManyWithoutListNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutGameListsNestedInput
+}
+
+export type GameListUncheckedUpdateWithoutLikesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumGameListTypeFieldUpdateOperationsInput | $Enums.GameListType
+  displayMode?: Prisma.StringFieldUpdateOperationsInput | string
+  tierLabels?: Prisma.GameListUpdatetierLabelsInput | string[]
+  tierColors?: Prisma.GameListUpdatetierColorsInput | string[]
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  background?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  accentColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  privacy?: Prisma.StringFieldUpdateOperationsInput | string
+  commentsHidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  entries?: Prisma.GameListEntryUncheckedUpdateManyWithoutListNestedInput
 }
 
 export type GameListCreateManyUserInput = {
@@ -887,6 +1021,7 @@ export type GameListUpdateWithoutUserInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   entries?: Prisma.GameListEntryUpdateManyWithoutListNestedInput
+  likes?: Prisma.LikeUpdateManyWithoutListNestedInput
 }
 
 export type GameListUncheckedUpdateWithoutUserInput = {
@@ -907,6 +1042,7 @@ export type GameListUncheckedUpdateWithoutUserInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   entries?: Prisma.GameListEntryUncheckedUpdateManyWithoutListNestedInput
+  likes?: Prisma.LikeUncheckedUpdateManyWithoutListNestedInput
 }
 
 export type GameListUncheckedUpdateManyWithoutUserInput = {
@@ -935,10 +1071,12 @@ export type GameListUncheckedUpdateManyWithoutUserInput = {
 
 export type GameListCountOutputType = {
   entries: number
+  likes: number
 }
 
 export type GameListCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   entries?: boolean | GameListCountOutputTypeCountEntriesArgs
+  likes?: boolean | GameListCountOutputTypeCountLikesArgs
 }
 
 /**
@@ -956,6 +1094,13 @@ export type GameListCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Ext
  */
 export type GameListCountOutputTypeCountEntriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.GameListEntryWhereInput
+}
+
+/**
+ * GameListCountOutputType without action
+ */
+export type GameListCountOutputTypeCountLikesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.LikeWhereInput
 }
 
 
@@ -979,6 +1124,7 @@ export type GameListSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   updatedAt?: boolean
   entries?: boolean | Prisma.GameList$entriesArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  likes?: boolean | Prisma.GameList$likesArgs<ExtArgs>
   _count?: boolean | Prisma.GameListCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["gameList"]>
 
@@ -1048,6 +1194,7 @@ export type GameListOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs =
 export type GameListInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   entries?: boolean | Prisma.GameList$entriesArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  likes?: boolean | Prisma.GameList$likesArgs<ExtArgs>
   _count?: boolean | Prisma.GameListCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type GameListIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1062,6 +1209,7 @@ export type $GameListPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
   objects: {
     entries: Prisma.$GameListEntryPayload<ExtArgs>[]
     user: Prisma.$UserPayload<ExtArgs>
+    likes: Prisma.$LikePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1477,6 +1625,7 @@ export interface Prisma__GameListClient<T, Null = never, ExtArgs extends runtime
   readonly [Symbol.toStringTag]: "PrismaPromise"
   entries<T extends Prisma.GameList$entriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.GameList$entriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$GameListEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  likes<T extends Prisma.GameList$likesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.GameList$likesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LikePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1945,6 +2094,30 @@ export type GameList$entriesArgs<ExtArgs extends runtime.Types.Extensions.Intern
   take?: number
   skip?: number
   distinct?: Prisma.GameListEntryScalarFieldEnum | Prisma.GameListEntryScalarFieldEnum[]
+}
+
+/**
+ * GameList.likes
+ */
+export type GameList$likesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Like
+   */
+  select?: Prisma.LikeSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Like
+   */
+  omit?: Prisma.LikeOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.LikeInclude<ExtArgs> | null
+  where?: Prisma.LikeWhereInput
+  orderBy?: Prisma.LikeOrderByWithRelationInput | Prisma.LikeOrderByWithRelationInput[]
+  cursor?: Prisma.LikeWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.LikeScalarFieldEnum | Prisma.LikeScalarFieldEnum[]
 }
 
 /**

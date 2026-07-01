@@ -208,7 +208,7 @@ export async function updateUserGameEntry(entryId: string, formData: FormData) {
 			timeMastered: true,
 			finishedAt: true,
 			masteredAt: true,
-			userGamePlayLogs: {
+			logs: {
 				select: {
 					hours: true,
 				},
@@ -220,7 +220,7 @@ export async function updateUserGameEntry(entryId: string, formData: FormData) {
 		throw new Error("Library entry not found.");
 	}
 
-	const logTime = current.userGamePlayLogs.reduce((total, log) => total + log.hours, 0);
+	const logTime = current.logs.reduce((total, log) => total + log.hours, 0);
 	const timePlayed = timeMode === "logs" ? logTime : manualTime;
 	const hasTimePlayed = Number.isFinite(timePlayed) && timePlayed != null && timePlayed > 0;
 	const hasMasteredTime = Number.isFinite(masteredTime) && masteredTime != null && masteredTime > 0;
@@ -248,7 +248,7 @@ export async function updateUserGameEntry(entryId: string, formData: FormData) {
 			},
 			include: {
 				game: true,
-				userGamePlayLogs: {
+				logs: {
 					orderBy: {
 						createdAt: "desc",
 					},
@@ -387,7 +387,7 @@ export async function createUserGamePlayLog(entryId: string, formData: FormData)
 			},
 			include: {
 				game: true,
-				userGamePlayLogs: {
+				logs: {
 					orderBy: {
 						createdAt: "desc",
 					},
@@ -485,7 +485,7 @@ export async function updateUserGamePlayLog(logId: string, formData: FormData) {
 			},
 			include: {
 				game: true,
-				userGamePlayLogs: {
+				logs: {
 					orderBy: {
 						createdAt: "desc",
 					},
@@ -549,7 +549,7 @@ export async function deleteUserGamePlayLog(logId: string) {
 			},
 			include: {
 				game: true,
-				userGamePlayLogs: {
+				logs: {
 					orderBy: {
 						createdAt: "desc",
 					},

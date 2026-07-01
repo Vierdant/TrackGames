@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import type { Game } from "@/lib/types";
+import type { Game } from "@/lib/data/games";
 import * as normalize from "@/lib/util/normalize";
-import GameCard from "./GameCard";
+import { GameCard } from "./GameDisplays";
 import HorizontalScroller from "../layout/HorizontalScroller";
 import SubTabs from "../layout/SubTabs";
 
@@ -27,7 +27,7 @@ export default function RelatedGamesTabs({ franchiseGames, seriesGames, similarG
 		<SubTabs tabs={tabs} active={activeTab} setter={setActiveTab} hasViewAll={activeTab !== "similar"} shouldCompact>
 			<HorizontalScroller className="mt-4 max-w-full gap-5 overflow-clip rounded-md">
 				{activeGames.map((game) => (
-					<GameCard key={game.id} game={game} size={160} effect="ripple" hover="name" hasLink={true} />
+					<GameCard key={game.id} game={game} size={160} effect="ripple" hover="name" hasHref={true} />
 				))}
 			</HorizontalScroller>
 		</SubTabs>

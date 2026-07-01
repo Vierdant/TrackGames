@@ -1,9 +1,9 @@
 import { NotificationType } from "../generated/prisma/enums";
-import type { User } from "../types";
+import type { UserModel } from "../generated/prisma/models/User";
 import { hexColor } from "../util/normalize";
 import { profileThemeStyle } from "./user";
 
-export function viewerThemeStyle(user: Pick<User, "profileColor" | "accentColor" | "siteThemeMode" | "siteThemeColor" | "siteAccentColor">) {
+export function viewerThemeStyle(user: Pick<UserModel, "profileColor" | "accentColor" | "siteThemeMode" | "siteThemeColor" | "siteAccentColor">) {
 	if (user.siteThemeMode === "custom") {
 		return profileThemeStyle(hexColor(user.siteThemeColor, "#7b5cdb"), hexColor(user.siteAccentColor, "#b8842f"));
 	}
@@ -15,12 +15,12 @@ export function viewerThemeStyle(user: Pick<User, "profileColor" | "accentColor"
 	return profileThemeStyle(user.profileColor, user.accentColor);
 }
 
-export function shouldHideComments(user?: Pick<User, "hideCommentsEverywhere"> | null) {
+export function shouldHideComments(user?: Pick<UserModel, "hideCommentsEverywhere"> | null) {
 	return Boolean(user?.hideCommentsEverywhere);
 }
 
 export function notificationAllowed(
-	user: Pick<User, "notifyCommentReplies" | "notifyProfileComments" | "notifyLikes" | "notifyFollows" | "notifyFollowerLists" | "notifyBadges">,
+	user: Pick<UserModel, "notifyCommentReplies" | "notifyProfileComments" | "notifyLikes" | "notifyFollows" | "notifyFollowerLists" | "notifyBadges">,
 	type: NotificationType,
 ) {
 	if (type === NotificationType.COMMENT_REPLY) return user.notifyCommentReplies;
@@ -32,7 +32,7 @@ export function notificationAllowed(
 	return true;
 }
 
-export function defaultLibraryFilters(user: Pick<User, "defaultGameListStatus" | "defaultGameListSort" | "defaultGameListView">) {
+export function defaultLibraryFilters(user: Pick<UserModel, "defaultGameListStatus" | "defaultGameListSort" | "defaultGameListView">) {
 	return {
 		status: user.defaultGameListStatus,
 		sort: user.defaultGameListSort,
@@ -40,6 +40,6 @@ export function defaultLibraryFilters(user: Pick<User, "defaultGameListStatus" |
 	};
 }
 
-export function defaultActivityFilter(user: Pick<User, "defaultActivityFilter">) {
+export function defaultActivityFilter(user: Pick<UserModel, "defaultActivityFilter">) {
 	return user.defaultActivityFilter || "all";
 }

@@ -1,27 +1,24 @@
 import db from "../db";
-import { getTagsForEntries, type UserLibraryTag } from "./library";
-import { GameListType, LikeTargetType } from "../generated/prisma/enums";
+import { getTagsForEntries } from "./library";
+import { GameListType } from "../generated/prisma/enums";
 import type { GameListDefaultArgs, GameListGetPayload } from "../generated/prisma/models/GameList";
+import type { UserGameEntryGetPayload } from "../generated/prisma/models/UserGameEntry";
 
-type PlaylistLibraryEntry = {
-	id: string;
-	status: string;
-	rating: number | null;
-	timePlayed: number | null;
-	timeFinished: number | null;
-	timeMastered: number | null;
-	finishedAt: Date | null;
-	masteredAt: Date | null;
-	tags: UserLibraryTag[];
+type PlaylistUserEntry = UserGameEntryGetPayload<{ select: typeof playlistUserEntrySelect }> & {
+	tags: { id: string; name: string }[];
 };
 
-type PlaylistAccess = {
-	id: string;
-	userId: string;
-	privacy: string;
+export type PlaylistEntry = PlaylistDisplayData["entries"][number] & {
+	userEntry?: PlaylistUserEntry | null;
 };
 
-const playlistArgs = {
+export type PlaylistData = Omit<PlaylistDisplayData, "entries"> & {
+	entries: PlaylistEntry[];
+};
+
+export type PlaylistDisplayData = GameListGetPayload<typeof playlistInclude>;
+
+const playlistInclude = {
 	include: {
 		user: {
 			select: {
@@ -39,95 +36,56 @@ const playlistArgs = {
 	},
 } satisfies GameListDefaultArgs;
 
-export type Playlist = GameListGetPayload<typeof playlistArgs>;
+const playlistUserEntrySelect = {
+	id: true,
+	gameId: true,
+	status: true,
+	rating: true,
+	timePlayed: true,
+	timeFinished: true,
+	timeMastered: true,
+	finishedAt: true,
+	masteredAt: true,
+} as const;
 
-export async function getUserPlaylists(userId: string) {
+export async function getUserPlaylists(userId: string, privacy: "public" | "followers" | "private" = "public") {
 	return await db.gameList.findMany({
 		where: {
 			userId,
 			type: GameListType.PLAYLIST,
+			privacy: privacy === "followers" ? { in: ["public", "followers"] } : privacy,
 		},
-		...playlistArgs,
+		...playlistInclude,
 		orderBy: {
 			updatedAt: "desc",
 		},
 	});
 }
 
-export async function getTopPlaylists() {
-	const likedPlaylists = await db.like.groupBy({
-		by: ["targetId"],
-		where: {
-			targetType: LikeTargetType.GAME_LIST,
-		},
-		_count: {
-			_all: true,
-		},
-	});
-	const topLikedPlaylists = likedPlaylists.toSorted((a, b) => b._count._all - a._count._all);
-	const likedPlaylistIds = topLikedPlaylists.map((playlist) => playlist.targetId);
-	const playlists = likedPlaylistIds.length
-		? await db.gameList.findMany({
-				where: {
-					id: {
-						in: likedPlaylistIds,
-					},
-					type: GameListType.PLAYLIST,
-					privacy: "public",
-				},
-				...playlistArgs,
-			})
-		: [];
-	const orderedPlaylists = playlists
-		.toSorted((a, b) => {
-			const aLikes = likedPlaylists.find((playlist) => playlist.targetId === a.id)?._count._all ?? 0;
-			const bLikes = likedPlaylists.find((playlist) => playlist.targetId === b.id)?._count._all ?? 0;
-
-			return bLikes - aLikes;
-		})
-		.slice(0, 4);
-
-	if (orderedPlaylists.length >= 4) return orderedPlaylists;
-
-	const recentPlaylists = await db.gameList.findMany({
+export async function getTopLikedPlaylists() {
+	const playlists = await db.gameList.findMany({
+		...playlistInclude,
+		take: 10,
 		where: {
 			type: GameListType.PLAYLIST,
-			privacy: "public",
-			id: {
-				notIn: orderedPlaylists.map((playlist) => playlist.id),
+		},
+		orderBy: {
+			likes: {
+				_count: "desc",
 			},
 		},
-		...playlistArgs,
-		orderBy: {
-			updatedAt: "desc",
-		},
-		take: 4 - orderedPlaylists.length,
 	});
 
-	return [...orderedPlaylists, ...recentPlaylists];
+	return playlists as PlaylistDisplayData[];
 }
 
-export async function getPlaylistAccess(id: string): Promise<PlaylistAccess | null> {
-	return await db.gameList.findFirst({
-		where: {
-			id,
-			type: GameListType.PLAYLIST,
-		},
-		select: {
-			id: true,
-			userId: true,
-			privacy: true,
-		},
-	});
-}
-
-export async function getPlaylist(id: string, viewerId?: string) {
+export async function getPlaylist(id: string, viewerId?: string): Promise<PlaylistData | null> {
 	const playlist = await db.gameList.findFirst({
 		where: {
 			id,
 			type: GameListType.PLAYLIST,
 		},
-		...playlistArgs,
+		...playlistInclude,
 	});
 
 	if (!playlist || !viewerId || !playlist.entries.length) return playlist;
@@ -139,17 +97,7 @@ export async function getPlaylist(id: string, viewerId?: string) {
 				in: playlist.entries.map((entry) => entry.gameId),
 			},
 		},
-		select: {
-			id: true,
-			gameId: true,
-			status: true,
-			rating: true,
-			timePlayed: true,
-			timeFinished: true,
-			timeMastered: true,
-			finishedAt: true,
-			masteredAt: true,
-		},
+		select: playlistUserEntrySelect,
 	});
 	const tags = await getTagsForEntries(libraryEntries.map((entry) => entry.id));
 	const entriesByGame = new Map(
@@ -166,7 +114,7 @@ export async function getPlaylist(id: string, viewerId?: string) {
 		...playlist,
 		entries: playlist.entries.map((entry) => ({
 			...entry,
-			libraryEntry: entriesByGame.get(entry.gameId) ?? null,
+			userEntry: entriesByGame.get(entry.gameId) ?? null,
 		})),
 	};
 }
@@ -183,5 +131,3 @@ export async function getPlaylistLibraryCount(userId: string | undefined, gameId
 		},
 	});
 }
-
-export type PlaylistEntry = Playlist["entries"][number] & { libraryEntry?: PlaylistLibraryEntry | null };

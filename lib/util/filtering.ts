@@ -1,22 +1,8 @@
+import { UserLibraryEntryWithTags } from "../data/library";
 import { ratingToFive } from "./rating";
 import { filterNumber, matchesNumberRange } from "./tools";
 
 type FilterChoice = "any" | "yes" | "no";
-
-type FilterTag = {
-	name: string;
-};
-
-type FilterEntry = {
-	status: string;
-	rating: number | null;
-	timePlayed: number | null;
-	timeFinished: number | null;
-	timeMastered: number | null;
-	finishedAt: Date | string | null;
-	masteredAt: Date | string | null;
-	tags: FilterTag[];
-};
 
 type Filters = {
 	statuses: readonly string[];
@@ -54,7 +40,7 @@ export function advancedFilterCount(filters: Filters) {
 	);
 }
 
-export function matchesAdvancedFilters(entry: FilterEntry, filters: Filters) {
+export function matchesAdvancedFilters(entry: UserLibraryEntryWithTags, filters: Filters) {
 	if (filters.statuses.length && !filters.statuses.includes(entry.status)) return false;
 	if (filters.excludedStatuses.includes(entry.status)) return false;
 

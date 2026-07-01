@@ -1,5 +1,5 @@
 import db from "../db";
-import { InteractionTargetType, LikeTargetType } from "../generated/prisma/enums";
+import { InteractionTargetType } from "../generated/prisma/enums";
 
 export async function getComments(targetType: InteractionTargetType, targetId: string, userId?: string) {
 	const comments = await db.comment.findMany({
@@ -23,10 +23,9 @@ export async function getComments(targetType: InteractionTargetType, targetId: s
 	});
 
 	const likes = await db.like.groupBy({
-		by: ["targetId"],
+		by: ["commentId"],
 		where: {
-			targetType: LikeTargetType.COMMENT,
-			targetId: {
+			commentId: {
 				in: comments.map((comment) => comment.id),
 			},
 		},
@@ -37,13 +36,12 @@ export async function getComments(targetType: InteractionTargetType, targetId: s
 		? await db.like.findMany({
 				where: {
 					userId,
-					targetType: LikeTargetType.COMMENT,
-					targetId: {
+					commentId: {
 						in: comments.map((comment) => comment.id),
 					},
 				},
 				select: {
-					targetId: true,
+					commentId: true,
 				},
 			})
 		: [];
@@ -66,8 +64,8 @@ export async function getComments(targetType: InteractionTargetType, targetId: s
 
 	return comments.map((comment) => ({
 		...comment,
-		likes: likes.find((like) => like.targetId === comment.id)?._count ?? 0,
-		liked: userLikes.some((like) => like.targetId === comment.id),
+		likes: likes.find((like) => like.commentId === comment.id)?._count ?? 0,
+		liked: userLikes.some((like) => like.commentId === comment.id),
 		userRating: ratings.find((rating) => rating.userId === comment.userId)?.rating ?? null,
 	}));
 }

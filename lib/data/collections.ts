@@ -1,7 +1,10 @@
 import db from "../db";
 import { formatRawCollection } from "../external/igdb/util";
-import type { Collection, MaybeArray } from "../types";
+import type { CollectionModel } from "../generated/prisma/models/Collection";
+import type { MaybeArray } from "../types";
 import { getByIds, getBySlugs } from "./getter";
+
+export type Collection = Pick<CollectionModel, "id" | "slug" | "name" | "games">;
 
 type DataResult<T extends MaybeArray<number>> = T extends number[] ? Collection[] : Collection | null;
 

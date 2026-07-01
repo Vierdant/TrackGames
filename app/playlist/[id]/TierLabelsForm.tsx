@@ -12,7 +12,7 @@ type TierLabelsFormProps = Readonly<{
 	colors: string[];
 }>;
 
-function filterItems(
+function filterLabelledColors(
 	current: {
 		label: string;
 		color: string;
@@ -66,7 +66,7 @@ export default function TierLabelsForm({ playlistId, tiers, colors }: TierLabels
 							/>
 							<button
 								type="button"
-								onClick={() => setItems((current) => filterItems(current, index))}
+								onClick={() => setItems((current) => filterLabelledColors(current, index))}
 								disabled={items.length === 1}
 								className="grid size-9 shrink-0 cursor-pointer place-items-center rounded text-text-muted hover:text-error disabled:cursor-not-allowed disabled:opacity-40"
 								aria-label="Remove tier"

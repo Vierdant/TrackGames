@@ -1,6 +1,7 @@
-import GameCard from "@/app/components/game/GameCard";
+import { GameCard } from "@/app/components/game/GameDisplays";
 import HorizontalScroller from "@/app/components/layout/HorizontalScroller";
-import type { Game, Widget } from "@/lib/types";
+import type { Widget } from "@/lib/types";
+import type { Game } from "@/lib/data/games";
 import { MarkdownBlocks } from "../../components/markdown/MarkdownBlocks";
 import { WidgetType } from "@/lib/enums";
 import { parseMarkdownBlocks } from "@/lib/markdown";
@@ -13,15 +14,15 @@ function GameList({ widget, games }: Readonly<{ widget: Widget; games: Game[] }>
 			{widget.games ? (
 				<div>
 					<p className="mb-3 border-b border-border pb-3 text-xl font-bold">{widget.title}</p>
-					<HorizontalScroller className="max-w-full gap-1 overflow-clip p-2 md:gap-5 md:p-6">
+					<HorizontalScroller className="max-w-full gap-1 overflow-clip pt-2 pb-2 md:gap-5 md:pt-6 md:pb-6">
 						{games.length > 0 ? (
 							games.map((game) => (
 								<div key={game.id}>
 									<div className="flex md:hidden">
-										<GameCard game={game} size={100} effect="ripple" hasLink={true} />
+										<GameCard game={game} size={100} effect="ripple" hasHref={true} />
 									</div>
 									<div className="hidden md:flex">
-										<GameCard game={game} size={160} effect="ripple" hover="name" hasLink={true} />
+										<GameCard game={game} size={140} effect="ripple" hover="name" hasHref={true} />
 									</div>
 								</div>
 							))
@@ -33,15 +34,6 @@ function GameList({ widget, games }: Readonly<{ widget: Widget; games: Game[] }>
 			) : (
 				<p className="rounded border-2 border-error/50 bg-error/30 p-5 text-center font-bold">Data Not Found - Favorites widget failed</p>
 			)}
-		</div>
-	);
-}
-
-function StatsBlock({ label, value }: Readonly<{ label: string; value: string }>) {
-	return (
-		<div className="flex h-16 w-full flex-col items-center justify-center gap-2 rounded-md border-2 border-primary/40 bg-primary/10 p-10 text-center text-2xl font-bold md:h-32">
-			<p className="flex flex-1 items-center">{value}</p>
-			<p className="h-6 text-sm">{label}</p>
 		</div>
 	);
 }
@@ -85,7 +77,15 @@ function Stats({ widget, stats }: Readonly<{ widget: Widget; stats: Awaited<Retu
 							value = stats.total;
 						}
 
-						return <StatsBlock key={`${stat}-${index}`} label={label} value={value?.toLocaleString("en", { maximumFractionDigits: 1 }) ?? "0"} />;
+						return (
+							<div
+								key={`${stat}-${index}`}
+								className="flex h-16 w-full flex-col items-center justify-center gap-2 rounded-md border-2 border-primary/40 bg-primary/10 p-10 text-center text-2xl font-bold md:h-32"
+							>
+								<p className="flex flex-1 items-center">{value?.toLocaleString("en", { maximumFractionDigits: 1 }) ?? "0"}</p>
+								<p className="h-6 text-sm">{label}</p>
+							</div>
+						);
 					})}
 				</div>
 			) : (

@@ -1,5 +1,5 @@
 import db from "../db";
-import { ActivityType, InteractionTargetType, LikeTargetType, NotificationType } from "../generated/prisma/enums";
+import { ActivityType, InteractionTargetType, NotificationType } from "../generated/prisma/enums";
 import { notificationAllowed } from "../account/preferences";
 
 export const activityPageSize = 32;
@@ -8,17 +8,15 @@ export async function getPlaylistLikeState(listId: string, userId?: string) {
 	const [likes, userLike] = await Promise.all([
 		db.like.count({
 			where: {
-				targetType: LikeTargetType.GAME_LIST,
-				targetId: listId,
+				listId,
 			},
 		}),
 		userId
 			? db.like.findUnique({
 					where: {
-						userId_targetType_targetId: {
+						userId_listId: {
 							userId,
-							targetType: LikeTargetType.GAME_LIST,
-							targetId: listId,
+							listId,
 						},
 					},
 					select: {
@@ -34,8 +32,8 @@ export async function getPlaylistLikeState(listId: string, userId?: string) {
 	};
 }
 
-export async function getProfileSocialState(profileId: string, viewerId?: string) {
-	const [following, followers, followingCount, followerCount, viewerFollow] = await Promise.all([
+export async function getProfileSocialState(profileId: string) {
+	const [following, followers, followingCount, followerCount] = await Promise.all([
 		db.userFollow.findMany({
 			where: {
 				followerId: profileId,
@@ -80,19 +78,6 @@ export async function getProfileSocialState(profileId: string, viewerId?: string
 				followingId: profileId,
 			},
 		}),
-		viewerId
-			? db.userFollow.findUnique({
-					where: {
-						followerId_followingId: {
-							followerId: viewerId,
-							followingId: profileId,
-						},
-					},
-					select: {
-						id: true,
-					},
-				})
-			: null,
 	]);
 
 	return {
@@ -100,7 +85,6 @@ export async function getProfileSocialState(profileId: string, viewerId?: string
 		followers: followers.flatMap((follow) => (follow.follower.name ? [{ name: follow.follower.name, image: follow.follower.image }] : [])),
 		followingCount,
 		followerCount,
-		isFollowing: Boolean(viewerFollow),
 	};
 }
 
@@ -214,7 +198,7 @@ export async function getUserActivities(userId: string, page: number, filter = "
 			const game = games.find((item) => item.id === Number(targetId)) ?? activity.game;
 			const isCommentActivity = Boolean(activity.comment);
 			const targetSlugHref = game?.slug ? `/game/${game.slug}` : null;
-			const targetNameHref = user?.name ? `/u/${user.name}` : targetSlugHref;
+			const targetNameHref = user?.name ? `/u/${user.name}?tab=profile` : targetSlugHref;
 			const targetHref = list ? `/playlist/${list.id}` : targetNameHref;
 
 			return {

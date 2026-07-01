@@ -1,7 +1,7 @@
 "use client";
 
 import { deletePlaylist, updateGameListSettings } from "@/lib/actions/playlists";
-import type { GameList } from "@/lib/types";
+import type { GameListModel } from "@/lib/generated/prisma/models/GameList";
 import { Edit3, Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
@@ -12,7 +12,7 @@ import MenuPanel from "../ui/MenuPanel";
 export default function GameListEditButton({
 	list,
 }: Readonly<{
-	list: Pick<GameList, "id" | "type" | "name" | "description" | "image" | "background" | "color" | "accentColor" | "privacy" | "commentsHidden">;
+	list: Pick<GameListModel, "id" | "type" | "name" | "description" | "image" | "background" | "color" | "accentColor" | "privacy" | "commentsHidden">;
 }>) {
 	const [open, setOpen] = useState(false);
 	const [pending, startTransition] = useTransition();

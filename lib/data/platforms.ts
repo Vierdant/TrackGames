@@ -1,7 +1,10 @@
 import db from "../db";
 import { formatRawPlatform } from "../external/igdb/util";
-import type { MaybeArray, Platform } from "../types";
+import type { PlatformModel } from "../generated/prisma/models/Platform";
+import type { MaybeArray } from "../types";
 import { getByIds, getBySlugs } from "./getter";
+
+export type Platform = Pick<PlatformModel, "id" | "slug" | "name">;
 
 type DataResult<T extends MaybeArray<number>> = T extends number[] ? Platform[] : Platform | null;
 

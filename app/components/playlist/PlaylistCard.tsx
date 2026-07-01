@@ -1,22 +1,18 @@
-import GameCard from "./GameCard";
+import { PlaylistDisplayData } from "@/lib/data/playlists";
+import { GameCard } from "../game/GameDisplays";
 import Link from "next/link";
 
-type PlaylistDisplayGame = {
-	cover?: string | null;
-	name?: string | null;
-	slug?: string | null;
-};
-
-type GamePlaylistDisplayProps = Readonly<{
-	game?: PlaylistDisplayGame;
-	games?: PlaylistDisplayGame[];
+type PlaylistDisplayProps = Readonly<{
+	playlist: PlaylistDisplayData;
 	rank?: number;
-	title?: string;
-	by?: string;
-	href?: string;
+	hasHref?: boolean;
 }>;
 
-export default function GamePlaylistDisplay({ game, games, rank, title, by, href }: GamePlaylistDisplayProps) {
+export default function PlaylistDisplay({ playlist, rank, hasHref }: PlaylistDisplayProps) {
+	const game = playlist.entries.at(0)?.game;
+	const games = playlist.entries.slice(0, 4).map((entry) => entry.game);
+	const title = playlist.name;
+	const by = playlist.user?.name ?? undefined;
 	const itemsList = game ? [game, game, game, game] : [];
 	const items = games?.length ? games : itemsList;
 	const card = (
@@ -29,15 +25,15 @@ export default function GamePlaylistDisplay({ game, games, rank, title, by, href
 				))}
 			</div>
 			<h1 className="text-text-muted">
-				{rank && <span className="text-secondary">#{rank}</span>} {title ?? game?.name ?? "Featured game"}
+				{!!rank && <span className="text-secondary">#{rank}</span>} {title ?? game?.name ?? "Featured game"}
 			</h1>
 			{by && <p className="text-sm text-text-faint">By {by}</p>}
 		</div>
 	);
 
-	if (href) {
+	if (hasHref) {
 		return (
-			<Link href={href} className="block w-full max-w-82">
+			<Link href={`/playlist/${playlist.id}`} className="block w-full max-w-82">
 				{card}
 			</Link>
 		);

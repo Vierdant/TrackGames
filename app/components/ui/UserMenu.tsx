@@ -213,7 +213,7 @@ export function UserMenu({ user, notifications }: UserMenuProps) {
 							<Link
 								role="menuitem"
 								tabIndex={isOpen ? undefined : -1}
-								href={`/u/${encodeURIComponent(user.name ?? "who")}`}
+								href={`/u/${encodeURIComponent(user.name ?? "who")}?tab=profile`}
 								onClick={closeMenu}
 								className="flex items-center gap-3 rounded px-3 py-3 font-medium text-text-muted transition-colors hover:bg-primary hover:text-text focus:bg-primary focus:text-text focus:outline-none md:py-2.5"
 							>

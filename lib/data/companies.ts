@@ -1,7 +1,10 @@
 import db from "../db";
 import { formatRawCompany } from "../external/igdb/util";
-import type { Company, MaybeArray } from "../types";
+import type { CompanyModel } from "../generated/prisma/models/Company";
+import type { MaybeArray } from "../types";
 import { getByIds, getBySlugs } from "./getter";
+
+export type Company = Partial<Pick<CompanyModel, "id" | "slug" | "name" | "logo" | "description" | "developed" | "published">>;
 
 type DataResult<T extends MaybeArray<number>> = T extends number[] ? Company[] : Company | null;
 

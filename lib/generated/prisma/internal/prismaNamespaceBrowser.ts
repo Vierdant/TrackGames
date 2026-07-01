@@ -432,8 +432,8 @@ export type ActivityScalarFieldEnum = (typeof ActivityScalarFieldEnum)[keyof typ
 export const LikeScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
-  targetType: 'targetType',
-  targetId: 'targetId',
+  listId: 'listId',
+  commentId: 'commentId',
   createdAt: 'createdAt'
 } as const
 

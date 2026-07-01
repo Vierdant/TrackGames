@@ -1,6 +1,7 @@
 import { CSSProperties } from "react";
 import db from "../db";
-import type { PublicUser, User } from "../types";
+import type { UserGetPayload } from "../generated/prisma/models/User";
+import type { PublicUser } from "../types";
 import { hexColor } from "../util/normalize";
 
 type SessionUserRef = {
@@ -10,10 +11,12 @@ type SessionUserRef = {
 	image?: string | null;
 };
 
-export async function getUser(sessionUser: SessionUserRef | undefined): Promise<User | null> {
+export type SecuredUser = UserGetPayload<{ omit: { passwordHash: true } }>;
+
+export async function getUser(sessionUser: SessionUserRef | undefined): Promise<SecuredUser | null> {
 	if (!sessionUser) return null;
 
-	const profile = await db.user.findFirst({
+	return await db.user.findFirst({
 		where: {
 			OR: [
 				sessionUser.id ? { id: sessionUser.id } : undefined,
@@ -21,90 +24,34 @@ export async function getUser(sessionUser: SessionUserRef | undefined): Promise<
 				sessionUser.name ? { name: sessionUser.name } : undefined,
 			].filter(Boolean) as { id?: string; email?: string; name?: string }[],
 		},
-		select: {
-			id: true,
-			name: true,
-			email: true,
+		omit: {
 			passwordHash: true,
-			image: true,
-			background: true,
-			bio: true,
-			profileColor: true,
-			accentColor: true,
-			privacy: true,
-			libraryPrivacy: true,
-			logsPrivacy: true,
-			activityPrivacy: true,
-			playlistPrivacy: true,
-			socials: true,
-			preferences: true,
-			widgets: true,
-			commentsHidden: true,
-			hideCommentsEverywhere: true,
-			defaultGameListStatus: true,
-			defaultGameListSort: true,
-			defaultGameListView: true,
-			defaultActivityFilter: true,
-			siteThemeMode: true,
-			siteThemeColor: true,
-			siteAccentColor: true,
-			notifyCommentReplies: true,
-			notifyProfileComments: true,
-			notifyLikes: true,
-			notifyFollows: true,
-			notifyFollowerLists: true,
-			notifyBadges: true,
-			roles: true,
-			accounts: {
-				select: {
-					provider: true,
-				},
-			},
-			createdAt: true,
-			updatedAt: true,
+		},
+	});
+}
+
+export async function hasUserPassword(email: string): Promise<boolean> {
+	const user = await db.user.findFirst({
+		where: {
+			email,
+		},
+		select: {
+			passwordHash: true,
 		},
 	});
 
-	if (!profile) return null;
+	return user?.passwordHash != undefined;
+}
 
-	return {
-		id: profile.id,
-		name: profile.name,
-		email: profile.email,
-		image: profile.image,
-		background: profile.background,
-		bio: profile.bio,
-		profileColor: profile.profileColor,
-		accentColor: profile.accentColor,
-		privacy: profile.privacy,
-		libraryPrivacy: profile.libraryPrivacy,
-		logsPrivacy: profile.logsPrivacy,
-		activityPrivacy: profile.activityPrivacy,
-		playlistPrivacy: profile.playlistPrivacy,
-		socials: profile.socials,
-		preferences: profile.preferences,
-		widgets: profile.widgets,
-		commentsHidden: profile.commentsHidden,
-		hideCommentsEverywhere: profile.hideCommentsEverywhere,
-		defaultGameListStatus: profile.defaultGameListStatus,
-		defaultGameListSort: profile.defaultGameListSort,
-		defaultGameListView: profile.defaultGameListView,
-		defaultActivityFilter: profile.defaultActivityFilter,
-		siteThemeMode: profile.siteThemeMode,
-		siteThemeColor: profile.siteThemeColor,
-		siteAccentColor: profile.siteAccentColor,
-		notifyCommentReplies: profile.notifyCommentReplies,
-		notifyProfileComments: profile.notifyProfileComments,
-		notifyLikes: profile.notifyLikes,
-		notifyFollows: profile.notifyFollows,
-		notifyFollowerLists: profile.notifyFollowerLists,
-		notifyBadges: profile.notifyBadges,
-		roles: profile.roles,
-		hasPassword: Boolean(profile.passwordHash),
-		linkedProviders: profile.accounts.map((account) => account.provider),
-		createdAt: profile.createdAt.toLocaleDateString(undefined, { month: "long", year: "numeric" }),
-		updatedAt: profile.updatedAt.toLocaleDateString(undefined, { month: "long", day: "numeric", year: "numeric" }),
-	};
+export async function getUserProviders(userId: string) {
+	return await db.account.findMany({
+		where: {
+			userId,
+		},
+		select: {
+			provider: true,
+		},
+	});
 }
 
 export async function getPublicUser(name: string): Promise<PublicUser | null> {
@@ -135,11 +82,28 @@ export async function getPublicUser(name: string): Promise<PublicUser | null> {
 	return user as PublicUser;
 }
 
-export function canViewPrivacy(privacy: string | null | undefined, isOwner: boolean, isFollower: boolean) {
+export function checkPublicPrivacy(privacy: string | null | undefined, isOwner: boolean, isFollower: boolean) {
 	if (isOwner) return true;
 	if (privacy === "private") return false;
 	if (privacy === "followers") return isFollower;
 	return true;
+}
+
+export async function isFollower(sessionUserId: string | undefined, userId: string | undefined): Promise<boolean> {
+	if (!sessionUserId || !userId) return false;
+	if (sessionUserId === userId) return true;
+
+	return !!(await db.userFollow.findUnique({
+		where: {
+			followerId_followingId: {
+				followerId: sessionUserId,
+				followingId: userId,
+			},
+		},
+		select: {
+			id: true,
+		},
+	}));
 }
 
 export function profileThemeStyle(profileColor: string | null | undefined, accentColor: string | null | undefined) {

@@ -1,7 +1,10 @@
 import db from "../db";
 import { formatRawFranchise } from "../external/igdb/util";
-import type { Franchise, MaybeArray } from "../types";
+import type { FranchiseModel } from "../generated/prisma/models/Franchise";
+import type { MaybeArray } from "../types";
 import { getByIds, getBySlugs } from "./getter";
+
+export type Franchise = Pick<FranchiseModel, "id" | "slug" | "name" | "games">;
 
 type DataResult<T extends MaybeArray<number>> = T extends number[] ? Franchise[] : Franchise | null;
 

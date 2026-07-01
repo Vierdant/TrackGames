@@ -1,5 +1,5 @@
 import { fetchAPI } from "./igdb-api";
-import type { Company } from "../../types";
+import type { Company } from "../../data/companies";
 
 export async function fetchCompanyById(id: number): Promise<Company | null> {
 	const companies = await fetchAPI<Company[]>(

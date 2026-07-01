@@ -2,58 +2,100 @@ import { ActivityType, InteractionTargetType } from "@/lib/generated/prisma/enum
 import Link from "next/link";
 import PaginationControls from "@/app/components/layout/PaginationControls";
 import { FilterBar } from "@/app/components/ui/FilterBar";
-
-type Activity = {
-	id: string;
-	type: ActivityType;
-	targetType: InteractionTargetType | null;
-	targetId: string | null;
-	listId: string | null;
-	targetName: string | null;
-	targetHref: string | null;
-	createdAt: Date;
-	game?: { slug: string | null; name: string | null } | null;
-};
+import { defaultActivityFilter } from "@/lib/account/preferences";
+import { getUserActivities } from "@/lib/data/social";
+import { PublicUser } from "@/lib/types";
+import { SecuredUser } from "@/lib/account/user";
+import { PrivateDisplay } from "@/app/components/ui/PrivateDisplay";
 
 type ActivityListProps = Readonly<{
-	user: string;
-	activities: Activity[];
-	page: number;
-	totalPages: number;
-	filter: string;
-	canViewLogs: boolean;
+	profile: PublicUser;
+	isVisible: boolean;
+	activityFilter?: string;
+	activityPage?: string;
+	viewer?: SecuredUser | null;
 }>;
 
-function ActivityText({ activity }: Readonly<{ activity: Activity }>) {
-	const message = activityMessage(activity);
-	const spacer = message.after.startsWith(".") || message.after.startsWith("'") ? "" : " ";
+export default async function ActivityList({ profile, isVisible, activityFilter, activityPage, viewer }: ActivityListProps) {
+	if (!isVisible) return <PrivateDisplay message={`Activity is private`} />;
+
+	const selectedActivityFilter = activityFilter ?? (viewer ? defaultActivityFilter(viewer) : "all");
+	const filter = selectedActivityFilter === "logs" && !isVisible ? "all" : selectedActivityFilter;
+
+	const activity = isVisible ? await getUserActivities(profile.id, Number(activityPage), filter, isVisible) : null;
+	const totalPages = activity?.totalPages ?? 1;
+	const page = activity?.page ?? 1;
+
+	const filters = [
+		{ id: "all", label: "All" },
+		{ id: "logs", label: "Game logs" },
+		{ id: "games", label: "Games" },
+		{ id: "playlists", label: "Playlists" },
+		{ id: "comments", label: "Comments" },
+		{ id: "social", label: "Social" },
+	].filter((item): item is { id: string; label: string } => Boolean(item));
 
 	return (
-		<p className="text-sm font-bold text-text">
-			{message.before}
-			{message.name && (
-				<>
-					{" "}
-					{activity.targetHref ? (
-						<Link href={activity.targetHref} className="text-primary hover:text-primary-hover">
-							{message.name}
+		<div className="flex flex-col">
+			<FilterBar
+				className="mb-2"
+				filters={[
+					{
+						type: "linkSelect",
+						label: "Filter activity",
+						value: filter,
+						options: filters.map((item) => ({
+							value: item.id,
+							label: item.label,
+							href: `/u/${profile.name}?tab=activity&activityFilter=${item.id}`,
+						})),
+					},
+				]}
+			/>
+
+			{activity?.activities.length ? (
+				activity.activities.map((activity) => {
+					const message = activityMessage(activity);
+					const spacer = message.after.startsWith(".") || message.after.startsWith("'") ? "" : " ";
+
+					return activity.targetHref ? (
+						<Link
+							key={activity.id}
+							href={activity.targetHref}
+							className="flex flex-row justify-between border-b border-border bg-bg p-4 transition-colors hover:border-primary hover:bg-bg-secondary/20"
+						>
+							<p className="text-sm font-bold text-text">
+								{message.before} {message.name && <span className="text-primary">{message.name}</span>}
+								{spacer}
+								{message.after}
+							</p>
+							<p className="mt-1 text-xs text-text-faint">{new Date(activity.createdAt).toLocaleDateString()}</p>
 						</Link>
 					) : (
-						<span className="text-primary">{message.name}</span>
-					)}
-				</>
+						<div
+							key={activity.id}
+							className="flex flex-row justify-between border-b border-border bg-bg p-4 transition-colors hover:border-primary hover:bg-bg-secondary/20"
+						>
+							<span className="text-primary">{message.name ?? "Error loading activity"}</span>
+							<p className="mt-1 text-xs text-text-faint">{new Date(activity.createdAt).toLocaleDateString()}</p>
+						</div>
+					);
+				})
+			) : (
+				<p className="rounded border border-border bg-bg p-4 text-sm text-text-muted">No activity yet.</p>
 			)}
-			{spacer}
-			{message.after}
-		</p>
-	);
-}
 
-function commentTargetAfter(targetType: InteractionTargetType | null) {
-	if (targetType === InteractionTargetType.GAME_LIST) return "playlist.";
-	if (targetType === InteractionTargetType.USER_PROFILE) return "'s profile.";
-	if (targetType === InteractionTargetType.GAME) return ".";
-	return ".";
+			{totalPages > 1 && (
+				<div className="mt-2 flex justify-center">
+					<PaginationControls
+						page={page}
+						pageCount={totalPages}
+						href={(nextPage) => `/u/${profile.name}?tab=activity&activityFilter=${filter}&activityPage=${nextPage}`}
+					/>
+				</div>
+			)}
+		</div>
+	);
 }
 
 function activityMessage(activity: { type: ActivityType; targetType: InteractionTargetType | null; targetName: string | null; targetHref: string | null }) {
@@ -91,50 +133,9 @@ function activityMessage(activity: { type: ActivityType; targetType: Interaction
 	}
 }
 
-export default function ActivityList({ user, activities, page, totalPages, filter, canViewLogs }: ActivityListProps) {
-	const filters = [
-		{ id: "all", label: "All" },
-		canViewLogs ? { id: "logs", label: "Game logs" } : null,
-		{ id: "games", label: "Games" },
-		{ id: "playlists", label: "Playlists" },
-		{ id: "comments", label: "Comments" },
-		{ id: "social", label: "Social" },
-	].filter((item): item is { id: string; label: string } => Boolean(item));
-
-	return (
-		<div className="flex flex-col">
-			<FilterBar
-				className="mb-2"
-				filters={[
-					{
-						type: "linkSelect",
-						label: "Filter activity",
-						value: filter,
-						options: filters.map((item) => ({
-							value: item.id,
-							label: item.label,
-							href: `/u/${user}?tab=activity&activityFilter=${item.id}`,
-						})),
-					},
-				]}
-			/>
-
-			{activities.length ? (
-				activities.map((activity) => (
-					<div key={activity.id} className="border-b border-border bg-bg p-4">
-						<ActivityText activity={activity} />
-						<p className="mt-1 text-xs text-text-faint">{new Date(activity.createdAt).toLocaleDateString()}</p>
-					</div>
-				))
-			) : (
-				<p className="rounded border border-border bg-bg p-4 text-sm text-text-muted">No activity yet.</p>
-			)}
-
-			{totalPages > 1 && (
-				<div className="mt-2 flex justify-center">
-					<PaginationControls page={page} pageCount={totalPages} href={(nextPage) => `/u/${user}?tab=activity&activityFilter=${filter}&activityPage=${nextPage}`} />
-				</div>
-			)}
-		</div>
-	);
+function commentTargetAfter(targetType: InteractionTargetType | null) {
+	if (targetType === InteractionTargetType.GAME_LIST) return "playlist.";
+	if (targetType === InteractionTargetType.USER_PROFILE) return "'s profile.";
+	if (targetType === InteractionTargetType.GAME) return ".";
+	return ".";
 }

@@ -3,14 +3,14 @@
 import { GhostButton } from "@/app/components/ui/Buttons";
 import ConfirmAction from "@/app/components/ui/ConfirmAction";
 import { Field, Input } from "@/app/components/ui/Inputs";
+import { SecuredUser } from "@/lib/account/user";
 import { linkProvider, unlinkProvider } from "@/lib/actions/auth";
 import { clearUserLibrary, deleteUserAccount, resetUserAccountData } from "@/lib/actions/settings";
 import { AUTHPROVIDERS } from "@/lib/constants";
-import type { User } from "@/lib/types";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 
-export default function AccountSettingsForm({ profile }: Readonly<{ profile: User }>) {
+export default function AccountSettingsForm({ profile, linkedProviders, hasPassword }: Readonly<{ profile: SecuredUser; linkedProviders: string[]; hasPassword: boolean }>) {
 	const [email, setEmail] = useState(profile.email ?? "");
 	const [currentPassword, setCurrentPassword] = useState("");
 	const [newPassword, setNewPassword] = useState("");
@@ -18,22 +18,21 @@ export default function AccountSettingsForm({ profile }: Readonly<{ profile: Use
 	const [confirming, setConfirming] = useState<"library" | "data" | "account" | null>(null);
 	const [pending, startTransition] = useTransition();
 	const router = useRouter();
-	const username = profile.name ?? "";
 
 	function run(action: "library" | "data" | "account") {
 		startTransition(async () => {
 			if (action === "library") {
-				await clearUserLibrary(username);
+				await clearUserLibrary(profile.name!);
 				router.refresh();
 			}
 
 			if (action === "data") {
-				await resetUserAccountData(username);
+				await resetUserAccountData(profile.name!);
 				router.refresh();
 			}
 
 			if (action === "account") {
-				await deleteUserAccount(username);
+				await deleteUserAccount(profile.name!);
 			}
 
 			setConfirming(null);
@@ -51,7 +50,7 @@ export default function AccountSettingsForm({ profile }: Readonly<{ profile: Use
 			<div>
 				<h3>Password</h3>
 				<div className="mt-1 grid gap-3 md:grid-cols-3">
-					{profile.hasPassword && (
+					{hasPassword && (
 						<div className="flex flex-col">
 							<span className="text-sm text-text-muted">Current password</span>
 							<label className="relative">
@@ -67,7 +66,7 @@ export default function AccountSettingsForm({ profile }: Readonly<{ profile: Use
 						</div>
 					)}
 					<label className="flex flex-col">
-						<span className="text-sm text-text-muted">{profile.hasPassword ? "New password" : "Set password"}</span>
+						<span className="text-sm text-text-muted">{hasPassword ? "New password" : "Set password"}</span>
 						<span className="relative">
 							<Input
 								name="newPassword"
@@ -99,7 +98,7 @@ export default function AccountSettingsForm({ profile }: Readonly<{ profile: Use
 				<h3>Login providers</h3>
 				<div className="mt-2 grid gap-2 md:grid-cols-2">
 					{AUTHPROVIDERS.map((provider) => {
-						const linked = profile.linkedProviders.includes(provider.slug);
+						const linked = linkedProviders.includes(provider.slug);
 						const Icon = provider.icon;
 
 						return (
@@ -124,7 +123,7 @@ export default function AccountSettingsForm({ profile }: Readonly<{ profile: Use
 				<p className="mt-2 ml-1.5 text-[0.7rem] text-text-muted">Sign in first, then link providers here to connect them to this account.</p>
 			</div>
 
-			<p className="ml-1.5 text-[0.7rem] text-text-muted">Joined {profile.createdAt}</p>
+			<p className="ml-1.5 text-[0.7rem] text-text-muted">Joined {new Date(profile.createdAt).toLocaleDateString(undefined, { month: "long", year: "numeric" })}</p>
 
 			<div className="rounded border border-error/40 bg-error/10 p-4">
 				<h3>Danger zone</h3>
@@ -148,8 +147,8 @@ export default function AccountSettingsForm({ profile }: Readonly<{ profile: Use
 				message="This deletes every game entry in your library, including play logs and entry data."
 				confirmLabel="Clear library"
 				pending={pending}
-				requireText={username}
-				requireLabel={`Type your username (${username}) to clear your library`}
+				requireText={profile.name!}
+				requireLabel={`Type your username (${profile.name!}) to clear your library`}
 				onClose={() => setConfirming(null)}
 				onConfirm={() => run("library")}
 			/>
@@ -159,8 +158,8 @@ export default function AccountSettingsForm({ profile }: Readonly<{ profile: Use
 				message="This resets your profile, library, playlists, comments, likes, follows, badges, notifications, preferences, and widgets. Your username and login methods stay in place."
 				confirmLabel="Clear all data"
 				pending={pending}
-				requireText={username}
-				requireLabel={`Type your username (${username}) to reset your account data`}
+				requireText={profile.name!}
+				requireLabel={`Type your username (${profile.name!}) to reset your account data`}
 				onClose={() => setConfirming(null)}
 				onConfirm={() => run("data")}
 			/>
@@ -170,8 +169,8 @@ export default function AccountSettingsForm({ profile }: Readonly<{ profile: Use
 				message="This permanently deletes your account and all related data. This cannot be undone."
 				confirmLabel="Delete account"
 				pending={pending}
-				requireText={username}
-				requireLabel={`Type your username (${username}) to delete your account`}
+				requireText={profile.name!}
+				requireLabel={`Type your username (${profile.name!}) to delete your account`}
 				onClose={() => setConfirming(null)}
 				onConfirm={() => run("account")}
 			/>

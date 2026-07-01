@@ -1,7 +1,10 @@
 import db from "../db";
 import { formatRawKeyword } from "../external/igdb/util";
-import type { Keyword, MaybeArray } from "../types";
+import type { KeywordModel } from "../generated/prisma/models/Keyword";
+import type { MaybeArray } from "../types";
 import { getByIds, getBySlugs } from "./getter";
+
+export type Keyword = Pick<KeywordModel, "id" | "slug" | "name">;
 
 type DataResult<T extends MaybeArray<number>> = T extends number[] ? Keyword[] : Keyword | null;
 

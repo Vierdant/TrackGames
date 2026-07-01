@@ -282,7 +282,7 @@ export async function exportTgLibrary() {
 			startedAt: true,
 			finishedAt: true,
 			masteredAt: true,
-			userGamePlayLogs: {
+			logs: {
 				orderBy: {
 					playedAt: "asc",
 				},
@@ -331,7 +331,7 @@ export async function exportTgLibrary() {
 				finishedAt: entry.finishedAt?.toISOString() ?? null,
 				masteredAt: entry.masteredAt?.toISOString() ?? null,
 				tags: (entryTags.get(entry.id) ?? []).map((tag) => tag.name),
-				logs: entry.userGamePlayLogs.map((log) => ({
+				logs: entry.logs.map((log) => ({
 					hours: log.hours,
 					note: log.note,
 					skipRecap: log.skipRecap,

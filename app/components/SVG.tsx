@@ -9,7 +9,7 @@ type IconProps = SVGProps<SVGSVGElement> & {
 	title?: string;
 };
 
-export function Hero({ title, className, ...props }: ImageProps) {
+export function HeroImage({ title, className, ...props }: ImageProps) {
 	return (
 		<svg
 			viewBox="14 80 188 172"

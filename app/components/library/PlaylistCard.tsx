@@ -36,7 +36,7 @@ export default function PlaylistCard({ entry, mode, canEdit, onUpdate, onRemove,
 	const [logDate, setLogDate] = useState("");
 	const [timeMode, setTimeMode] = useState(timeModeLabel(entry.timeMode));
 	const [entryStatus, setEntryStatus] = useState(entry.status);
-	const [isFinished, setEntryFinished] = useState(Boolean(entry.finishedAt || entry.timeFinished != null));
+	const [isFinished, setIsFinished] = useState(Boolean(entry.finishedAt || entry.timeFinished != null));
 	const [tags, setTags] = useState(entry.tags.map((tag) => tag.name));
 	const [isAddingTag, setAddingTag] = useState(false);
 	const [tagInput, setTagInput] = useState("");
@@ -46,7 +46,7 @@ export default function PlaylistCard({ entry, mode, canEdit, onUpdate, onRemove,
 	const game = entry.game;
 	const src = ImageIdToURL(game.cover ?? undefined);
 	const hasNotes = Boolean(entry.notes?.trim());
-	const logs = [...(entry.userGamePlayLogs ?? [])].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+	const logs = [...(entry.logs ?? [])].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 	const filteredLogs = logDate ? logs.filter((log) => new Date(log.playedAt).toISOString().slice(0, 10) === logDate) : logs;
 	const selectedLog = logs.find((log) => log.id === selectedLogId);
 	const now = new Date();
@@ -130,7 +130,7 @@ export default function PlaylistCard({ entry, mode, canEdit, onUpdate, onRemove,
 		setLogDate("");
 		setTimeMode(timeModeLabel(entry.timeMode));
 		setEntryStatus(entry.status);
-		setEntryFinished(Boolean(entry.finishedAt || entry.timeFinished != null));
+		setIsFinished(Boolean(entry.finishedAt || entry.timeFinished != null));
 		setTags(entry.tags.map((tag) => tag.name));
 		setAddingTag(false);
 		setTagInput("");
@@ -221,7 +221,7 @@ export default function PlaylistCard({ entry, mode, canEdit, onUpdate, onRemove,
 						<div className="relative h-20 overflow-hidden rounded bg-bg md:hidden">
 							{src && <Image src={src} alt={game.name ?? "game cover"} fill sizes="60px" className="object-cover" />}
 						</div>
-						<h3 className="min-w-0 truncate text-base font-bold md:text-lg">{game.name}</h3>
+						<h3 className="min-w-0 truncate text-base font-bold text-text md:text-lg">{game.name}</h3>
 						<button
 							type="button"
 							onClick={() => setEditing(false)}
@@ -247,7 +247,7 @@ export default function PlaylistCard({ entry, mode, canEdit, onUpdate, onRemove,
 						entryStatus={entryStatus}
 						setEntryStatus={setEntryStatus}
 						isFinished={isFinished}
-						setEntryFinished={setEntryFinished}
+						setEntryFinished={setIsFinished}
 						tags={tags}
 						setTags={setTags}
 						isAddingTag={isAddingTag}

@@ -1,24 +1,5 @@
 import { GameDevStatus, GameType, PlayerPerspective } from "../../generated/prisma/enums";
-import type {
-	Collection,
-	Company,
-	Franchise,
-	Game,
-	Genre,
-	Keyword,
-	MultiplayerMode,
-	Platform,
-	RawCollection,
-	RawCompany,
-	RawFranchise,
-	RawGame,
-	RawGenre,
-	RawKeyword,
-	RawMultiplayerMode,
-	RawPlatform,
-	RawTheme,
-	Theme,
-} from "../../types";
+import type { RawCollection, RawCompany, RawFranchise, RawGame, RawGenre, RawKeyword, RawMultiplayerMode, RawPlatform, RawTheme } from "./types";
 
 function requireBaseEntity(entity: { id?: number; name?: string; slug?: string }, label: string) {
 	if (!entity.id || !entity.name || !entity.slug) {
@@ -113,7 +94,7 @@ function getPlayerPerspective(slug: string): PlayerPerspective {
 	}
 }
 
-export function ImageIdToURL(id?: string, type: "cover_small" | "cover" | "cover_big" | "screenshot_big" | "1080" | "720" = "cover_big"): string | null {
+export function ImageIdToURL(id: string | null | undefined, type: "cover_small" | "cover" | "cover_big" | "screenshot_big" | "1080" | "720" = "cover_big"): string | null {
 	if (id != null) {
 		switch (type) {
 			case "cover_small":
@@ -134,7 +115,7 @@ export function ImageIdToURL(id?: string, type: "cover_small" | "cover" | "cover
 	}
 }
 
-export function formatRawGame(game: RawGame): Game {
+export function formatRawGame(game: RawGame) {
 	if (!game.id || !game.name || !game.slug) {
 		throw new Error("Cannot format an API game without an id, name, and slug.");
 	}
@@ -172,7 +153,7 @@ export function formatRawGame(game: RawGame): Game {
 	};
 }
 
-export function formatRawCollection(collection: RawCollection): Collection {
+export function formatRawCollection(collection: RawCollection) {
 	const base = requireBaseEntity(collection, "collection");
 
 	return {
@@ -181,7 +162,7 @@ export function formatRawCollection(collection: RawCollection): Collection {
 	};
 }
 
-export function formatRawFranchise(franchise: RawFranchise): Franchise {
+export function formatRawFranchise(franchise: RawFranchise) {
 	const base = requireBaseEntity(franchise, "franchise");
 
 	return {
@@ -190,15 +171,15 @@ export function formatRawFranchise(franchise: RawFranchise): Franchise {
 	};
 }
 
-export function formatRawGenre(genre: RawGenre): Genre {
+export function formatRawGenre(genre: RawGenre) {
 	return requireBaseEntity(genre, "genre");
 }
 
-export function formatRawPlatform(platform: RawPlatform): Platform {
+export function formatRawPlatform(platform: RawPlatform) {
 	return requireBaseEntity(platform, "platform");
 }
 
-export function formatRawKeyword(keyword: RawKeyword): Keyword {
+export function formatRawKeyword(keyword: RawKeyword) {
 	return {
 		id: keyword.id!,
 		name: keyword.name!,
@@ -206,11 +187,11 @@ export function formatRawKeyword(keyword: RawKeyword): Keyword {
 	};
 }
 
-export function formatRawTheme(theme: RawTheme): Theme {
+export function formatRawTheme(theme: RawTheme) {
 	return requireBaseEntity(theme, "theme");
 }
 
-export function formatRawMultiplayerMode(multiplayerMode: RawMultiplayerMode): MultiplayerMode {
+export function formatRawMultiplayerMode(multiplayerMode: RawMultiplayerMode) {
 	if (!multiplayerMode.id || !multiplayerMode.game || typeof multiplayerMode.platform !== "number") {
 		throw new Error("Cannot format an API multiplayer mode without an id, game, and platform.");
 	}
@@ -232,7 +213,7 @@ export function formatRawMultiplayerMode(multiplayerMode: RawMultiplayerMode): M
 	};
 }
 
-export function formatRawCompany(company: RawCompany): Company {
+export function formatRawCompany(company: RawCompany) {
 	return {
 		id: company.id!,
 		name: company.name || undefined,

@@ -1,7 +1,6 @@
 "use client";
 
 import { updateUserSettings } from "@/lib/actions/settings";
-import type { User } from "@/lib/types";
 import AccountSettingsForm from "./AccountSettingsForm";
 import ImportSettingsForm from "./ImportSettingsForm";
 import PreferencesSettingsForm from "./PreferencesSettingsForm";
@@ -9,13 +8,12 @@ import PrivacySettingsForm from "./PrivacySettingsForm";
 import ProfileSettingsForm from "./ProfileSettingsForm";
 import { SaveBar } from "./SettingsShared";
 import WidgetsSettingsForm from "./WidgetsSettingsForm";
+import { SecuredUser } from "@/lib/account/user";
 
-export default function SettingsPanel({ activeTab, profile }: Readonly<{ activeTab: string; profile: User }>) {
+type SettingsPanelProps = Readonly<{ activeTab: string; profile: SecuredUser; linkedProviders: string[]; hasPassword: boolean }>;
+
+export default function SettingsPanel({ activeTab, profile, linkedProviders, hasPassword }: SettingsPanelProps) {
 	const action = updateUserSettings.bind(null, activeTab);
-
-	if (activeTab === "import") {
-		return <ImportSettingsForm />;
-	}
 
 	return (
 		<form action={action} className="flex flex-col gap-5">
@@ -23,7 +21,8 @@ export default function SettingsPanel({ activeTab, profile }: Readonly<{ activeT
 			{activeTab === "privacy" && <PrivacySettingsForm profile={profile} />}
 			{activeTab === "widgets" && <WidgetsSettingsForm profile={profile} />}
 			{activeTab === "preferences" && <PreferencesSettingsForm profile={profile} />}
-			{activeTab === "account" && <AccountSettingsForm profile={profile} />}
+			{activeTab === "import" && <ImportSettingsForm />}
+			{activeTab === "account" && <AccountSettingsForm profile={profile} linkedProviders={linkedProviders} hasPassword={hasPassword} />}
 
 			<SaveBar />
 		</form>

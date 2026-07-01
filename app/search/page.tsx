@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import GameCard from "../components/game/GameCard";
+import { GameCard } from "../components/game/GameDisplays";
 import Container from "../components/layout/Container";
 import { searchGames } from "@/lib/data/games";
 import { absoluteUrl, DEFAULT_OG_IMAGE, metadataDescription, SITE_NAME } from "@/lib/metadata";
@@ -74,7 +74,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
 						<div className="grid grid-cols-2 justify-items-center gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8">
 							{games.map((game) => (
 								<div key={game.id} className="min-w-0">
-									<GameCard game={game} size={140} effect="ripple" hover="name" hasLink={true} />
+									<GameCard game={game} size={140} effect="ripple" hover="name" hasHref={true} />
 								</div>
 							))}
 						</div>

@@ -48,3 +48,29 @@ export const AUTHPROVIDERS = [
 ];
 
 export const ALLOWEDHOSTS = new Set(["i.imgur.com", "images.unsplash.com", "media.discordapp.net", "cdn.discordapp.com", "cdn.pixabay.com"]);
+
+export const ALLOWEDTAGS = [
+	"p",
+	"br",
+	"strong",
+	"em",
+	"del",
+	"blockquote",
+	"ul",
+	"ol",
+	"li",
+	"code",
+	"pre",
+	"h1",
+	"h2",
+	"h3",
+	"a",
+	"img",
+	"hr",
+	"table",
+	"thead",
+	"tbody",
+	"tr",
+	"th",
+	"td",
+];

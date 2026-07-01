@@ -1,7 +1,7 @@
 "use server";
 
 import { redirect } from "next/navigation";
-import { canViewPrivacy } from "../account/user";
+import { checkPublicPrivacy, isFollower } from "../account/user";
 import { auth } from "../auth";
 import db from "../db";
 import { ActivityType, InteractionTargetType, LikeTargetType, NotificationType } from "../generated/prisma/enums";
@@ -26,24 +26,6 @@ function commentActivityType(targetType: InteractionTargetType, parentId: string
 	if (targetType === InteractionTargetType.GAME) return ActivityType.COMMENTED_ON_GAME;
 	if (targetType === InteractionTargetType.USER_PROFILE) return ActivityType.COMMENTED_ON_PROFILE;
 	return ActivityType.COMMENTED_ON_GAME_LIST;
-}
-
-async function isFollowing(viewerId: string, ownerId: string) {
-	if (viewerId === ownerId) return false;
-
-	const follow = await db.userFollow.findUnique({
-		where: {
-			followerId_followingId: {
-				followerId: viewerId,
-				followingId: ownerId,
-			},
-		},
-		select: {
-			id: true,
-		},
-	});
-
-	return Boolean(follow);
 }
 
 async function ensureCanInteractWithGame(targetId: string) {
@@ -78,7 +60,7 @@ async function ensureCanInteractWithProfile(targetId: string, viewerId: string, 
 	}
 
 	const isOwner = user.id === viewerId;
-	const canView = canViewPrivacy(user.privacy, isOwner, await isFollowing(viewerId, user.id));
+	const canView = checkPublicPrivacy(user.privacy, isOwner, await isFollower(viewerId, user.id));
 
 	if (!canView) {
 		throw new Error("Profile is private.");
@@ -95,12 +77,12 @@ async function ensureCanInteractWithTarget(targetType: InteractionTargetType, ta
 	}
 
 	if (targetType === InteractionTargetType.GAME) {
-		ensureCanInteractWithGame(targetId);
+		await ensureCanInteractWithGame(targetId);
 		return;
 	}
 
 	if (targetType === InteractionTargetType.USER_PROFILE) {
-		ensureCanInteractWithProfile(targetId, viewerId, mode);
+		await ensureCanInteractWithProfile(targetId, viewerId, mode);
 		return;
 	}
 
@@ -119,7 +101,7 @@ async function ensureCanInteractWithTarget(targetType: InteractionTargetType, ta
 	}
 
 	const isOwner = list.userId === viewerId;
-	const canView = canViewPrivacy(list.privacy, isOwner, await isFollowing(viewerId, list.userId));
+	const canView = checkPublicPrivacy(list.privacy, isOwner, await isFollower(viewerId, list.userId));
 
 	if (!canView) {
 		throw new Error("List is private.");
@@ -243,13 +225,11 @@ export async function toggleLike(targetType: LikeTargetType, targetId: string) {
 		throw new Error("Invalid target.");
 	}
 
-	const existing = await db.like.findUnique({
+	const existing = await db.like.findFirst({
 		where: {
-			userId_targetType_targetId: {
-				userId,
-				targetType,
-				targetId,
-			},
+			userId,
+			listId: targetType === LikeTargetType.GAME_LIST ? targetId : null,
+			commentId: targetType === LikeTargetType.COMMENT ? targetId : null,
 		},
 		select: {
 			id: true,
@@ -290,8 +270,8 @@ export async function toggleLike(targetType: LikeTargetType, targetId: string) {
 		await tx.like.create({
 			data: {
 				userId,
-				targetType,
-				targetId,
+				listId: targetType === LikeTargetType.GAME_LIST ? targetId : null,
+				commentId: targetType === LikeTargetType.COMMENT ? targetId : null,
 			},
 		});
 
@@ -342,8 +322,7 @@ export async function deleteComment(commentId: string) {
 	await db.$transaction([
 		db.like.deleteMany({
 			where: {
-				targetType: LikeTargetType.COMMENT,
-				targetId: comment.id,
+				commentId: comment.id,
 			},
 		}),
 		db.comment.delete({

@@ -1,6 +1,6 @@
 "use client";
 
-import type { Game } from "@/lib/types";
+import type { Game } from "@/lib/data/games";
 import { deferEffect } from "@/lib/util/effects";
 import { ArrowRight, Search, X } from "lucide-react";
 import Link from "next/link";

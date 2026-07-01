@@ -48,7 +48,7 @@ export function MediaModal({ open, title, value, onClose, onSave }: MediaModelPr
 
 	return (
 		<MenuPanel open={open} onClose={onClose} title={title}>
-			<div className="flex flex-col gap-3">
+			<div className="flex flex-col gap-3 text-text">
 				<Input value={draft} onChange={(event) => setDraft(event.target.value)} placeholder="https://..." />
 			</div>
 			<div className="mt-5 flex justify-end gap-2">

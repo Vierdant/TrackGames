@@ -197,7 +197,7 @@ export type UserGameEntryTagScalarWhereWithAggregatesInput = {
 }
 
 export type UserGameEntryTagCreateInput = {
-  entry: Prisma.UserGameEntryCreateNestedOneWithoutUserGameEntryTagsInput
+  entry: Prisma.UserGameEntryCreateNestedOneWithoutTagsInput
   tag: Prisma.UserTagCreateNestedOneWithoutEntriesInput
 }
 
@@ -207,7 +207,7 @@ export type UserGameEntryTagUncheckedCreateInput = {
 }
 
 export type UserGameEntryTagUpdateInput = {
-  entry?: Prisma.UserGameEntryUpdateOneRequiredWithoutUserGameEntryTagsNestedInput
+  entry?: Prisma.UserGameEntryUpdateOneRequiredWithoutTagsNestedInput
   tag?: Prisma.UserTagUpdateOneRequiredWithoutEntriesNestedInput
 }
 
@@ -387,7 +387,7 @@ export type UserGameEntryTagScalarWhereInput = {
 }
 
 export type UserGameEntryTagCreateWithoutTagInput = {
-  entry: Prisma.UserGameEntryCreateNestedOneWithoutUserGameEntryTagsInput
+  entry: Prisma.UserGameEntryCreateNestedOneWithoutTagsInput
 }
 
 export type UserGameEntryTagUncheckedCreateWithoutTagInput = {
@@ -441,7 +441,7 @@ export type UserGameEntryTagCreateManyTagInput = {
 }
 
 export type UserGameEntryTagUpdateWithoutTagInput = {
-  entry?: Prisma.UserGameEntryUpdateOneRequiredWithoutUserGameEntryTagsNestedInput
+  entry?: Prisma.UserGameEntryUpdateOneRequiredWithoutTagsNestedInput
 }
 
 export type UserGameEntryTagUncheckedUpdateWithoutTagInput = {

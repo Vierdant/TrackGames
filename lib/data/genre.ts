@@ -1,7 +1,10 @@
 import db from "../db";
 import { formatRawGenre } from "../external/igdb/util";
-import type { Genre, MaybeArray } from "../types";
+import type { GenreModel } from "../generated/prisma/models/Genre";
+import type { MaybeArray } from "../types";
 import { getByIds, getBySlugs } from "./getter";
+
+export type Genre = Pick<GenreModel, "id" | "slug" | "name">;
 
 type DataResult<T extends MaybeArray<number>> = T extends number[] ? Genre[] : Genre | null;
 

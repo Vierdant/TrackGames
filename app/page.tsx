@@ -1,22 +1,22 @@
-import { PrimaryButton, GhostButton } from "./components/ui/Buttons";
-import StatBlock from "./components/StatBlock";
-import Container from "./components/layout/Container";
+import { PrimaryButton, GhostButton } from "@/app/components/ui/Buttons";
+import StatBlock from "@/app/components/StatBlock";
+import Container from "@/app/components/layout/Container";
 import { trendingGames, yearlyGames, hiddenGames, mostAnticipated, comingSoon, recentReleases, siteStats, topPlaylists } from "@/lib/cache/resources";
-import GameCard from "./components/game/GameCard";
-import HorizontalScroller from "./components/layout/HorizontalScroller";
-import GameFeature from "./components/game/GameFeature";
-import Gallary from "./components/layout/Gallery";
-import GamePlaylistDisplay from "./components/game/GamePlaylistDisplay";
-import { Hero } from "./components/SVG";
-import GameStatInfoCard from "./components/game/GameStatInfoCard";
+import { GameCard, StatInfoCard } from "@/app/components/game/GameDisplays";
+import HorizontalScroller from "@/app/components/layout/HorizontalScroller";
+import GameFeature from "@/app/components/game/GameFeature";
+import Gallary from "@/app/components/layout/Gallery";
+import { HeroImage } from "@/app/components/SVG";
 import { formatRawGame } from "@/lib/external/igdb/util";
 import { auth } from "@/lib/auth";
 import { getUser } from "@/lib/account/user";
 import { viewerThemeStyle } from "@/lib/account/preferences";
+import PlaylistDisplay from "./components/playlist/PlaylistCard";
 
 export default async function Home() {
 	const session = await auth();
-	const [trendingDataList, yearlyDataList, hiddenDataList, mostAnticipatedList, comingSoonList, recentReleasesList, stats, playlists, viewer] = await Promise.all([
+	const viewer = await getUser(session?.user);
+	const [trendingDataList, yearlyDataList, hiddenDataList, mostAnticipatedList, comingSoonList, recentReleasesList, stats, playlists] = await Promise.all([
 		trendingGames.get(),
 		yearlyGames.get(),
 		hiddenGames.get(),
@@ -25,12 +25,10 @@ export default async function Home() {
 		recentReleases.get(),
 		siteStats.get(),
 		topPlaylists.get(),
-		getUser(session?.user),
 	]);
 
 	return (
 		<div style={viewer ? viewerThemeStyle(viewer) : undefined}>
-			{/* HERO */}
 			<section className="relative flex items-center justify-center overflow-hidden p-20">
 				<div className="pointer-events-none absolute inset-0 bg-[url('/assets/lucid-games-bg.webp')] mask-[radial-gradient(ellipse_at_center,black_48%,transparent_78%)] bg-cover bg-center mask-size-[120%_120%] mask-no-repeat before:absolute before:inset-0 before:bg-bg/92 before:content-['']" />
 				<Container className="relative z-1 flex flex-col items-center justify-between gap-10 lg:flex-row">
@@ -53,7 +51,7 @@ export default async function Home() {
 							{session ? (
 								<>
 									<PrimaryButton href={`/library/${session.user.name}`}>Check Library</PrimaryButton>
-									<GhostButton href={`/u/${session.user.name}`}>Your Profile</GhostButton>
+									<GhostButton href={`/u/${session.user.name}?tab=profile`}>Your Profile</GhostButton>
 								</>
 							) : (
 								<>
@@ -66,26 +64,24 @@ export default async function Home() {
 					</div>
 
 					<div className="relative z-1 hidden w-82 lg:block lg:w-115">
-						<Hero className="text-text dark:text-primary" />
+						<HeroImage className="text-text dark:text-primary" />
 					</div>
 				</Container>
 			</section>
 
-			{/* TRENDING */}
 			<section className="mt-10">
 				<Container>
 					<div className="flex flex-col items-start rounded border-b-2 border-primary/30 pb-10">
 						<h1 className="flex flex-row items-center gap-2 text-xl font-bold text-text-muted">Trending Today</h1>
 						<HorizontalScroller className="mt-4 max-w-full gap-5 overflow-clip rounded-md">
 							{trendingDataList.map((game) => (
-								<GameCard key={game.id} game={formatRawGame(game)} effect="ripple" hover="name" hasLink={true} />
+								<GameCard key={game.id} game={formatRawGame(game)} effect="ripple" hover="name" hasHref={true} />
 							))}
 						</HorizontalScroller>
 					</div>
 				</Container>
 			</section>
 
-			{/* YEARLY HITS */}
 			<section className="mt-10">
 				<Container>
 					<div className="rounded border-b-2 border-primary/30 pb-10">
@@ -99,7 +95,6 @@ export default async function Home() {
 				</Container>
 			</section>
 
-			{/* PLAYLISTS */}
 			<section className="mt-10">
 				<Container>
 					<div className="rounded border-b-2 border-primary/30 pb-20">
@@ -107,14 +102,7 @@ export default async function Home() {
 						{playlists.length ? (
 							<div className="grid grid-cols-2 items-center justify-between gap-5 md:grid-cols-4">
 								{playlists.map((playlist, index) => (
-									<GamePlaylistDisplay
-										key={playlist.id}
-										games={playlist.entries.slice(0, 4).map((entry) => entry.game)}
-										rank={index + 1}
-										title={playlist.name}
-										by={playlist.user?.name ?? undefined}
-										href={`/playlist/${playlist.id}`}
-									/>
+									<PlaylistDisplay key={playlist.id} playlist={playlist} rank={index + 1} hasHref />
 								))}
 							</div>
 						) : (
@@ -124,32 +112,31 @@ export default async function Home() {
 				</Container>
 			</section>
 
-			{/* OTHER GAME QUERIES */}
 			<section className="mt-10 mb-10">
 				<Container>
 					<div className="grid grid-cols-2 gap-10 sm:grid-cols-2 lg:grid-cols-4">
 						<div className="flex min-w-0 flex-col gap-2">
 							<h1 className="mb-5 text-center text-xl font-bold text-nowrap text-text-muted sm:text-start">Recent Releases</h1>
 							{recentReleasesList.slice(0, 4).map((game) => (
-								<GameStatInfoCard key={game.id} game={formatRawGame(game)} />
+								<StatInfoCard key={game.id} game={formatRawGame(game)} />
 							))}
 						</div>
 						<div className="flex min-w-0 flex-col gap-2">
 							<h1 className="mb-5 text-center text-xl font-bold text-nowrap text-text-muted sm:text-start">Coming Soon</h1>
 							{comingSoonList.slice(0, 4).map((game) => (
-								<GameStatInfoCard key={game.id} game={formatRawGame(game)} />
+								<StatInfoCard key={game.id} game={formatRawGame(game)} />
 							))}
 						</div>
 						<div className="flex min-w-0 flex-col gap-2">
 							<h1 className="mb-5 text-center text-xl font-bold text-nowrap text-text-muted sm:text-start">Most Anticipated</h1>
 							{mostAnticipatedList.slice(0, 4).map((game) => (
-								<GameStatInfoCard key={game.id} game={formatRawGame(game)} />
+								<StatInfoCard key={game.id} game={formatRawGame(game)} />
 							))}
 						</div>
 						<div className="flex min-w-0 flex-col gap-2">
 							<h1 className="mb-5 text-center text-xl font-bold text-nowrap text-text-muted sm:text-start">Hidden Gems</h1>
 							{hiddenDataList.slice(0, 4).map((game) => (
-								<GameStatInfoCard key={game.id} game={formatRawGame(game)} />
+								<StatInfoCard key={game.id} game={formatRawGame(game)} />
 							))}
 						</div>
 					</div>

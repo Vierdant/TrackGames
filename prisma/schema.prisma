@@ -105,8 +105,8 @@ model VerificationToken {
 }
 
 model Game {
-  id                   Int           @id
-  slug                 String        @unique
+  id                   Int                 @id
+  slug                 String              @unique
   name                 String
   summary              String?
   totalRating          Float?
@@ -128,12 +128,12 @@ model Game {
   expansions           Int[]
   themes               Int[]
   multiplayerModes     Int[]
-  keywords             Int[]         @default([])
+  keywords             Int[]               @default([])
   versionParent        Int?
   parentGame           Int?
   playerPerspectives   PlayerPerspective[]
   gameStatus           GameDevStatus
-  gameType             GameType      @default(MAINGAME)
+  gameType             GameType            @default(MAINGAME)
 
   createdAt        DateTime          @default(now())
   updatedAt        DateTime          @updatedAt
@@ -148,28 +148,28 @@ model Game {
 }
 
 model UserGameEntry {
-  id           String     @id @default(cuid())
+  id           String             @id @default(cuid())
   userId       String
   gameId       Int
-  status       GameStatus @default(BACKLOG)
+  status       GameStatus         @default(BACKLOG)
   rating       Float?
   timePlayed   Float?
-  timeMode     String     @default("logs")
+  timeMode     String             @default("logs")
   timeFinished Float?
   timeMastered Float?
-  notes        String?    @db.Text
-  favorite     Boolean    @default(false)
-  addedAt      DateTime   @default(now())
+  notes        String?            @db.Text
+  favorite     Boolean            @default(false)
+  addedAt      DateTime           @default(now())
   startedAt    DateTime?
   finishedAt   DateTime?
   masteredAt   DateTime?
-  user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
-  game         Game       @relation(fields: [gameId], references: [id], onDelete: Cascade)
+  logs         UserGamePlayLog[]
+  tags         UserGameEntryTag[]
+  user         User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  game         Game               @relation(fields: [gameId], references: [id], onDelete: Cascade)
 
-  createdAt         DateTime           @default(now())
-  updatedAt         DateTime           @updatedAt
-  userGamePlayLogs  UserGamePlayLog[]
-  userGameEntryTags UserGameEntryTag[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@unique([userId, gameId])
   @@index([userId])
@@ -241,6 +241,7 @@ model GameList {
   createdAt      DateTime        @default(now())
   updatedAt      DateTime        @updatedAt
   user           User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  likes          Like[]
 
   @@unique([userId, slug])
   @@index([userId])
@@ -382,16 +383,19 @@ model Activity {
 model Like {
   id String @id @default(cuid())
 
-  userId     String
-  targetType LikeTargetType
-  targetId   String
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  listId    String?
+  list      GameList? @relation(fields: [listId], references: [id], onDelete: Cascade)
+  commentId String?
+  comment   Comment?  @relation(fields: [commentId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
 
-  @@unique([userId, targetType, targetId])
-  @@index([targetType, targetId])
+  @@unique([userId, listId])
+  @@unique([userId, commentId])
+  @@unique([userId, listId, commentId])
+  @@index([listId, commentId])
   @@index([userId])
 }
 
@@ -412,6 +416,7 @@ model Comment {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  likes     Like[]
 
   @@index([targetType, targetId])
   @@index([parentId])

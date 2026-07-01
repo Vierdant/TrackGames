@@ -1,8 +1,44 @@
 import db from "../db";
 import { formatRawGame } from "../external/igdb/util";
 import { GameListType, GameStatus } from "../generated/prisma/enums";
-import type { Game, MaybeArray } from "../types";
+import type { GameModel } from "../generated/prisma/models/Game";
+import type { MaybeArray } from "../types";
 import { getByIds, getBySlugs } from "./getter";
+
+export type Game = Partial<
+	Pick<
+		GameModel,
+		| "id"
+		| "slug"
+		| "name"
+		| "summary"
+		| "totalRating"
+		| "totalRatingCount"
+		| "releaseDate"
+		| "cover"
+		| "screenshots"
+		| "videos"
+		| "platforms"
+		| "developers"
+		| "publishers"
+		| "genres"
+		| "franchises"
+		| "collections"
+		| "similarGames"
+		| "standaloneExpansions"
+		| "dlcs"
+		| "expandedGames"
+		| "expansions"
+		| "themes"
+		| "playerPerspectives"
+		| "multiplayerModes"
+		| "keywords"
+		| "versionParent"
+		| "parentGame"
+		| "gameStatus"
+		| "gameType"
+	>
+>;
 
 type DataResult<T extends MaybeArray<number>> = T extends number[] ? Game[] : Game | null;
 

@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { PrimaryButton, GhostButton } from "../ui/Buttons";
 
-type FollowButtonProps = Readonly<{ userId: string; hasFollowedState: boolean; isLoggedIn: boolean }>;
+type FollowButtonProps = Readonly<{ userId: string; hasFollowedState?: boolean; isLoggedIn?: boolean }>;
 
 export default function FollowButton({ userId, hasFollowedState, isLoggedIn }: FollowButtonProps) {
 	const [following, setFollowing] = useState(hasFollowedState);

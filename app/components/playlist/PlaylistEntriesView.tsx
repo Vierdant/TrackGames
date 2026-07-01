@@ -1,18 +1,19 @@
 "use client";
 
-import GameCard from "@/app/components/game/GameCard";
+import { GameCard } from "@/app/components/game/GameDisplays";
 import AdvancedLibraryFilterPanel, { emptyAdvancedLibraryFilters } from "@/app/components/library/AdvancedLibraryFilterPanel";
 import { FilterBar } from "@/app/components/ui/FilterBar";
 import MenuPanel from "@/app/components/ui/MenuPanel";
 import { Input, Select } from "@/app/components/ui/Inputs";
 import { removeGameFromPlaylist, updatePlaylistEntry } from "@/lib/actions/playlists";
-import type { PlaylistEntry } from "@/lib/data/playlists";
 import { Edit3, SlidersHorizontal, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useMemo, useState, useTransition, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
 import { GhostButton, PrimaryButton } from "../ui/Buttons";
 import { advancedFilterCount, matchesAdvancedFilters } from "@/lib/util/filtering";
+import type { PlaylistEntry } from "@/lib/data/playlists";
+import { UserLibraryEntryWithTags } from "@/lib/data/library";
 
 type EntryShellProps = Readonly<{
 	listId: string;
@@ -116,7 +117,7 @@ export default function PlaylistEntriesView({ listId, entries, mode, canEdit, ti
 	const [advancedFilters, setAdvancedFilters] = useState(emptyAdvancedLibraryFilters);
 	const ordered = useMemo(() => [...entries].sort((a, b) => (a.position ?? 999999) - (b.position ?? 999999) || Number(a.addedAt ?? 0) - Number(b.addedAt ?? 0)), [entries]);
 	const allTags = useMemo(
-		() => Array.from(new Set(entries.flatMap((entry) => entry.libraryEntry?.tags.map((tag) => tag.name) ?? []))).sort((a, b) => a.localeCompare(b)),
+		() => Array.from(new Set(entries.flatMap((entry) => entry.userEntry?.tags.map((tag) => tag.name) ?? []))).sort((a, b) => a.localeCompare(b)),
 		[entries],
 	);
 	const filterCount = advancedFilterCount(advancedFilters);
@@ -129,10 +130,10 @@ export default function PlaylistEntriesView({ listId, entries, mode, canEdit, ti
 
 				if (!filterCount) return true;
 
-				const libraryEntry = entry.libraryEntry;
-				if (!libraryEntry) return false;
+				const userEntry = entry.userEntry;
+				if (!userEntry) return false;
 
-				return matchesAdvancedFilters(libraryEntry, advancedFilters);
+				return matchesAdvancedFilters(userEntry as UserLibraryEntryWithTags, advancedFilters);
 			})
 			.sort((a, b) => {
 				if (sort === "name") return (a.game.name ?? "").localeCompare(b.game.name ?? "");
@@ -185,7 +186,7 @@ export default function PlaylistEntriesView({ listId, entries, mode, canEdit, ti
 							<div className="grid min-h-38 grid-cols-[repeat(auto-fill,7rem)] p-3">
 								{tierEntries.map((entry) => (
 									<EntryShell key={entry.id} listId={listId} entry={entry} canEdit={canEdit} tiers={tiers}>
-										<GameCard game={entry.game} size={96} hover="name" hasLink={true} />
+										<GameCard game={entry.game} size={96} hover="name" hasHref={true} />
 									</EntryShell>
 								))}
 							</div>
@@ -239,10 +240,10 @@ export default function PlaylistEntriesView({ listId, entries, mode, canEdit, ti
 					{filtered.map((entry) => (
 						<EntryShell key={entry.id} listId={listId} entry={entry} canEdit={canEdit} tiers={tiers}>
 							<div className="hidden md:flex">
-								<GameCard game={entry.game} size={130} hover="name" hasLink={true} />
+								<GameCard game={entry.game} size={130} hover="name" hasHref={true} />
 							</div>
 							<div className="flex md:hidden">
-								<GameCard game={entry.game} size={80} hover="name" hasLink={true} />
+								<GameCard game={entry.game} size={80} hover="name" hasHref={true} />
 							</div>
 						</EntryShell>
 					))}

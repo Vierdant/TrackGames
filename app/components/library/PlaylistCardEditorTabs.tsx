@@ -40,9 +40,9 @@ type PlaylistCardEditorTabsProps = Readonly<{
 	today: string;
 	logDate: string;
 	setLogDate: (date: string) => void;
-	logs: NonNullable<UserLibraryEntryWithTags["userGamePlayLogs"]>;
-	filteredLogs: NonNullable<UserLibraryEntryWithTags["userGamePlayLogs"]>;
-	selectedLog: NonNullable<UserLibraryEntryWithTags["userGamePlayLogs"]>[number] | undefined;
+	logs: NonNullable<UserLibraryEntryWithTags["logs"]>;
+	filteredLogs: NonNullable<UserLibraryEntryWithTags["logs"]>;
+	selectedLog: NonNullable<UserLibraryEntryWithTags["logs"]>[number] | undefined;
 	selectedLogId: string;
 	setSelectedLogId: (id: string) => void;
 	finishedAtValue: string;

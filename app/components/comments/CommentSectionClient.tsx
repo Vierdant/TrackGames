@@ -46,6 +46,39 @@ type CommenSectionClientProps = Readonly<{
 	currentUserId: string | null;
 }>;
 
+export default function CommentSectionClient({ targetType, targetId, comments, currentUserId }: CommenSectionClientProps) {
+	const topLevelComments = comments.filter((comment) => !comment.parentId);
+	const addTopLevel = addComment.bind(null, targetType, targetId, null);
+
+	return (
+		<section id="comments" className="flex scroll-mt-24 flex-col gap-4 rounded bg-bg p-4">
+			<div className="flex items-center justify-between gap-3 border-b border-border pb-2">
+				<h2 className="text-sm font-bold">Comments</h2>
+				<span className="text-xs text-text-faint">{comments.length}</span>
+			</div>
+			{currentUserId ? (
+				<CommentForm action={addTopLevel} />
+			) : (
+				<p className="rounded p-3 text-sm text-text-muted">
+					<Link href="/login" className="font-bold text-primary">
+						Log in
+					</Link>{" "}
+					to comment.
+				</p>
+			)}
+			<div className="flex flex-col gap-4">
+				{topLevelComments.length ? (
+					topLevelComments.map((comment) => (
+						<CommentItem key={comment.id} comment={comment} comments={comments} targetType={targetType} targetId={targetId} currentUserId={currentUserId} />
+					))
+				) : (
+					<p className="text-sm text-text-muted">No comments yet.</p>
+				)}
+			</div>
+		</section>
+	);
+}
+
 function CommentForm({ action, placeholder = "Write a comment" }: CommentFormProps) {
 	const ref = useRef<HTMLFormElement>(null);
 	const [content, setContent] = useState("");
@@ -130,7 +163,7 @@ function CommentItem({ comment, comments, targetType, targetId, currentUserId }:
 				<div className="rounded bg-bg pl-1">
 					<div className="flex flex-wrap items-center gap-2 text-sm">
 						{comment.user.name ? (
-							<Link href={`/u/${comment.user.name}`} className="font-bold hover:text-primary">
+							<Link href={`/u/${comment.user.name}?tab=profile`} className="font-bold hover:text-primary">
 								{comment.user.name}
 							</Link>
 						) : (
@@ -182,38 +215,5 @@ function CommentItem({ comment, comments, targetType, targetId, currentUserId }:
 				)}
 			</div>
 		</div>
-	);
-}
-
-export default function CommentSectionClient({ targetType, targetId, comments, currentUserId }: CommenSectionClientProps) {
-	const topLevelComments = comments.filter((comment) => !comment.parentId);
-	const addTopLevel = addComment.bind(null, targetType, targetId, null);
-
-	return (
-		<section id="comments" className="flex scroll-mt-24 flex-col gap-4 rounded bg-bg p-4">
-			<div className="flex items-center justify-between gap-3 border-b border-border pb-2">
-				<h2 className="text-sm font-bold">Comments</h2>
-				<span className="text-xs text-text-faint">{comments.length}</span>
-			</div>
-			{currentUserId ? (
-				<CommentForm action={addTopLevel} />
-			) : (
-				<p className="rounded p-3 text-sm text-text-muted">
-					<Link href="/login" className="font-bold text-primary">
-						Log in
-					</Link>{" "}
-					to comment.
-				</p>
-			)}
-			<div className="flex flex-col gap-4">
-				{topLevelComments.length ? (
-					topLevelComments.map((comment) => (
-						<CommentItem key={comment.id} comment={comment} comments={comments} targetType={targetType} targetId={targetId} currentUserId={currentUserId} />
-					))
-				) : (
-					<p className="text-sm text-text-muted">No comments yet.</p>
-				)}
-			</div>
-		</section>
 	);
 }

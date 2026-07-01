@@ -3,27 +3,13 @@
 import { GhostButton } from "@/app/components/ui/Buttons";
 import { parseWidgets, serializeWidgets } from "@/lib/account/widget";
 import { WidgetType } from "@/lib/enums";
-import type { User, Widget } from "@/lib/types";
+import type { Widget } from "@/lib/types";
 import { Plus } from "lucide-react";
 import { useMemo, useState } from "react";
 import { WidgetEditor } from "./WidgetEditors";
+import { SecuredUser } from "@/lib/account/user";
 
-function getWidgetTitle(type: WidgetType): string {
-	switch (type) {
-		case WidgetType.GAMELIST:
-			return "Game list";
-		case WidgetType.STATS:
-			return "Stats";
-		default:
-			return "Markdown";
-	}
-}
-
-function widgetFilter(items: Widget[], widget: Widget) {
-	return items.filter((item) => item.id !== widget.id);
-}
-
-export default function WidgetsSettingsForm({ profile }: Readonly<{ profile: User }>) {
+export default function WidgetsSettingsForm({ profile }: Readonly<{ profile: SecuredUser }>) {
 	const [widgets, setWidgets] = useState(() => parseWidgets(profile.widgets));
 	const widgetPayload = useMemo(() => serializeWidgets(widgets), [widgets]);
 
@@ -92,4 +78,19 @@ export default function WidgetsSettingsForm({ profile }: Readonly<{ profile: Use
 			)}
 		</div>
 	);
+}
+
+function getWidgetTitle(type: WidgetType): string {
+	switch (type) {
+		case WidgetType.GAMELIST:
+			return "Game list";
+		case WidgetType.STATS:
+			return "Stats";
+		default:
+			return "Markdown";
+	}
+}
+
+function widgetFilter(items: Widget[], widget: Widget) {
+	return items.filter((item) => item.id !== widget.id);
 }

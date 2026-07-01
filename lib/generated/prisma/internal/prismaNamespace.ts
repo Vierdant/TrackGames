@@ -2729,8 +2729,8 @@ export type ActivityScalarFieldEnum = (typeof ActivityScalarFieldEnum)[keyof typ
 export const LikeScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
-  targetType: 'targetType',
-  targetId: 'targetId',
+  listId: 'listId',
+  commentId: 'commentId',
   createdAt: 'createdAt'
 } as const
 
@@ -3003,20 +3003,6 @@ export type EnumInteractionTargetTypeFieldRefInput<$PrismaModel> = FieldRefInput
  * Reference to a field of type 'InteractionTargetType[]'
  */
 export type ListEnumInteractionTargetTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'InteractionTargetType[]'>
-    
-
-
-/**
- * Reference to a field of type 'LikeTargetType'
- */
-export type EnumLikeTargetTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LikeTargetType'>
-    
-
-
-/**
- * Reference to a field of type 'LikeTargetType[]'
- */
-export type ListEnumLikeTargetTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LikeTargetType[]'>
     
 
 

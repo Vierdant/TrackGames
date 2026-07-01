@@ -331,7 +331,7 @@ export type UserGamePlayLogCreateInput = {
   createdAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutUserGamePlayLogsInput
   game: Prisma.GameCreateNestedOneWithoutUserGamePlayLogsInput
-  gameEntry: Prisma.UserGameEntryCreateNestedOneWithoutUserGamePlayLogsInput
+  gameEntry: Prisma.UserGameEntryCreateNestedOneWithoutLogsInput
 }
 
 export type UserGamePlayLogUncheckedCreateInput = {
@@ -355,7 +355,7 @@ export type UserGamePlayLogUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutUserGamePlayLogsNestedInput
   game?: Prisma.GameUpdateOneRequiredWithoutUserGamePlayLogsNestedInput
-  gameEntry?: Prisma.UserGameEntryUpdateOneRequiredWithoutUserGamePlayLogsNestedInput
+  gameEntry?: Prisma.UserGameEntryUpdateOneRequiredWithoutLogsNestedInput
 }
 
 export type UserGamePlayLogUncheckedUpdateInput = {
@@ -601,7 +601,7 @@ export type UserGamePlayLogCreateWithoutUserInput = {
   playedAt?: Date | string
   createdAt?: Date | string
   game: Prisma.GameCreateNestedOneWithoutUserGamePlayLogsInput
-  gameEntry: Prisma.UserGameEntryCreateNestedOneWithoutUserGamePlayLogsInput
+  gameEntry: Prisma.UserGameEntryCreateNestedOneWithoutLogsInput
 }
 
 export type UserGamePlayLogUncheckedCreateWithoutUserInput = {
@@ -664,7 +664,7 @@ export type UserGamePlayLogCreateWithoutGameInput = {
   playedAt?: Date | string
   createdAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutUserGamePlayLogsInput
-  gameEntry: Prisma.UserGameEntryCreateNestedOneWithoutUserGamePlayLogsInput
+  gameEntry: Prisma.UserGameEntryCreateNestedOneWithoutLogsInput
 }
 
 export type UserGamePlayLogUncheckedCreateWithoutGameInput = {
@@ -771,7 +771,7 @@ export type UserGamePlayLogUpdateWithoutUserInput = {
   playedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   game?: Prisma.GameUpdateOneRequiredWithoutUserGamePlayLogsNestedInput
-  gameEntry?: Prisma.UserGameEntryUpdateOneRequiredWithoutUserGamePlayLogsNestedInput
+  gameEntry?: Prisma.UserGameEntryUpdateOneRequiredWithoutLogsNestedInput
 }
 
 export type UserGamePlayLogUncheckedUpdateWithoutUserInput = {
@@ -815,7 +815,7 @@ export type UserGamePlayLogUpdateWithoutGameInput = {
   playedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutUserGamePlayLogsNestedInput
-  gameEntry?: Prisma.UserGameEntryUpdateOneRequiredWithoutUserGamePlayLogsNestedInput
+  gameEntry?: Prisma.UserGameEntryUpdateOneRequiredWithoutLogsNestedInput
 }
 
 export type UserGamePlayLogUncheckedUpdateWithoutGameInput = {

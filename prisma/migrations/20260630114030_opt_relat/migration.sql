@@ -1,0 +1,6 @@
+-- AlterTable
+ALTER TABLE "Activity" ALTER COLUMN "expiresAt" SET DEFAULT (CURRENT_TIMESTAMP + INTERVAL '30 days');
+
+-- AlterTable
+ALTER TABLE "Like" ALTER COLUMN "commendId" DROP NOT NULL,
+ALTER COLUMN "listId" DROP NOT NULL;

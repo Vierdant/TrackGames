@@ -4,14 +4,14 @@ import nextTs from "eslint-config-next/typescript";
 import simpleImportSort from "eslint-plugin-simple-import-sort";
 import eslintConfigPrettier from "eslint-config-prettier";
 import importPlugin from "eslint-plugin-import";
-import yamikhal from "./eslint-plugin/index.js";
+import yamikhal from "./eslint/index.js";
 
 const eslintConfig = defineConfig([
 	...nextVitals,
 	...nextTs,
 	eslintConfigPrettier,
 
-	globalIgnores([".next/**", "out/**", "build/**", "next-env.d.ts", "scripts/**"]),
+	globalIgnores([".next/**", "out/**", "build/**", "next-env.d.ts", "src/scripts/**"]),
 
 	{
 		files: ["**/*.{ts,tsx}"],

@@ -1,5 +1,5 @@
 # Generated code
-lib/generated/
+src/lib/generated/
 
 # Next.js
 .next/

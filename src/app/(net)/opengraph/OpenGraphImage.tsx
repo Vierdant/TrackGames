@@ -35,8 +35,8 @@ export async function createOpenGraphImage({
 	playlistImages = [],
 	variant = "site",
 }: OpenGraphImageProps) {
-	const icon = await readFile(join(process.cwd(), "app/android-chrome-512x512.png"));
-	const iconSrc = `data:image/png;base64,${icon.toString("base64")}`;
+	const icon = (await readFile(join(process.cwd(), "public", "android-chrome-512x512.png"))).toString("base64");
+	const iconSrc = `data:image/png;base64,${icon}`;
 	const imageSrc = await resolveStillImage(image);
 	const coverSrc = await resolveStillImage(coverImage);
 	const dissolveColor = hexColor(primaryColor, "#9A7BFF");

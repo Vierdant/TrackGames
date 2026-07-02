@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import Container from "../components/layout/Container";
 import { absoluteUrl, DEFAULT_OG_IMAGE, metadataDescription, SITE_NAME } from "@/lib/metadata";
+import Container from "../components/layout/Container";
 
 const description = metadataDescription("How TrackGames handles account data, cookies, local storage, and third-party content.");
 

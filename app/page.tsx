@@ -1,16 +1,16 @@
-import { PrimaryButton, GhostButton } from "@/app/components/ui/Buttons";
-import StatBlock from "@/app/components/StatBlock";
-import Container from "@/app/components/layout/Container";
-import { trendingGames, yearlyGames, hiddenGames, mostAnticipated, comingSoon, recentReleases, siteStats, topPlaylists } from "@/lib/cache/resources";
 import { GameCard, StatInfoCard } from "@/app/components/game/GameDisplays";
-import HorizontalScroller from "@/app/components/layout/HorizontalScroller";
 import GameFeature from "@/app/components/game/GameFeature";
+import Container from "@/app/components/layout/Container";
 import Gallary from "@/app/components/layout/Gallery";
+import HorizontalScroller from "@/app/components/layout/HorizontalScroller";
+import StatBlock from "@/app/components/StatBlock";
 import { HeroImage } from "@/app/components/SVG";
-import { formatRawGame } from "@/lib/external/igdb/util";
-import { auth } from "@/lib/auth";
-import { getUser } from "@/lib/account/user";
+import { GhostButton,PrimaryButton } from "@/app/components/ui/Buttons";
 import { viewerThemeStyle } from "@/lib/account/preferences";
+import { getUser } from "@/lib/account/user";
+import { auth } from "@/lib/auth";
+import { comingSoon, hiddenGames, mostAnticipated, recentReleases, siteStats, topPlaylists,trendingGames, yearlyGames } from "@/lib/cache/resources";
+import { formatRawGame } from "@/lib/external/igdb/util";
 import PlaylistDisplay from "./components/playlist/PlaylistCard";
 
 export default async function Home() {

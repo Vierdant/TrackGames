@@ -1,15 +1,15 @@
 "use server";
 
-import * as zod from "zod";
-import { auth, OAUTH_USERNAME_COOKIE, signIn, signOut } from "../auth";
-import { AuthError } from "next-auth";
-import { redirect } from "next/navigation";
-import db from "../db";
-import { hashPassword } from "../util/password";
-import { Prisma } from "../generated/prisma/client";
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
+import { AuthError } from "next-auth";
+import { type PrismaClientKnownRequestError } from "@prisma/client/runtime/client";
+import * as zod from "zod";
 import { USERNAME_ERROR, usernameSchema } from "../account/username";
-import { PrismaClientKnownRequestError } from "@prisma/client/runtime/client";
+import { auth, OAUTH_USERNAME_COOKIE, signIn, signOut } from "../auth";
+import db from "../db";
+import { Prisma } from "../generated/prisma/client";
+import { hashPassword } from "../util/password";
 
 type AuthActionResult = {
 	error?: string;

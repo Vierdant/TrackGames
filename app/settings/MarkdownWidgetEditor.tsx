@@ -1,12 +1,12 @@
 "use client";
 
-import { GhostButton } from "@/app/components/ui/Buttons";
-import { MarkdownBlocks } from "@/app/components/markdown/MarkdownBlocks";
-import { AlignCenter, AlignLeft, AlignRight, Bold, Eye, Image as ImageIcon, Italic, Link, Palette, Strikethrough, Table, Video } from "lucide-react";
 import { useRef, useState } from "react";
-import { parseMarkdownBlocks } from "@/lib/markdown";
+import { AlignCenter, AlignLeft, AlignRight, Bold, Eye, Image as ImageIcon, Italic, Link, Palette, Strikethrough, Table, Video } from "lucide-react";
+import { MarkdownBlocks } from "@/app/components/markdown/MarkdownBlocks";
+import { GhostButton } from "@/app/components/ui/Buttons";
 import { Input, Textarea } from "@/app/components/ui/Inputs";
 import MenuPanel from "@/app/components/ui/MenuPanel";
+import { parseMarkdownBlocks } from "@/lib/markdown";
 
 type MarkdownWidgetEditorProps = Readonly<{
 	value: string;

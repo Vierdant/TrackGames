@@ -3,13 +3,13 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import * as z from "zod";
+import { usernameSchema } from "../account/username";
 import { auth, signOut } from "../auth";
 import db from "../db";
 import { LinkType } from "../enums";
 import { Prisma } from "../generated/prisma/client";
 import { ActivityType } from "../generated/prisma/enums";
 import { hashPassword, verifyPassword } from "../util/password";
-import { usernameSchema } from "../account/username";
 
 type SocialLinkValue = {
 	platform: z.infer<typeof socialPlatformSchema>;

@@ -1,6 +1,6 @@
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import Link from "next/link";
 import type { ReactNode } from "react";
+import Link from "next/link";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 type PaginationControlsProps = Readonly<{
 	page: number;

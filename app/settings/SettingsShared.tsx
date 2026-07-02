@@ -1,10 +1,10 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { GhostButton, PrimaryButton } from "@/app/components/ui/Buttons";
 import { Input } from "@/app/components/ui/Inputs";
 import MenuPanel from "@/app/components/ui/MenuPanel";
 import * as normalize from "@/lib/util/normalize";
-import { useEffect, useState } from "react";
 
 type ColorFieldProps = Readonly<{ name: string; value: string; onChange: (value: string) => void; placeholder: string; label: string }>;
 

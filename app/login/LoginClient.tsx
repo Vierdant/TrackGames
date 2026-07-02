@@ -1,13 +1,13 @@
 "use client";
 
-import { useSearchParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { GhostButton } from "../components/ui/Buttons";
-import { GoogleIcon, TwitchIcon, GithubIcon, DiscordIcon } from "../components/SVG";
-import { Mail, User, Lock, EyeOff, Eye } from "lucide-react";
+import { useRouter,useSearchParams } from "next/navigation";
+import { Eye,EyeOff, Lock, Mail, User } from "lucide-react";
 import { login, loginProvider, signup } from "@/lib/actions/auth";
-import MenuPanel from "../components/ui/MenuPanel";
 import { deferEffect } from "@/lib/util/effects";
+import { DiscordIcon,GithubIcon, GoogleIcon, TwitchIcon } from "../components/SVG";
+import { GhostButton } from "../components/ui/Buttons";
+import MenuPanel from "../components/ui/MenuPanel";
 
 const providers = [
 	{ name: "Google", icon: GoogleIcon, slug: "google" },

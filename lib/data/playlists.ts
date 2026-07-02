@@ -1,8 +1,8 @@
 import db from "../db";
-import { getTagsForEntries } from "./library";
 import { GameListType } from "../generated/prisma/enums";
 import type { GameListDefaultArgs, GameListGetPayload } from "../generated/prisma/models/GameList";
 import type { UserGameEntryGetPayload } from "../generated/prisma/models/UserGameEntry";
+import { getTagsForEntries } from "./library";
 
 type PlaylistUserEntry = UserGameEntryGetPayload<{ select: typeof playlistUserEntrySelect }> & {
 	tags: { id: string; name: string }[];

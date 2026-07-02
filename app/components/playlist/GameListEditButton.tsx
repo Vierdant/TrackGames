@@ -1,10 +1,10 @@
 "use client";
 
+import { useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
+import { Edit3, Trash2 } from "lucide-react";
 import { deletePlaylist, updateGameListSettings } from "@/lib/actions/playlists";
 import type { GameListModel } from "@/lib/generated/prisma/models/GameList";
-import { Edit3, Trash2 } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useState, useTransition } from "react";
 import { GhostButton, PrimaryButton } from "../ui/Buttons";
 import { Checkbox, Input, Select, Textarea } from "../ui/Inputs";
 import MenuPanel from "../ui/MenuPanel";

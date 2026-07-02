@@ -1,9 +1,9 @@
 import { Suspense } from "react";
-import { auth } from "@/lib/auth";
-import { redirect } from "next/navigation";
-import LoginClient from "./LoginClient";
 import type { Metadata } from "next";
+import { redirect } from "next/navigation";
+import { auth } from "@/lib/auth";
 import { absoluteUrl, DEFAULT_OG_IMAGE, metadataDescription, SITE_NAME } from "@/lib/metadata";
+import LoginClient from "./LoginClient";
 
 const description = metadataDescription("Log in or create a TrackGames account to track your game library, playlists, ratings, and profile.");
 

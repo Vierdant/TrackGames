@@ -1,6 +1,7 @@
 import { defineConfig, globalIgnores } from "eslint/config";
 import nextVitals from "eslint-config-next/core-web-vitals";
 import nextTs from "eslint-config-next/typescript";
+import simpleImportSort from "eslint-plugin-simple-import-sort";
 import eslintConfigPrettier from "eslint-config-prettier";
 import importPlugin from "eslint-plugin-import";
 import yamikhal from "./eslint-plugin/index.js";
@@ -18,6 +19,7 @@ const eslintConfig = defineConfig([
 		plugins: {
 			yamikhal,
 			import: importPlugin,
+			"simple-import-sort": simpleImportSort,
 		},
 
 		rules: {
@@ -26,6 +28,21 @@ const eslintConfig = defineConfig([
 			"import/no-duplicates": "error",
 			"import/no-self-import": "error",
 			"import/no-useless-path-segments": "warn",
+
+			"@typescript-eslint/consistent-type-imports": [
+				"error",
+				{
+					prefer: "type-imports",
+					fixStyle: "inline-type-imports",
+				},
+			],
+
+			"simple-import-sort/imports": [
+				"error",
+				{
+					groups: [[String.raw`^\u0000?react`, String.raw`^\u0000?next`, String.raw`^\u0000?@?\w`, "^@/", String.raw`^\.`]],
+				},
+			],
 
 			"no-console": "warn",
 			"no-else-return": "warn",

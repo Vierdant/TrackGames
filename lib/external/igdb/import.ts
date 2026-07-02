@@ -1,3 +1,4 @@
+import type db from "@/lib/db";
 import {
 	formatRawCollection,
 	formatRawCompany,
@@ -27,7 +28,7 @@ function isSlugUniqueError(error: unknown) {
 
 export const IGDB_BASE_URL = "https://api.igdb.com/v4";
 
-export type DbClient = typeof import("@/lib/db").default;
+export type DbClient = typeof db;
 export type ImportKind = "collections" | "franchises" | "genres" | "platforms" | "companies" | "keywords" | "themes" | "multiplayerModes" | "games";
 export type ImportConfig<Raw, Formatted> = {
 	kind: ImportKind;

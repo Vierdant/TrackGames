@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { PrismaClient } from "@prisma/client/extension";
+import { type PrismaClient } from "@prisma/client/extension";
 import { fetchAPI } from "../external/igdb/igdb-api";
 
 export async function getFallback<T>(select: object, database: PrismaClient, fetching: { endpoint: string; body: string }, formatter: (data: any) => T): Promise<T[]> {

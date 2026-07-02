@@ -1,12 +1,12 @@
-import { PrimaryButton } from "../ui/Buttons";
-import Container from "./Container";
 import Link from "next/link";
-import ThemeSwitch from "../ui/ThemeSwitch";
-import { auth } from "@/lib/auth";
-import { UserMenu } from "../ui/UserMenu";
 import { getUser } from "@/lib/account/user";
-import HeaderSearch from "./HeaderSearch";
+import { auth } from "@/lib/auth";
 import { getUserNotifications } from "@/lib/data/social";
+import { PrimaryButton } from "../ui/Buttons";
+import ThemeSwitch from "../ui/ThemeSwitch";
+import { UserMenu } from "../ui/UserMenu";
+import Container from "./Container";
+import HeaderSearch from "./HeaderSearch";
 
 export default async function Header() {
 	const session = await auth();

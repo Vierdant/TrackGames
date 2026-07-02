@@ -1,13 +1,13 @@
+import { Children, cloneElement, isValidElement, type ReactNode } from "react";
+import ReactMarkdown, { type Components } from "react-markdown";
+import Image from "next/image";
+import rehypeSanitize from "rehype-sanitize";
+import remarkGfm from "remark-gfm";
 import { ALLOWEDTAGS } from "@/lib/constants";
 import { MarkdownAlign } from "@/lib/enums";
 import type { MarkdownBlock } from "@/lib/types";
 import * as normalize from "@/lib/util/normalize";
 import { isSafeLinkHref, isSafeUrl } from "@/lib/util/safety";
-import Image from "next/image";
-import { Children, cloneElement, isValidElement, ReactNode } from "react";
-import ReactMarkdown, { type Components } from "react-markdown";
-import rehypeSanitize from "rehype-sanitize";
-import remarkGfm from "remark-gfm";
 
 type MarkdownImageProps = Readonly<{
 	src: string;

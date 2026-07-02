@@ -1,6 +1,6 @@
 import PlaylistDisplay from "@/app/components/playlist/PlaylistCard";
-import PlaylistCreatorModal from "./PlaylistCreatorModal";
 import { getUserPlaylists } from "@/lib/data/playlists";
+import PlaylistCreatorModal from "./PlaylistCreatorModal";
 
 export default async function ProfilePlaylists({ userId, canCreate, isFollower }: Readonly<{ userId: string; canCreate: boolean; isFollower: boolean }>) {
 	const playlists = await getUserPlaylists(userId, isFollower ? "followers" : "public");

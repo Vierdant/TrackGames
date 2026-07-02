@@ -1,16 +1,16 @@
+import type { Metadata } from "next";
+import { redirect } from "next/navigation";
+import { Bell, Download, LayoutGrid, Settings, Shield, UserIcon } from "lucide-react";
 import Container from "@/app/components/layout/Container";
 import ProfileBackground from "@/app/components/user/BackgroundView";
-import { auth } from "@/lib/auth";
+import ProfileHeader from "@/app/components/user/ProfileHeader";
 import { getUser, getUserProviders, hasUserPassword, profileThemeStyle } from "@/lib/account/user";
+import { auth } from "@/lib/auth";
+import { absoluteUrl, DEFAULT_OG_IMAGE, metadataDescription, SITE_NAME } from "@/lib/metadata";
+import { type PublicUser } from "@/lib/types";
 import * as normalize from "@/lib/util/normalize";
-import { Bell, Download, LayoutGrid, Settings, Shield, UserIcon } from "lucide-react";
-import { redirect } from "next/navigation";
 import SettingsPanel from "./SettingsPanel";
 import SettingsTabs from "./SettingsTabs";
-import type { Metadata } from "next";
-import ProfileHeader from "@/app/components/user/ProfileHeader";
-import { absoluteUrl, DEFAULT_OG_IMAGE, metadataDescription, SITE_NAME } from "@/lib/metadata";
-import { PublicUser } from "@/lib/types";
 
 type SearchPageProps = Readonly<{
 	searchParams: Promise<{ tab?: string; edit?: string; saved?: string; error?: string }>;

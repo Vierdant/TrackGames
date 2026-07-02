@@ -2,10 +2,10 @@
 
 import type { ReactNode } from "react";
 import { useEffect, useState } from "react";
+import { deferEffect } from "@/lib/util/effects";
 import { GhostButton, PrimaryButton } from "./Buttons";
 import { Input } from "./Inputs";
 import MenuPanel from "./MenuPanel";
-import { deferEffect } from "@/lib/util/effects";
 
 type ConfirmActionProps = Readonly<{
 	open: boolean;

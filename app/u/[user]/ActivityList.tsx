@@ -1,12 +1,12 @@
-import { ActivityType, InteractionTargetType } from "@/lib/generated/prisma/enums";
 import Link from "next/link";
 import PaginationControls from "@/app/components/layout/PaginationControls";
 import { FilterBar } from "@/app/components/ui/FilterBar";
-import { defaultActivityFilter } from "@/lib/account/preferences";
-import { getUserActivities } from "@/lib/data/social";
-import { PublicUser } from "@/lib/types";
-import { SecuredUser } from "@/lib/account/user";
 import { PrivateDisplay } from "@/app/components/ui/PrivateDisplay";
+import { defaultActivityFilter } from "@/lib/account/preferences";
+import { type SecuredUser } from "@/lib/account/user";
+import { getUserActivities } from "@/lib/data/social";
+import { ActivityType, InteractionTargetType } from "@/lib/generated/prisma/enums";
+import { type PublicUser } from "@/lib/types";
 
 type ActivityListProps = Readonly<{
 	profile: PublicUser;

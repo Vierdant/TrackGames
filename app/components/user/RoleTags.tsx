@@ -1,4 +1,4 @@
-import { UserRole } from "@/lib/generated/prisma/enums";
+import { type UserRole } from "@/lib/generated/prisma/enums";
 
 const roleClasses: Record<UserRole, string> = {
 	ADMIN: "border-error/40 bg-error/15 text-error",

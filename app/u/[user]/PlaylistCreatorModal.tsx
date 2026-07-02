@@ -1,11 +1,11 @@
 "use client";
 
+import { useState } from "react";
+import { Plus } from "lucide-react";
 import { GhostButton, PrimaryButton } from "@/app/components/ui/Buttons";
 import { Input, Textarea } from "@/app/components/ui/Inputs";
 import MenuPanel from "@/app/components/ui/MenuPanel";
 import { createPlaylist } from "@/lib/actions/playlists";
-import { Plus } from "lucide-react";
-import { useState } from "react";
 
 export default function PlaylistCreatorModal({ canCreate }: Readonly<{ canCreate: boolean }>) {
 	const [open, setOpen] = useState(false);

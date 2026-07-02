@@ -1,6 +1,6 @@
 import db from "@/lib/db";
-import { GameListType } from "@/lib/generated/prisma/enums";
 import { ImageIdToURL } from "@/lib/external/igdb/util";
+import { GameListType } from "@/lib/generated/prisma/enums";
 import { metadataDescription } from "@/lib/metadata";
 import { createOpenGraphImage } from "../../opengraph/OpenGraphImage";
 

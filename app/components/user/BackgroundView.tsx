@@ -1,9 +1,9 @@
 "use client";
 
-import { isVideoUrl } from "@/lib/util/safety";
-import { Image as ImageIcon } from "lucide-react";
+import { type CSSProperties,useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { useEffect, useRef, useState, type CSSProperties } from "react";
+import { Image as ImageIcon } from "lucide-react";
+import { isVideoUrl } from "@/lib/util/safety";
 
 type BackgroundViewProps = Readonly<{
 	src: string | null | undefined;

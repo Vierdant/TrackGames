@@ -1,17 +1,17 @@
 "use client";
 
+import { type SetStateAction, useMemo, useState } from "react";
+import { ChevronDown, ChevronUp, Trash2 } from "lucide-react";
 import { GhostButton } from "@/app/components/ui/Buttons";
 import { Field, Input, Select, Textarea } from "@/app/components/ui/Inputs";
 import AvatarPreview from "@/app/components/user/AvatarView";
 import BackgroundView from "@/app/components/user/BackgroundView";
-import { SOCIALPLATFORMS } from "@/lib/constants";
 import { getSocialOption, getSocialPlaceholder, getSocialPlatform, getSocialPlatformLabel, parseSocials, serializeSocials } from "@/lib/account/socials";
+import { type SecuredUser } from "@/lib/account/user";
+import { SOCIALPLATFORMS } from "@/lib/constants";
 import { LinkType } from "@/lib/enums";
 import type { SocialLink } from "@/lib/types";
-import { ChevronDown, ChevronUp, Trash2 } from "lucide-react";
-import { SetStateAction, useMemo, useState } from "react";
 import { ColorField, MediaModal } from "./SettingsShared";
-import { SecuredUser } from "@/lib/account/user";
 
 type SocialLinksEditorProps = Readonly<{
 	socials: SocialLink[];

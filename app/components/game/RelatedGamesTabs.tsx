@@ -3,9 +3,9 @@
 import { useState } from "react";
 import type { Game } from "@/lib/data/games";
 import * as normalize from "@/lib/util/normalize";
-import { GameCard } from "./GameDisplays";
 import HorizontalScroller from "../layout/HorizontalScroller";
 import SubTabs from "../layout/SubTabs";
+import { GameCard } from "./GameDisplays";
 
 type RelatedGamesTabsProps = Readonly<{ franchiseGames: Game[]; seriesGames: Game[]; similarGames: Game[] }>;
 

@@ -1,5 +1,5 @@
 import db from "../db";
-import { UserRole } from "../generated/prisma/enums";
+import { type UserRole } from "../generated/prisma/enums";
 
 export async function userHasRole(userId: string, role: UserRole) {
 	const user = await db.user.findUnique({

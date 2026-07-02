@@ -1,10 +1,10 @@
 "use client";
 
-import { toggleLike } from "@/lib/actions/social";
-import { LikeTargetType } from "@/lib/generated/prisma/enums";
-import { Heart } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
+import { Heart } from "lucide-react";
+import { toggleLike } from "@/lib/actions/social";
+import { type LikeTargetType } from "@/lib/generated/prisma/enums";
 
 type LikeButtonProps = Readonly<{
 	targetType: LikeTargetType;

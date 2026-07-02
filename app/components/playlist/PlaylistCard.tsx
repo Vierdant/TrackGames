@@ -1,6 +1,6 @@
-import { PlaylistDisplayData } from "@/lib/data/playlists";
-import { GameCard } from "../game/GameDisplays";
 import Link from "next/link";
+import { type PlaylistDisplayData } from "@/lib/data/playlists";
+import { GameCard } from "../game/GameDisplays";
 
 type PlaylistDisplayProps = Readonly<{
 	playlist: PlaylistDisplayData;

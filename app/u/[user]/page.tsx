@@ -1,23 +1,23 @@
-import Container from "@/app/components/layout/Container";
-import { checkPublicPrivacy, getPublicUser, getUser, isFollower, profileThemeStyle } from "@/lib/account/user";
-import { shouldHideComments } from "@/lib/account/preferences";
+import type { Metadata } from "next";
 import { redirect } from "next/navigation";
+import CommentSection from "@/app/components/comments/CommentSection";
+import Container from "@/app/components/layout/Container";
+import BadgeView from "@/app/components/social/BadgeView";
+import { PrivateDisplay } from "@/app/components/ui/PrivateDisplay";
+import ProfileHeader from "@/app/components/user/ProfileHeader";
+import { shouldHideComments } from "@/lib/account/preferences";
+import { checkPublicPrivacy, getPublicUser, getUser, isFollower, profileThemeStyle } from "@/lib/account/user";
+import { parseWidgets } from "@/lib/account/widget";
 import { auth } from "@/lib/auth";
-import FollowerPreviewPanel from "./FollowerPreviewPanel";
+import { getProfileSocialState, getUserBadges } from "@/lib/data/social";
+import { InteractionTargetType } from "@/lib/generated/prisma/enums";
+import { absoluteUrl, metadataDescription, robotsForPrivacy, SITE_NAME } from "@/lib/metadata";
 import BackgroundView from "../../components/user/BackgroundView";
+import ActivityList from "./ActivityList";
+import FollowerPreviewPanel from "./FollowerPreviewPanel";
+import ProfilePlaylists from "./ProfilePlaylists";
 import ProfileSwitcherPanel from "./ProfileSwitcherPanel";
 import UserWidget from "./UserWidget";
-import { parseWidgets } from "@/lib/account/widget";
-import ProfileHeader from "@/app/components/user/ProfileHeader";
-import ProfilePlaylists from "./ProfilePlaylists";
-import CommentSection from "@/app/components/comments/CommentSection";
-import { InteractionTargetType } from "@/lib/generated/prisma/enums";
-import { getProfileSocialState, getUserBadges } from "@/lib/data/social";
-import BadgeView from "@/app/components/social/BadgeView";
-import ActivityList from "./ActivityList";
-import type { Metadata } from "next";
-import { absoluteUrl, metadataDescription, robotsForPrivacy, SITE_NAME } from "@/lib/metadata";
-import { PrivateDisplay } from "@/app/components/ui/PrivateDisplay";
 
 type UserPageProps = Readonly<{
 	params: Promise<{ user: string }>;

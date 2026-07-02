@@ -1,5 +1,5 @@
-import { Lock } from "lucide-react";
 import Link from "next/link";
+import { Lock } from "lucide-react";
 
 export function PrivateDisplay({ message, extended, canBackOption }: Readonly<{ message?: string; extended?: boolean; canBackOption?: boolean }>) {
 	const body = (

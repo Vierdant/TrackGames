@@ -1,13 +1,13 @@
 "use client";
 
-import Image from "next/image";
 import { useCallback, useRef } from "react";
-import { ImageIdToURL } from "@/lib/external/igdb/util";
-import { rippleEffect } from "@/lib/util/effects";
+import Image from "next/image";
 import Link from "next/link";
-import { ratingToFive } from "@/lib/util/rating";
 import { Star } from "lucide-react";
 import type { Game } from "@/lib/data/games";
+import { ImageIdToURL } from "@/lib/external/igdb/util";
+import { rippleEffect } from "@/lib/util/effects";
+import { ratingToFive } from "@/lib/util/rating";
 
 type GameCardGame = {
 	cover?: string | null;

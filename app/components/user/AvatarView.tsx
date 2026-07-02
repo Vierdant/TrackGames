@@ -1,6 +1,6 @@
-import { UserIcon } from "lucide-react";
-import Image from "next/image";
 import type { CSSProperties } from "react";
+import Image from "next/image";
+import { UserIcon } from "lucide-react";
 
 type AvatarPreviewProps = Readonly<{
 	image: string | null | undefined;

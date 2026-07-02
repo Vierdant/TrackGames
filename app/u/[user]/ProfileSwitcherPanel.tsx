@@ -1,8 +1,8 @@
 "use client";
 
-import SubTabs from "@/app/components/layout/SubTabs";
-import { ReactNode, useState } from "react";
+import { type ReactNode, useState } from "react";
 import { useRouter } from "next/navigation";
+import SubTabs from "@/app/components/layout/SubTabs";
 
 type ProfileSwitcherPanelProps = Readonly<{ user: string; defaultTab: string; children: ReactNode }>;
 

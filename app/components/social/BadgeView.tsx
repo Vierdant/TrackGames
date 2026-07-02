@@ -1,5 +1,5 @@
-import { BadgeCheck } from "lucide-react";
 import Image from "next/image";
+import { BadgeCheck } from "lucide-react";
 
 type BadgeViewProps = Readonly<{ badge: { name: string; description: string | null; icon: string | null; color: string | null } }>;
 

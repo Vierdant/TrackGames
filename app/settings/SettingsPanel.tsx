@@ -1,5 +1,6 @@
 "use client";
 
+import { type SecuredUser } from "@/lib/account/user";
 import { updateUserSettings } from "@/lib/actions/settings";
 import AccountSettingsForm from "./AccountSettingsForm";
 import ImportSettingsForm from "./ImportSettingsForm";
@@ -8,7 +9,6 @@ import PrivacySettingsForm from "./PrivacySettingsForm";
 import ProfileSettingsForm from "./ProfileSettingsForm";
 import { SaveBar } from "./SettingsShared";
 import WidgetsSettingsForm from "./WidgetsSettingsForm";
-import { SecuredUser } from "@/lib/account/user";
 
 type SettingsPanelProps = Readonly<{ activeTab: string; profile: SecuredUser; linkedProviders: string[]; hasPassword: boolean }>;
 

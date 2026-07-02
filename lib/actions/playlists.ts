@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 import { auth } from "../auth";
 import { siteStats } from "../cache/resources";
 import db from "../db";
-import { ActivityType, InteractionTargetType, NotificationType, GameListType } from "../generated/prisma/enums";
+import { ActivityType, GameListType,InteractionTargetType, NotificationType } from "../generated/prisma/enums";
 import { formDataString, formDataStrings } from "../util/formData";
 
 const displayModes = new Set(["GRID", "RANKING", "TIER"]);

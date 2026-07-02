@@ -1,14 +1,14 @@
-import CachedResource from "./cachedResource";
+import { getTopLikedPlaylists } from "../data/playlists";
+import { getSiteStats } from "../data/stats";
 import {
-	calculateTrendingGames,
-	calculateYearlyHitGames,
+	calculateComingSoon,
 	calculateHiddenGems,
 	calculateMostAnticipated,
-	calculateComingSoon,
 	calculateRecentlyReleased,
+	calculateTrendingGames,
+	calculateYearlyHitGames,
 } from "../external/igdb/games";
-import { getSiteStats } from "../data/stats";
-import { getTopLikedPlaylists } from "../data/playlists";
+import CachedResource from "./cachedResource";
 
 export const trendingGames = new CachedResource({
 	name: "trending-games",

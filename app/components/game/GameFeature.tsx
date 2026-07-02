@@ -1,10 +1,10 @@
 "use client";
 
-import Image from "next/image";
 import { useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
 import type { Game } from "@/lib/data/games";
 import { ImageIdToURL } from "@/lib/external/igdb/util";
-import Link from "next/link";
 
 export default function GameFeature({ game }: Readonly<{ game: Game }>) {
 	const coverSrc = ImageIdToURL(game.cover, "cover_big");

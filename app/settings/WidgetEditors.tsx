@@ -1,15 +1,15 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { ChevronDown, ChevronLeft, ChevronRight, ChevronUp, Eye, EyeOff, Plus, Search, Trash2, X } from "lucide-react";
-import MarkdownWidgetEditor from "./MarkdownWidgetEditor";
 import { GameCard } from "@/app/components/game/GameDisplays";
-import type { Widget } from "@/lib/types";
+import { Input, Select } from "@/app/components/ui/Inputs";
 import type { Game } from "@/lib/data/games";
 import { WidgetType } from "@/lib/enums";
-import * as normalize from "@/lib/util/normalize";
+import type { Widget } from "@/lib/types";
 import { deferEffect } from "@/lib/util/effects";
-import { Input, Select } from "@/app/components/ui/Inputs";
-import { useEffect, useState } from "react";
+import * as normalize from "@/lib/util/normalize";
+import MarkdownWidgetEditor from "./MarkdownWidgetEditor";
 
 type WidgetHeaderProps = Readonly<{
 	widget: Widget;

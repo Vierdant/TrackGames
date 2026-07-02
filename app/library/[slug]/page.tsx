@@ -1,20 +1,20 @@
-import LibraryEntriesPanel from "@/app/components/library/LibraryEntriesPanel";
-import Container from "@/app/components/layout/Container";
-import { GhostButton } from "@/app/components/ui/Buttons";
-import BackgroundView from "@/app/components/user/BackgroundView";
-import { getUserGameEntries, UserLibraryEntryWithTags } from "@/lib/data/library";
-import { ensureAndGetUserLibrary } from "@/lib/playlist/library";
+import { type CSSProperties } from "react";
+import type { Metadata } from "next";
 import { redirect } from "next/navigation";
-import { auth } from "@/lib/auth";
+import Container from "@/app/components/layout/Container";
+import LibraryEntriesPanel from "@/app/components/library/LibraryEntriesPanel";
 import GameListEditButton from "@/app/components/playlist/GameListEditButton";
-import { checkPublicPrivacy, profileThemeStyle, getUser, isFollower, SecuredUser } from "@/lib/account/user";
+import { GhostButton } from "@/app/components/ui/Buttons";
+import { PrivateDisplay } from "@/app/components/ui/PrivateDisplay";
+import BackgroundView from "@/app/components/user/BackgroundView";
 import { defaultLibraryFilters } from "@/lib/account/preferences";
+import { checkPublicPrivacy, getUser, isFollower, profileThemeStyle, type SecuredUser } from "@/lib/account/user";
+import { auth } from "@/lib/auth";
+import { getUserGameEntries, type UserLibraryEntryWithTags } from "@/lib/data/library";
 import db from "@/lib/db";
 import { GameListType } from "@/lib/generated/prisma/enums";
-import type { Metadata } from "next";
 import { absoluteUrl, metadataDescription, robotsForPrivacy, SITE_NAME } from "@/lib/metadata";
-import { CSSProperties } from "react";
-import { PrivateDisplay } from "@/app/components/ui/PrivateDisplay";
+import { ensureAndGetUserLibrary } from "@/lib/playlist/library";
 
 export default async function Page({ params }: Readonly<{ params: Promise<{ slug: string }> }>) {
 	const { slug } = await params;

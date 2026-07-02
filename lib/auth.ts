@@ -1,14 +1,14 @@
-import NextAuth from "next-auth";
-import { PrismaAdapter } from "@auth/prisma-adapter";
-import Github from "next-auth/providers/github";
-import Discord from "next-auth/providers/discord";
-import Twitch from "next-auth/providers/twitch";
-import Google from "next-auth/providers/google";
-import Credentials from "next-auth/providers/credentials";
 import { cookies } from "next/headers";
+import NextAuth from "next-auth";
+import Credentials from "next-auth/providers/credentials";
+import Discord from "next-auth/providers/discord";
+import Github from "next-auth/providers/github";
+import Google from "next-auth/providers/google";
+import Twitch from "next-auth/providers/twitch";
+import { PrismaAdapter } from "@auth/prisma-adapter";
+import { USERNAME_MAX_LENGTH, USERNAME_PATTERN } from "./account/username";
 import db from "./db";
 import { verifyPassword } from "./util/password";
-import { USERNAME_MAX_LENGTH, USERNAME_PATTERN } from "./account/username";
 
 const loginProviders = new Set(["google", "github", "twitch", "discord"]);
 

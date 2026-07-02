@@ -1,4 +1,4 @@
-import { RefObject } from "react";
+import { type RefObject } from "react";
 
 export function deferEffect(callback: () => void) {
 	const shortTimer = globalThis.setTimeout(callback, 0);

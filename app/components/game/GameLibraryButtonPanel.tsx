@@ -1,12 +1,12 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import Link from "next/link";
+import { Bookmark, CheckCircle2, CirclePause, Heart, Library, ListPlus, NotebookText, Plus, Trophy, X, XCircle } from "lucide-react";
 import { addGameToLibrary, removeGameFromLibrary, setGameLibraryStatus, updateGameQuickRating } from "@/lib/actions/library";
 import { addGameToPlaylist, removeGameFromPlaylist } from "@/lib/actions/playlists";
 import { GameStatus } from "@/lib/generated/prisma/enums";
 import { ratingToFive } from "@/lib/util/rating";
-import { Bookmark, CheckCircle2, CirclePause, Heart, Library, ListPlus, NotebookText, Plus, Trophy, X, XCircle } from "lucide-react";
-import Link from "next/link";
 import { FloatedSquareButton, GhostButton, PrimaryButton } from "../ui/Buttons";
 import ConfirmAction from "../ui/ConfirmAction";
 import MenuPanel from "../ui/MenuPanel";

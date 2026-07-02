@@ -1,10 +1,10 @@
 "use client";
 
-import { toggleFollow } from "@/lib/actions/social";
-import { UserPlus, UserCheck } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
-import { PrimaryButton, GhostButton } from "../ui/Buttons";
+import { useRouter } from "next/navigation";
+import { UserCheck,UserPlus } from "lucide-react";
+import { toggleFollow } from "@/lib/actions/social";
+import { GhostButton,PrimaryButton } from "../ui/Buttons";
 
 type FollowButtonProps = Readonly<{ userId: string; hasFollowedState?: boolean; isLoggedIn?: boolean }>;
 

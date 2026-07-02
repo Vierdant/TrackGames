@@ -1,15 +1,15 @@
 "use client";
 
-import { markNotificationsRead } from "@/lib/actions/social";
-import { logout } from "@/lib/actions/auth";
-import ThemeSwitch from "./ThemeSwitch";
-import { ArrowRight, Bell, Book, LogOut, Menu, Settings, User as UserIcon } from "lucide-react";
-import type { User } from "next-auth";
-import Link from "next/link";
 import { useEffect, useRef, useState, useTransition } from "react";
+import Link from "next/link";
+import type { User } from "next-auth";
+import { ArrowRight, Bell, Book, LogOut, Menu, Settings, User as UserIcon } from "lucide-react";
+import { logout } from "@/lib/actions/auth";
+import { markNotificationsRead } from "@/lib/actions/social";
+import { deferEffect } from "@/lib/util/effects";
 import AvatarPreview from "../user/AvatarView";
 import MenuPanel from "./MenuPanel";
-import { deferEffect } from "@/lib/util/effects";
+import ThemeSwitch from "./ThemeSwitch";
 
 type Notification = Readonly<{
 	id: string;

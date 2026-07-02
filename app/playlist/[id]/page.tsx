@@ -1,25 +1,25 @@
-import PlaylistEntriesView from "@/app/components/playlist/PlaylistEntriesView";
+import type { Metadata } from "next";
+import { redirect } from "next/navigation";
+import CommentSection from "@/app/components/comments/CommentSection";
 import Container from "@/app/components/layout/Container";
+import GameListEditButton from "@/app/components/playlist/GameListEditButton";
+import PlaylistEntriesView from "@/app/components/playlist/PlaylistEntriesView";
+import LikeButton from "@/app/components/social/LikeButton";
 import { GhostButton } from "@/app/components/ui/Buttons";
 import { Select } from "@/app/components/ui/Inputs";
+import { PrivateDisplay } from "@/app/components/ui/PrivateDisplay";
 import BackgroundView from "@/app/components/user/BackgroundView";
+import { shouldHideComments } from "@/lib/account/preferences";
+import { checkPublicPrivacy, getUser, isFollower, profileThemeStyle } from "@/lib/account/user";
 import { updatePlaylistDisplayMode } from "@/lib/actions/playlists";
 import { auth } from "@/lib/auth";
 import { getPlaylist, getPlaylistLibraryCount } from "@/lib/data/playlists";
-import { redirect } from "next/navigation";
-import AddPlaylistGameForm from "./AddPlaylistGameForm";
-import TierLabelsForm from "./TierLabelsForm";
-import GameListEditButton from "@/app/components/playlist/GameListEditButton";
-import { checkPublicPrivacy, getUser, isFollower, profileThemeStyle } from "@/lib/account/user";
-import { shouldHideComments } from "@/lib/account/preferences";
-import CommentSection from "@/app/components/comments/CommentSection";
-import { GameListType, InteractionTargetType, LikeTargetType } from "@/lib/generated/prisma/enums";
-import LikeButton from "@/app/components/social/LikeButton";
 import { getPlaylistLikeState } from "@/lib/data/social";
 import db from "@/lib/db";
-import type { Metadata } from "next";
+import { GameListType, InteractionTargetType, LikeTargetType } from "@/lib/generated/prisma/enums";
 import { absoluteUrl, metadataDescription, robotsForPrivacy, SITE_NAME } from "@/lib/metadata";
-import { PrivateDisplay } from "@/app/components/ui/PrivateDisplay";
+import AddPlaylistGameForm from "./AddPlaylistGameForm";
+import TierLabelsForm from "./TierLabelsForm";
 
 export default async function Page({ params }: Readonly<{ params: Promise<{ id: string }> }>) {
 	const { id } = await params;

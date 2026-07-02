@@ -1,10 +1,10 @@
 "use client";
 
-import { ImageIdToURL } from "@/lib/external/igdb/util";
-import Image from "next/image";
 import { useState } from "react";
-import HorizontalScroller from "./HorizontalScroller";
+import Image from "next/image";
 import { ChevronLeft, ChevronRight, Play } from "lucide-react";
+import { ImageIdToURL } from "@/lib/external/igdb/util";
+import HorizontalScroller from "./HorizontalScroller";
 
 type MediaItem =
 	| {

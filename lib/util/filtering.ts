@@ -1,4 +1,4 @@
-import { UserLibraryEntryWithTags } from "../data/library";
+import { type UserLibraryEntryWithTags } from "../data/library";
 import { ratingToFive } from "./rating";
 import { filterNumber, matchesNumberRange } from "./tools";
 

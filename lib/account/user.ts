@@ -1,4 +1,4 @@
-import { CSSProperties } from "react";
+import { type CSSProperties } from "react";
 import db from "../db";
 import type { UserGetPayload } from "../generated/prisma/models/User";
 import type { PublicUser } from "../types";

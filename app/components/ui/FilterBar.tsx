@@ -1,8 +1,8 @@
 "use client";
 
-import { Search } from "lucide-react";
-import { useRouter } from "next/navigation";
 import type { ReactNode } from "react";
+import { useRouter } from "next/navigation";
+import { Search } from "lucide-react";
 import { Input, Select } from "./Inputs";
 
 type Filter =

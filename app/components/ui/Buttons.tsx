@@ -1,5 +1,5 @@
+import { type ButtonHTMLAttributes, type ReactNode } from "react";
 import Link from "next/link";
-import { ButtonHTMLAttributes, ReactNode } from "react";
 
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
 	children: ReactNode;

@@ -1,8 +1,8 @@
 "use client";
 
-import { Checkbox, Field, Select } from "@/app/components/ui/Inputs";
-import { SecuredUser } from "@/lib/account/user";
 import { useState } from "react";
+import { Checkbox, Field, Select } from "@/app/components/ui/Inputs";
+import { type SecuredUser } from "@/lib/account/user";
 
 export default function PrivacySettingsForm({ profile }: Readonly<{ profile: SecuredUser }>) {
 	const [profilePrivacy, setProfilePrivacy] = useState(profile.privacy);

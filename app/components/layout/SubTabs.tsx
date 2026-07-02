@@ -1,7 +1,7 @@
 "use client";
 
+import { type Dispatch, type ReactNode, type SetStateAction } from "react";
 import { ArrowRight } from "lucide-react";
-import { Dispatch, ReactNode, SetStateAction } from "react";
 
 type SubTabsProps = Readonly<{
 	tabs: { id: string; label: string }[];

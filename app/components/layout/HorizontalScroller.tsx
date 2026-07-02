@@ -1,7 +1,7 @@
 "use client";
 
+import { Children, type PointerEvent,type ReactNode, useEffect, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { ReactNode, useRef, useState, Children, useEffect, PointerEvent } from "react";
 
 type HorizontalScrollerProps = Readonly<{
 	children: ReactNode;

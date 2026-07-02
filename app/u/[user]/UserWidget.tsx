@@ -1,12 +1,12 @@
 import { GameCard } from "@/app/components/game/GameDisplays";
 import HorizontalScroller from "@/app/components/layout/HorizontalScroller";
-import type { Widget } from "@/lib/types";
 import type { Game } from "@/lib/data/games";
-import { MarkdownBlocks } from "../../components/markdown/MarkdownBlocks";
-import { WidgetType } from "@/lib/enums";
-import { parseMarkdownBlocks } from "@/lib/markdown";
 import { getMinifiedGame } from "@/lib/data/games";
 import { getUserGameStats } from "@/lib/data/library";
+import { WidgetType } from "@/lib/enums";
+import { parseMarkdownBlocks } from "@/lib/markdown";
+import type { Widget } from "@/lib/types";
+import { MarkdownBlocks } from "../../components/markdown/MarkdownBlocks";
 
 function GameList({ widget, games }: Readonly<{ widget: Widget; games: Game[] }>) {
 	return (

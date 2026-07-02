@@ -1,5 +1,4 @@
 import "server-only";
-
 import { deflateSync } from "node:zlib";
 
 type GifColorTable = number[][];

@@ -1,7 +1,7 @@
 "use client";
 
+import { Children, type ReactNode, useEffect, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { Children, ReactNode, useEffect, useRef, useState } from "react";
 
 type GallaryMode = "slide" | "fade";
 

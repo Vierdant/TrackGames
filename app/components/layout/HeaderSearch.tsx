@@ -1,11 +1,11 @@
 "use client";
 
-import type { Game } from "@/lib/data/games";
-import { deferEffect } from "@/lib/util/effects";
-import { ArrowRight, Search, X } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { ArrowRight, Search, X } from "lucide-react";
+import type { Game } from "@/lib/data/games";
+import { deferEffect } from "@/lib/util/effects";
 import HighLevelIsland from "../ui/HighLevelIsland";
 
 function SearchBox({ autoFocus = false, onPick }: Readonly<{ autoFocus?: boolean; onPick?: () => void }>) {

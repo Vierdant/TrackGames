@@ -1,14 +1,14 @@
 "use client";
 
+import { useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
 import { GhostButton } from "@/app/components/ui/Buttons";
 import ConfirmAction from "@/app/components/ui/ConfirmAction";
 import { Field, Input } from "@/app/components/ui/Inputs";
-import { SecuredUser } from "@/lib/account/user";
+import { type SecuredUser } from "@/lib/account/user";
 import { linkProvider, unlinkProvider } from "@/lib/actions/auth";
 import { clearUserLibrary, deleteUserAccount, resetUserAccountData } from "@/lib/actions/settings";
 import { AUTHPROVIDERS } from "@/lib/constants";
-import { useRouter } from "next/navigation";
-import { useState, useTransition } from "react";
 
 export default function AccountSettingsForm({ profile, linkedProviders, hasPassword }: Readonly<{ profile: SecuredUser; linkedProviders: string[]; hasPassword: boolean }>) {
 	const [email, setEmail] = useState(profile.email ?? "");

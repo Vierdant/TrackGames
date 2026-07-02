@@ -1,10 +1,10 @@
 "use client";
 
+import { useState } from "react";
+import { Check } from "lucide-react";
 import { getSocialPlatform } from "@/lib/account/socials";
 import { LinkType } from "@/lib/enums";
 import type { SocialLink } from "@/lib/types";
-import { Check } from "lucide-react";
-import { useState } from "react";
 
 export function SocialIconLinks({ socials }: Readonly<{ socials: SocialLink[] }>) {
 	const [copiedKey, setCopiedKey] = useState<string | null>(null);

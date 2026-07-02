@@ -1,15 +1,15 @@
 "use client";
 
-import AvatarView from "@/app/components/user/AvatarView";
-import { addComment, deleteComment, toggleLike } from "@/lib/actions/social";
-import { InteractionTargetType, LikeTargetType, UserRole } from "@/lib/generated/prisma/enums";
-import { ratingToFive } from "@/lib/util/rating";
-import { Heart, MessageCircle, Send, Trash2 } from "lucide-react";
+import { useRef, useState, useTransition } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useRef, useState, useTransition } from "react";
-import { PrimaryButton } from "../ui/Buttons";
+import { Heart, MessageCircle, Send, Trash2 } from "lucide-react";
+import AvatarView from "@/app/components/user/AvatarView";
+import { addComment, deleteComment, toggleLike } from "@/lib/actions/social";
+import { InteractionTargetType, LikeTargetType, type UserRole } from "@/lib/generated/prisma/enums";
+import { ratingToFive } from "@/lib/util/rating";
 import StarRating from "../game/StarRating";
+import { PrimaryButton } from "../ui/Buttons";
 import RoleTags from "../user/RoleTags";
 
 type Comment = {

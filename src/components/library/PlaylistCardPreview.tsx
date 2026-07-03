@@ -39,7 +39,7 @@ export default function PlaylistCardPreview({ entry, mode, canEdit, onOpenInfo, 
 
 	if (mode === "grid") {
 		return (
-			<div className="group relative min-w-0 overflow-hidden rounded border border-border bg-bg-secondary">
+			<div className="animate-content-in group relative min-w-0 overflow-hidden rounded border border-border bg-bg-secondary">
 				<button type="button" onClick={onOpenInfo} className="block w-full cursor-pointer md:hidden">
 					<div className="relative aspect-5/7 bg-bg">{src && <Image src={src} alt={game.name ?? "game cover"} fill sizes="160px" className="object-cover" />}</div>
 				</button>

@@ -48,12 +48,15 @@ const playlistUserEntrySelect = {
 	masteredAt: true,
 } as const;
 
-export async function getUserPlaylists(userId: string, privacy: "public" | "followers" | "private" = "public") {
+export async function getUserPlaylists(userId: string, privacy: "public" | "followers" | "private" | "all" = "public") {
+	const followerFilter = privacy === "followers" ? { in: ["public", "followers"] } : privacy;
+	const allFilter = privacy === "all" ? { in: ["public", "followers", "private"] } : followerFilter;
+
 	return await db.gameList.findMany({
 		where: {
 			userId,
 			type: GameListType.PLAYLIST,
-			privacy: privacy === "followers" ? { in: ["public", "followers"] } : privacy,
+			privacy: allFilter,
 		},
 		...playlistInclude,
 		orderBy: {
@@ -68,6 +71,7 @@ export async function getTopLikedPlaylists() {
 		take: 10,
 		where: {
 			type: GameListType.PLAYLIST,
+			privacy: "public",
 		},
 		orderBy: {
 			likes: {

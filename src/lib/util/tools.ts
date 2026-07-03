@@ -1,3 +1,10 @@
+export function formatNumber(num: number): string {
+	return Intl.NumberFormat("en", {
+		notation: "compact",
+		maximumFractionDigits: 1,
+	}).format(num);
+}
+
 export function filterNumber(value: string) {
 	if (value === "") return null;
 

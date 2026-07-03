@@ -73,7 +73,7 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang="en" className={`dark ${inter.variable} ${spaceGrotesk.variable} h-full antialiased`}>
-			<body className="flex h-full min-h-96 flex-col">
+			<body className="flex h-full min-h-96 flex-col" suppressHydrationWarning>
 				<Header />
 				{children}
 				<Footer />

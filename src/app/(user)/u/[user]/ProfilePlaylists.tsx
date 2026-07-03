@@ -2,8 +2,15 @@ import PlaylistDisplay from "@/components/playlist/PlaylistCard";
 import { getUserPlaylists } from "@/lib/data/playlists";
 import PlaylistCreatorModal from "./PlaylistCreatorModal";
 
-export default async function ProfilePlaylists({ userId, canCreate, isFollower }: Readonly<{ userId: string; canCreate: boolean; isFollower: boolean }>) {
-	const playlists = await getUserPlaylists(userId, isFollower ? "followers" : "public");
+export default async function ProfilePlaylists({
+	userId,
+	canCreate,
+	isOwner,
+	isFollower,
+}: Readonly<{ userId: string; canCreate: boolean; isOwner: boolean; isFollower: boolean }>) {
+	const followerFilter = isFollower ? "followers" : "public";
+	const filter = isOwner ? "all" : followerFilter;
+	const playlists = await getUserPlaylists(userId, filter);
 
 	return (
 		<div className="flex flex-col gap-4">

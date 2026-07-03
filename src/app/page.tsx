@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { GameCard, StatInfoCard } from "@/components/game/GameDisplays";
 import GameFeature from "@/components/game/GameFeature";
 import Container from "@/components/layout/Container";
@@ -7,6 +8,7 @@ import PlaylistDisplay from "@/components/playlist/PlaylistCard";
 import StatBlock from "@/components/StatBlock";
 import { HeroImage } from "@/components/SVG";
 import { GhostButton, PrimaryButton } from "@/components/ui/Buttons";
+import Loading from "@/components/ui/Loading";
 import { viewerThemeStyle } from "@/lib/account/preferences";
 import { getUser } from "@/lib/account/user";
 import { auth } from "@/lib/auth";
@@ -69,79 +71,81 @@ export default async function Home() {
 				</Container>
 			</section>
 
-			<section className="mt-10">
-				<Container>
-					<div className="flex flex-col items-start rounded border-b-2 border-primary/30 pb-10">
-						<h1 className="flex flex-row items-center gap-2 text-xl font-bold text-text-muted">Trending Today</h1>
-						<HorizontalScroller className="mt-4 max-w-full gap-5 overflow-clip rounded-md">
-							{trendingDataList.map((game) => (
-								<GameCard key={game.id} game={formatRawGame(game)} effect="ripple" hover="name" hasHref={true} />
-							))}
-						</HorizontalScroller>
-					</div>
-				</Container>
-			</section>
+			<Suspense fallback={<Loading />}>
+				<section className="mt-10">
+					<Container>
+						<div className="flex flex-col items-start rounded border-b-2 border-primary/30 pb-10">
+							<h1 className="flex flex-row items-center gap-2 text-xl font-bold text-text-muted">Trending Today</h1>
+							<HorizontalScroller className="animate-content-in mt-4 max-w-full gap-5 overflow-clip rounded-md">
+								{trendingDataList.map((game) => (
+									<GameCard key={game.id} game={formatRawGame(game)} effect="ripple" hover="name" hasHref={true} />
+								))}
+							</HorizontalScroller>
+						</div>
+					</Container>
+				</section>
 
-			<section className="mt-10">
-				<Container>
-					<div className="rounded border-b-2 border-primary/30 pb-10">
-						<h1 className="mb-5 flex flex-row items-center gap-2 text-xl font-bold text-text-muted">Hits of the Year</h1>
-						<Gallary mode="fade" shouldAutoRotate autoRotateMs={20000} idleMs={8000}>
-							{yearlyDataList.map((game) => (
-								<GameFeature key={game.id} game={formatRawGame(game)} />
-							))}
-						</Gallary>
-					</div>
-				</Container>
-			</section>
+				<section className="animate-content-in mt-10">
+					<Container>
+						<div className="rounded border-b-2 border-primary/30 pb-10">
+							<h1 className="mb-5 flex flex-row items-center gap-2 text-xl font-bold text-text-muted">Hits of the Year</h1>
+							<Gallary mode="fade" shouldAutoRotate autoRotateMs={20000} idleMs={8000}>
+								{yearlyDataList.map((game) => (
+									<GameFeature key={game.id} game={formatRawGame(game)} />
+								))}
+							</Gallary>
+						</div>
+					</Container>
+				</section>
 
-			<section className="mt-10">
-				<Container>
-					<div className="rounded border-b-2 border-primary/30 pb-20">
-						<h1 className="mb-5 flex flex-row items-center gap-2 text-xl font-bold text-text-muted">Playlists</h1>
-						{playlists.length ? (
-							<div className="grid grid-cols-2 items-center justify-between gap-5 md:grid-cols-4">
-								{playlists.map((playlist, index) => (
-									<PlaylistDisplay key={playlist.id} playlist={playlist} rank={index + 1} hasHref />
+				<section className="animate-content-in mt-10">
+					<Container>
+						<div className="rounded border-b-2 border-primary/30 pb-20">
+							<h1 className="mb-5 flex flex-row items-center gap-2 text-xl font-bold text-text-muted">Playlists</h1>
+							{playlists.length ? (
+								<div className="grid grid-cols-2 items-center justify-between gap-5 md:grid-cols-4">
+									{playlists.map((playlist, index) => (
+										<PlaylistDisplay key={playlist.id} playlist={playlist} rank={index + 1} hasHref />
+									))}
+								</div>
+							) : (
+								<p className="p-4 text-sm text-text-muted">No public playlists yet.</p>
+							)}
+						</div>
+					</Container>
+				</section>
+
+				<section className="animate-content-in mt-10 mb-10">
+					<Container>
+						<div className="grid grid-cols-2 gap-10 sm:grid-cols-2 lg:grid-cols-4">
+							<div className="flex min-w-0 flex-col gap-2">
+								<h1 className="mb-5 text-center text-xl font-bold text-nowrap text-text-muted sm:text-start">Recent Releases</h1>
+								{recentReleasesList.slice(0, 4).map((game) => (
+									<StatInfoCard key={game.id} game={formatRawGame(game)} />
 								))}
 							</div>
-						) : (
-							<p className="p-4 text-sm text-text-muted">No public playlists yet.</p>
-						)}
-					</div>
-				</Container>
-			</section>
-
-			<section className="mt-10 mb-10">
-				<Container>
-					<div className="grid grid-cols-2 gap-10 sm:grid-cols-2 lg:grid-cols-4">
-						<div className="flex min-w-0 flex-col gap-2">
-							<h1 className="mb-5 text-center text-xl font-bold text-nowrap text-text-muted sm:text-start">Recent Releases</h1>
-							{recentReleasesList.slice(0, 4).map((game) => (
-								<StatInfoCard key={game.id} game={formatRawGame(game)} />
-							))}
+							<div className="flex min-w-0 flex-col gap-2">
+								<h1 className="mb-5 text-center text-xl font-bold text-nowrap text-text-muted sm:text-start">Coming Soon</h1>
+								{comingSoonList.slice(0, 4).map((game) => (
+									<StatInfoCard key={game.id} game={formatRawGame(game)} />
+								))}
+							</div>
+							<div className="flex min-w-0 flex-col gap-2">
+								<h1 className="mb-5 text-center text-xl font-bold text-nowrap text-text-muted sm:text-start">Most Anticipated</h1>
+								{mostAnticipatedList.slice(0, 4).map((game) => (
+									<StatInfoCard key={game.id} game={formatRawGame(game)} />
+								))}
+							</div>
+							<div className="flex min-w-0 flex-col gap-2">
+								<h1 className="mb-5 text-center text-xl font-bold text-nowrap text-text-muted sm:text-start">Hidden Gems</h1>
+								{hiddenDataList.slice(0, 4).map((game) => (
+									<StatInfoCard key={game.id} game={formatRawGame(game)} />
+								))}
+							</div>
 						</div>
-						<div className="flex min-w-0 flex-col gap-2">
-							<h1 className="mb-5 text-center text-xl font-bold text-nowrap text-text-muted sm:text-start">Coming Soon</h1>
-							{comingSoonList.slice(0, 4).map((game) => (
-								<StatInfoCard key={game.id} game={formatRawGame(game)} />
-							))}
-						</div>
-						<div className="flex min-w-0 flex-col gap-2">
-							<h1 className="mb-5 text-center text-xl font-bold text-nowrap text-text-muted sm:text-start">Most Anticipated</h1>
-							{mostAnticipatedList.slice(0, 4).map((game) => (
-								<StatInfoCard key={game.id} game={formatRawGame(game)} />
-							))}
-						</div>
-						<div className="flex min-w-0 flex-col gap-2">
-							<h1 className="mb-5 text-center text-xl font-bold text-nowrap text-text-muted sm:text-start">Hidden Gems</h1>
-							{hiddenDataList.slice(0, 4).map((game) => (
-								<StatInfoCard key={game.id} game={formatRawGame(game)} />
-							))}
-						</div>
-					</div>
-				</Container>
-			</section>
+					</Container>
+				</section>
+			</Suspense>
 		</div>
 	);
 }

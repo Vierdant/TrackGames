@@ -1,11 +1,6 @@
-type StatBlockProps = Readonly<{ color: string; title: string; value: number }>;
+import IncrementedNumber from "./ui/IncrementedNumber";
 
-function formatNumber(num: number): string {
-	return Intl.NumberFormat("en", {
-		notation: "compact",
-		maximumFractionDigits: 1,
-	}).format(num);
-}
+type StatBlockProps = Readonly<{ color: string; title: string; value: number }>;
 
 export default function StatBlock({ color, title, value }: StatBlockProps) {
 	return (
@@ -15,7 +10,9 @@ export default function StatBlock({ color, title, value }: StatBlockProps) {
 					<span className="block size-2.5 shrink-0" style={{ background: color }}></span>
 					<h3 className="text-xs leading-none font-bold">{title}</h3>
 				</div>
-				<p className="mt-1 text-lg leading-tight font-semibold">{formatNumber(value)}</p>
+				<p className="mt-1 text-lg leading-tight font-semibold">
+					<IncrementedNumber value={(value as number) ?? "0"} />
+				</p>
 			</div>
 		</div>
 	);

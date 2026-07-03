@@ -1,8 +1,10 @@
+import { Suspense } from "react";
 import type { Metadata } from "next";
-import { redirect } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import CommentSection from "@/components/comments/CommentSection";
 import Container from "@/components/layout/Container";
 import BadgeView from "@/components/social/BadgeView";
+import Loading from "@/components/ui/Loading";
 import { PrivateDisplay } from "@/components/ui/PrivateDisplay";
 import BackgroundView from "@/components/user/BackgroundView";
 import ProfileHeader from "@/components/user/ProfileHeader";
@@ -27,7 +29,7 @@ type UserPageProps = Readonly<{
 export default async function Page({ params, searchParams }: UserPageProps) {
 	const { user } = await params;
 	const [profile, session] = await Promise.all([getPublicUser(user), auth()]);
-	if (!profile) redirect("/not-found");
+	if (!profile) notFound();
 
 	const { tab, activityPage = "1", activityFilter } = await searchParams;
 	if (!tab) redirect(`/u/${profile.name}?tab=profile`);
@@ -75,17 +77,29 @@ export default async function Page({ params, searchParams }: UserPageProps) {
 						{/* RIGHT SIDE */}
 						<div className="min-w-0 flex-1">
 							<ProfileSwitcherPanel user={profile.name} defaultTab={tab}>
-								{tab === "profile" && (
-									<div className="flex w-full flex-col justify-center md:gap-2">
-										{profileWidgets.map((widget) => (
-											<UserWidget key={widget.id} widget={widget} userId={profile.id} />
-										))}
+								<Suspense fallback={<Loading />}>
+									<div className="animate-content-in">
+										{tab === "profile" && (
+											<div className="flex w-full flex-col justify-center md:gap-2">
+												{profileWidgets.map((widget) => (
+													<UserWidget key={widget.id} widget={widget} userId={profile.id} />
+												))}
+											</div>
+										)}
+										{tab === "activity" && (
+											<ActivityList
+												profile={profile}
+												isVisible={canViewActivity}
+												activityFilter={activityFilter}
+												activityPage={activityPage}
+												viewer={viewer}
+											/>
+										)}
+										{tab === "playlists" && (
+											<ProfilePlaylists userId={profile.id} canCreate={isOwnProfile} isFollower={isFollowingOwner} isOwner={isOwnProfile} />
+										)}
 									</div>
-								)}
-								{tab === "activity" && (
-									<ActivityList profile={profile} isVisible={canViewActivity} activityFilter={activityFilter} activityPage={activityPage} viewer={viewer} />
-								)}
-								{tab === "playlists" && <ProfilePlaylists userId={profile.id} canCreate={isOwnProfile} isFollower={isFollowingOwner} />}
+								</Suspense>
 							</ProfileSwitcherPanel>
 						</div>
 					</Container>

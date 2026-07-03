@@ -1,6 +1,7 @@
 import { GameCard } from "@/components/game/GameDisplays";
 import HorizontalScroller from "@/components/layout/HorizontalScroller";
 import { MarkdownBlocks } from "@/components/markdown/MarkdownBlocks";
+import IncrementedNumber from "@/components/ui/IncrementedNumber";
 import type { Game } from "@/lib/data/games";
 import { getMinifiedGame } from "@/lib/data/games";
 import { getUserGameStats } from "@/lib/data/library";
@@ -62,7 +63,7 @@ function Stats({ widget, stats }: Readonly<{ widget: Widget; stats: Awaited<Retu
 							value = stats.wishlist;
 						} else if (name === "hours") {
 							label = "Hours";
-							value = Math.round(stats.hours * 10) / 10 + "h";
+							value = Math.round(stats.hours * 10) / 10;
 						} else if (name === "dropped") {
 							label = "Dropped";
 							value = stats.dropped;
@@ -82,7 +83,9 @@ function Stats({ widget, stats }: Readonly<{ widget: Widget; stats: Awaited<Retu
 								key={`${stat}-${index}`}
 								className="flex h-16 w-full flex-col items-center justify-center gap-2 rounded-md border-2 border-primary/40 bg-primary/10 p-10 text-center text-2xl font-bold md:h-32"
 							>
-								<p className="flex flex-1 items-center">{value?.toLocaleString("en", { maximumFractionDigits: 1 }) ?? "0"}</p>
+								<p className="flex flex-1 items-center">
+									<IncrementedNumber value={(value as number) ?? "0"} />
+								</p>
 								<p className="h-6 text-sm">{label}</p>
 							</div>
 						);

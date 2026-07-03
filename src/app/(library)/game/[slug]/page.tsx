@@ -1,6 +1,8 @@
+import { Suspense } from "react";
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
-import { redirect } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { type Session } from "next-auth";
 import { Apple, Astroid, BadgeCheck, Clock, Flag, Gamepad2, GamepadDirectional, Library, Monitor, Play, Star, TabletSmartphone, ToggleRight } from "lucide-react";
 import CommentSection from "@/components/comments/CommentSection";
@@ -50,7 +52,7 @@ type RenderAverageRatingWidgetProps = Readonly<{
 export default async function Page({ params }: Readonly<{ params: Promise<{ slug: string }> }>) {
 	const { slug } = await params;
 	const [game, session] = await Promise.all([getGameBySlug(slug), auth()]);
-	if (!game) redirect("/not-found");
+	if (!game) notFound();
 
 	let backdrop;
 	const developerIds = game.developers ? game.developers.map((id) => id) : [];
@@ -92,7 +94,7 @@ export default async function Page({ params }: Readonly<{ params: Promise<{ slug
 			{/* GAME TITLE / CONTROLS */}
 			<section className="relative min-h-136 w-full md:min-h-152">
 				{backdrop ? (
-					<div className="pointer-events-none absolute inset-0 bg-cover bg-top" style={{ backgroundImage: `url(${backdrop})` }} />
+					<Image src={backdrop} alt="image backdrop image" fill preload sizes="100vw" className="pointer-events-none object-cover object-top" />
 				) : (
 					<div className="pointer-events-none absolute inset-0 bg-bg-secondary" />
 				)}

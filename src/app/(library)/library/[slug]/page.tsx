@@ -1,16 +1,17 @@
-import { type CSSProperties } from "react";
+import { type CSSProperties, Suspense } from "react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Container from "@/components/layout/Container";
 import LibraryEntriesPanel from "@/components/library/LibraryEntriesPanel";
 import GameListEditButton from "@/components/playlist/GameListEditButton";
 import { GhostButton } from "@/components/ui/Buttons";
+import Loading from "@/components/ui/Loading";
 import { PrivateDisplay } from "@/components/ui/PrivateDisplay";
 import BackgroundView from "@/components/user/BackgroundView";
 import { defaultLibraryFilters } from "@/lib/account/preferences";
 import { checkPublicPrivacy, getUser, isFollower, profileThemeStyle, type SecuredUser } from "@/lib/account/user";
 import { auth } from "@/lib/auth";
-import { getUserGameEntries, type UserLibraryEntryWithTags } from "@/lib/data/library";
+import { getUserGameEntries } from "@/lib/data/library";
 import db from "@/lib/db";
 import { GameListType } from "@/lib/generated/prisma/enums";
 import { absoluteUrl, metadataDescription, robotsForPrivacy, SITE_NAME } from "@/lib/metadata";
@@ -27,7 +28,6 @@ export default async function Page({ params }: Readonly<{ params: Promise<{ slug
 
 	if (!canViewLibrary) return <PrivateDisplay canBackOption message={`${library.name} is private`} />;
 
-	const userEntries = canViewLibrary ? await getUserGameEntries(library?.userId) : [];
 	const viewer = await getUser(session?.user);
 	const background = library.background ?? null;
 	const themeStyle = profileThemeStyle(library.color, library.accentColor);
@@ -55,7 +55,9 @@ export default async function Page({ params }: Readonly<{ params: Promise<{ slug
 				<section className="relative z-10 bg-bg/95 pt-5 pb-10">
 					<Container className="flex flex-col-reverse gap-5 lg:flex-row lg:items-start">
 						{canViewLibrary ? (
-							<Entries entries={userEntries} isOwnLibrary themeStyle={themeStyle} viewer={viewer} />
+							<Suspense fallback={<Loading />}>
+								<Entries userId={library.userId} isOwnLibrary themeStyle={themeStyle} viewer={viewer} />
+							</Suspense>
 						) : (
 							<p className="rounded border border-border bg-bg p-4 text-sm text-text-muted">This library is private.</p>
 						)}
@@ -66,17 +68,19 @@ export default async function Page({ params }: Readonly<{ params: Promise<{ slug
 	);
 }
 
-function Entries({
-	entries,
+async function Entries({
+	userId,
 	isOwnLibrary,
 	themeStyle,
 	viewer,
 }: {
-	entries: UserLibraryEntryWithTags[];
+	userId: string;
 	isOwnLibrary: boolean;
 	themeStyle: CSSProperties & Record<string, string>;
 	viewer: SecuredUser | null;
 }) {
+	const entries = await getUserGameEntries(userId);
+
 	return entries.length ? (
 		<LibraryEntriesPanel entries={entries} canEdit={isOwnLibrary} themeStyle={themeStyle} defaults={viewer ? defaultLibraryFilters(viewer) : undefined} />
 	) : (

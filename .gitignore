@@ -28,6 +28,8 @@ CLAUDE.md
 .sonarlint
 .vscode
 /.cache/
+.next-dev.err.log
+.next-dev.out.log
 
 # debug
 npm-debug.log*

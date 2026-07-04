@@ -3,13 +3,32 @@
 import { getCurrentUserId } from "@/lib/auth";
 import { isFollower } from "@/lib/data/user";
 import db from "@/lib/db";
+import type { Prisma } from "@/lib/generated/prisma/client";
 import { ActivityType, InteractionTargetType, LikeTargetType, NotificationType } from "@/lib/generated/prisma/enums";
-import { inputError } from "@/lib/logger";
+import { inputError, logger } from "@/lib/logger";
 import { formDataString } from "@/lib/util/parse/formData";
 import { checkPublicPrivacy } from "@/lib/util/privacy";
 
 function activityExpiry() {
 	return new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
+}
+
+export async function deleteActivityForGameList(tx: Prisma.TransactionClient, listId: string) {
+	return [
+		tx.notification.deleteMany({
+			where: { targetType: InteractionTargetType.GAME_LIST, targetId: listId },
+		}),
+		tx.activity.deleteMany({
+			where: { targetType: InteractionTargetType.GAME_LIST, targetId: listId },
+		}),
+		tx.comment.deleteMany({
+			where: { targetType: InteractionTargetType.GAME_LIST, targetId: listId },
+		}),
+	];
+}
+
+export async function deleteActivityForComment(tx: Prisma.TransactionClient, commentId: string) {
+	return [tx.notification.deleteMany({ where: { commentId } }), tx.activity.deleteMany({ where: { commentId } })];
 }
 
 function commentActivityType(targetType: InteractionTargetType, parentId: string | null) {
@@ -115,60 +134,69 @@ export async function addComment(targetType: InteractionTargetType, targetId: st
 		return inputError("Comments must be 2000 characters or fewer.");
 	}
 
-	await ensureCanInteractWithTarget(targetType, targetId, userId, "comment");
+	try {
+		await ensureCanInteractWithTarget(targetType, targetId, userId, "comment");
+	} catch (error) {
+		return inputError(error instanceof Error ? error.message : "Unable to comment.");
+	}
 
 	if (parentId) {
-		await db.$transaction(async (tx) => {
-			const parent = await tx.comment.findFirst({
-				where: {
-					id: parentId,
-					targetType,
-					targetId,
-				},
-				select: {
-					id: true,
-					userId: true,
-				},
-			});
+		try {
+			await db.$transaction(async (tx) => {
+				const parent = await tx.comment.findFirst({
+					where: {
+						id: parentId,
+						targetType,
+						targetId,
+					},
+					select: {
+						id: true,
+						userId: true,
+					},
+				});
 
-			if (!parent) {
-				throw new Error("Comment not found.");
-			}
+				if (!parent) {
+					throw new Error("Comment not found.");
+				}
 
-			const comment = await tx.comment.create({
-				data: {
-					userId,
-					targetType,
-					targetId,
-					parentId,
-					content,
-				},
-			});
-
-			await tx.activity.create({
-				data: {
-					userId,
-					type: ActivityType.REPLIED_TO_COMMENT,
-					targetType,
-					targetId,
-					commentId: comment.id,
-					expiresAt: activityExpiry(),
-				},
-			});
-
-			if (parent.userId !== userId) {
-				await tx.notification.create({
+				const comment = await tx.comment.create({
 					data: {
-						userId: parent.userId,
-						actorId: userId,
-						type: NotificationType.COMMENT_REPLY,
+						userId,
+						targetType,
+						targetId,
+						parentId,
+						content,
+					},
+				});
+
+				await tx.activity.create({
+					data: {
+						userId,
+						type: ActivityType.REPLIED_TO_COMMENT,
 						targetType,
 						targetId,
 						commentId: comment.id,
+						expiresAt: activityExpiry(),
 					},
 				});
-			}
-		});
+
+				if (parent.userId !== userId) {
+					await tx.notification.create({
+						data: {
+							userId: parent.userId,
+							actorId: userId,
+							type: NotificationType.COMMENT_REPLY,
+							targetType,
+							targetId,
+							commentId: comment.id,
+						},
+					});
+				}
+			});
+		} catch (error) {
+			logger.error("social", "addComment reply transaction failed", error);
+			return inputError("Comment not found.");
+		}
 
 		return;
 	}
@@ -243,18 +271,26 @@ export async function toggleLike(targetType: LikeTargetType, targetId: string) {
 
 	if (targetType === LikeTargetType.COMMENT) {
 		if (!likedComment) {
-			throw new Error("Comment not found.");
+			return inputError("Comment not found.");
 		}
 
-		await ensureCanInteractWithTarget(likedComment.targetType, likedComment.targetId, userId, "comment");
+		try {
+			await ensureCanInteractWithTarget(likedComment.targetType, likedComment.targetId, userId, "comment");
+		} catch (error) {
+			return inputError(error instanceof Error ? error.message : "Unable to like comment.");
+		}
 	}
 
 	if (targetType === LikeTargetType.GAME_LIST) {
 		if (!likedList) {
-			throw new Error("List not found.");
+			return inputError("List not found.");
 		}
 
-		await ensureCanInteractWithTarget(InteractionTargetType.GAME_LIST, targetId, userId, "view");
+		try {
+			await ensureCanInteractWithTarget(InteractionTargetType.GAME_LIST, targetId, userId, "view");
+		} catch (error) {
+			return inputError(error instanceof Error ? error.message : "Unable to like list.");
+		}
 	}
 
 	await db.$transaction(async (tx) => {
@@ -316,6 +352,7 @@ export async function deleteComment(commentId: string) {
 				commentId: comment.id,
 			},
 		}),
+		...(await deleteActivityForComment(db, comment.id)),
 		db.comment.delete({
 			where: {
 				id: comment.id,

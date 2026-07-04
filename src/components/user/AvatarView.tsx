@@ -1,7 +1,7 @@
 import type { CSSProperties } from "react";
 import Image from "next/image";
 import { UserIcon } from "lucide-react";
-import { joinClass } from "@/app/_util/func";
+import { joinClass } from "@/lib/util/client/func";
 
 type AvatarPreviewProps = Readonly<{
 	image: string | null | undefined;

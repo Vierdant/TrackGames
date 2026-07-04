@@ -3,7 +3,7 @@
 import { type CSSProperties, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { Image as ImageIcon } from "lucide-react";
-import { joinClass } from "@/app/_util/func";
+import { joinClass } from "@/lib/util/client/func";
 import { isVideoUrl } from "@/lib/util/validate/safety";
 
 type BackgroundViewProps = Readonly<{

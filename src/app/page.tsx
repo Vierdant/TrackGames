@@ -1,5 +1,4 @@
 import { Suspense } from "react";
-import { viewerThemeStyle } from "@/app/_util/theme";
 import { GameCard, StatInfoCard } from "@/components/game/GameDisplays";
 import GameFeature from "@/components/game/GameFeature";
 import Container from "@/components/layout/Container";
@@ -14,6 +13,7 @@ import { auth } from "@/lib/auth";
 import { comingSoon, hiddenGames, mostAnticipated, recentReleases, siteStats, topPlaylists, trendingGames, yearlyGames } from "@/lib/cache/resources";
 import { getUser } from "@/lib/data/user";
 import { formatRawGame } from "@/lib/external/igdb/util";
+import { viewerThemeStyle } from "@/lib/util/client/theme";
 
 export default async function Home() {
 	const session = await auth();

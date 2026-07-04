@@ -2,10 +2,10 @@
 
 import { useState } from "react";
 import { Check } from "lucide-react";
-import { joinClass } from "@/app/_util/func";
 import { socialPlatformIcons } from "@/components/config";
 import type { SocialLink } from "@/lib/types";
 import { LinkType } from "@/lib/types";
+import { joinClass } from "@/lib/util/client/func";
 import { getSocialPlatform } from "@/lib/util/parse/socials";
 
 export default function SocialIconLinks({ socials }: Readonly<{ socials: SocialLink[] }>) {

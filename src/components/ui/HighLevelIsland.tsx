@@ -3,9 +3,11 @@
 import type { ReactNode } from "react";
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
-import { deferHook } from "@/app/_util/func";
+import { deferHook } from "@/lib/util/client/func";
 
-export default function HighLevelIsland({ children, className = "" }: Readonly<{ children: ReactNode; className?: string }>) {
+type HighLevelIslandProps = Readonly<{ children: ReactNode; className?: string }>;
+
+export default function HighLevelIsland({ children, className = "" }: HighLevelIslandProps) {
 	const [mounted, setMounted] = useState(false);
 
 	useEffect(() => {

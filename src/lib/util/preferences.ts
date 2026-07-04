@@ -1,19 +1,5 @@
-import { profileThemeStyle } from "@/app/_util/theme";
 import { NotificationType } from "@/lib/generated/prisma/enums";
 import type { UserModel } from "@/lib/generated/prisma/models/User";
-import { hexColor } from "@/lib/util/validate/normalize";
-
-export function viewerThemeStyle(user: Pick<UserModel, "profileColor" | "accentColor" | "siteThemeMode" | "siteThemeColor" | "siteAccentColor">) {
-	if (user.siteThemeMode === "custom") {
-		return profileThemeStyle(hexColor(user.siteThemeColor, "#7b5cdb"), hexColor(user.siteAccentColor, "#b8842f"));
-	}
-
-	if (user.siteThemeMode === "default") {
-		return undefined;
-	}
-
-	return profileThemeStyle(user.profileColor, user.accentColor);
-}
 
 export function shouldHideComments(user?: Pick<UserModel, "hideCommentsEverywhere"> | null) {
 	return Boolean(user?.hideCommentsEverywhere);

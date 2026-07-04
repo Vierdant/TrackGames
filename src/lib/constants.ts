@@ -1,11 +1,9 @@
-import { Rss } from "lucide-react";
 import z from "zod";
-import { DiscordIcon, XIcon } from "@/components/SVG";
 import { LinkType } from "@/lib/types";
 
 export const SOCIAL_PLATFORMS = [
-	{ id: "x-link", value: "x", kind: LinkType.LINK, label: "X (Twitter)", placeholder: "https://x.com/username", icon: XIcon },
-	{ id: "discord-copy", value: "discord", kind: LinkType.COPY, label: "Discord username", placeholder: "username", icon: DiscordIcon },
+	{ id: "x-link", value: "x", kind: LinkType.LINK, label: "X (Twitter)", placeholder: "https://x.com/username" },
+	{ id: "discord-copy", value: "discord", kind: LinkType.COPY, label: "Discord username", placeholder: "username" },
 	{
 		id: "discord-link",
 		value: "discord",
@@ -34,7 +32,7 @@ export const SOCIAL_PLATFORMS = [
 		label: "YouTube",
 		placeholder: "https://youtube.com/@username",
 	},
-	{ id: "website-link", value: "website", kind: LinkType.LINK, label: "Website", placeholder: "https://example.com", icon: Rss },
+	{ id: "website-link", value: "website", kind: LinkType.LINK, label: "Website", placeholder: "https://example.com" },
 ];
 
 export const AUTH_PROVIDERS = [

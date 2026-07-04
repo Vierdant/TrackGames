@@ -2,7 +2,7 @@
 
 import { Children, type PointerEvent, type ReactNode, useEffect, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { stepIndex } from "@/app/_util/func";
+import { stepIndex } from "@/lib/util/client/func";
 
 type HorizontalScrollerProps = Readonly<{
 	children: ReactNode;

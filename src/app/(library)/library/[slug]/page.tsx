@@ -1,7 +1,6 @@
 import { type CSSProperties, Suspense } from "react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { profileThemeStyle } from "@/app/_util/theme";
 import Container from "@/components/layout/Container";
 import LibraryEntriesPanel from "@/components/library/LibraryEntriesPanel";
 import GameListEditButton from "@/components/playlist/GameListEditButton";
@@ -12,8 +11,7 @@ import BackgroundView from "@/components/user/BackgroundView";
 import { auth } from "@/lib/auth";
 import { ensureAndGetUserLibrary, getUserGameEntries } from "@/lib/data/library";
 import { getUser, isFollower, type SecuredUser } from "@/lib/data/user";
-import db from "@/lib/db";
-import { GameListType } from "@/lib/generated/prisma/enums";
+import { profileThemeStyle } from "@/lib/util/client/theme";
 import { absoluteUrl, metadataDescription, robotsForPrivacy, SITE_NAME } from "@/lib/util/metadata";
 import { defaultLibraryFilters } from "@/lib/util/preferences";
 import { checkPublicPrivacy } from "@/lib/util/privacy";
@@ -91,24 +89,7 @@ async function Entries({
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
 	const { slug } = await params;
-	const library = await db.gameList.findFirst({
-		where: {
-			slug,
-			type: GameListType.LIBRARY,
-		},
-		select: {
-			name: true,
-			description: true,
-			image: true,
-			background: true,
-			privacy: true,
-			user: {
-				select: {
-					libraryPrivacy: true,
-				},
-			},
-		},
-	});
+	const library = await ensureAndGetUserLibrary(slug);
 	const title = library?.name ?? "Library not found";
 	const description = metadataDescription(library?.description, library ? `Browse ${library.name} on TrackGames.` : "The requested library could not be found.");
 	const image = absoluteUrl(`/library/${encodeURIComponent(slug)}/opengraph-image`);

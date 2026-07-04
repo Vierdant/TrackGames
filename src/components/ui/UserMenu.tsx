@@ -4,12 +4,12 @@ import { useEffect, useRef, useState, useTransition } from "react";
 import Link from "next/link";
 import type { User } from "next-auth";
 import { ArrowRight, Bell, Book, LogOut, Menu, Settings, User as UserIcon } from "lucide-react";
-import { deferHook } from "@/app/_util/func";
 import MenuPanel from "@/components/ui/MenuPanel";
 import ThemeSwitch from "@/components/ui/ThemeSwitch";
 import AvatarPreview from "@/components/user/AvatarView";
 import { logout } from "@/lib/actions/auth";
 import { markNotificationsRead } from "@/lib/actions/social";
+import { deferHook } from "@/lib/util/client/func";
 
 type Notification = Readonly<{
 	id: string;

@@ -2,15 +2,15 @@
 
 import type { CSSProperties } from "react";
 import { useMemo, useState } from "react";
-import { Grid2X2, List, SlidersHorizontal } from "lucide-react";
-import { formLabel, joinClass } from "@/app/_util/func";
+import { Grid2X2, List } from "lucide-react";
 import PaginatedList from "@/components/layout/PaginatedList";
 import AdvancedLibraryFilterPanel, { emptyAdvancedLibraryFilters } from "@/components/library/AdvancedLibraryFilterPanel";
 import PlaylistCard from "@/components/library/PlaylistCard";
-import { GhostButton } from "@/components/ui/Buttons";
+import { AdvancedFilterButton } from "@/components/ui/Buttons";
 import FilterBar from "@/components/ui/FilterBar";
 import type { UserLibraryEntryWithTags } from "@/lib/data/library";
 import { GameStatus } from "@/lib/generated/prisma/enums";
+import { formLabel, joinClass } from "@/lib/util/client/func";
 import { advancedFilterCount, matchesAdvancedFilters } from "@/lib/util/filtering";
 
 type LibraryEntriesPanelProps = Readonly<{
@@ -88,14 +88,7 @@ export default function LibraryEntriesPanel({ entries, canEdit, themeStyle, defa
 					]}
 					actions={
 						<div className="flex flex-row justify-end gap-2">
-							<GhostButton
-								onClick={() => setShowAdvancedFilters(true)}
-								className={joinClass("h-9 border-border", filterCount ? "border-primary text-primary" : "border-border text-text-muted")}
-								aria-label="Advanced filters"
-							>
-								<SlidersHorizontal size={17} aria-hidden="true" />
-								Filter{filterCount ? ` (${filterCount})` : ""}
-							</GhostButton>
+							<AdvancedFilterButton onClick={() => setShowAdvancedFilters(true)} filterCount={filterCount} />
 							<button
 								type="button"
 								onClick={() => setMode("grid")}

@@ -2,11 +2,11 @@
 
 import { useEffect, useState } from "react";
 import { Plus, Search, X } from "lucide-react";
-import { deferHook } from "@/app/_util/func";
 import { PrimaryButton } from "@/components/ui/Buttons";
 import { Input, Select } from "@/components/ui/Inputs";
 import { addGameToPlaylist } from "@/lib/actions/playlists";
 import type { Game } from "@/lib/data/games";
+import { deferHook } from "@/lib/util/client/func";
 
 type AddPlaylistGameFormProps = Readonly<{ playlistId: string; mode: string; tiers: string[]; existingGameIds: number[] }>;
 

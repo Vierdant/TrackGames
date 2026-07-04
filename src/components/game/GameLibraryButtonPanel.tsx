@@ -2,7 +2,6 @@
 
 import { useState, useTransition } from "react";
 import { Bookmark, CheckCircle2, CirclePause, Heart, Library, ListPlus, NotebookText, Trophy, XCircle } from "lucide-react";
-import { joinClass } from "@/app/_util/func";
 import ManageListsPanel from "@/components/game/ManageListsPanel";
 import StarRating from "@/components/game/StarRating";
 import { FloatedSquareButton, GhostButton, PrimaryButton } from "@/components/ui/Buttons";
@@ -11,6 +10,7 @@ import MenuPanel from "@/components/ui/MenuPanel";
 import { addGameToLibrary, removeGameFromLibrary, setGameLibraryStatus, updateGameQuickRating } from "@/lib/actions/library";
 import { addGameToPlaylist, removeGameFromPlaylist } from "@/lib/actions/playlists";
 import { GameStatus } from "@/lib/generated/prisma/enums";
+import { joinClass } from "@/lib/util/client/func";
 import { ratingToFive } from "@/lib/util/format/rating";
 
 type UserPlaylist = {
@@ -136,6 +136,8 @@ export default function GameLibraryButtonPanel({ gameId, gameSlug, isLoggedIn, e
 	function setStatus(status: GameStatus) {
 		startTransition(async () => {
 			const result = await setGameLibraryStatus(gameId, gameSlug, status);
+			if ("error" in result) return;
+
 			setCurrentEntry(result);
 			setManagingStatus(false);
 		});
@@ -160,6 +162,7 @@ export default function GameLibraryButtonPanel({ gameId, gameSlug, isLoggedIn, e
 			const formData = new FormData();
 			formData.set("gameId", String(gameId));
 			const entry = await addGameToPlaylist(listId, formData);
+			if ("error" in entry) return;
 			setUserPlaylists((current) => addGameEntryToPlaylists(current, listId, entry.id, gameId));
 		});
 	}

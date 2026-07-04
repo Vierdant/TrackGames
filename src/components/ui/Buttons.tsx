@@ -1,6 +1,7 @@
 import { type ButtonHTMLAttributes, type ReactNode } from "react";
 import Link from "next/link";
-import { joinClass } from "@/app/_util/func";
+import { SlidersHorizontal } from "lucide-react";
+import { joinClass } from "@/lib/util/client/func";
 
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
 	children: ReactNode;
@@ -39,6 +40,19 @@ export function Button({ children, href, className, variant = "primary", ...prop
 export const PrimaryButton = (p: ButtonProps) => <Button {...p} variant="primary" />;
 export const SecondaryButton = (p: ButtonProps) => <Button {...p} variant="secondary" />;
 export const GhostButton = (p: ButtonProps) => <Button {...p} variant="ghost" />;
+
+export function AdvancedFilterButton({ onClick, filterCount }: { onClick: () => void; filterCount: number }) {
+	return (
+		<GhostButton
+			onClick={onClick}
+			className={joinClass("h-9 border-border", filterCount ? "border-primary text-primary" : "border-border text-text-muted")}
+			aria-label="Advanced filters"
+		>
+			<SlidersHorizontal size={17} aria-hidden="true" />
+			Filter{filterCount ? ` (${filterCount})` : ""}
+		</GhostButton>
+	);
+}
 
 export function FloatedSquareButton({ children, className, label, labelClassName, ...props }: FloatedSquareButtonProps) {
 	return (

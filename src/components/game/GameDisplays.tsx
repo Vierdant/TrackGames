@@ -4,10 +4,10 @@ import { useCallback, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Star } from "lucide-react";
-import { rippleEffect } from "@/app/_util/effects";
-import { joinClass } from "@/app/_util/func";
 import type { Game } from "@/lib/data/games";
 import { ImageIdToURL } from "@/lib/external/igdb/util";
+import { rippleEffect } from "@/lib/util/client/effects";
+import { joinClass } from "@/lib/util/client/func";
 import { ratingToFive } from "@/lib/util/format/rating";
 
 type GameCardGame = {

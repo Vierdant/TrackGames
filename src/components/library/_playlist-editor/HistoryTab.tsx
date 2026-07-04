@@ -1,10 +1,10 @@
 "use client";
 
 import { Trash2 } from "lucide-react";
-import { joinClass } from "@/app/_util/func";
 import { GhostButton, PrimaryButton } from "@/components/ui/Buttons";
 import { Checkbox, Input, SuffixedInput, Textarea } from "@/components/ui/Inputs";
 import type { UserLibraryEntryWithTags } from "@/lib/data/library";
+import { joinClass } from "@/lib/util/client/func";
 
 type HistoryTabProps = Readonly<{
 	saveHistoryLog: (formData: FormData) => void;

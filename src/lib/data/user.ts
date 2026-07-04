@@ -1,3 +1,4 @@
+import { cache } from "react";
 import db from "@/lib/db";
 import { type UserRole } from "@/lib/generated/prisma/enums";
 import type { UserGetPayload } from "@/lib/generated/prisma/models/User";
@@ -53,7 +54,7 @@ export async function getUserProviders(userId: string) {
 	});
 }
 
-export async function getPublicUser(name: string): Promise<PublicUser | null> {
+export const getPublicUser = cache(async (name: string): Promise<PublicUser | null> => {
 	const user = await db.user.findFirst({
 		where: { name },
 		select: {
@@ -79,7 +80,7 @@ export async function getPublicUser(name: string): Promise<PublicUser | null> {
 	});
 
 	return user as PublicUser;
-}
+});
 
 export async function isFollower(sessionUserId: string | undefined, userId: string | undefined): Promise<boolean> {
 	if (!sessionUserId || !userId) return false;

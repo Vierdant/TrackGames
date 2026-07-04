@@ -2,11 +2,12 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { deleteActivityForGameList } from "@/lib/actions/social";
 import { getCurrentUserId } from "@/lib/auth";
 import { siteStats } from "@/lib/cache/resources";
 import db from "@/lib/db";
 import { ActivityType, GameListType, InteractionTargetType, NotificationType } from "@/lib/generated/prisma/enums";
-import { inputError } from "@/lib/logger";
+import { inputError, logger } from "@/lib/logger";
 import { formDataString, formDataStrings } from "@/lib/util/parse/formData";
 
 const displayModes = new Set(["GRID", "RANKING", "TIER"]);
@@ -28,7 +29,7 @@ async function getOwnedPlaylist(listId: string, userId: string) {
 	});
 
 	if (!playlist) {
-		throw new Error("Playlist not found.");
+		return inputError("Playlist not found.");
 	}
 
 	return playlist;
@@ -48,7 +49,7 @@ async function getOwnedList(listId: string, userId: string) {
 	});
 
 	if (!list) {
-		throw new Error("List not found.");
+		return inputError("List not found.");
 	}
 
 	return list;
@@ -80,14 +81,25 @@ export async function createPlaylist(formData: FormData) {
 	const name = formDataString(formData.get("name")).trim();
 	const description = formDataString(formData.get("description")).trim();
 	const displayMode = formDataString(formData.get("displayMode"), "GRID");
-	const user = await db.user.findUnique({
-		where: { id: userId },
-		select: { playlistPrivacy: true },
-	});
 
 	if (!name) {
 		return inputError("Playlist name is required.");
 	}
+
+	const [user, followers] = await Promise.all([
+		db.user.findUnique({
+			where: { id: userId },
+			select: { playlistPrivacy: true },
+		}),
+		db.userFollow.findMany({
+			where: {
+				followingId: userId,
+			},
+			select: {
+				followerId: true,
+			},
+		}),
+	]);
 
 	const playlist = await db.gameList.create({
 		data: {
@@ -114,15 +126,6 @@ export async function createPlaylist(formData: FormData) {
 		},
 	});
 
-	const followers = await db.userFollow.findMany({
-		where: {
-			followingId: userId,
-		},
-		select: {
-			followerId: true,
-		},
-	});
-
 	if (followers.length) {
 		await db.notification.createMany({
 			data: followers.map((follow) => ({
@@ -135,9 +138,7 @@ export async function createPlaylist(formData: FormData) {
 		});
 	}
 
-	siteStats.refresh().catch((error) => {
-		throw new Error(error);
-	});
+	siteStats.refresh().catch((error) => logger.error("cache", `refresh failed for playlist public stats`, error));
 	revalidatePath("/u/[user]", "page");
 	redirect(`/playlist/${playlist.id}`);
 }
@@ -148,23 +149,29 @@ export async function addGameToPlaylist(listId: string, formData: FormData) {
 	const requestedTier = formDataString(formData.get("tier")).trim();
 
 	if (!Number.isInteger(gameId) || gameId <= 0) {
-		throw new Error("Invalid game.");
+		return inputError("Invalid game.");
 	}
 
-	const playlist = await getOwnedPlaylist(listId, userId);
-	const tier = requestedTier || playlist.tierLabels[0] || "A";
+	const [playlist, lastEntry] = await Promise.all([
+		getOwnedPlaylist(listId, userId),
+		db.gameListEntry.findFirst({
+			where: {
+				listId,
+			},
+			orderBy: {
+				position: "desc",
+			},
+			select: {
+				position: true,
+			},
+		}),
+	]);
 
-	const lastEntry = await db.gameListEntry.findFirst({
-		where: {
-			listId,
-		},
-		orderBy: {
-			position: "desc",
-		},
-		select: {
-			position: true,
-		},
-	});
+	if ("error" in playlist) {
+		return playlist;
+	}
+
+	const tier = requestedTier || playlist.tierLabels[0] || "A";
 
 	const entry = await db.gameListEntry.upsert({
 		where: {
@@ -195,7 +202,11 @@ export async function addGameToPlaylist(listId: string, formData: FormData) {
 export async function removeGameFromPlaylist(listId: string, entryId: string) {
 	const userId = await getCurrentUserId();
 
-	await getOwnedPlaylist(listId, userId);
+	const playlist = await getOwnedPlaylist(listId, userId);
+
+	if ("error" in playlist) {
+		return playlist;
+	}
 
 	await db.gameListEntry.deleteMany({
 		where: {
@@ -212,6 +223,10 @@ export async function updatePlaylistEntry(listId: string, entryId: string, formD
 	const position = Number(formDataString(formData.get("position")));
 	const tier = formDataString(formData.get("tier")).trim();
 	const playlist = await getOwnedPlaylist(listId, userId);
+
+	if ("error" in playlist) {
+		return playlist;
+	}
 
 	await db.gameListEntry.update({
 		where: {
@@ -231,7 +246,11 @@ export async function updatePlaylistDisplayMode(listId: string, formData: FormDa
 	const userId = await getCurrentUserId();
 	const displayMode = formDataString(formData.get("displayMode"), "GRID");
 
-	await getOwnedPlaylist(listId, userId);
+	const playlist = await getOwnedPlaylist(listId, userId);
+
+	if ("error" in playlist) {
+		throw new Error(playlist.error);
+	}
 
 	await db.gameList.update({
 		where: {
@@ -259,7 +278,11 @@ export async function updatePlaylistTiers(listId: string, formData: FormData) {
 		return /^#[0-9a-f]{6}$/i.test(color) ? color : fallbackTierColors[index] || "#64748b";
 	});
 
-	await getOwnedPlaylist(listId, userId);
+	const playlist = await getOwnedPlaylist(listId, userId);
+
+	if ("error" in playlist) {
+		throw new Error(playlist.error);
+	}
 
 	await db.$transaction([
 		db.gameList.update({
@@ -288,6 +311,11 @@ export async function updatePlaylistTiers(listId: string, formData: FormData) {
 export async function updateGameListSettings(listId: string, formData: FormData) {
 	const userId = await getCurrentUserId();
 	const list = await getOwnedList(listId, userId);
+
+	if ("error" in list) {
+		return list;
+	}
+
 	const name = nullableText(formData.get("name"), 80);
 
 	if (!name) {
@@ -338,24 +366,26 @@ export async function deletePlaylist(listId: string) {
 	});
 
 	if (!playlist) {
-		throw new Error("Playlist not found.");
+		return inputError("Playlist not found.");
 	}
 
-	const result = await db.gameList.deleteMany({
-		where: {
-			id: listId,
-			userId,
-			type: GameListType.PLAYLIST,
-		},
-	});
+	const results = await db.$transaction([
+		...(await deleteActivityForGameList(db, listId)),
+		db.gameList.deleteMany({
+			where: {
+				id: listId,
+				userId,
+				type: GameListType.PLAYLIST,
+			},
+		}),
+	]);
+	const result = results.at(-1) as { count: number };
 
 	if (result.count === 0) {
-		throw new Error("Playlist not found.");
+		return inputError("Playlist not found.");
 	}
 
-	siteStats.refresh().catch((error) => {
-		throw new Error(error);
-	});
+	siteStats.refresh().catch((error) => logger.error("cache", `refresh failed for playlist public stats`, error));
 	revalidatePath(`/playlist/${playlist.id}`);
 	revalidatePath("/u/[user]", "page");
 	redirect(playlist.user.name ? `/u/${playlist.user.name}?tab=playlists` : "/");

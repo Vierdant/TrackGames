@@ -66,167 +66,265 @@ function getGameObject(item: TgLibraryEntry, gamesBySlug: Map<string, { slug: st
 	return item.game?.id ? gamesById.get(item.game.id) : sluggedHolder;
 }
 
-async function importBackupEntryItem(
-	tx: Prisma.TransactionClient,
-	userId: string,
-	item: TgLibraryEntry,
-	gamesBySlug: Map<string, { slug: string; id: number }>,
-	gamesById: Map<number, { id: number; slug: string }>,
-) {
+function resolveBackupEntryItem(item: TgLibraryEntry, gamesBySlug: Map<string, { slug: string; id: number }>, gamesById: Map<number, { id: number; slug: string }>) {
 	const game = getGameObject(item, gamesBySlug, gamesById);
 	const status = Object.values(GameStatus).includes(item.status as GameStatus) ? (item.status as GameStatus) : null;
 
 	if (!game || !status) return null;
 
-	return importBackupEntry(tx, userId, item, game, status);
-}
-
-async function importBackupEntry(tx: Prisma.TransactionClient, userId: string, item: TgLibraryEntry, game: { id: number; slug: string }, status: GameStatus) {
 	item.timeMode = item.timeMode === "manual" ? "manual" : "logs";
 
-	const entryData = {
-		status,
-		rating: numberFromBackup(item.rating),
-		timePlayed: numberFromBackup(item.timePlayed),
-		timeMode: item.timeMode,
-		timeFinished: numberFromBackup(item.timeFinished),
-		timeMastered: numberFromBackup(item.timeMastered),
-		notes: item.notes?.trim() || null,
-		favorite: Boolean(item.favorite),
-		addedAt: dateFromBackup(item.addedAt) ?? undefined,
-		startedAt: dateFromBackup(item.startedAt),
-		finishedAt: dateFromBackup(item.finishedAt),
-		masteredAt: dateFromBackup(item.masteredAt),
-	};
-	const entry = await tx.userGameEntry.upsert({
-		where: {
-			userId_gameId: {
-				userId,
-				gameId: game.id,
-			},
+	return {
+		gameId: game.id,
+		entryData: {
+			status,
+			rating: numberFromBackup(item.rating),
+			timePlayed: numberFromBackup(item.timePlayed),
+			timeMode: item.timeMode,
+			timeFinished: numberFromBackup(item.timeFinished),
+			timeMastered: numberFromBackup(item.timeMastered),
+			notes: item.notes?.trim() || null,
+			favorite: Boolean(item.favorite),
+			addedAt: dateFromBackup(item.addedAt),
+			startedAt: dateFromBackup(item.startedAt),
+			finishedAt: dateFromBackup(item.finishedAt),
+			masteredAt: dateFromBackup(item.masteredAt),
 		},
-		update: entryData,
-		create: {
+		tagNames: Array.from(
+			new Set(
+				(item.tags ?? [])
+					.map((tag) => tag.trim())
+					.filter(Boolean)
+					.map((tag) => tag.slice(0, 40)),
+			),
+		),
+		logs: (item.logs ?? [])
+			.filter((log) => Number.isFinite(log.hours) && log.hours! > 0)
+			.map((log) => ({
+				gameId: game.id,
+				hours: log.hours!,
+				note: log.note?.trim() || "Imported from .tg backup.",
+				skipRecap: Boolean(log.skipRecap),
+				playedAt: dateFromBackup(log.playedAt) ?? new Date(),
+				createdAt: dateFromBackup(log.createdAt) ?? new Date(),
+			})),
+	};
+}
+
+async function importBackupEntryChunk(
+	tx: Prisma.TransactionClient,
+	userId: string,
+	itemsChunk: TgLibraryEntry[],
+	gamesBySlug: Map<string, { slug: string; id: number }>,
+	gamesById: Map<number, { id: number; slug: string }>,
+) {
+	const resolvedByGameId = new Map<number, NonNullable<ReturnType<typeof resolveBackupEntryItem>>>();
+	let skipped = 0;
+
+	for (const item of itemsChunk) {
+		const resolved = resolveBackupEntryItem(item, gamesBySlug, gamesById);
+		if (!resolved) {
+			skipped += 1;
+			continue;
+		}
+
+		resolvedByGameId.set(resolved.gameId, resolved);
+	}
+
+	const resolved = Array.from(resolvedByGameId.values());
+	const existing = await tx.userGameEntry.findMany({
+		where: {
 			userId,
-			gameId: game.id,
-			...entryData,
+			gameId: { in: resolved.map((entry) => entry.gameId) },
 		},
 		select: {
 			id: true,
+			gameId: true,
+			addedAt: true,
 		},
 	});
+	const existingByGameId = new Map(existing.map((entry) => [entry.gameId, entry]));
 
-	await tx.userGamePlayLog.deleteMany({
-		where: {
-			userId,
-			entryId: entry.id,
-		},
-	});
-	await tx.userGameEntryTag.deleteMany({
-		where: {
-			entryId: entry.id,
-		},
-	});
+	const toCreate = resolved.filter((entry) => !existingByGameId.has(entry.gameId));
+	const created = toCreate.length
+		? await tx.userGameEntry.createManyAndReturn({
+				data: toCreate.map((entry) => ({
+					userId,
+					gameId: entry.gameId,
+					...entry.entryData,
+					addedAt: entry.entryData.addedAt ?? new Date(),
+				})),
+				select: {
+					id: true,
+					gameId: true,
+				},
+			})
+		: [];
+	const entryIdByGameId = new Map([...existingByGameId, ...created.map((entry) => [entry.gameId, entry] as const)].map(([gameId, entry]) => [gameId, entry.id]));
 
-	const tagNames = Array.from(
-		new Set(
-			(item.tags ?? [])
-				.map((tag) => tag.trim())
-				.filter(Boolean)
-				.map((tag) => tag.slice(0, 40)),
-		),
-	);
-
-	const importedLogs = (item.logs ?? [])
-		.filter((log) => Number.isFinite(log.hours) && log.hours! > 0)
-		.map((log) => ({
-			userId,
-			entryId: entry.id,
-			gameId: game.id,
-			hours: log.hours!,
-			note: log.note?.trim() || "Imported from .tg backup.",
-			skipRecap: Boolean(log.skipRecap),
-			playedAt: dateFromBackup(log.playedAt) ?? new Date(),
-			createdAt: dateFromBackup(log.createdAt) ?? new Date(),
+	const toUpdate = resolved
+		.filter((entry) => existingByGameId.has(entry.gameId))
+		.map((entry) => ({
+			id: entryIdByGameId.get(entry.gameId)!,
+			...entry.entryData,
+			addedAt: entry.entryData.addedAt ?? existingByGameId.get(entry.gameId)!.addedAt,
 		}));
+
+	if (toUpdate.length) {
+		await tx.$executeRaw`
+			UPDATE "UserGameEntry" AS entry
+			SET
+				"status" = data."status",
+				"rating" = data."rating",
+				"timePlayed" = data."timePlayed",
+				"timeMode" = data."timeMode",
+				"timeFinished" = data."timeFinished",
+				"timeMastered" = data."timeMastered",
+				"notes" = data."notes",
+				"favorite" = data."favorite",
+				"addedAt" = data."addedAt",
+				"startedAt" = data."startedAt",
+				"finishedAt" = data."finishedAt",
+				"masteredAt" = data."masteredAt"
+			FROM (
+				SELECT *
+				FROM UNNEST(
+					${toUpdate.map((entry) => entry.id)}::text[],
+					${toUpdate.map((entry) => entry.status)}::"GameStatus"[],
+					${toUpdate.map((entry) => entry.rating)}::float8[],
+					${toUpdate.map((entry) => entry.timePlayed)}::float8[],
+					${toUpdate.map((entry) => entry.timeMode)}::text[],
+					${toUpdate.map((entry) => entry.timeFinished)}::float8[],
+					${toUpdate.map((entry) => entry.timeMastered)}::float8[],
+					${toUpdate.map((entry) => entry.notes)}::text[],
+					${toUpdate.map((entry) => entry.favorite)}::bool[],
+					${toUpdate.map((entry) => entry.addedAt)}::timestamp[],
+					${toUpdate.map((entry) => entry.startedAt)}::timestamp[],
+					${toUpdate.map((entry) => entry.finishedAt)}::timestamp[],
+					${toUpdate.map((entry) => entry.masteredAt)}::timestamp[]
+				) AS data("id", "status", "rating", "timePlayed", "timeMode", "timeFinished", "timeMastered", "notes", "favorite", "addedAt", "startedAt", "finishedAt", "masteredAt")
+			) AS data
+			WHERE entry.id = data."id"
+		`;
+
+		const updatedEntryIds = toUpdate.map((entry) => entry.id);
+		await tx.userGamePlayLog.deleteMany({
+			where: {
+				userId,
+				entryId: { in: updatedEntryIds },
+			},
+		});
+		await tx.userGameEntryTag.deleteMany({
+			where: {
+				entryId: { in: updatedEntryIds },
+			},
+		});
+	}
+
+	const importedLogs = resolved.flatMap((entry) => entry.logs.map((log) => ({ ...log, entryId: entryIdByGameId.get(entry.gameId)! })));
 
 	if (importedLogs.length) {
 		await tx.userGamePlayLog.createMany({
-			data: importedLogs,
+			data: importedLogs.map((log) => ({
+				userId,
+				...log,
+			})),
 		});
 	}
 
-	return { entryId: entry.id, tagNames, logCount: importedLogs.length };
+	const entryTagNames = new Map<string, string[]>();
+	for (const entry of resolved) {
+		if (entry.tagNames.length === 0) continue;
+		entryTagNames.set(entryIdByGameId.get(entry.gameId)!, entry.tagNames);
+	}
+
+	return { imported: resolved.length, logCount: importedLogs.length, skipped, entryTagNames };
 }
 
-async function importSteamGameEntry(tx: Prisma.TransactionClient, userId: string, game: { id: number; hours: number }, playedAt: Date, skipImportedLogsRecap: boolean) {
-	const current = await tx.userGameEntry.findUnique({
+async function importSteamGameChunk(tx: Prisma.TransactionClient, userId: string, games: { id: number; hours: number }[], playedAt: Date, skipImportedLogsRecap: boolean) {
+	const existing = await tx.userGameEntry.findMany({
 		where: {
-			userId_gameId: {
-				userId,
-				gameId: game.id,
-			},
+			userId,
+			gameId: { in: games.map((game) => game.id) },
 		},
 		select: {
 			id: true,
+			gameId: true,
 			timePlayed: true,
 		},
 	});
-	const currentHours = current?.timePlayed ?? 0;
-	const hours = Math.round((game.hours - currentHours) * 10) / 10;
+	const existingByGameId = new Map(existing.map((entry) => [entry.gameId, entry]));
 
-	const entry =
-		current ??
-		(await tx.userGameEntry.create({
-			data: {
-				userId,
-				gameId: game.id,
-				timePlayed: game.hours,
-			},
-			select: {
-				id: true,
-			},
-		}));
+	const toCreate = games.filter((game) => !existingByGameId.has(game.id));
+	const created = toCreate.length
+		? await tx.userGameEntry.createManyAndReturn({
+				data: toCreate.map((game) => ({
+					userId,
+					gameId: game.id,
+					timePlayed: game.hours,
+				})),
+				select: {
+					id: true,
+					gameId: true,
+				},
+			})
+		: [];
+	const createdByGameId = new Map(created.map((entry) => [entry.gameId, entry]));
 
-	if (hours <= 0) {
-		return { imported: !current };
+	const updates = games
+		.map((game) => {
+			const current = existingByGameId.get(game.id);
+			if (!current) return null;
+
+			const hours = Math.round((game.hours - (current.timePlayed ?? 0)) * 10) / 10;
+			return { entryId: current.id, gameId: game.id, hours, timePlayed: game.hours };
+		})
+		.filter((update): update is { entryId: string; gameId: number; hours: number; timePlayed: number } => update !== null);
+	const toUpdate = updates.filter((update) => update.hours > 0);
+
+	if (toUpdate.length) {
+		await tx.$executeRaw`
+			UPDATE "UserGameEntry" AS entry
+			SET "timePlayed" = data."timePlayed"
+			FROM (
+				SELECT * FROM UNNEST(${toUpdate.map((update) => update.entryId)}::text[], ${toUpdate.map((update) => update.timePlayed)}::float8[])
+				AS data("entryId", "timePlayed")
+			) AS data
+			WHERE entry.id = data."entryId"
+		`;
 	}
 
-	if (current) {
-		await tx.userGameEntry.update({
-			where: {
-				id: current.id,
-			},
-			data: {
-				timePlayed: game.hours,
-			},
+	const importedLogs = [
+		...toCreate.map((game) => ({ gameId: game.id, entryId: createdByGameId.get(game.id)!.id, hours: game.hours })),
+		...toUpdate.map((update) => ({ gameId: update.gameId, entryId: update.entryId, hours: update.hours })),
+	].filter((log) => log.hours > 0);
+
+	if (importedLogs.length) {
+		await tx.userGamePlayLog.createMany({
+			data: importedLogs.map((log) => ({
+				userId,
+				entryId: log.entryId,
+				gameId: log.gameId,
+				hours: log.hours,
+				note: "Imported from Steam.",
+				skipRecap: skipImportedLogsRecap,
+				playedAt,
+			})),
+		});
+
+		await tx.activity.createMany({
+			data: importedLogs.map((log) => ({
+				userId,
+				type: ActivityType.LOGGED_GAME_PLAY,
+				targetType: InteractionTargetType.GAME,
+				targetId: String(log.gameId),
+				gameId: log.gameId,
+				message: "Imported from Steam.",
+			})),
 		});
 	}
 
-	await tx.userGamePlayLog.create({
-		data: {
-			userId,
-			entryId: entry.id,
-			gameId: game.id,
-			hours,
-			note: "Imported from Steam.",
-			skipRecap: skipImportedLogsRecap,
-			playedAt,
-		},
-	});
-
-	await tx.activity.create({
-		data: {
-			userId,
-			type: ActivityType.LOGGED_GAME_PLAY,
-			targetType: InteractionTargetType.GAME,
-			targetId: String(game.id),
-			gameId: game.id,
-			message: "Imported from Steam.",
-		},
-	});
-
-	return { imported: true };
+	return toCreate.length + toUpdate.length;
 }
 
 export async function getSteamProfileImportPreview(steamId: string) {
@@ -337,10 +435,7 @@ export async function importSteamLibrary(steamId: string, skipImportedLogsRecap 
 
 	await chunked(matched, 50, async (matchedChunk) => {
 		await db.$transaction(async (tx) => {
-			for (const game of matchedChunk) {
-				const result = await importSteamGameEntry(tx, userId, game, playedAt, skipImportedLogsRecap);
-				if (result.imported) imported += 1;
-			}
+			imported += await importSteamGameChunk(tx, userId, matchedChunk, playedAt, skipImportedLogsRecap);
 		});
 	});
 
@@ -479,24 +574,13 @@ export async function importTgLibrary(contents: string) {
 
 	await chunked(entries, 50, async (entriesChunk) => {
 		await db.$transaction(async (tx) => {
-			const entryTagNames = new Map<string, string[]>();
+			const result = await importBackupEntryChunk(tx, userId, entriesChunk, gamesBySlug, gamesById);
 
-			for (const item of entriesChunk) {
-				const result = await importBackupEntryItem(tx, userId, item, gamesBySlug, gamesById);
-				if (!result) {
-					skipped += 1;
-					continue;
-				}
+			imported += result.imported;
+			logs += result.logCount;
+			skipped += result.skipped;
 
-				if (result.tagNames.length > 0) {
-					entryTagNames.set(result.entryId, result.tagNames);
-				}
-
-				imported += 1;
-				logs += result.logCount;
-			}
-
-			await syncEntryTags(tx, userId, entryTagNames);
+			await syncEntryTags(tx, userId, result.entryTagNames);
 		});
 	});
 

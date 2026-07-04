@@ -1,3 +1,4 @@
+import { cache } from "react";
 import { getTagsForEntries } from "@/lib/data/library";
 import db from "@/lib/db";
 import { GameListType } from "@/lib/generated/prisma/enums";
@@ -83,7 +84,7 @@ export async function getTopLikedPlaylists() {
 	return playlists as PlaylistDisplayData[];
 }
 
-export async function getPlaylist(id: string, viewerId?: string): Promise<PlaylistData | null> {
+export const getPlaylist = cache(async (id: string, viewerId?: string): Promise<PlaylistData | null> => {
 	const playlist = await db.gameList.findFirst({
 		where: {
 			id,
@@ -121,7 +122,7 @@ export async function getPlaylist(id: string, viewerId?: string): Promise<Playli
 			userEntry: entriesByGame.get(entry.gameId) ?? null,
 		})),
 	};
-}
+});
 
 export async function getPlaylistLibraryCount(userId: string | undefined, gameIds: number[]) {
 	if (!userId || !gameIds.length) return 0;

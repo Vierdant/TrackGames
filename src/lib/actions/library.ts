@@ -2,32 +2,37 @@
 
 import { revalidatePath } from "next/cache";
 import { getCurrentUserId } from "@/lib/auth";
-import { getTagsForEntries, syncEntryTags } from "@/lib/data/library";
+import { getTagsForEntries, replaceEntryTags } from "@/lib/data/library";
 import db from "@/lib/db";
 import { ActivityType, GameStatus, InteractionTargetType } from "@/lib/generated/prisma/enums";
-import { inputError } from "@/lib/logger";
+import { inputError, logger } from "@/lib/logger";
+import type { ActionResult } from "@/lib/types";
 import { ratingToHundred } from "@/lib/util/format/rating";
 import { formDataString } from "@/lib/util/parse/formData";
 
 const DEFAULT_LOG_NOTE = "No note.";
 
-function pastDateFromInput(value: string, label: string) {
+function pastDateFromInput(value: string, label: string): Date | null | ActionResult {
 	if (!value) return null;
 
 	const date = new Date(`${value}T12:00:00`);
 
 	if (Number.isNaN(date.getTime())) {
-		throw new TypeError(`Invalid ${label} date.`);
+		return inputError(`Invalid ${label} date.`);
 	}
 
 	const today = new Date();
 	today.setHours(23, 59, 59, 999);
 
 	if (date > today) {
-		throw new Error(`${label} date cannot be in the future.`);
+		return inputError(`${label} date cannot be in the future.`);
 	}
 
 	return date;
+}
+
+function optionalNonNegativeNumber(value: string) {
+	return value ? Math.max(0, Number(value)) : null;
 }
 
 export async function addGameToLibrary(gameId: number, gameSlug: string) {
@@ -74,7 +79,7 @@ export async function setGameLibraryStatus(gameId: number, gameSlug: string, sta
 	const userId = await getCurrentUserId();
 
 	if (!Object.values(GameStatus).includes(status)) {
-		throw new Error("Invalid game status.");
+		return inputError("Invalid game status.");
 	}
 
 	const current = await db.userGameEntry.findUnique({
@@ -179,13 +184,16 @@ export async function updateUserGameEntry(entryId: string, formData: FormData) {
 	}
 
 	const rating = ratingValue ? (ratingToHundred(Number(ratingValue)) ?? null) : null;
-	const manualTime = timePlayedValue ? Math.max(0, Number(timePlayedValue)) : null;
-	const finishedTime = timeFinishedValue ? Math.max(0, Number(timeFinishedValue)) : null;
-	const masteredTime = timeMasteredValue ? Math.max(0, Number(timeMasteredValue)) : null;
+	const manualTime = optionalNonNegativeNumber(timePlayedValue);
+	const finishedTime = optionalNonNegativeNumber(timeFinishedValue);
+	const masteredTime = optionalNonNegativeNumber(timeMasteredValue);
 	const safeFinishedTime = Number.isFinite(finishedTime) ? finishedTime : null;
 	const safeMasteredTime = Number.isFinite(masteredTime) ? masteredTime : null;
 	const finishedAt = pastDateFromInput(finishedAtValue, "Finished");
+	if (finishedAt && "error" in finishedAt) return finishedAt;
+
 	const masteredAt = pastDateFromInput(masteredAtValue, "Mastered");
+	if (masteredAt && "error" in masteredAt) return masteredAt;
 
 	const current = await db.userGameEntry.findUnique({
 		where: {
@@ -207,7 +215,7 @@ export async function updateUserGameEntry(entryId: string, formData: FormData) {
 	});
 
 	if (!current) {
-		throw new Error("Library entry not found.");
+		return inputError("Library entry not found.");
 	}
 
 	const logTime = current.logs.reduce((total, log) => total + log.hours, 0);
@@ -216,7 +224,7 @@ export async function updateUserGameEntry(entryId: string, formData: FormData) {
 	const hasMasteredTime = Number.isFinite(masteredTime) && masteredTime != null && masteredTime > 0;
 
 	if (mastered && !hasTimePlayed && !hasMasteredTime) {
-		throw new Error("Time played or mastered time is required before marking a game as mastered.");
+		return inputError("Time played or mastered time is required before marking a game as mastered.");
 	}
 
 	const entry = await db.$transaction(async (tx) => {
@@ -247,15 +255,7 @@ export async function updateUserGameEntry(entryId: string, formData: FormData) {
 		});
 
 		if (updateTags) {
-			await tx.userGameEntryTag.deleteMany({
-				where: {
-					entryId,
-				},
-			});
-
-			if (tagNames.length > 0) {
-				await syncEntryTags(tx, userId, new Map([[entryId, tagNames]]));
-			}
+			await replaceEntryTags(tx, userId, entryId, tagNames);
 		}
 
 		return updated;
@@ -306,7 +306,7 @@ export async function createUserGamePlayLog(entryId: string, formData: FormData)
 	});
 
 	if (!current) {
-		throw new Error("Library entry not found.");
+		return inputError("Library entry not found.");
 	}
 
 	const entry = await db.$transaction(async (tx) => {
@@ -396,64 +396,72 @@ export async function updateUserGamePlayLog(logId: string, formData: FormData) {
 		return inputError("Invalid played date.");
 	}
 
-	const entry = await db.$transaction(async (tx) => {
-		const log = await tx.userGamePlayLog.update({
-			where: {
-				id: logId,
-				userId,
-			},
-			data: {
-				playedAt,
-				hours,
-				note,
-				skipRecap,
-			},
-			select: {
-				entryId: true,
-			},
-		});
+	let entry;
 
-		const current = await tx.userGameEntry.findUnique({
-			where: {
-				id: log.entryId,
-				userId,
-			},
-			select: {
-				timeMode: true,
-			},
-		});
+	try {
+		entry = await db.$transaction(async (tx) => {
+			const log = await tx.userGamePlayLog.update({
+				where: {
+					id: logId,
+					userId,
+				},
+				data: {
+					playedAt,
+					hours,
+					note,
+					skipRecap,
+				},
+				select: {
+					entryId: true,
+				},
+			});
 
-		if (!current) {
-			throw new Error("Library entry not found.");
-		}
+			const current = await tx.userGameEntry.findUnique({
+				where: {
+					id: log.entryId,
+					userId,
+				},
+				select: {
+					timeMode: true,
+				},
+			});
 
-		const loggedTime = await tx.userGamePlayLog.aggregate({
-			where: {
-				entryId: log.entryId,
-			},
-			_sum: {
-				hours: true,
-			},
-		});
+			if (!current) {
+				throw new Error("Library entry not found.");
+			}
 
-		return tx.userGameEntry.update({
-			where: {
-				id: log.entryId,
-				userId,
-			},
-			data: {
-				timePlayed: current.timeMode === "logs" ? (loggedTime._sum.hours ?? null) : undefined,
-			},
-			include: {
-				game: true,
-				logs: {
-					orderBy: {
-						createdAt: "desc",
+			const loggedTime = await tx.userGamePlayLog.aggregate({
+				where: {
+					entryId: log.entryId,
+				},
+				_sum: {
+					hours: true,
+				},
+			});
+
+			return tx.userGameEntry.update({
+				where: {
+					id: log.entryId,
+					userId,
+				},
+				data: {
+					timePlayed: current.timeMode === "logs" ? (loggedTime._sum.hours ?? null) : undefined,
+				},
+				include: {
+					game: true,
+					logs: {
+						orderBy: {
+							createdAt: "desc",
+						},
 					},
 				},
-			},
+			});
 		});
-	});
+	} catch (error) {
+		logger.error("library", "updateUserGamePlayLog transaction failed", error);
+		return inputError("Library entry not found.");
+	}
+
 	const tags = await getTagsForEntries([entry.id]);
 
 	revalidatePath("/library/[slug]", "page");
@@ -466,58 +474,66 @@ export async function updateUserGamePlayLog(logId: string, formData: FormData) {
 
 export async function deleteUserGamePlayLog(logId: string) {
 	const userId = await getCurrentUserId();
-	const entry = await db.$transaction(async (tx) => {
-		const log = await tx.userGamePlayLog.delete({
-			where: {
-				id: logId,
-				userId,
-			},
-			select: {
-				entryId: true,
-			},
-		});
+	let entry;
 
-		const current = await tx.userGameEntry.findUnique({
-			where: {
-				id: log.entryId,
-				userId,
-			},
-			select: {
-				timeMode: true,
-			},
-		});
+	try {
+		entry = await db.$transaction(async (tx) => {
+			const log = await tx.userGamePlayLog.delete({
+				where: {
+					id: logId,
+					userId,
+				},
+				select: {
+					entryId: true,
+				},
+			});
 
-		if (!current) {
-			throw new Error("Library entry not found.");
-		}
+			const current = await tx.userGameEntry.findUnique({
+				where: {
+					id: log.entryId,
+					userId,
+				},
+				select: {
+					timeMode: true,
+				},
+			});
 
-		const loggedTime = await tx.userGamePlayLog.aggregate({
-			where: {
-				entryId: log.entryId,
-			},
-			_sum: {
-				hours: true,
-			},
-		});
+			if (!current) {
+				throw new Error("Library entry not found.");
+			}
 
-		return tx.userGameEntry.update({
-			where: {
-				id: log.entryId,
-				userId,
-			},
-			data: {
-				timePlayed: current.timeMode === "logs" ? (loggedTime._sum.hours ?? null) : undefined,
-			},
-			include: {
-				game: true,
-				logs: {
-					orderBy: {
-						createdAt: "desc",
+			const loggedTime = await tx.userGamePlayLog.aggregate({
+				where: {
+					entryId: log.entryId,
+				},
+				_sum: {
+					hours: true,
+				},
+			});
+
+			return tx.userGameEntry.update({
+				where: {
+					id: log.entryId,
+					userId,
+				},
+				data: {
+					timePlayed: current.timeMode === "logs" ? (loggedTime._sum.hours ?? null) : undefined,
+				},
+				include: {
+					game: true,
+					logs: {
+						orderBy: {
+							createdAt: "desc",
+						},
 					},
 				},
-			},
+			});
 		});
-	});
+	} catch (error) {
+		logger.error("library", "deleteUserGamePlayLog transaction failed", error);
+		return inputError("Library entry not found.");
+	}
+
 	const tags = await getTagsForEntries([entry.id]);
 
 	revalidatePath("/library/[slug]", "page");

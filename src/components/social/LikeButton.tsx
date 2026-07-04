@@ -3,9 +3,9 @@
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { Heart } from "lucide-react";
-import { joinClass } from "@/app/_util/func";
 import { toggleLike } from "@/lib/actions/social";
 import { type LikeTargetType } from "@/lib/generated/prisma/enums";
+import { joinClass } from "@/lib/util/client/func";
 
 type LikeButtonProps = Readonly<{
 	targetType: LikeTargetType;

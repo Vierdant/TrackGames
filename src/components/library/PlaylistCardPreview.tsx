@@ -3,12 +3,12 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Edit3, NotebookText } from "lucide-react";
-import { formLabel, joinClass } from "@/app/_util/func";
 import StarRating from "@/components/game/StarRating";
 import { GhostButton } from "@/components/ui/Buttons";
 import type { UserLibraryEntryWithTags } from "@/lib/data/library";
 import { ImageIdToURL } from "@/lib/external/igdb/util";
 import { GameStatus } from "@/lib/generated/prisma/enums";
+import { formLabel, joinClass } from "@/lib/util/client/func";
 import { ratingToFive } from "@/lib/util/format/rating";
 
 type PlaylistCardPreviewProps = Readonly<{

@@ -2,10 +2,10 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { ChevronLeft, ChevronRight, Play } from "lucide-react";
-import { joinClass, stepIndex } from "@/app/_util/func";
+import { Play } from "lucide-react";
 import HorizontalScroller from "@/components/layout/HorizontalScroller";
 import { ImageIdToURL } from "@/lib/external/igdb/util";
+import { joinClass } from "@/lib/util/client/func";
 
 type MediaItem =
 	| {
@@ -27,39 +27,33 @@ export default function MediaGallery({ media }: Readonly<{ media: MediaItem[] }>
 
 	return (
 		<div className="w-full max-w-full min-w-0 overflow-hidden">
-			<div className="relative mb-4 aspect-video overflow-hidden rounded-md bg-black/50">
-				{activeItem.type === "video" ? (
-					<iframe src={`https://www.youtube-nocookie.com/embed/${activeItem.id}`} title="Game video" className="h-full w-full" allowFullScreen />
-				) : (
-					<Image
-						src={`https://images.igdb.com/igdb/image/upload/t_screenshot_big/${activeItem.id}.jpg`}
-						alt=""
-						fill
-						sizes="(min-width: 1024px) 768px, calc(100vw - 2rem)"
-						className="object-cover"
-					/>
+			<HorizontalScroller
+				className="mb-4 aspect-video rounded-md bg-black/50 [&>div]:h-full [&>div]:w-full [&>div]:gap-0 [&>div>div]:w-full"
+				selectedIndex={mediaActive}
+				onSelectedIndexChange={setMediaActive}
+			>
+				{media.map((item) =>
+					item.type === "video" ? (
+						<iframe
+							key={`${item.type}-${item.id}`}
+							src={`https://www.youtube-nocookie.com/embed/${item.id}`}
+							title="Game video"
+							className="h-full w-full"
+							allowFullScreen
+						/>
+					) : (
+						<Image
+							key={`${item.type}-${item.id}`}
+							src={`https://images.igdb.com/igdb/image/upload/t_screenshot_big/${item.id}.jpg`}
+							alt=""
+							width={1280}
+							height={720}
+							sizes="(min-width: 1024px) 768px, calc(100vw - 2rem)"
+							className="h-full w-full object-cover"
+						/>
+					),
 				)}
-				{mediaActive > 0 && (
-					<button
-						type="button"
-						aria-label="Show previous media"
-						onClick={() => setMediaActive(stepIndex(mediaActive, -1, media.length, "clamp"))}
-						className="absolute top-1/2 left-3 z-10 grid size-10 -translate-y-1/2 cursor-pointer place-items-center"
-					>
-						<ChevronLeft size={30} strokeWidth={3} />
-					</button>
-				)}
-				{mediaActive < media.length - 1 && (
-					<button
-						type="button"
-						aria-label="Show next media"
-						onClick={() => setMediaActive(stepIndex(mediaActive, 1, media.length, "clamp"))}
-						className="absolute top-1/2 right-3 z-10 grid size-10 -translate-y-1/2 cursor-pointer place-items-center"
-					>
-						<ChevronRight size={30} strokeWidth={3} />
-					</button>
-				)}
-			</div>
+			</HorizontalScroller>
 
 			<div className="pb-2">
 				<HorizontalScroller className="w-full max-w-full min-w-0 gap-3 px-0" selectedIndex={mediaActive} onSelectedIndexChange={setMediaActive}>

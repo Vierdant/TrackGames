@@ -1,5 +1,6 @@
 import fs from "node:fs/promises";
 import path from "node:path";
+import { logger } from "@/lib/logger";
 
 const CACHE_DIR = path.join(process.cwd(), ".cache");
 
@@ -10,7 +11,11 @@ export async function readDiskCache<T>(key: string): Promise<T | null> {
 
 		return JSON.parse(raw) as T;
 	} catch (error: unknown) {
-		console.error("Corrupted cache: " + key, error);
+		if (error instanceof Error && "code" in error && error.code === "ENOENT") {
+			return null;
+		}
+
+		logger.error("diskCache", "Corrupted cache: " + key, error);
 		return null;
 	}
 }

@@ -2,13 +2,13 @@
 
 import type { Dispatch, SetStateAction } from "react";
 import { Plus, X } from "lucide-react";
-import { formLabel } from "@/app/_util/func";
 import StarRating from "@/components/game/StarRating";
 import { timeModeLabel } from "@/components/library/_playlist-editor/shared";
 import { GhostButton, PrimaryButton } from "@/components/ui/Buttons";
 import { Checkbox, Select, Textarea } from "@/components/ui/Inputs";
 import type { UserLibraryEntryWithTags } from "@/lib/data/library";
 import { GameStatus } from "@/lib/generated/prisma/enums";
+import { formLabel } from "@/lib/util/client/func";
 
 type EntryTabProps = Readonly<{
 	entry: UserLibraryEntryWithTags;

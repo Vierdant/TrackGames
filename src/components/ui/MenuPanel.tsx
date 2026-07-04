@@ -3,8 +3,8 @@
 import type { CSSProperties, ReactNode, RefObject } from "react";
 import { useEffect, useRef, useState } from "react";
 import { X } from "lucide-react";
-import { joinClass } from "@/app/_util/func";
 import HighLevelIsland from "@/components/ui/HighLevelIsland";
+import { joinClass } from "@/lib/util/client/func";
 
 type MenuPanelProps = Readonly<{
 	open: boolean;
@@ -93,7 +93,8 @@ export default function MenuPanel({
 				variant === "modal"
 					? "pointer-events-auto max-h-[calc(100vh-2rem)] w-[min(var(--menu-panel-width,32rem),calc(100vw-2rem))] max-w-none overflow-y-auto rounded bg-bg p-5 shadow-main"
 					: "pointer-events-auto absolute top-full right-0 z-50 mt-3 w-80 rounded border border-border bg-bg p-2 text-sm shadow-main",
-				`${open ? "animate-menu-panel-in" : "animate-menu-panel-out"} ${panelClassName ?? ""}`,
+				open ? "animate-menu-panel-in" : "animate-menu-panel-out",
+				panelClassName,
 			)}
 		>
 			{(title || shouldShowClose) && (
@@ -124,7 +125,8 @@ export default function MenuPanel({
 				open
 				className={joinClass(
 					"pointer-events-auto fixed inset-0 m-0 flex h-dvh max-h-none w-dvw max-w-none items-center justify-center border-0 bg-overlay p-4",
-					`${open ? "animate-menu-overlay-in" : "animate-menu-overlay-out"} ${className ?? ""}`,
+					open ? "animate-menu-overlay-in" : "animate-menu-overlay-out",
+					className,
 				)}
 				onPointerDown={(event) => {
 					if (event.target === event.currentTarget) onClose();

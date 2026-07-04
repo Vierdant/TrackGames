@@ -1,4 +1,3 @@
-import "server-only";
 import { type ActionResult } from "@/lib/types";
 
 type Level = "debug" | "info" | "warn" | "error";

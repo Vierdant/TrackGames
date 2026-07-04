@@ -1,7 +1,6 @@
 import { Suspense } from "react";
 import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
-import { profileThemeStyle } from "@/app/_util/theme";
 import ActivityList from "@/app/(user)/u/[user]/ActivityList";
 import FollowerPreviewPanel from "@/app/(user)/u/[user]/FollowerPreviewPanel";
 import ProfilePlaylists from "@/app/(user)/u/[user]/ProfilePlaylists";
@@ -18,6 +17,7 @@ import { auth } from "@/lib/auth";
 import { getProfileSocialState, getUserBadges } from "@/lib/data/social";
 import { getPublicUser, getUser, isFollower } from "@/lib/data/user";
 import { InteractionTargetType } from "@/lib/generated/prisma/enums";
+import { profileThemeStyle } from "@/lib/util/client/theme";
 import { absoluteUrl, metadataDescription, robotsForPrivacy, SITE_NAME } from "@/lib/util/metadata";
 import { parseWidgets } from "@/lib/util/parse/widgets";
 import { checkPublicPrivacy, shouldHideComments } from "@/lib/util/privacy";
@@ -41,9 +41,7 @@ export default async function Page({ params, searchParams }: UserPageProps) {
 
 	if (!canViewProfile) return <PrivateDisplay canBackOption message={`${profile.name}'s profile is private`} />;
 
-	const socialState = await getProfileSocialState(profile.id);
-	const badges = await getUserBadges(profile.id);
-	const viewer = await getUser(session?.user);
+	const [socialState, badges, viewer] = await Promise.all([getProfileSocialState(profile.id), getUserBadges(profile.id), getUser(session?.user)]);
 	const profileWidgets = parseWidgets(profile.widgets);
 
 	const canViewActivity = checkPublicPrivacy(profile.activityPrivacy, isOwnProfile, isFollowingOwner);

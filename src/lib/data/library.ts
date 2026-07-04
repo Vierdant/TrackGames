@@ -1,3 +1,4 @@
+import { cache } from "react";
 import type { Game } from "@/lib/data/games";
 import db from "@/lib/db";
 import type { Prisma } from "@/lib/generated/prisma/client";
@@ -119,6 +120,19 @@ export async function syncEntryTags(tx: Prisma.TransactionClient, userId: string
 	});
 }
 
+/** Clears an entry's existing tags and replaces them with `tagNames`. */
+export async function replaceEntryTags(tx: Prisma.TransactionClient, userId: string, entryId: string, tagNames: string[]) {
+	await tx.userGameEntryTag.deleteMany({
+		where: {
+			entryId,
+		},
+	});
+
+	if (tagNames.length > 0) {
+		await syncEntryTags(tx, userId, new Map([[entryId, tagNames]]));
+	}
+}
+
 export async function getUserGameEntries(userId: string): Promise<UserLibraryEntryWithTags[]> {
 	const entries = await db.userGameEntry.findMany({
 		where: {
@@ -237,7 +251,7 @@ const gameListSelect = {
 	},
 };
 
-export async function ensureAndGetUserLibrary(slug: string) {
+export const ensureAndGetUserLibrary = cache(async (slug: string) => {
 	const user = await db.user.findFirst({
 		where: {
 			name: slug,
@@ -271,7 +285,7 @@ export async function ensureAndGetUserLibrary(slug: string) {
 		},
 		select: gameListSelect,
 	});
-}
+});
 
 export async function getUserLibraryGamesByIds(userId: string, ids: number[]): Promise<Game[]> {
 	if (!ids.length) return [];

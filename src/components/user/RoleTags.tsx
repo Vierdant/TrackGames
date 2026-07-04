@@ -1,5 +1,5 @@
-import { joinClass } from "@/app/_util/func";
 import { type UserRole } from "@/lib/generated/prisma/enums";
+import { joinClass } from "@/lib/util/client/func";
 
 const roleClasses: Record<UserRole, string> = {
 	ADMIN: "border-error/40 bg-error/15 text-error",

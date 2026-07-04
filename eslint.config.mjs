@@ -28,6 +28,7 @@ const eslintConfig = defineConfig([
 			"import/no-duplicates": "error",
 			"import/no-self-import": "error",
 			"import/no-useless-path-segments": "warn",
+			"import/no-cycle": "error",
 
 			"@typescript-eslint/consistent-type-imports": [
 				"error",

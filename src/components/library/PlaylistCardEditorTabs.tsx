@@ -1,7 +1,6 @@
 "use client";
 
 import type { Dispatch, SetStateAction } from "react";
-import { joinClass } from "@/app/_util/func";
 import SubTabs from "@/components/layout/SubTabs";
 import EntryTab from "@/components/library/_playlist-editor/EntryTab";
 import HistoryTab from "@/components/library/_playlist-editor/HistoryTab";
@@ -10,6 +9,7 @@ import type { EditorTab } from "@/components/library/_playlist-editor/shared";
 import TimeTab from "@/components/library/_playlist-editor/TimeTab";
 import type { UserLibraryEntryWithTags } from "@/lib/data/library";
 import type { GameStatus } from "@/lib/generated/prisma/enums";
+import { joinClass } from "@/lib/util/client/func";
 
 export { timeModeLabel } from "@/components/library/_playlist-editor/shared";
 export type { EditorTab } from "@/components/library/_playlist-editor/shared";

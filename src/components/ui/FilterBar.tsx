@@ -3,8 +3,8 @@
 import type { ReactNode } from "react";
 import { useRouter } from "next/navigation";
 import { Search } from "lucide-react";
-import { joinClass } from "@/app/_util/func";
 import { Input, Select } from "@/components/ui/Inputs";
+import { joinClass } from "@/lib/util/client/func";
 
 type Filter =
 	| {

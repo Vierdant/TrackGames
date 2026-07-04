@@ -2,7 +2,7 @@
 
 import { Children, type ReactNode, useEffect, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { joinClass, stepIndex } from "@/app/_util/func";
+import { joinClass, stepIndex } from "@/lib/util/client/func";
 
 type GallaryMode = "slide" | "fade";
 

@@ -2,7 +2,7 @@
 
 import { type Dispatch, type ReactNode, type SetStateAction } from "react";
 import { ArrowRight } from "lucide-react";
-import { joinClass } from "@/app/_util/func";
+import { joinClass } from "@/lib/util/client/func";
 
 type SubTabsProps = Readonly<{
 	tabs: { id: string; label: string }[];

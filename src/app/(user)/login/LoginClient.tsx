@@ -3,11 +3,11 @@
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Eye, EyeOff, Lock, Mail, User } from "lucide-react";
-import { deferHook } from "@/app/_util/func";
 import { DiscordIcon, GithubIcon, GoogleIcon, TwitchIcon } from "@/components/SVG";
 import { GhostButton } from "@/components/ui/Buttons";
 import MenuPanel from "@/components/ui/MenuPanel";
 import { login, loginProvider, signup } from "@/lib/actions/auth";
+import { deferHook } from "@/lib/util/client/func";
 
 const providers = [
 	{ name: "Google", icon: GoogleIcon, slug: "google" },
@@ -144,7 +144,7 @@ export default function LoginClient() {
 								autoComplete="username"
 								placeholder="Your display name"
 								maxLength={32}
-								pattern="[A-Za-z0-9_-]+"
+								pattern="[A-Za-z0-9_\-]+"
 								value={name}
 								onChange={(event) => setName(event.target.value)}
 								aria-invalid={Boolean(fieldErrors.name)}
@@ -291,7 +291,7 @@ export default function LoginClient() {
 								autoComplete="username"
 								placeholder="profile-name"
 								maxLength={32}
-								pattern="[A-Za-z0-9_-]+"
+								pattern="[A-Za-z0-9_\-]+"
 								value={providerUsername}
 								onChange={(event) => {
 									setProviderUsername(event.target.value);

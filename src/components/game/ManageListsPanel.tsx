@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 import { Plus, X } from "lucide-react";
-import { joinClass } from "@/app/_util/func";
 import MenuPanel from "@/components/ui/MenuPanel";
+import { joinClass } from "@/lib/util/client/func";
 
 type UserPlaylist = {
 	id: string;

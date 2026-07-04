@@ -3,13 +3,14 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import * as z from "zod";
+import { deleteActivityForGameList } from "@/lib/actions/social";
 import { getCurrentUserId, signOut } from "@/lib/auth";
 import { usernameSchema } from "@/lib/constants";
 import db from "@/lib/db";
 import { Prisma } from "@/lib/generated/prisma/client";
 import { ActivityType } from "@/lib/generated/prisma/enums";
 import { inputError } from "@/lib/logger";
-import { LinkType } from "@/lib/types";
+import { type ActionResult, LinkType } from "@/lib/types";
 import { hashPassword, verifyPassword } from "@/lib/util/server/password";
 
 type SocialLinkValue = {
@@ -81,7 +82,18 @@ const socialLinksSchema = z
 				)
 				.max(20)
 				.parse(parsed);
-			const normalized = socialLinks.map(validateSocialLink).filter((item): item is SocialLinkValue => item !== null);
+			const normalized: SocialLinkValue[] = [];
+
+			for (const link of socialLinks) {
+				const result = validateSocialLink(link);
+
+				if (result && "error" in result) {
+					ctx.addIssue({ code: "custom", message: result.error });
+					return z.NEVER;
+				}
+
+				if (result) normalized.push(result);
+			}
 
 			return normalized.length > 0 ? JSON.stringify(normalized) : null;
 		} catch {
@@ -129,12 +141,12 @@ const settingsSchema = z.object({
 	passwordConfirm: z.string().max(128).optional(),
 });
 
-function validateSocialLink(item: SocialLinkValue): SocialLinkValue | null {
+function validateSocialLink(item: SocialLinkValue): SocialLinkValue | null | ActionResult {
 	if (!item.value) return null;
 
 	if (item.kind === LinkType.COPY) {
 		if (item.value.length > 100) {
-			throw new Error("Copy values must be 100 characters or fewer.");
+			return inputError("Copy values must be 100 characters or fewer.");
 		}
 
 		return { platform: item.platform, kind: item.kind, value: item.value };
@@ -143,7 +155,7 @@ function validateSocialLink(item: SocialLinkValue): SocialLinkValue | null {
 	const url = new URL(item.value);
 
 	if (url.protocol !== "https:") {
-		throw new Error("Only HTTPS URLs are allowed.");
+		return inputError("Only HTTPS URLs are allowed.");
 	}
 
 	return { platform: item.platform, kind: item.kind, value: item.value };
@@ -157,13 +169,16 @@ async function getConfirmedUser(confirmName: string) {
 	});
 
 	if (!user?.name || confirmName !== user.name) {
-		throw new Error("Username confirmation did not match.");
+		return inputError("Username confirmation did not match.");
 	}
 
 	return user;
 }
 
 async function clearAccountData(userId: string) {
+	const lists = await db.gameList.findMany({ where: { userId }, select: { id: true } });
+	const listCleanup = await Promise.all(lists.map((list) => deleteActivityForGameList(db, list.id)));
+
 	await db.$transaction([
 		db.notification.deleteMany({
 			where: {
@@ -179,6 +194,7 @@ async function clearAccountData(userId: string) {
 		db.like.deleteMany({ where: { userId } }),
 		db.activity.deleteMany({ where: { userId } }),
 		db.comment.deleteMany({ where: { userId } }),
+		...listCleanup.flat(),
 		db.gameList.deleteMany({ where: { userId } }),
 		db.userGameEntry.deleteMany({ where: { userId } }),
 	]);
@@ -298,7 +314,7 @@ export async function updateUserSettings(tabValue: string, formData: FormData) {
 	const tabResult = tabSchema.safeParse(tabValue);
 
 	if (!tabResult.success) {
-		redirect("/settings?error=invalid-tab");
+		return inputError("Invalid tab. Refresh the page or report to an admin.");
 	}
 
 	const tab = tabResult.data;
@@ -306,11 +322,11 @@ export async function updateUserSettings(tabValue: string, formData: FormData) {
 	const parsedValues = settingsSchema.safeParse(Object.fromEntries(formData));
 
 	if (tab === "profile" && !usernameSchema.safeParse(formData.get("name")).success) {
-		return inputError("Invalid username.");
+		return inputError("Invalid username. Check the fields and try again.");
 	}
 
 	if (!parsedValues.success) {
-		return inputError("Invalid input.");
+		return inputError("Some settings were invalid. Check the fields and try again.");
 	}
 
 	const values = parsedValues.data;
@@ -337,11 +353,14 @@ export async function updateUserSettings(tabValue: string, formData: FormData) {
 	revalidatePath("/", "layout");
 	revalidatePath("/settings");
 	revalidatePath("/u/[user]", "page");
-	redirect(`/settings?tab=${tab}&saved=1`);
 }
 
 export async function clearUserLibrary(confirmName: string) {
 	const user = await getConfirmedUser(confirmName);
+
+	if ("error" in user) {
+		return user;
+	}
 
 	await db.$transaction([
 		db.activity.deleteMany({
@@ -364,6 +383,10 @@ export async function clearUserLibrary(confirmName: string) {
 
 export async function resetUserAccountData(confirmName: string) {
 	const user = await getConfirmedUser(confirmName);
+
+	if ("error" in user) {
+		return user;
+	}
 
 	await clearAccountData(user.id);
 	await db.user.update({
@@ -408,6 +431,10 @@ export async function resetUserAccountData(confirmName: string) {
 
 export async function deleteUserAccount(confirmName: string) {
 	const user = await getConfirmedUser(confirmName);
+
+	if ("error" in user) {
+		return user;
+	}
 
 	await db.notification.deleteMany({
 		where: {

@@ -3,25 +3,39 @@
 import { useEffect, useRef } from "react";
 import { formatNumber } from "@/lib/util/format/numbers";
 
-export default function IncrementedNumber({ start = 0, value, duration = 1000 }: Readonly<{ start?: number; value: number; duration?: number }>) {
+export default function IncrementedNumber({
+	start = 0,
+	value,
+	duration = 1000,
+	chunked = false,
+}: Readonly<{ start?: number; value: number; duration?: number; chunked?: boolean | number }>) {
 	const elementRef = useRef(null);
 
 	useEffect(() => {
-		animateValue(elementRef.current!, start, value, duration);
-	}, [duration, start, value]);
+		animateValue(elementRef.current!, start, value, duration, chunked);
+	}, [duration, start, value, chunked]);
 
-	return <span ref={elementRef}>{start.toLocaleString("en", { maximumFractionDigits: 1 })}</span>;
+	return <span ref={elementRef}>{formatNumber(start)}</span>;
 }
 
-function animateValue(obj: HTMLElement, start: number, value: number, duration: number) {
+function chunkStep(value: number) {
+	if (value < 10) return 1;
+	return 10 ** Math.floor(Math.log10(value));
+}
+
+function animateValue(obj: HTMLElement, start: number, value: number, duration: number, chunked: boolean | number) {
+	let step = 0;
+	if (chunked === true) step = chunkStep(value);
+	else if (chunked !== false) step = chunked;
 	let startTimestamp: number | null = null;
-	const step = (timestamp: number) => {
+	const tick = (timestamp: number) => {
 		if (!startTimestamp) startTimestamp = timestamp;
 		const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-		obj.innerHTML = formatNumber(Math.floor(progress * (value - start) + start));
+		const current = progress * (value - start) + start;
+		obj.innerHTML = formatNumber(chunked ? Math.min(Math.ceil(current / step) * step, value) : Math.floor(current));
 		if (progress < 1) {
-			globalThis.requestAnimationFrame(step);
+			globalThis.requestAnimationFrame(tick);
 		}
 	};
-	globalThis.requestAnimationFrame(step);
+	globalThis.requestAnimationFrame(tick);
 }

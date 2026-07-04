@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { profileThemeStyle } from "@/app/_util/theme";
 import AddPlaylistGameForm from "@/app/(library)/playlist/[id]/AddPlaylistGameForm";
 import TierLabelsForm from "@/app/(library)/playlist/[id]/TierLabelsForm";
 import CommentSection from "@/components/comments/CommentSection";
@@ -17,8 +16,8 @@ import { auth } from "@/lib/auth";
 import { getPlaylist, getPlaylistLibraryCount } from "@/lib/data/playlists";
 import { getPlaylistLikeState } from "@/lib/data/social";
 import { getUser, isFollower } from "@/lib/data/user";
-import db from "@/lib/db";
-import { GameListType, InteractionTargetType, LikeTargetType } from "@/lib/generated/prisma/enums";
+import { InteractionTargetType, LikeTargetType } from "@/lib/generated/prisma/enums";
+import { profileThemeStyle } from "@/lib/util/client/theme";
 import { absoluteUrl, metadataDescription, robotsForPrivacy, SITE_NAME } from "@/lib/util/metadata";
 import { checkPublicPrivacy, shouldHideComments } from "@/lib/util/privacy";
 
@@ -135,22 +134,7 @@ export default async function Page({ params }: Readonly<{ params: Promise<{ id: 
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
 	const { id } = await params;
-	const playlist = await db.gameList.findFirst({
-		where: {
-			id,
-			type: GameListType.PLAYLIST,
-		},
-		select: {
-			name: true,
-			description: true,
-			privacy: true,
-			user: {
-				select: {
-					name: true,
-				},
-			},
-		},
-	});
+	const playlist = await getPlaylist(id);
 	const title = playlist?.name ? `${playlist.name} Playlist` : "Playlist not found";
 	const description = metadataDescription(
 		playlist?.description,

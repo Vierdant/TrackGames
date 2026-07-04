@@ -3,7 +3,7 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { joinClass } from "@/app/_util/func";
+import { joinClass } from "@/lib/util/client/func";
 
 type PaginationControlsProps = Readonly<{
 	page: number;

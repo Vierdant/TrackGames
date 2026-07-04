@@ -1,4 +1,5 @@
 import type { SVGProps } from "react";
+import { joinClass } from "@/lib/util/client/func";
 
 type ImageProps = SVGProps<SVGSVGElement> & {
 	title?: string;
@@ -18,7 +19,7 @@ export function HeroImage({ title, className, ...props }: ImageProps) {
 			role={title ?? undefined}
 			aria-hidden={title ? undefined : true}
 			aria-label={title}
-			className={["h-auto w-full", className].filter(Boolean).join(" ")}
+			className={joinClass("h-auto w-full", className)}
 			{...props}
 		>
 			<path

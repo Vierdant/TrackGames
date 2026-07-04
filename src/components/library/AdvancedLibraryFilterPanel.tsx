@@ -2,10 +2,10 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Search, X } from "lucide-react";
-import { deferHook, formLabel, joinClass } from "@/app/_util/func";
 import { GhostButton, PrimaryButton } from "@/components/ui/Buttons";
 import { Input, Select } from "@/components/ui/Inputs";
 import { GameStatus } from "@/lib/generated/prisma/enums";
+import { deferHook, formLabel, joinClass } from "@/lib/util/client/func";
 
 type AdvancedLibraryFilterPanelProps = Readonly<{
 	open: boolean;

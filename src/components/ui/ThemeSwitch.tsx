@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Moon, Sun } from "lucide-react";
-import { deferHook, joinClass } from "@/app/_util/func";
+import { deferHook, joinClass } from "@/lib/util/client/func";
 
 type ThemeSwitchProps = Readonly<{
 	className?: string;

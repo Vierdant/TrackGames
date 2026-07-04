@@ -22,33 +22,31 @@ export async function getComments(targetType: InteractionTargetType, targetId: s
 		},
 	});
 
-	const likes = await db.like.groupBy({
-		by: ["commentId"],
-		where: {
-			commentId: {
-				in: comments.map((comment) => comment.id),
+	const [likes, userLikes, ratings] = await Promise.all([
+		db.like.groupBy({
+			by: ["commentId"],
+			where: {
+				commentId: {
+					in: comments.map((comment) => comment.id),
+				},
 			},
-		},
-		_count: true,
-	});
-
-	const userLikes = userId
-		? await db.like.findMany({
-				where: {
-					userId,
-					commentId: {
-						in: comments.map((comment) => comment.id),
+			_count: true,
+		}),
+		userId
+			? db.like.findMany({
+					where: {
+						userId,
+						commentId: {
+							in: comments.map((comment) => comment.id),
+						},
 					},
-				},
-				select: {
-					commentId: true,
-				},
-			})
-		: [];
-
-	const ratings =
+					select: {
+						commentId: true,
+					},
+				})
+			: Promise.resolve([]),
 		targetType === InteractionTargetType.GAME
-			? await db.userGameEntry.findMany({
+			? db.userGameEntry.findMany({
 					where: {
 						gameId: Number(targetId),
 						userId: {
@@ -60,7 +58,8 @@ export async function getComments(targetType: InteractionTargetType, targetId: s
 						rating: true,
 					},
 				})
-			: [];
+			: Promise.resolve([]),
+	]);
 
 	return comments.map((comment) => ({
 		...comment,

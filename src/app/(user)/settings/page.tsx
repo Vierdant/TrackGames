@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { Bell, Download, LayoutGrid, Settings, Shield, UserIcon } from "lucide-react";
-import { profileThemeStyle } from "@/app/_util/theme";
 import SettingsPanel from "@/app/(user)/settings/SettingsPanel";
 import SettingsTabs from "@/app/(user)/settings/SettingsTabs";
 import Container from "@/components/layout/Container";
@@ -10,6 +9,7 @@ import ProfileHeader from "@/components/user/ProfileHeader";
 import { auth } from "@/lib/auth";
 import { getUser, getUserProviders, hasUserPassword } from "@/lib/data/user";
 import { type PublicUser } from "@/lib/types";
+import { profileThemeStyle } from "@/lib/util/client/theme";
 import { absoluteUrl, DEFAULT_OG_IMAGE, metadataDescription, SITE_NAME } from "@/lib/util/metadata";
 import * as lookup from "@/lib/util/validate/lookup";
 
@@ -68,8 +68,7 @@ export default async function SettingsPage({ searchParams }: SearchPageProps) {
 	const profile = await getUser(session.user);
 	if (!profile) redirect("/login");
 
-	const hasPassword = await hasUserPassword(profile.email!);
-	const accounts = activeTab === "account" ? await getUserProviders(profile.id) : [];
+	const [hasPassword, accounts] = await Promise.all([hasUserPassword(profile.email!), activeTab === "account" ? getUserProviders(profile.id) : []]);
 	const active = lookup.byKey(SETTINGTABS, "id", activeTab) ?? SETTINGTABS[0];
 
 	return (
@@ -84,10 +83,6 @@ export default async function SettingsPage({ searchParams }: SearchPageProps) {
 						<SettingsTabs activeTab={activeTab} />
 
 						<div className="min-w-0">
-							{params.error && (
-								<div className="mb-4 rounded border border-error/40 bg-error/10 px-4 py-3 text-sm font-bold text-error">{settingsErrorMessage(params.error)}</div>
-							)}
-
 							<div className="rounded bg-bg p-5">
 								<div className="mb-5 flex flex-col gap-3 border-b border-border pb-4 md:flex-row md:items-start md:justify-between">
 									<div>
@@ -102,15 +97,4 @@ export default async function SettingsPage({ searchParams }: SearchPageProps) {
 			</Container>
 		</main>
 	);
-}
-
-function settingsErrorMessage(error: string) {
-	switch (error) {
-		case "last-login":
-			return "Add another login method before unlinking that provider.";
-		case "invalid-provider":
-			return "That provider could not be linked.";
-		default:
-			return "Some settings were invalid. Check the fields and try again.";
-	}
 }

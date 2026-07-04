@@ -1,5 +1,5 @@
 import { forwardRef, type InputHTMLAttributes, type ReactNode, type SelectHTMLAttributes, type TextareaHTMLAttributes } from "react";
-import { joinClass } from "@/app/_util/func";
+import { joinClass } from "@/lib/util/client/func";
 
 type FieldProps = Readonly<{ label: string; hint?: string; children: ReactNode; className?: string }>;
 

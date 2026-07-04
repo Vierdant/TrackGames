@@ -4,9 +4,9 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ArrowRight, Search, X } from "lucide-react";
-import { deferHook, joinClass } from "@/app/_util/func";
 import HighLevelIsland from "@/components/ui/HighLevelIsland";
 import type { Game } from "@/lib/data/games";
+import { deferHook, joinClass } from "@/lib/util/client/func";
 
 function SearchBox({ autoFocus = false, onPick }: Readonly<{ autoFocus?: boolean; onPick?: () => void }>) {
 	const router = useRouter();

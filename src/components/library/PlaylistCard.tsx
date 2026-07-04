@@ -5,7 +5,6 @@ import { useState, useTransition } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { X } from "lucide-react";
-import { formLabel } from "@/app/_util/func";
 import StarRating from "@/components/game/StarRating";
 import PlaylistCardEditorTabs, { timeModeLabel } from "@/components/library/PlaylistCardEditorTabs";
 import PlaylistCardPreview, { statusColor } from "@/components/library/PlaylistCardPreview";
@@ -15,6 +14,7 @@ import MenuPanel from "@/components/ui/MenuPanel";
 import { createUserGamePlayLog, deleteUserGamePlayLog, removeGameFromLibrary, updateUserGameEntry, updateUserGamePlayLog } from "@/lib/actions/library";
 import type { UserLibraryEntryWithTags } from "@/lib/data/library";
 import { ImageIdToURL } from "@/lib/external/igdb/util";
+import { formLabel } from "@/lib/util/client/func";
 import { ratingToFive } from "@/lib/util/format/rating";
 import { formDataString } from "@/lib/util/parse/formData";
 
@@ -116,6 +116,11 @@ export default function PlaylistCard({ entry, mode, canEdit, onUpdate, onRemove,
 		setError("");
 		startTransition(async () => {
 			const updated = await deleteUserGamePlayLog(logId);
+			if ("error" in updated) {
+				setError(updated.error);
+				return;
+			}
+
 			onUpdate(updated);
 			setSelectedLogId("");
 		});

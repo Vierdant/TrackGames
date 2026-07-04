@@ -3,11 +3,10 @@
 import { type ReactNode, useMemo, useState, useTransition } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Edit3, SlidersHorizontal, Trash2 } from "lucide-react";
-import { joinClass } from "@/app/_util/func";
+import { Edit3, Trash2 } from "lucide-react";
 import { GameCard } from "@/components/game/GameDisplays";
 import AdvancedLibraryFilterPanel, { emptyAdvancedLibraryFilters } from "@/components/library/AdvancedLibraryFilterPanel";
-import { GhostButton, PrimaryButton } from "@/components/ui/Buttons";
+import { AdvancedFilterButton, GhostButton, PrimaryButton } from "@/components/ui/Buttons";
 import FilterBar from "@/components/ui/FilterBar";
 import { Input, Select } from "@/components/ui/Inputs";
 import MenuPanel from "@/components/ui/MenuPanel";
@@ -216,16 +215,7 @@ export default function PlaylistEntriesView({ listId, entries, mode, canEdit, ti
 						],
 					},
 				]}
-				actions={
-					<GhostButton
-						onClick={() => setShowAdvancedFilters(true)}
-						className={joinClass("h-9 border-border", filterCount ? "border-primary text-primary" : "border-border text-text-muted")}
-						aria-label="Advanced filters"
-					>
-						<SlidersHorizontal size={17} aria-hidden="true" />
-						Filter{filterCount ? ` (${filterCount})` : ""}
-					</GhostButton>
-				}
+				actions={<AdvancedFilterButton onClick={() => setShowAdvancedFilters(true)} filterCount={filterCount} />}
 			/>
 			<AdvancedLibraryFilterPanel
 				open={showAdvancedFilters}

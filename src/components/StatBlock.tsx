@@ -11,7 +11,7 @@ export default function StatBlock({ color, title, value }: StatBlockProps) {
 					<h3 className="text-xs leading-none font-bold">{title}</h3>
 				</div>
 				<p className="mt-1 text-lg leading-tight font-semibold">
-					<IncrementedNumber value={(value as number) ?? "0"} />
+					<IncrementedNumber value={(value as number) ?? "0"} chunked={10000} />
 				</p>
 			</div>
 		</div>

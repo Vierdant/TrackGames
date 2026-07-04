@@ -3,7 +3,7 @@ import { joinClass } from "@/lib/util/client/func";
 
 type FieldProps = Readonly<{ label: string; hint?: string; children: ReactNode; className?: string }>;
 
-const base = "bg-bg-secondary/80 p-1 rounded mt-1 pl-3 pr-3 border border-border outline-none";
+const base = "bg-bg-secondary/80 p-1 rounded mt-1 pl-3 pr-3 border border-border outline-none placeholder:text-text-faint";
 
 export function Field({ label, hint, children, className }: FieldProps) {
 	return (

@@ -1,6 +1,7 @@
 import type { CSSProperties } from "react";
 import Image from "next/image";
 import { UserIcon } from "lucide-react";
+import { joinClass } from "@/app/_util/func";
 
 type AvatarPreviewProps = Readonly<{
 	image: string | null | undefined;
@@ -22,7 +23,10 @@ export default function AvatarPreview({ image, size = 24, mdSize = size * 1.5, i
 
 	return (
 		<div
-			className={`relative flex aspect-square h-(--avatar-size) w-(--avatar-size) shrink-0 items-center justify-center overflow-hidden bg-bg md:h-(--avatar-md-size) md:w-(--avatar-md-size) ${className}`}
+			className={joinClass(
+				"relative flex aspect-square h-(--avatar-size) w-(--avatar-size) shrink-0 items-center justify-center overflow-hidden bg-bg md:h-(--avatar-md-size) md:w-(--avatar-md-size)",
+				className,
+			)}
 			style={style}
 		>
 			{image ? (

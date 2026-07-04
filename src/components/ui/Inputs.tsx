@@ -1,12 +1,9 @@
 import { forwardRef, type InputHTMLAttributes, type ReactNode, type SelectHTMLAttributes, type TextareaHTMLAttributes } from "react";
+import { joinClass } from "@/app/_util/func";
 
 type FieldProps = Readonly<{ label: string; hint?: string; children: ReactNode; className?: string }>;
 
 const base = "bg-bg-secondary/80 p-1 rounded mt-1 pl-3 pr-3 border border-border outline-none";
-
-function join(base: string, extra?: string) {
-	return [base, extra].filter(Boolean).join(" ");
-}
 
 export function Field({ label, hint, children, className }: FieldProps) {
 	return (
@@ -19,7 +16,7 @@ export function Field({ label, hint, children, className }: FieldProps) {
 }
 
 export const Input = forwardRef<HTMLInputElement, InputHTMLAttributes<HTMLInputElement>>(function Input({ className, ...props }, ref) {
-	return <input ref={ref} {...props} className={join(`${base} w-full`, className)} />;
+	return <input ref={ref} {...props} className={joinClass(`${base} w-full`, className)} />;
 });
 
 export const SuffixedInput = forwardRef<HTMLInputElement, InputHTMLAttributes<HTMLInputElement> & { suffix: ReactNode; inputClassName?: string }>(function SuffixedInput(
@@ -28,23 +25,28 @@ export const SuffixedInput = forwardRef<HTMLInputElement, InputHTMLAttributes<HT
 ) {
 	return (
 		<span
-			className={join(
+			className={joinClass(
 				`mt-1 flex w-full overflow-hidden rounded border border-border bg-bg-secondary/80 outline-none focus-within:border-primary ${disabled ? "opacity-60" : ""}`,
 				className,
 			)}
 		>
-			<input ref={ref} {...props} disabled={disabled} className={join("min-w-0 flex-1 bg-transparent px-3 py-1 outline-none disabled:cursor-not-allowed", inputClassName)} />
+			<input
+				ref={ref}
+				{...props}
+				disabled={disabled}
+				className={joinClass("min-w-0 flex-1 bg-transparent px-3 py-1 outline-none disabled:cursor-not-allowed", inputClassName)}
+			/>
 			<span className="flex shrink-0 items-center border-l border-border bg-bg px-3 py-1 text-text-muted select-none">{suffix}</span>
 		</span>
 	);
 });
 
 export const Textarea = forwardRef<HTMLTextAreaElement, TextareaHTMLAttributes<HTMLTextAreaElement>>(function Textarea({ className, ...props }, ref) {
-	return <textarea ref={ref} {...props} className={join(`${base} w-full`, className)} />;
+	return <textarea ref={ref} {...props} className={joinClass(`${base} w-full`, className)} />;
 });
 
 export const Select = forwardRef<HTMLSelectElement, SelectHTMLAttributes<HTMLSelectElement>>(function Select({ className, ...props }, ref) {
-	return <select ref={ref} {...props} className={join(base, className)} />;
+	return <select ref={ref} {...props} className={joinClass(base, className)} />;
 });
 
 export const Checkbox = forwardRef<HTMLInputElement, InputHTMLAttributes<HTMLInputElement>>(function Checkbox({ className, type, ...props }, ref) {
@@ -53,7 +55,7 @@ export const Checkbox = forwardRef<HTMLInputElement, InputHTMLAttributes<HTMLInp
 			ref={ref}
 			{...props}
 			type={type ?? "checkbox"}
-			className={join(
+			className={joinClass(
 				"size-4 shrink-0 cursor-pointer appearance-none rounded border border-border bg-bg transition checked:border-primary checked:bg-primary hover:border-primary focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50",
 				className,
 			)}

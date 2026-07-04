@@ -2,6 +2,7 @@
 
 import { Children, type PointerEvent, type ReactNode, useEffect, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { stepIndex } from "@/app/_util/func";
 
 type HorizontalScrollerProps = Readonly<{
 	children: ReactNode;
@@ -85,7 +86,7 @@ export default function HorizontalScroller({ children, className = "", selectedI
 		}
 
 		const childrenCount = Children.count(children);
-		const nextIndex = direction === "left" ? Math.max(selectedIndex - 1, 0) : Math.min(selectedIndex + 1, childrenCount - 1);
+		const nextIndex = stepIndex(selectedIndex, direction === "left" ? -1 : 1, childrenCount, "clamp");
 
 		onSelectedIndexChange(nextIndex);
 	}

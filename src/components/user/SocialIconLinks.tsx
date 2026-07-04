@@ -2,11 +2,13 @@
 
 import { useState } from "react";
 import { Check } from "lucide-react";
-import { getSocialPlatform } from "@/lib/account/socials";
-import { LinkType } from "@/lib/enums";
+import { joinClass } from "@/app/_util/func";
+import { socialPlatformIcons } from "@/components/config";
 import type { SocialLink } from "@/lib/types";
+import { LinkType } from "@/lib/types";
+import { getSocialPlatform } from "@/lib/util/parse/socials";
 
-export function SocialIconLinks({ socials }: Readonly<{ socials: SocialLink[] }>) {
+export default function SocialIconLinks({ socials }: Readonly<{ socials: SocialLink[] }>) {
 	const [copiedKey, setCopiedKey] = useState<string | null>(null);
 
 	if (socials.length === 0) return null;
@@ -24,7 +26,7 @@ export function SocialIconLinks({ socials }: Readonly<{ socials: SocialLink[] }>
 
 				if (!platform) return null;
 
-				const Icon = platform.icon;
+				const Icon = socialPlatformIcons[platform.id as keyof typeof socialPlatformIcons];
 				const key = `${social.platform}-${social.kind}-${index}`;
 				const copied = copiedKey === key;
 
@@ -34,7 +36,10 @@ export function SocialIconLinks({ socials }: Readonly<{ socials: SocialLink[] }>
 							key={key}
 							type="button"
 							onClick={() => manageCopyClick(social, key)}
-							className={`relative flex h-7 w-7 cursor-pointer items-center justify-center rounded transition-colors ${copied ? "text-success" : "text-text-muted hover:text-primary"}`}
+							className={joinClass(
+								"relative flex h-7 w-7 cursor-pointer items-center justify-center rounded transition-colors",
+								copied ? "text-success" : "text-text-muted hover:text-primary",
+							)}
 							aria-label={`Copy Username`}
 							title={copied ? "Copied" : `Copy Username`}
 						>

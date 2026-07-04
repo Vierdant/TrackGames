@@ -1,4 +1,5 @@
 import type db from "@/lib/db";
+import type { RawCollection, RawCompany, RawFranchise, RawGame, RawGenre, RawKeyword, RawMultiplayerMode, RawPlatform, RawTheme } from "@/lib/external/igdb/types";
 import {
 	formatRawCollection,
 	formatRawCompany,
@@ -10,7 +11,6 @@ import {
 	formatRawPlatform,
 	formatRawTheme,
 } from "@/lib/external/igdb/util";
-import type { RawCollection, RawCompany, RawFranchise, RawGame, RawGenre, RawKeyword, RawMultiplayerMode, RawPlatform, RawTheme } from "./types";
 
 function isSlugUniqueError(error: unknown) {
 	if (typeof error !== "object" || error === null || !("code" in error) || error.code !== "P2002") {

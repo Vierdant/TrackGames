@@ -1,21 +1,22 @@
 import { type CSSProperties, Suspense } from "react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { profileThemeStyle } from "@/app/_util/theme";
 import Container from "@/components/layout/Container";
 import LibraryEntriesPanel from "@/components/library/LibraryEntriesPanel";
 import GameListEditButton from "@/components/playlist/GameListEditButton";
 import { GhostButton } from "@/components/ui/Buttons";
 import Loading from "@/components/ui/Loading";
-import { PrivateDisplay } from "@/components/ui/PrivateDisplay";
+import PrivateDisplay from "@/components/ui/PrivateDisplay";
 import BackgroundView from "@/components/user/BackgroundView";
-import { defaultLibraryFilters } from "@/lib/account/preferences";
-import { checkPublicPrivacy, getUser, isFollower, profileThemeStyle, type SecuredUser } from "@/lib/account/user";
 import { auth } from "@/lib/auth";
-import { getUserGameEntries } from "@/lib/data/library";
+import { ensureAndGetUserLibrary, getUserGameEntries } from "@/lib/data/library";
+import { getUser, isFollower, type SecuredUser } from "@/lib/data/user";
 import db from "@/lib/db";
 import { GameListType } from "@/lib/generated/prisma/enums";
-import { absoluteUrl, metadataDescription, robotsForPrivacy, SITE_NAME } from "@/lib/metadata";
-import { ensureAndGetUserLibrary } from "@/lib/playlist/library";
+import { absoluteUrl, metadataDescription, robotsForPrivacy, SITE_NAME } from "@/lib/util/metadata";
+import { defaultLibraryFilters } from "@/lib/util/preferences";
+import { checkPublicPrivacy } from "@/lib/util/privacy";
 
 export default async function Page({ params }: Readonly<{ params: Promise<{ slug: string }> }>) {
 	const { slug } = await params;

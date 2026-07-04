@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { formatNumber } from "@/lib/util/tools";
+import { formatNumber } from "@/lib/util/format/numbers";
 
 export default function IncrementedNumber({ start = 0, value, duration = 1000 }: Readonly<{ start?: number; value: number; duration?: number }>) {
 	const elementRef = useRef(null);

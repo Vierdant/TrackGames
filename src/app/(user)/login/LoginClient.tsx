@@ -3,11 +3,11 @@
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Eye, EyeOff, Lock, Mail, User } from "lucide-react";
+import { deferHook } from "@/app/_util/func";
 import { DiscordIcon, GithubIcon, GoogleIcon, TwitchIcon } from "@/components/SVG";
 import { GhostButton } from "@/components/ui/Buttons";
 import MenuPanel from "@/components/ui/MenuPanel";
 import { login, loginProvider, signup } from "@/lib/actions/auth";
-import { deferEffect } from "@/lib/util/effects";
 
 const providers = [
 	{ name: "Google", icon: GoogleIcon, slug: "google" },
@@ -44,13 +44,13 @@ export default function LoginClient() {
 	const passwordMessage = isRegister && password.length > 0 && password.length < 8 ? "Password must be at least 8 characters." : fieldErrors.password;
 
 	useEffect(() => {
-		const defer = deferEffect(() => {
+		const defer = deferHook(() => {
 			setMode(searchParams.get("mode") === "register" ? "register" : "login");
 		});
 		const authError = searchParams.get("error");
 
 		if (authError) {
-			return deferEffect(() => {
+			return deferHook(() => {
 				setErrorMessage(authErrorMessages[authError] ?? "Sign in failed. Please try again.");
 			});
 		}

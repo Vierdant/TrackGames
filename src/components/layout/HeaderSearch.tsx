@@ -4,9 +4,9 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ArrowRight, Search, X } from "lucide-react";
+import { deferHook, joinClass } from "@/app/_util/func";
+import HighLevelIsland from "@/components/ui/HighLevelIsland";
 import type { Game } from "@/lib/data/games";
-import { deferEffect } from "@/lib/util/effects";
-import HighLevelIsland from "../ui/HighLevelIsland";
 
 function SearchBox({ autoFocus = false, onPick }: Readonly<{ autoFocus?: boolean; onPick?: () => void }>) {
 	const router = useRouter();
@@ -49,7 +49,7 @@ function SearchBox({ autoFocus = false, onPick }: Readonly<{ autoFocus?: boolean
 		const search = query.trim();
 
 		if (search.length < 2) {
-			return deferEffect(() => {
+			return deferHook(() => {
 				setResults([]);
 				setOpen(false);
 			});
@@ -177,9 +177,12 @@ export default function HeaderSearch() {
 				<Search size={20} aria-hidden="true" />
 			</button>
 			<HighLevelIsland className="md:hidden">
-				<div className={`pointer-events-auto fixed inset-0 bg-overlay transition-opacity ${open ? "opacity-100" : "pointer-events-none opacity-0"}`}>
+				<div className={joinClass("pointer-events-auto fixed inset-0 bg-overlay transition-opacity", open ? "opacity-100" : "pointer-events-none opacity-0")}>
 					<div
-						className={`fixed inset-y-0 right-0 w-full bg-bg p-4 shadow-main transition-transform duration-200 ease-out ${open ? "translate-x-0" : "translate-x-full"}`}
+						className={joinClass(
+							"fixed inset-y-0 right-0 w-full bg-bg p-4 shadow-main transition-transform duration-200 ease-out",
+							open ? "translate-x-0" : "translate-x-full",
+						)}
 					>
 						<div className="flex items-center gap-3">
 							<SearchBox autoFocus={open} onPick={() => setOpen(false)} />

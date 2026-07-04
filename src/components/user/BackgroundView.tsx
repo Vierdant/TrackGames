@@ -3,7 +3,8 @@
 import { type CSSProperties, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { Image as ImageIcon } from "lucide-react";
-import { isVideoUrl } from "@/lib/util/safety";
+import { joinClass } from "@/app/_util/func";
+import { isVideoUrl } from "@/lib/util/validate/safety";
 
 type BackgroundViewProps = Readonly<{
 	src: string | null | undefined;
@@ -31,9 +32,9 @@ export default function BackgroundView({ src = null, size, mdSize = size, alt = 
 			} as CSSProperties)
 		: undefined;
 	const rootClassName = size
-		? `relative flex w-[var(--background-size)] shrink-0 items-center justify-center overflow-hidden bg-bg md:w-[var(--background-md-size)] ${className}`
-		: `pointer-events-none fixed inset-0 z-0 overflow-hidden bg-bg ${className}`;
-	const mediaClassName = `h-full w-full ${fit === "contain" ? "object-contain" : "object-cover"} object-center`;
+		? joinClass("relative flex w-[var(--background-size)] shrink-0 items-center justify-center overflow-hidden bg-bg md:w-[var(--background-md-size)]", className)
+		: joinClass("pointer-events-none fixed inset-0 z-0 overflow-hidden bg-bg", className);
+	const mediaClassName = joinClass("h-full w-full", fit === "contain" ? "object-contain" : "object-cover", "object-center");
 	const imageSizes = size ? `${Math.round((desktopSize ?? size) * 4)}px` : "100vw";
 	const shouldPrioritize = priority ?? !size;
 
@@ -104,10 +105,10 @@ export default function BackgroundView({ src = null, size, mdSize = size, alt = 
 					onLoadedData={() => setVideoReady(true)}
 					onCanPlay={() => setVideoReady(true)}
 					onPlaying={() => setVideoReady(true)}
-					className={`transition-opacity duration-300 ${videoReady ? "opacity-100" : "opacity-0"} ${mediaClassName}`}
+					className={joinClass("transition-opacity duration-300", videoReady ? "opacity-100" : "opacity-0", mediaClassName)}
 				/>
 			) : (
-				<Image src={src} alt={alt} fill preload={shouldPrioritize} sizes={imageSizes} className={`select-none ${mediaClassName}`} />
+				<Image src={src} alt={alt} fill preload={shouldPrioritize} sizes={imageSizes} className={joinClass("select-none", mediaClassName)} />
 			)}
 			{!isPreview && <div className="absolute inset-0 bg-bg/50" />}
 		</div>

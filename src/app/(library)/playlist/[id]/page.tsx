@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { profileThemeStyle } from "@/app/_util/theme";
+import AddPlaylistGameForm from "@/app/(library)/playlist/[id]/AddPlaylistGameForm";
+import TierLabelsForm from "@/app/(library)/playlist/[id]/TierLabelsForm";
 import CommentSection from "@/components/comments/CommentSection";
 import Container from "@/components/layout/Container";
 import GameListEditButton from "@/components/playlist/GameListEditButton";
@@ -7,19 +10,17 @@ import PlaylistEntriesView from "@/components/playlist/PlaylistEntriesView";
 import LikeButton from "@/components/social/LikeButton";
 import { GhostButton } from "@/components/ui/Buttons";
 import { Select } from "@/components/ui/Inputs";
-import { PrivateDisplay } from "@/components/ui/PrivateDisplay";
+import PrivateDisplay from "@/components/ui/PrivateDisplay";
 import BackgroundView from "@/components/user/BackgroundView";
-import { shouldHideComments } from "@/lib/account/preferences";
-import { checkPublicPrivacy, getUser, isFollower, profileThemeStyle } from "@/lib/account/user";
 import { updatePlaylistDisplayMode } from "@/lib/actions/playlists";
 import { auth } from "@/lib/auth";
 import { getPlaylist, getPlaylistLibraryCount } from "@/lib/data/playlists";
 import { getPlaylistLikeState } from "@/lib/data/social";
+import { getUser, isFollower } from "@/lib/data/user";
 import db from "@/lib/db";
 import { GameListType, InteractionTargetType, LikeTargetType } from "@/lib/generated/prisma/enums";
-import { absoluteUrl, metadataDescription, robotsForPrivacy, SITE_NAME } from "@/lib/metadata";
-import AddPlaylistGameForm from "./AddPlaylistGameForm";
-import TierLabelsForm from "./TierLabelsForm";
+import { absoluteUrl, metadataDescription, robotsForPrivacy, SITE_NAME } from "@/lib/util/metadata";
+import { checkPublicPrivacy, shouldHideComments } from "@/lib/util/privacy";
 
 export default async function Page({ params }: Readonly<{ params: Promise<{ id: string }> }>) {
 	const { id } = await params;
@@ -30,7 +31,7 @@ export default async function Page({ params }: Readonly<{ params: Promise<{ id: 
 	}
 
 	const isOwner = session?.user?.id === playlist.userId;
-	const isFollowingOwner = await isFollower(session?.user.id, playlist.userId);
+	const [isFollowingOwner, viewer] = await Promise.all([isFollower(session?.user.id, playlist.userId), getUser(session?.user)]);
 	const isVisible = checkPublicPrivacy(playlist.privacy, isOwner, isFollowingOwner);
 
 	if (!isVisible) {
@@ -38,7 +39,6 @@ export default async function Page({ params }: Readonly<{ params: Promise<{ id: 
 	}
 
 	const canEdit = session?.user?.id === playlist.userId;
-	const viewer = await getUser(session?.user);
 	const gameIds = playlist.entries.map((entry) => entry.gameId);
 	const [ownedCount, likeState] = await Promise.all([getPlaylistLibraryCount(session?.user?.id, gameIds), getPlaylistLikeState(playlist.id, session?.user?.id)]);
 	const ownedPercent = playlist.entries.length ? Math.round((ownedCount / playlist.entries.length) * 100) : 0;

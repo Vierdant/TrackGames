@@ -6,7 +6,7 @@ import { MarkdownBlocks } from "@/components/markdown/MarkdownBlocks";
 import { GhostButton } from "@/components/ui/Buttons";
 import { Input, Textarea } from "@/components/ui/Inputs";
 import MenuPanel from "@/components/ui/MenuPanel";
-import { parseMarkdownBlocks } from "@/lib/markdown";
+import { parseMarkdownBlocks } from "@/lib/util/parse/markdown";
 
 type MarkdownWidgetEditorProps = Readonly<{
 	value: string;

@@ -4,12 +4,12 @@ import { useEffect, useRef, useState, useTransition } from "react";
 import Link from "next/link";
 import type { User } from "next-auth";
 import { ArrowRight, Bell, Book, LogOut, Menu, Settings, User as UserIcon } from "lucide-react";
+import { deferHook } from "@/app/_util/func";
+import MenuPanel from "@/components/ui/MenuPanel";
+import ThemeSwitch from "@/components/ui/ThemeSwitch";
+import AvatarPreview from "@/components/user/AvatarView";
 import { logout } from "@/lib/actions/auth";
 import { markNotificationsRead } from "@/lib/actions/social";
-import { deferEffect } from "@/lib/util/effects";
-import AvatarPreview from "../user/AvatarView";
-import MenuPanel from "./MenuPanel";
-import ThemeSwitch from "./ThemeSwitch";
 
 type Notification = Readonly<{
 	id: string;
@@ -29,7 +29,7 @@ type UserMenuProps = Readonly<{
 	notifications: Notification[];
 }>;
 
-function Notifications({ notifications, onClose }: { notifications: Notification[]; onClose: () => void }) {
+function Notifications({ notifications, onClose }: Readonly<{ notifications: Notification[]; onClose: () => void }>) {
 	return notifications.length ? (
 		notifications.map((notification) => (
 			<Link
@@ -59,7 +59,7 @@ function notificationText(notification: Notification) {
 	return "New notification.";
 }
 
-export function UserMenu({ user, notifications }: UserMenuProps) {
+export default function UserMenu({ user, notifications }: UserMenuProps) {
 	const [isOpen, setIsOpen] = useState(false);
 	const [view, setView] = useState<"menu" | "notifications">("menu");
 	const [unread, setUnread] = useState(notifications.some((notification) => !notification.readAt));
@@ -68,7 +68,7 @@ export function UserMenu({ user, notifications }: UserMenuProps) {
 	const buttonRef = useRef<HTMLButtonElement>(null);
 
 	function update(event: MediaQueryListEvent | MediaQueryList) {
-		return deferEffect(() => {
+		return deferHook(() => {
 			setIsSmallScreen(event.matches);
 		});
 	}

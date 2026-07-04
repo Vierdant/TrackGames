@@ -2,12 +2,12 @@
 
 import { useMemo, useState } from "react";
 import { Plus } from "lucide-react";
+import { WidgetEditor } from "@/app/(user)/settings/WidgetEditors";
 import { GhostButton } from "@/components/ui/Buttons";
-import { type SecuredUser } from "@/lib/account/user";
-import { parseWidgets, serializeWidgets } from "@/lib/account/widget";
-import { WidgetType } from "@/lib/enums";
+import { type SecuredUser } from "@/lib/data/user";
 import type { Widget } from "@/lib/types";
-import { WidgetEditor } from "./WidgetEditors";
+import { WidgetType } from "@/lib/types";
+import { parseWidgets, serializeWidgets } from "@/lib/util/parse/widgets";
 
 export default function WidgetsSettingsForm({ profile }: Readonly<{ profile: SecuredUser }>) {
 	const [widgets, setWidgets] = useState(() => parseWidgets(profile.widgets));

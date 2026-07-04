@@ -1,25 +1,15 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
-import { auth } from "../auth";
-import { getTagsForEntries } from "../data/library";
-import db from "../db";
-import { ActivityType, GameStatus, InteractionTargetType } from "../generated/prisma/enums";
-import { formDataString } from "../util/formData";
-import { ratingToHundred } from "../util/rating";
+import { getCurrentUserId } from "@/lib/auth";
+import { getTagsForEntries, syncEntryTags } from "@/lib/data/library";
+import db from "@/lib/db";
+import { ActivityType, GameStatus, InteractionTargetType } from "@/lib/generated/prisma/enums";
+import { inputError } from "@/lib/logger";
+import { ratingToHundred } from "@/lib/util/format/rating";
+import { formDataString } from "@/lib/util/parse/formData";
 
 const DEFAULT_LOG_NOTE = "No note.";
-
-async function getCurrentUserId() {
-	const session = await auth();
-
-	if (!session?.user?.id) {
-		redirect("/login");
-	}
-
-	return session.user.id;
-}
 
 function pastDateFromInput(value: string, label: string) {
 	if (!value) return null;
@@ -185,7 +175,7 @@ export async function updateUserGameEntry(entryId: string, formData: FormData) {
 	);
 
 	if (!Object.values(GameStatus).includes(status as GameStatus)) {
-		throw new Error("Invalid game status.");
+		return inputError("Invalid game status.");
 	}
 
 	const rating = ratingValue ? (ratingToHundred(Number(ratingValue)) ?? null) : null;
@@ -263,37 +253,8 @@ export async function updateUserGameEntry(entryId: string, formData: FormData) {
 				},
 			});
 
-			for (const name of tagNames) {
-				const normalized = name.toLowerCase();
-				const tag = await tx.userTag.upsert({
-					where: {
-						userId_normalized: {
-							userId,
-							normalized,
-						},
-					},
-					update: {
-						name,
-					},
-					create: {
-						userId,
-						name,
-						normalized,
-					},
-					select: {
-						id: true,
-					},
-				});
-
-				await tx.userGameEntryTag.createMany({
-					data: [
-						{
-							entryId,
-							tagId: tag.id,
-						},
-					],
-					skipDuplicates: true,
-				});
+			if (tagNames.length > 0) {
+				await syncEntryTags(tx, userId, new Map([[entryId, tagNames]]));
 			}
 		}
 
@@ -318,13 +279,13 @@ export async function createUserGamePlayLog(entryId: string, formData: FormData)
 	const mastered = formData.get("mastered") === "on";
 
 	if (!Number.isFinite(hours) || hours <= 0) {
-		throw new Error("Hours played must be greater than zero.");
+		return inputError("Hours played must be greater than zero.");
 	}
 
 	const playedAt = playedAtValue ? new Date(`${playedAtValue}T12:00:00`) : new Date();
 
 	if (Number.isNaN(playedAt.getTime())) {
-		throw new TypeError("Invalid played date.");
+		return inputError("Invalid played date.");
 	}
 
 	const current = await db.userGameEntry.findUnique({
@@ -426,13 +387,13 @@ export async function updateUserGamePlayLog(logId: string, formData: FormData) {
 	const skipRecap = formData.get("skipRecap") === "on";
 
 	if (!Number.isFinite(hours) || hours <= 0) {
-		throw new Error("Hours played must be greater than zero.");
+		return inputError("Hours played must be greater than zero.");
 	}
 
 	const playedAt = playedAtValue ? new Date(`${playedAtValue}T12:00:00`) : new Date();
 
 	if (Number.isNaN(playedAt.getTime())) {
-		throw new TypeError("Invalid played date.");
+		return inputError("Invalid played date.");
 	}
 
 	const entry = await db.$transaction(async (tx) => {

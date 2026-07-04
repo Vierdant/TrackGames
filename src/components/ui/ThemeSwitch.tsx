@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Moon, Sun } from "lucide-react";
-import { deferEffect } from "@/lib/util/effects";
+import { deferHook, joinClass } from "@/app/_util/func";
 
 type ThemeSwitchProps = Readonly<{
 	className?: string;
@@ -28,7 +28,7 @@ export default function ThemeSwitch({ className = "", variant = "plain" }: Theme
 	useEffect(() => {
 		const isDark = document.documentElement.classList.contains("dark");
 
-		const deferSetter = deferEffect(() => {
+		const deferSetter = deferHook(() => {
 			setDark(isDark);
 		});
 
@@ -36,7 +36,7 @@ export default function ThemeSwitch({ className = "", variant = "plain" }: Theme
 
 		if (saved === "light") {
 			document.documentElement.classList.remove("dark");
-			return deferEffect(() => {
+			return deferHook(() => {
 				setDark(false);
 				deferSetter();
 			});
@@ -44,7 +44,7 @@ export default function ThemeSwitch({ className = "", variant = "plain" }: Theme
 
 		if (saved === "dark") {
 			document.documentElement.classList.add("dark");
-			return deferEffect(() => {
+			return deferHook(() => {
 				setDark(true);
 				deferSetter();
 			});
@@ -58,7 +58,7 @@ export default function ThemeSwitch({ className = "", variant = "plain" }: Theme
 			: "grid size-10 cursor-pointer place-items-center text-text-muted transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary";
 
 	return (
-		<button type="button" onClick={toggleTheme} className={`${classes} ${className}`} aria-label={dark ? "Switch to light theme" : "Switch to dark theme"}>
+		<button type="button" onClick={toggleTheme} className={joinClass(classes, className)} aria-label={dark ? "Switch to light theme" : "Switch to dark theme"}>
 			<Icon size={24} aria-hidden="true" />
 		</button>
 	);

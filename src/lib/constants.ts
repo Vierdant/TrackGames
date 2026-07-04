@@ -1,8 +1,9 @@
 import { Rss } from "lucide-react";
-import { DiscordIcon, GithubIcon, GoogleIcon, TwitchIcon, XIcon, YoutubeIcon } from "@/components/SVG";
-import { LinkType } from "./enums";
+import z from "zod";
+import { DiscordIcon, XIcon } from "@/components/SVG";
+import { LinkType } from "@/lib/types";
 
-export const SOCIALPLATFORMS = [
+export const SOCIAL_PLATFORMS = [
 	{ id: "x-link", value: "x", kind: LinkType.LINK, label: "X (Twitter)", placeholder: "https://x.com/username", icon: XIcon },
 	{ id: "discord-copy", value: "discord", kind: LinkType.COPY, label: "Discord username", placeholder: "username", icon: DiscordIcon },
 	{
@@ -11,7 +12,6 @@ export const SOCIALPLATFORMS = [
 		kind: LinkType.LINK,
 		label: "Discord server",
 		placeholder: "https://discord.gg/invite",
-		icon: DiscordIcon,
 	},
 	{
 		id: "github-link",
@@ -19,7 +19,6 @@ export const SOCIALPLATFORMS = [
 		kind: LinkType.LINK,
 		label: "GitHub",
 		placeholder: "https://github.com/username",
-		icon: GithubIcon,
 	},
 	{
 		id: "twitch-link",
@@ -27,7 +26,6 @@ export const SOCIALPLATFORMS = [
 		kind: LinkType.LINK,
 		label: "Twitch",
 		placeholder: "https://twitch.tv/username",
-		icon: TwitchIcon,
 	},
 	{
 		id: "youtube-link",
@@ -35,21 +33,20 @@ export const SOCIALPLATFORMS = [
 		kind: LinkType.LINK,
 		label: "YouTube",
 		placeholder: "https://youtube.com/@username",
-		icon: YoutubeIcon,
 	},
 	{ id: "website-link", value: "website", kind: LinkType.LINK, label: "Website", placeholder: "https://example.com", icon: Rss },
 ];
 
-export const AUTHPROVIDERS = [
-	{ slug: "google", label: "Google", icon: GoogleIcon },
-	{ slug: "github", label: "GitHub", icon: GithubIcon },
-	{ slug: "twitch", label: "Twitch", icon: TwitchIcon },
-	{ slug: "discord", label: "Discord", icon: DiscordIcon },
+export const AUTH_PROVIDERS = [
+	{ slug: "google", label: "Google" },
+	{ slug: "github", label: "GitHub" },
+	{ slug: "twitch", label: "Twitch" },
+	{ slug: "discord", label: "Discord" },
 ];
 
-export const ALLOWEDHOSTS = new Set(["i.imgur.com", "images.unsplash.com", "media.discordapp.net", "cdn.discordapp.com", "cdn.pixabay.com"]);
+export const ALLOWED_HOSTS = new Set(["i.imgur.com", "images.unsplash.com", "media.discordapp.net", "cdn.discordapp.com", "cdn.pixabay.com"]);
 
-export const ALLOWEDTAGS = [
+export const ALLOWED_TAGS = [
 	"p",
 	"br",
 	"strong",
@@ -74,3 +71,8 @@ export const ALLOWEDTAGS = [
 	"th",
 	"td",
 ];
+
+export const USERNAME_MAX_LENGTH = 32;
+export const USERNAME_ERROR = "Use 1-32 letters, numbers, underscores, or hyphens.";
+export const USERNAME_PATTERN = /^[A-Za-z0-9_-]+$/;
+export const usernameSchema = z.string().min(1).max(USERNAME_MAX_LENGTH).regex(USERNAME_PATTERN);

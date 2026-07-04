@@ -3,6 +3,7 @@
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { Heart } from "lucide-react";
+import { joinClass } from "@/app/_util/func";
 import { toggleLike } from "@/lib/actions/social";
 import { type LikeTargetType } from "@/lib/generated/prisma/enums";
 
@@ -35,14 +36,16 @@ export default function LikeButton({ targetType, targetId, initialLikes, hasLike
 		setLikes(Math.max(0, likes + (nextLiked ? 1 : -1)));
 
 		startTransition(async () => {
-			try {
-				await toggleLike(targetType, targetId);
-				router.refresh();
-			} catch {
+			const response = await toggleLike(targetType, targetId);
+
+			if (response?.error) {
 				setLiked(previousLiked);
 				setLikes(previousLikes);
-				setError("Could not update like.");
+				setError(response.error);
+				return;
 			}
+
+			router.refresh();
 		});
 	}
 
@@ -52,9 +55,12 @@ export default function LikeButton({ targetType, targetId, initialLikes, hasLike
 				type="button"
 				onClick={toggle}
 				disabled={pending}
-				className={`flex cursor-pointer items-center gap-2 rounded bg-bg px-4 py-2 text-sm font-bold text-text-muted transition hover:border-primary hover:text-primary disabled:cursor-not-allowed disabled:opacity-70 ${liked ? "text-primary" : ""}`}
+				className={joinClass(
+					"flex cursor-pointer items-center gap-2 rounded bg-bg px-4 py-2 text-sm font-bold text-text-muted transition hover:border-primary hover:text-primary disabled:cursor-not-allowed disabled:opacity-70",
+					liked && "text-primary",
+				)}
 			>
-				<Heart size={16} className={liked ? "fill-primary" : ""} />
+				<Heart size={16} className={joinClass(liked && "fill-primary")} />
 				{likes}
 			</button>
 			{error && <output className="text-xs text-error">{error}</output>}

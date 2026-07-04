@@ -3,12 +3,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Edit3, NotebookText } from "lucide-react";
+import { formLabel, joinClass } from "@/app/_util/func";
+import StarRating from "@/components/game/StarRating";
+import { GhostButton } from "@/components/ui/Buttons";
 import type { UserLibraryEntryWithTags } from "@/lib/data/library";
 import { ImageIdToURL } from "@/lib/external/igdb/util";
 import { GameStatus } from "@/lib/generated/prisma/enums";
-import { ratingToFive } from "@/lib/util/rating";
-import StarRating from "../game/StarRating";
-import { GhostButton } from "../ui/Buttons";
+import { ratingToFive } from "@/lib/util/format/rating";
 
 type PlaylistCardPreviewProps = Readonly<{
 	entry: UserLibraryEntryWithTags;
@@ -18,10 +19,6 @@ type PlaylistCardPreviewProps = Readonly<{
 	onOpenNotes: () => void;
 	onOpenEditor: () => void;
 }>;
-
-export function statusLabel(status: string) {
-	return status.toLowerCase().replace("_", " ");
-}
 
 export function statusColor(status: GameStatus) {
 	if (status === GameStatus.PLAYING) return "bg-primary";
@@ -47,8 +44,8 @@ export default function PlaylistCardPreview({ entry, mode, canEdit, onOpenInfo, 
 					<div className="relative aspect-5/7 bg-bg">
 						{src && <Image src={src} alt={game.name ?? "game cover"} fill sizes="160px" className="object-cover" />}
 						<span className="absolute top-2 left-2 z-10 hidden max-w-[calc(100%-1rem)] items-center gap-2 rounded bg-bg-secondary/90 px-2 py-1 text-xs font-bold text-text capitalize opacity-0 transition-opacity group-hover:opacity-100 md:flex">
-							<span className={`size-2 shrink-0 rounded-full ${statusColor(entry.status)}`} aria-hidden="true" />
-							<span className="truncate">{statusLabel(entry.status)}</span>
+							<span className={joinClass("size-2 shrink-0 rounded-full", statusColor(entry.status))} aria-hidden="true" />
+							<span className="truncate">{formLabel(entry.status)}</span>
 						</span>
 						<div className="absolute inset-0 flex flex-col justify-end bg-bg/85 p-3 opacity-0 transition-opacity group-hover:opacity-100">
 							{hasNotes && (
@@ -95,8 +92,8 @@ export default function PlaylistCardPreview({ entry, mode, canEdit, onOpenInfo, 
 				<div className="grid min-w-0 grid-cols-[minmax(0,1fr)_auto_auto_auto] items-center gap-2 text-xs text-text-muted md:grid-cols-[minmax(0,2fr)_minmax(0,1fr)_minmax(0,1fr)_auto_minmax(0,1fr)] md:gap-4">
 					<p className="hidden truncate text-sm font-bold text-text md:block">{game.name}</p>
 					<span className="flex min-w-0 items-center gap-2 capitalize md:justify-end">
-						<span className={`size-2 rounded-full ${statusColor(entry.status)}`} aria-hidden="true" />
-						<span className="truncate">{statusLabel(entry.status)}</span>
+						<span className={joinClass("size-2 rounded-full", statusColor(entry.status))} aria-hidden="true" />
+						<span className="truncate">{formLabel(entry.status)}</span>
 					</span>
 					<span className="hidden min-w-18 justify-end md:flex">
 						<StarRating rating={ratingToFive(entry.rating ?? 0)} />

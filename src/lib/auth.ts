@@ -6,9 +6,9 @@ import Github from "next-auth/providers/github";
 import Google from "next-auth/providers/google";
 import Twitch from "next-auth/providers/twitch";
 import { PrismaAdapter } from "@auth/prisma-adapter";
-import { USERNAME_MAX_LENGTH, USERNAME_PATTERN } from "./account/username";
-import db from "./db";
-import { verifyPassword } from "./util/password";
+import { USERNAME_MAX_LENGTH, USERNAME_PATTERN } from "@/lib/constants";
+import db from "@/lib/db";
+import { verifyPassword } from "@/lib/util/server/password";
 
 const loginProviders = new Set(["google", "github", "twitch", "discord"]);
 
@@ -138,3 +138,13 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
 		},
 	},
 });
+
+export async function getCurrentUserId() {
+	const session = await auth();
+
+	if (!session?.user?.id) {
+		throw new Error("You must be logged in.");
+	}
+
+	return session.user.id;
+}

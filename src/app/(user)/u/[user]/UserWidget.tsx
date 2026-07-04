@@ -5,9 +5,9 @@ import IncrementedNumber from "@/components/ui/IncrementedNumber";
 import type { Game } from "@/lib/data/games";
 import { getMinifiedGame } from "@/lib/data/games";
 import { getUserGameStats } from "@/lib/data/library";
-import { WidgetType } from "@/lib/enums";
-import { parseMarkdownBlocks } from "@/lib/markdown";
 import type { Widget } from "@/lib/types";
+import { WidgetType } from "@/lib/types";
+import { parseMarkdownBlocks } from "@/lib/util/parse/markdown";
 
 function GameList({ widget, games }: Readonly<{ widget: Widget; games: Game[] }>) {
 	return (

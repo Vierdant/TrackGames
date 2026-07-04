@@ -1,7 +1,8 @@
-import db from "../db";
-import { GameStatus } from "../generated/prisma/enums";
-import type { UserGameEntryGetPayload } from "../generated/prisma/models/UserGameEntry";
-import type { Game } from "./games";
+import type { Game } from "@/lib/data/games";
+import db from "@/lib/db";
+import type { Prisma } from "@/lib/generated/prisma/client";
+import { GameStatus } from "@/lib/generated/prisma/enums";
+import type { UserGameEntryGetPayload } from "@/lib/generated/prisma/models/UserGameEntry";
 
 const userGameEntryInclude = {
 	game: true,
@@ -42,6 +43,80 @@ export async function getTagsForEntries(entryIds: string[]) {
 	}
 
 	return tags;
+}
+
+/**
+ * Resolves tag names to ids (creating or renaming UserTag rows as needed)
+ * and creates the UserGameEntryTag join rows for each entry, all batched.
+ * Caller is responsible for clearing any existing join rows beforehand.
+ */
+export async function syncEntryTags(tx: Prisma.TransactionClient, userId: string, entryTagNames: Map<string, string[]>) {
+	if (entryTagNames.size === 0) return;
+
+	const normalizedNames = new Map<string, string>();
+	for (const tagNames of entryTagNames.values()) {
+		for (const name of tagNames) {
+			normalizedNames.set(name.toLowerCase(), name);
+		}
+	}
+
+	const existingTags = await tx.userTag.findMany({
+		where: {
+			userId,
+			normalized: { in: [...normalizedNames.keys()] },
+		},
+		select: {
+			id: true,
+			name: true,
+			normalized: true,
+		},
+	});
+	const existingByNormalized = new Map(existingTags.map((tag) => [tag.normalized, tag]));
+
+	await Promise.all(
+		existingTags
+			.filter((tag) => tag.name !== normalizedNames.get(tag.normalized))
+			.map((tag) =>
+				tx.userTag.update({
+					where: { id: tag.id },
+					data: { name: normalizedNames.get(tag.normalized)! },
+				}),
+			),
+	);
+
+	const missingNormalized = [...normalizedNames.keys()].filter((normalized) => !existingByNormalized.has(normalized));
+	if (missingNormalized.length > 0) {
+		await tx.userTag.createMany({
+			data: missingNormalized.map((normalized) => ({
+				userId,
+				name: normalizedNames.get(normalized)!,
+				normalized,
+			})),
+		});
+	}
+
+	const allTags = await tx.userTag.findMany({
+		where: {
+			userId,
+			normalized: { in: [...normalizedNames.keys()] },
+		},
+		select: {
+			id: true,
+			normalized: true,
+		},
+	});
+	const tagIdByNormalized = new Map(allTags.map((tag) => [tag.normalized, tag.id]));
+
+	const joinRows = [...entryTagNames.entries()].flatMap(([entryId, tagNames]) =>
+		tagNames.map((name) => ({
+			entryId,
+			tagId: tagIdByNormalized.get(name.toLowerCase())!,
+		})),
+	);
+	await tx.userGameEntryTag.createMany({
+		data: joinRows,
+		skipDuplicates: true,
+	});
 }
 
 export async function getUserGameEntries(userId: string): Promise<UserLibraryEntryWithTags[]> {
@@ -136,6 +211,66 @@ export async function searchUserLibraryGames(userId: string, query: string): Pro
             lower("Game"."name") ASC
         LIMIT 8
     `;
+}
+
+const gameListSelect = {
+	id: true,
+	type: true,
+	userId: true,
+	displayMode: true,
+	tierColors: true,
+	tierLabels: true,
+	name: true,
+	slug: true,
+	description: true,
+	image: true,
+	background: true,
+	color: true,
+	accentColor: true,
+	privacy: true,
+	commentsHidden: true,
+	entries: true,
+	user: {
+		select: {
+			libraryPrivacy: true,
+		},
+	},
+};
+
+export async function ensureAndGetUserLibrary(slug: string) {
+	const user = await db.user.findFirst({
+		where: {
+			name: slug,
+		},
+		select: {
+			id: true,
+			name: true,
+			libraryPrivacy: true,
+		},
+	});
+
+	if (!user) return null;
+
+	const library = await db.gameList.findFirst({
+		where: {
+			slug,
+			userId: user.id,
+		},
+		select: gameListSelect,
+	});
+
+	if (library) return library;
+
+	return await db.gameList.create({
+		data: {
+			userId: user.id,
+			type: "LIBRARY",
+			name: `${user.name}'s Library`,
+			slug: `${user.name}`,
+			privacy: "public",
+		},
+		select: gameListSelect,
+	});
 }
 
 export async function getUserLibraryGamesByIds(userId: string, ids: number[]): Promise<Game[]> {

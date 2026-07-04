@@ -1,14 +1,9 @@
-import db from "../db";
-import { formatRawGenre } from "../external/igdb/util";
-import type { GenreModel } from "../generated/prisma/models/Genre";
-import type { MaybeArray } from "../types";
-import { getByIds, getBySlugs } from "./getter";
+import { makeGetById, makeGetBySlug } from "@/lib/data/getter";
+import db from "@/lib/db";
+import { formatRawGenre } from "@/lib/external/igdb/util";
+import type { GenreModel } from "@/lib/generated/prisma/models/Genre";
 
 export type Genre = Pick<GenreModel, "id" | "slug" | "name">;
-
-type DataResult<T extends MaybeArray<number>> = T extends number[] ? Genre[] : Genre | null;
-
-type SlugResult<T extends string | string[]> = T extends string[] ? Genre[] : Genre | null;
 
 const select = {
 	id: true,
@@ -21,14 +16,6 @@ const fetching = {
 	body: `fields slug, name;`,
 };
 
-export async function getGenre<T extends MaybeArray<number>>(id: T): Promise<DataResult<T>> {
-	const ids = Array.isArray(id) ? id : [id];
-	const res = await getByIds(ids as number[], select, db.genre, fetching, formatRawGenre);
-	return (Array.isArray(id) ? res : (res[0] ?? null)) as DataResult<T>;
-}
+export const getGenre = makeGetById<Genre>(select, db.genre, fetching, formatRawGenre);
 
-export async function getGenreBySlug<T extends string | string[]>(slug: T): Promise<SlugResult<T>> {
-	const slugs = Array.isArray(slug) ? slug : [slug];
-	const res = await getBySlugs(slugs as string[], select, db.genre, fetching, formatRawGenre);
-	return (Array.isArray(slug) ? res : (res[0] ?? null)) as SlugResult<T>;
-}
+export const getGenreBySlug = makeGetBySlug<Genre>(select, db.genre, fetching, formatRawGenre);

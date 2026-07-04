@@ -1,21 +1,12 @@
 "use server";
 
-import { redirect } from "next/navigation";
-import { checkPublicPrivacy, isFollower } from "../account/user";
-import { auth } from "../auth";
-import db from "../db";
-import { ActivityType, InteractionTargetType, LikeTargetType, NotificationType } from "../generated/prisma/enums";
-import { formDataString } from "../util/formData";
-
-async function getCurrentUserId() {
-	const session = await auth();
-
-	if (!session?.user?.id) {
-		redirect("/login");
-	}
-
-	return session.user.id;
-}
+import { getCurrentUserId } from "@/lib/auth";
+import { isFollower } from "@/lib/data/user";
+import db from "@/lib/db";
+import { ActivityType, InteractionTargetType, LikeTargetType, NotificationType } from "@/lib/generated/prisma/enums";
+import { inputError } from "@/lib/logger";
+import { formDataString } from "@/lib/util/parse/formData";
+import { checkPublicPrivacy } from "@/lib/util/privacy";
 
 function activityExpiry() {
 	return new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
@@ -117,11 +108,11 @@ export async function addComment(targetType: InteractionTargetType, targetId: st
 	const content = formDataString(formData.get("content")).trim();
 
 	if (!content) {
-		throw new Error("Comment is required.");
+		return inputError("Comment is required.");
 	}
 
 	if (content.length > 2000) {
-		throw new Error("Comments must be 2000 characters or fewer.");
+		return inputError("Comments must be 2000 characters or fewer.");
 	}
 
 	await ensureCanInteractWithTarget(targetType, targetId, userId, "comment");
@@ -222,7 +213,7 @@ export async function toggleLike(targetType: LikeTargetType, targetId: string) {
 	const userId = await getCurrentUserId();
 
 	if (!Object.values(LikeTargetType).includes(targetType)) {
-		throw new Error("Invalid target.");
+		return inputError("Invalid target.");
 	}
 
 	const existing = await db.like.findFirst({

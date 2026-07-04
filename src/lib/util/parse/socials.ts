@@ -1,7 +1,6 @@
-import { SOCIALPLATFORMS } from "../constants";
-import { LinkType } from "../enums";
-import type { SocialLink } from "../types";
-import * as normalize from "../util/normalize";
+import { SOCIAL_PLATFORMS } from "@/lib/constants";
+import { LinkType, type SocialLink } from "@/lib/types";
+import * as normalize from "@/lib/util/validate/normalize";
 
 function normalizeSocialKind(value: unknown): LinkType {
 	if (value === LinkType.COPY) return LinkType.COPY;
@@ -9,15 +8,15 @@ function normalizeSocialKind(value: unknown): LinkType {
 }
 
 export function isSocialPlatform(value: string): boolean {
-	return SOCIALPLATFORMS.some((platform) => platform.value === value);
+	return SOCIAL_PLATFORMS.some((platform) => platform.value === value);
 }
 
 export function getSocialPlatform(value: string, kind: LinkType) {
-	return normalize.byKeys(SOCIALPLATFORMS, { value, kind }) ?? normalize.byKey(SOCIALPLATFORMS, "value", value);
+	return normalize.byKeys(SOCIAL_PLATFORMS, { value, kind }) ?? normalize.byKey(SOCIAL_PLATFORMS, "value", value);
 }
 
 export function getSocialOption(id: string) {
-	return normalize.byKey(SOCIALPLATFORMS, "id", id);
+	return normalize.byKey(SOCIAL_PLATFORMS, "id", id);
 }
 
 export function getSocialPlatformLabel(value: string, kind: LinkType) {

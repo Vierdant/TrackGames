@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { GhostButton, PrimaryButton } from "@/components/ui/Buttons";
 import { Input } from "@/components/ui/Inputs";
 import MenuPanel from "@/components/ui/MenuPanel";
-import * as normalize from "@/lib/util/normalize";
+import * as normalize from "@/lib/util/validate/normalize";
 
 type ColorFieldProps = Readonly<{ name: string; value: string; onChange: (value: string) => void; placeholder: string; label: string }>;
 
@@ -63,11 +63,13 @@ export function MediaModal({ open, title, value, onClose, onSave }: MediaModelPr
 	);
 }
 
-export function SaveBar() {
+export function SaveBar({ pending }: Readonly<{ pending?: boolean }>) {
 	return (
 		<div className="bottom-4 z-20 mt-5 flex justify-end">
 			<div className="flex gap-2 rounded p-2">
-				<PrimaryButton type="submit">Save</PrimaryButton>
+				<PrimaryButton type="submit" disabled={pending}>
+					{pending ? "Saving..." : "Save"}
+				</PrimaryButton>
 			</div>
 		</div>
 	);

@@ -2,7 +2,7 @@ import { createOpenGraphImage } from "@/app/(net)/opengraph/OpenGraphImage";
 import db from "@/lib/db";
 import { ImageIdToURL } from "@/lib/external/igdb/util";
 import { GameListType } from "@/lib/generated/prisma/enums";
-import { metadataDescription } from "@/lib/metadata";
+import { metadataDescription } from "@/lib/util/metadata";
 
 export const alt = "Playlist on TrackGames";
 export const size = {

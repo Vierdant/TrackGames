@@ -5,17 +5,18 @@ import { useState, useTransition } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { X } from "lucide-react";
+import { formLabel } from "@/app/_util/func";
+import StarRating from "@/components/game/StarRating";
+import PlaylistCardEditorTabs, { timeModeLabel } from "@/components/library/PlaylistCardEditorTabs";
+import PlaylistCardPreview, { statusColor } from "@/components/library/PlaylistCardPreview";
+import { GhostButton, PrimaryButton } from "@/components/ui/Buttons";
+import ConfirmAction from "@/components/ui/ConfirmAction";
+import MenuPanel from "@/components/ui/MenuPanel";
 import { createUserGamePlayLog, deleteUserGamePlayLog, removeGameFromLibrary, updateUserGameEntry, updateUserGamePlayLog } from "@/lib/actions/library";
 import type { UserLibraryEntryWithTags } from "@/lib/data/library";
 import { ImageIdToURL } from "@/lib/external/igdb/util";
-import { formDataString } from "@/lib/util/formData";
-import { ratingToFive } from "@/lib/util/rating";
-import StarRating from "../game/StarRating";
-import { GhostButton, PrimaryButton } from "../ui/Buttons";
-import ConfirmAction from "../ui/ConfirmAction";
-import MenuPanel from "../ui/MenuPanel";
-import PlaylistCardEditorTabs, { timeModeLabel } from "./PlaylistCardEditorTabs";
-import PlaylistCardPreview, { statusColor, statusLabel } from "./PlaylistCardPreview";
+import { ratingToFive } from "@/lib/util/format/rating";
+import { formDataString } from "@/lib/util/parse/formData";
 
 type PlayListCardProps = Readonly<{
 	entry: UserLibraryEntryWithTags;
@@ -68,6 +69,12 @@ export default function PlaylistCard({ entry, mode, canEdit, onUpdate, onRemove,
 		setError("");
 		startTransition(async () => {
 			const updated = await updateUserGameEntry(entry.id, formData);
+
+			if ("error" in updated) {
+				setError(updated.error);
+				return;
+			}
+
 			onUpdate(updated);
 			setEditing(false);
 		});
@@ -77,6 +84,12 @@ export default function PlaylistCard({ entry, mode, canEdit, onUpdate, onRemove,
 		setError("");
 		startTransition(async () => {
 			const updated = await createUserGamePlayLog(entry.id, formData);
+
+			if ("error" in updated) {
+				setError(updated.error);
+				return;
+			}
+
 			onUpdate(updated);
 			setEditing(false);
 		});
@@ -88,6 +101,12 @@ export default function PlaylistCard({ entry, mode, canEdit, onUpdate, onRemove,
 		setError("");
 		startTransition(async () => {
 			const updated = await updateUserGamePlayLog(selectedLogId, formData);
+
+			if ("error" in updated) {
+				setError(updated.error);
+				return;
+			}
+
 			onUpdate(updated);
 			setSelectedLogId("");
 		});
@@ -157,7 +176,7 @@ export default function PlaylistCard({ entry, mode, canEdit, onUpdate, onRemove,
 					<div className="flex min-w-0 flex-1 flex-col gap-2 text-sm text-text-muted">
 						<p className="flex items-center gap-2 capitalize">
 							<span className={`size-2 rounded-full ${statusColor(entry.status)}`} aria-hidden="true" />
-							{statusLabel(entry.status)}
+							{formLabel(entry.status)}
 						</p>
 						<p className="flex flex-row items-center gap-2">
 							<span className="font-bold text-text">Rating:</span> <StarRating rating={ratingToFive(entry.rating ?? 0) ?? 0} size={15} />

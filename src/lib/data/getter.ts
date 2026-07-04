@@ -1,26 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { cache } from "react";
 import { type PrismaClient } from "@prisma/client/extension";
-import { fetchAPI } from "../external/igdb/igdb-api";
+import { fetchAPI } from "@/lib/external/igdb/igdb-api";
+import type { MaybeArray } from "@/lib/types";
 
-export async function getFallback<T>(select: object, database: PrismaClient, fetching: { endpoint: string; body: string }, formatter: (data: any) => T): Promise<T[]> {
-	const fallbackData = await fetchAPI<any[]>(fetching.endpoint, fetching.body);
+type ByIdResult<A extends MaybeArray<number>, T> = A extends number[] ? T[] : T | null;
+type BySlugResult<A extends MaybeArray<string>, T> = A extends string[] ? T[] : T | null;
 
-	const saved = await Promise.all(
-		fallbackData.map((raw) => {
-			const data = formatter(raw);
-
-			return database.upsert({
-				where: { id: (data as { id: number }).id! },
-				update: data as any,
-				create: data as any,
-				select,
-			} as any);
-		}),
-	);
-
-	return saved as T[];
-}
-
+/** Fetches rows by id from the local DB, falling back to IGDB (and upserting) for any ids not found locally. Result order matches the input `ids` order. */
 export async function getByIds<T>(ids: number[], select: object, database: PrismaClient, fetching: { endpoint: string; body: string }, formatter: (data: any) => T): Promise<T[]> {
 	if (!ids.length) return [];
 
@@ -51,6 +38,7 @@ export async function getByIds<T>(ids: number[], select: object, database: Prism
 	return ids.map((id) => gamesById.get(id)).filter((game): game is T => Boolean(game));
 }
 
+/** Same as `getByIds` but keyed by slug. */
 export async function getBySlugs<T>(
 	slugs: string[],
 	select: object,
@@ -87,4 +75,45 @@ export async function getBySlugs<T>(
 	}
 
 	return slugs.map((slug) => gamesBySlug.get(slug)).filter((game): game is T => Boolean(game));
+}
+
+/**
+ * Builds a `cache()`-wrapped getter for one Prisma model, backed by `getByIds`.
+ * Accepts a single id or an array.
+ */
+export function makeGetById<T>(select: object, database: PrismaClient, fetching: { endpoint: string; body: string }, formatter: (data: any) => T) {
+	return cache(async (id: MaybeArray<number>) => {
+		const ids = Array.isArray(id) ? id : [id];
+		const res = await getByIds(ids, select, database, fetching, formatter);
+		return Array.isArray(id) ? res : (res[0] ?? null);
+	}) as <A extends MaybeArray<number>>(id: A) => Promise<ByIdResult<A, T>>;
+}
+
+/** Same as `makeGetById` but keyed by slug, backed by `getBySlugs`. */
+export function makeGetBySlug<T>(select: object, database: PrismaClient, fetching: { endpoint: string; body: string }, formatter: (data: any) => T) {
+	return cache(async (slug: MaybeArray<string>) => {
+		const slugs = Array.isArray(slug) ? slug : [slug];
+		const res = await getBySlugs(slugs, select, database, fetching, formatter);
+		return Array.isArray(slug) ? res : (res[0] ?? null);
+	}) as <A extends MaybeArray<string>>(slug: A) => Promise<BySlugResult<A, T>>;
+}
+
+/** Fetches rows from IGDB and upserts them into the local DB, returning the saved rows. */
+export async function getFallback<T>(select: object, database: PrismaClient, fetching: { endpoint: string; body: string }, formatter: (data: any) => T): Promise<T[]> {
+	const fallbackData = await fetchAPI<any[]>(fetching.endpoint, fetching.body);
+
+	const saved = await Promise.all(
+		fallbackData.map((raw) => {
+			const data = formatter(raw);
+
+			return database.upsert({
+				where: { id: (data as { id: number }).id! },
+				update: data as any,
+				create: data as any,
+				select,
+			} as any);
+		}),
+	);
+
+	return saved as T[];
 }

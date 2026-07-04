@@ -1,5 +1,5 @@
 import { IGDB_BASE_URL, importConfigs } from "@/lib/external/igdb/import";
-import { getAccessToken } from "@/lib/token";
+import { getAccessToken } from "@/lib/external/igdb/token";
 import { loadEnvConfig } from "@next/env";
 
 loadEnvConfig(process.cwd());

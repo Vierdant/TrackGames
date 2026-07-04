@@ -1,8 +1,8 @@
 "use server";
 
-import { Unix, UnixElapseMeasure } from "../../util/Unix";
-import { fetchAPI } from "./igdb-api";
-import type { PopScoreEntry, RawGame } from "./types";
+import { fetchAPI } from "@/lib/external/igdb/igdb-api";
+import type { PopScoreEntry, RawGame } from "@/lib/external/igdb/types";
+import { Unix, UnixElapseMeasure } from "@/lib/util/format/time";
 
 export async function fetchDisplayGames(fields: string | null = null, body: string = ""): Promise<RawGame[]> {
 	fields = fields ? ", " + fields : "";
@@ -45,23 +45,30 @@ export async function calculateTrendingGames() {
     `,
 	);
 
+	const gameIds = games.map((game) => game.id).filter((id) => id !== undefined);
+
+	const primitives = await fetchAPI<PopScoreEntry[]>(
+		"popularity_primitives",
+		`
+            fields game_id, value, popularity_type, created_at;
+            where popularity_type = (1, 2)
+            & game_id = (${gameIds.join(",")});
+            sort created_at desc;
+            limit 500;
+            `,
+	);
+
+	const scoresByGameId = new Map<number, { type1: number; type2: number }>();
+	for (const primitive of primitives) {
+		const scores = scoresByGameId.get(primitive.game_id) ?? { type1: 0, type2: 0 };
+		if (primitive.popularity_type === 1) scores.type1 ||= primitive.value;
+		if (primitive.popularity_type === 2) scores.type2 ||= primitive.value;
+		scoresByGameId.set(primitive.game_id, scores);
+	}
+
 	for (const game of games) {
-		const primitives = await fetchAPI<PopScoreEntry[]>(
-			"popularity_primitives",
-			`
-                fields game_id, value, popularity_type, created_at;
-                where popularity_type = (1, 2)
-                & game_id = ${game.id};
-                sort created_at desc;
-                limit 500;
-                `,
-		);
-
-		const type1 = primitives.find((p) => p.popularity_type === 1)?.value ?? 0;
-		const type2 = primitives.find((p) => p.popularity_type === 2)?.value ?? 0;
-
-		const weightedScore = type1 * 0.6 + type2 * 0.4;
-
+		const scores = game.id !== undefined ? scoresByGameId.get(game.id) : undefined;
+		const weightedScore = (scores?.type1 ?? 0) * 0.6 + (scores?.type2 ?? 0) * 0.4;
 		weightedGames.push({ game, score: weightedScore });
 	}
 

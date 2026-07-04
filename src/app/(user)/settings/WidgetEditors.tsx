@@ -2,14 +2,14 @@
 
 import { useEffect, useState } from "react";
 import { ChevronDown, ChevronLeft, ChevronRight, ChevronUp, Eye, EyeOff, Plus, Search, Trash2, X } from "lucide-react";
+import { deferHook } from "@/app/_util/func";
+import MarkdownWidgetEditor from "@/app/(user)/settings/MarkdownWidgetEditor";
 import { GameCard } from "@/components/game/GameDisplays";
 import { Input, Select } from "@/components/ui/Inputs";
 import type { Game } from "@/lib/data/games";
-import { WidgetType } from "@/lib/enums";
 import type { Widget } from "@/lib/types";
-import { deferEffect } from "@/lib/util/effects";
-import * as normalize from "@/lib/util/normalize";
-import MarkdownWidgetEditor from "./MarkdownWidgetEditor";
+import { WidgetType } from "@/lib/types";
+import * as lookup from "@/lib/util/validate/lookup";
 
 type WidgetHeaderProps = Readonly<{
 	widget: Widget;
@@ -126,7 +126,7 @@ function StatsEditor({ widget, onChange }: StatsEditor) {
 					{selectedStats.map((stat, index) => (
 						<div key={stat} className="flex min-h-28 min-w-0 flex-col items-center justify-center gap-3 rounded border border-primary/80 bg-primary/5 p-3">
 							<p className="mt-2 truncate text-2xl leading-tight font-semibold text-text">000</p>
-							<p className="text-md mt-2 truncate leading-tight font-semibold text-text-muted">{normalize.label(statOptions, "value", "label", stat, stat)}</p>
+							<p className="text-md mt-2 truncate leading-tight font-semibold text-text-muted">{lookup.label(statOptions, "value", "label", stat, stat)}</p>
 							<div className="flex items-center justify-end gap-1 pt-2">
 								<button
 									type="button"
@@ -175,7 +175,7 @@ function GameListEditor({ widget, onChange }: GameListEditor) {
 
 	useEffect(() => {
 		if (!widget.games.length) {
-			return deferEffect(() => {
+			return deferHook(() => {
 				setSelectedGames([]);
 			});
 		}
@@ -198,7 +198,7 @@ function GameListEditor({ widget, onChange }: GameListEditor) {
 		const search = query.trim();
 
 		if (search.length < 2) {
-			return deferEffect(() => {
+			return deferHook(() => {
 				setResults([]);
 				setLoading(false);
 			});

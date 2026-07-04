@@ -3,13 +3,14 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import * as z from "zod";
-import { usernameSchema } from "../account/username";
-import { auth, signOut } from "../auth";
-import db from "../db";
-import { LinkType } from "../enums";
-import { Prisma } from "../generated/prisma/client";
-import { ActivityType } from "../generated/prisma/enums";
-import { hashPassword, verifyPassword } from "../util/password";
+import { getCurrentUserId, signOut } from "@/lib/auth";
+import { usernameSchema } from "@/lib/constants";
+import db from "@/lib/db";
+import { Prisma } from "@/lib/generated/prisma/client";
+import { ActivityType } from "@/lib/generated/prisma/enums";
+import { inputError } from "@/lib/logger";
+import { LinkType } from "@/lib/types";
+import { hashPassword, verifyPassword } from "@/lib/util/server/password";
 
 type SocialLinkValue = {
 	platform: z.infer<typeof socialPlatformSchema>;
@@ -80,28 +81,7 @@ const socialLinksSchema = z
 				)
 				.max(20)
 				.parse(parsed);
-			const normalized: SocialLinkValue[] = [];
-
-			for (const item of socialLinks) {
-				if (!item.value) continue;
-
-				if (item.kind === LinkType.COPY) {
-					if (item.value.length > 100) {
-						throw new Error("Copy values must be 100 characters or fewer.");
-					}
-
-					normalized.push({ platform: item.platform, kind: item.kind, value: item.value });
-					continue;
-				}
-
-				const url = new URL(item.value);
-
-				if (url.protocol !== "https:") {
-					throw new Error("Only HTTPS URLs are allowed.");
-				}
-
-				normalized.push({ platform: item.platform, kind: item.kind, value: item.value });
-			}
+			const normalized = socialLinks.map(validateSocialLink).filter((item): item is SocialLinkValue => item !== null);
 
 			return normalized.length > 0 ? JSON.stringify(normalized) : null;
 		} catch {
@@ -149,32 +129,24 @@ const settingsSchema = z.object({
 	passwordConfirm: z.string().max(128).optional(),
 });
 
-async function getCurrentUserId() {
-	const session = await auth();
+function validateSocialLink(item: SocialLinkValue): SocialLinkValue | null {
+	if (!item.value) return null;
 
-	if (!session?.user) {
-		redirect("/login");
+	if (item.kind === LinkType.COPY) {
+		if (item.value.length > 100) {
+			throw new Error("Copy values must be 100 characters or fewer.");
+		}
+
+		return { platform: item.platform, kind: item.kind, value: item.value };
 	}
 
-	if (session.user.id) {
-		return session.user.id;
+	const url = new URL(item.value);
+
+	if (url.protocol !== "https:") {
+		throw new Error("Only HTTPS URLs are allowed.");
 	}
 
-	const user = await db.user.findFirst({
-		where: {
-			OR: [session.user.email ? { email: session.user.email } : undefined, session.user.name ? { name: session.user.name } : undefined].filter(Boolean) as {
-				email?: string;
-				name?: string;
-			}[],
-		},
-		select: { id: true },
-	});
-
-	if (!user) {
-		redirect("/login");
-	}
-
-	return user.id;
+	return { platform: item.platform, kind: item.kind, value: item.value };
 }
 
 async function getConfirmedUser(confirmName: string) {
@@ -334,11 +306,11 @@ export async function updateUserSettings(tabValue: string, formData: FormData) {
 	const parsedValues = settingsSchema.safeParse(Object.fromEntries(formData));
 
 	if (tab === "profile" && !usernameSchema.safeParse(formData.get("name")).success) {
-		redirect("/settings?tab=profile&edit=1&error=invalid-username");
+		return inputError("Invalid username.");
 	}
 
 	if (!parsedValues.success) {
-		redirect(`/settings?tab=${tab}&edit=1&error=invalid`);
+		return inputError("Invalid input.");
 	}
 
 	const values = parsedValues.data;

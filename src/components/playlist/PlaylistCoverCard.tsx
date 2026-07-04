@@ -1,14 +1,14 @@
 import Link from "next/link";
+import { GameCard } from "@/components/game/GameDisplays";
 import { type PlaylistDisplayData } from "@/lib/data/playlists";
-import { GameCard } from "../game/GameDisplays";
 
-type PlaylistDisplayProps = Readonly<{
+type PlaylistCoverCardProps = Readonly<{
 	playlist: PlaylistDisplayData;
 	rank?: number;
 	hasHref?: boolean;
 }>;
 
-export default function PlaylistDisplay({ playlist, rank, hasHref }: PlaylistDisplayProps) {
+export default function PlaylistCoverCard({ playlist, rank, hasHref }: PlaylistCoverCardProps) {
 	const game = playlist.entries.at(0)?.game;
 	const games = playlist.entries.slice(0, 4).map((entry) => entry.game);
 	const title = playlist.name;

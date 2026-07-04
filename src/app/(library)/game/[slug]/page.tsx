@@ -1,18 +1,17 @@
-import { Suspense } from "react";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { notFound, redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 import { type Session } from "next-auth";
 import { Apple, Astroid, BadgeCheck, Clock, Flag, Gamepad2, GamepadDirectional, Library, Monitor, Play, Star, TabletSmartphone, ToggleRight } from "lucide-react";
+import { joinClass } from "@/app/_util/func";
+import { viewerThemeStyle } from "@/app/_util/theme";
 import CommentSection from "@/components/comments/CommentSection";
 import { GameCard } from "@/components/game/GameDisplays";
 import GameLibraryButtonPanel from "@/components/game/GameLibraryButtonPanel";
 import RelatedGamesTabs from "@/components/game/RelatedGamesTabs";
 import Container from "@/components/layout/Container";
 import MediaGallary from "@/components/layout/MediaGallery";
-import { shouldHideComments, viewerThemeStyle } from "@/lib/account/preferences";
-import { getUser } from "@/lib/account/user";
 import { auth } from "@/lib/auth";
 import { type Collection, getCollection } from "@/lib/data/collections";
 import { getCompany } from "@/lib/data/companies";
@@ -22,11 +21,14 @@ import { getGenre } from "@/lib/data/genre";
 import { getUserGameEntry } from "@/lib/data/library";
 import { getPlatform } from "@/lib/data/platforms";
 import { getUserPlaylists } from "@/lib/data/playlists";
+import { getUser } from "@/lib/data/user";
 import { ImageIdToURL } from "@/lib/external/igdb/util";
 import { InteractionTargetType } from "@/lib/generated/prisma/enums";
-import { absoluteUrl, metadataDescription, SITE_NAME } from "@/lib/metadata";
-import * as normalize from "@/lib/util/normalize";
-import { ratingToFive } from "@/lib/util/rating";
+import { formatNumber } from "@/lib/util/format/numbers";
+import { ratingToFive } from "@/lib/util/format/rating";
+import { absoluteUrl, metadataDescription, SITE_NAME } from "@/lib/util/metadata";
+import { shouldHideComments } from "@/lib/util/privacy";
+import * as normalize from "@/lib/util/validate/normalize";
 
 type GameStats = {
 	plays: number;
@@ -243,7 +245,7 @@ export default async function Page({ params }: Readonly<{ params: Promise<{ slug
 						{/* PLAYLIST STATS */}
 						<section className="flex min-w-0 flex-row items-start justify-start gap-2 rounded bg-bg-secondary p-4">
 							<h2 className="text-md ml-5 shrink-0 text-text-muted">This entry is in</h2>
-							<p className="text-md ml-auto min-w-0 pr-5 text-right font-bold text-text">{formatCompactNumber(gameStats.publicPlaylistEntries)} playlists</p>
+							<p className="text-md ml-auto min-w-0 pr-5 text-right font-bold text-text">{formatNumber(gameStats.publicPlaylistEntries)} playlists</p>
 						</section>
 
 						{/* TIME SPENT */}
@@ -289,7 +291,7 @@ function AverageRatingWidget({ game, gameStats }: RenderAverageRatingWidgetProps
 								<div
 									key={rating.rating}
 									className="flex h-full flex-1 items-end"
-									title={`${label}: ${formatCompactNumber(rating.count)} ${rating.count === 1 ? "vote" : "votes"} (${percentage.toFixed(1)}%)`}
+									title={`${label}: ${formatNumber(rating.count)} ${rating.count === 1 ? "vote" : "votes"} (${percentage.toFixed(1)}%)`}
 								>
 									<div
 										className="w-full rounded-t bg-primary/75"
@@ -317,14 +319,12 @@ function AverageRatingWidget({ game, gameStats }: RenderAverageRatingWidgetProps
 }
 
 function LogStatFormat({ className, title, stat, Icon }: LogStatFormatProps) {
-	const style = "w-full" + " " + className;
-
 	return (
-		<div className={style}>
+		<div className={joinClass("w-full", className)}>
 			<div className="ml-5 flex min-w-0 flex-row items-center gap-2">
 				<Icon className="rounded-2xl bg-bg/60 p-2 text-secondary" size={30} />
 				<p className="text-md min-w-0 truncate text-text-muted">{title}</p>
-				<p className="text-md ml-auto shrink-0 text-text">{formatCompactNumber(stat!)}</p>
+				<p className="text-md ml-auto shrink-0 text-text">{formatNumber(stat!)}</p>
 			</div>
 		</div>
 	);
@@ -349,13 +349,6 @@ function platformIcon(name: string) {
 	if (lower.includes("pc") || lower.includes("windows") || lower.includes("steam") || lower.includes("epic") || lower.includes("gog")) return <Monitor size={16} />;
 	if (lower.includes("mac")) return <Apple size={16} />;
 	if (lower.includes("ios") || lower.includes("android") || lower.includes("mobile")) return <TabletSmartphone size={16} />;
-}
-
-function formatCompactNumber(value: number) {
-	return Intl.NumberFormat("en", {
-		notation: "compact",
-		maximumFractionDigits: 1,
-	}).format(value);
 }
 
 function formatHours(value: number | null) {

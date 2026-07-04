@@ -1,8 +1,7 @@
-import { type CSSProperties } from "react";
-import db from "../db";
-import type { UserGetPayload } from "../generated/prisma/models/User";
-import type { PublicUser } from "../types";
-import { hexColor } from "../util/normalize";
+import db from "@/lib/db";
+import { type UserRole } from "@/lib/generated/prisma/enums";
+import type { UserGetPayload } from "@/lib/generated/prisma/models/User";
+import type { PublicUser } from "@/lib/types";
 
 type SessionUserRef = {
 	id?: string;
@@ -82,13 +81,6 @@ export async function getPublicUser(name: string): Promise<PublicUser | null> {
 	return user as PublicUser;
 }
 
-export function checkPublicPrivacy(privacy: string | null | undefined, isOwner: boolean, isFollower: boolean) {
-	if (isOwner) return true;
-	if (privacy === "private") return false;
-	if (privacy === "followers") return isFollower;
-	return true;
-}
-
 export async function isFollower(sessionUserId: string | undefined, userId: string | undefined): Promise<boolean> {
 	if (!sessionUserId || !userId) return false;
 	if (sessionUserId === userId) return true;
@@ -106,17 +98,20 @@ export async function isFollower(sessionUserId: string | undefined, userId: stri
 	}));
 }
 
-export function profileThemeStyle(profileColor: string | null | undefined, accentColor: string | null | undefined) {
-	const style: CSSProperties & Record<string, string> = {};
-	const primary = hexColor(profileColor, "#7b5cdb");
-	const secondary = hexColor(accentColor, "#b8842f");
+export async function userHasRole(userId: string, role: UserRole) {
+	const user = await db.user.findUnique({
+		where: { id: userId },
+		select: { roles: true },
+	});
 
-	style["--primary"] = primary;
-	style["--primary-hover"] = `color-mix(in srgb, ${primary} 82%, white)`;
-	style["--border-strong"] = primary;
+	return Boolean(user?.roles.includes(role));
+}
 
-	style["--secondary"] = secondary;
-	style["--secondary-hover"] = `color-mix(in srgb, ${secondary} 82%, white)`;
+export async function userHasAnyRole(userId: string, roles: UserRole[]) {
+	const user = await db.user.findUnique({
+		where: { id: userId },
+		select: { roles: true },
+	});
 
-	return style;
+	return Boolean(user?.roles.some((role) => roles.includes(role)));
 }

@@ -1,14 +1,9 @@
-import db from "../db";
-import { formatRawCollection } from "../external/igdb/util";
-import type { CollectionModel } from "../generated/prisma/models/Collection";
-import type { MaybeArray } from "../types";
-import { getByIds, getBySlugs } from "./getter";
+import { makeGetById, makeGetBySlug } from "@/lib/data/getter";
+import db from "@/lib/db";
+import { formatRawCollection } from "@/lib/external/igdb/util";
+import type { CollectionModel } from "@/lib/generated/prisma/models/Collection";
 
 export type Collection = Pick<CollectionModel, "id" | "slug" | "name" | "games">;
-
-type DataResult<T extends MaybeArray<number>> = T extends number[] ? Collection[] : Collection | null;
-
-type SlugResult<T extends string | string[]> = T extends string[] ? Collection[] : Collection | null;
 
 const select = {
 	id: true,
@@ -22,14 +17,6 @@ const fetching = {
 	body: `fields slug, name, games;`,
 };
 
-export async function getCollection<T extends MaybeArray<number>>(id: T): Promise<DataResult<T>> {
-	const ids = Array.isArray(id) ? id : [id];
-	const res = await getByIds(ids as number[], select, db.collection, fetching, formatRawCollection);
-	return (Array.isArray(id) ? res : (res[0] ?? null)) as DataResult<T>;
-}
+export const getCollection = makeGetById<Collection>(select, db.collection, fetching, formatRawCollection);
 
-export async function getCollectionBySlug<T extends string | string[]>(slug: T): Promise<SlugResult<T>> {
-	const slugs = Array.isArray(slug) ? slug : [slug];
-	const res = await getBySlugs(slugs as string[], select, db.collection, fetching, formatRawCollection);
-	return (Array.isArray(slug) ? res : (res[0] ?? null)) as SlugResult<T>;
-}
+export const getCollectionBySlug = makeGetBySlug<Collection>(select, db.collection, fetching, formatRawCollection);

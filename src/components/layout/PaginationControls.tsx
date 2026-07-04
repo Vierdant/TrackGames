@@ -1,6 +1,9 @@
+"use client";
+
 import type { ReactNode } from "react";
 import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { joinClass } from "@/app/_util/func";
 
 type PaginationControlsProps = Readonly<{
 	page: number;
@@ -21,9 +24,11 @@ export default function PaginationControls({ page, pageCount, href, onPageChange
 	}
 
 	function renderPageButton(value: number, label: string, children: ReactNode, disabled?: boolean) {
-		const className = `grid size-9 place-items-center rounded border text-sm font-bold transition-colors ${
-			safePage === value ? "border-primary bg-primary text-text" : "border-border text-text-muted hover:border-primary hover:text-primary"
-		} ${disabled ? "pointer-events-none opacity-50" : ""}`;
+		const className = joinClass(
+			"grid size-9 place-items-center rounded border text-sm font-bold transition-colors",
+			safePage === value ? "border-primary bg-primary text-text" : "border-border text-text-muted hover:border-primary hover:text-primary",
+			disabled && "pointer-events-none opacity-50",
+		);
 
 		if (href) {
 			return (
@@ -38,7 +43,7 @@ export default function PaginationControls({ page, pageCount, href, onPageChange
 				type="button"
 				onClick={() => goToPage(value)}
 				disabled={disabled}
-				className={`${className} cursor-pointer disabled:cursor-default`}
+				className={joinClass(className, "cursor-pointer disabled:cursor-default")}
 				aria-label={label}
 				aria-current={safePage === value ? "page" : undefined}
 			>
@@ -48,7 +53,10 @@ export default function PaginationControls({ page, pageCount, href, onPageChange
 	}
 
 	function renderArrowButton(value: number, label: string, children: ReactNode, disabled: boolean) {
-		const className = `flex items-center justify-center gap-5 rounded border border-text-faint bg-primary/0 px-3 py-2 font-bold text-text-muted transition-colors hover:border-primary hover:text-primary ${disabled ? "pointer-events-none opacity-50" : ""}`;
+		const className = joinClass(
+			"flex items-center justify-center gap-5 rounded border border-text-faint bg-primary/0 px-3 py-2 font-bold text-text-muted transition-colors hover:border-primary hover:text-primary",
+			disabled && "pointer-events-none opacity-50",
+		);
 
 		if (href) {
 			return (
@@ -59,7 +67,7 @@ export default function PaginationControls({ page, pageCount, href, onPageChange
 		}
 
 		return (
-			<button type="button" onClick={() => goToPage(value)} disabled={disabled} className={`${className} cursor-pointer disabled:cursor-default`} aria-label={label}>
+			<button type="button" onClick={() => goToPage(value)} disabled={disabled} className={joinClass(className, "cursor-pointer disabled:cursor-default")} aria-label={label}>
 				{children}
 			</button>
 		);

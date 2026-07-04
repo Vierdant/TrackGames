@@ -1,19 +1,20 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { Bell, Download, LayoutGrid, Settings, Shield, UserIcon } from "lucide-react";
+import { profileThemeStyle } from "@/app/_util/theme";
+import SettingsPanel from "@/app/(user)/settings/SettingsPanel";
+import SettingsTabs from "@/app/(user)/settings/SettingsTabs";
 import Container from "@/components/layout/Container";
 import ProfileBackground from "@/components/user/BackgroundView";
 import ProfileHeader from "@/components/user/ProfileHeader";
-import { getUser, getUserProviders, hasUserPassword, profileThemeStyle } from "@/lib/account/user";
 import { auth } from "@/lib/auth";
-import { absoluteUrl, DEFAULT_OG_IMAGE, metadataDescription, SITE_NAME } from "@/lib/metadata";
+import { getUser, getUserProviders, hasUserPassword } from "@/lib/data/user";
 import { type PublicUser } from "@/lib/types";
-import * as normalize from "@/lib/util/normalize";
-import SettingsPanel from "./SettingsPanel";
-import SettingsTabs from "./SettingsTabs";
+import { absoluteUrl, DEFAULT_OG_IMAGE, metadataDescription, SITE_NAME } from "@/lib/util/metadata";
+import * as lookup from "@/lib/util/validate/lookup";
 
 type SearchPageProps = Readonly<{
-	searchParams: Promise<{ tab?: string; edit?: string; saved?: string; error?: string }>;
+	searchParams: Promise<{ tab?: string; error?: string }>;
 }>;
 
 const description = metadataDescription("Manage your TrackGames profile, privacy, widgets, preferences, imports, and account settings.");
@@ -60,7 +61,7 @@ export const SETTINGTABS: { id: string; label: string; icon: typeof UserIcon }[]
 
 export default async function SettingsPage({ searchParams }: SearchPageProps) {
 	const params = await searchParams;
-	const activeTab = normalize.value(params.tab, SETTINGTABS, "id", "profile");
+	const activeTab = lookup.value(params.tab, SETTINGTABS, "id", "profile");
 	const session = await auth();
 	if (!session?.user) redirect("/login");
 
@@ -69,7 +70,7 @@ export default async function SettingsPage({ searchParams }: SearchPageProps) {
 
 	const hasPassword = await hasUserPassword(profile.email!);
 	const accounts = activeTab === "account" ? await getUserProviders(profile.id) : [];
-	const active = normalize.byKey(SETTINGTABS, "id", activeTab) ?? SETTINGTABS[0];
+	const active = lookup.byKey(SETTINGTABS, "id", activeTab) ?? SETTINGTABS[0];
 
 	return (
 		<main className="relative z-0 flex-1" style={profileThemeStyle(profile.profileColor, profile.accentColor)}>
@@ -83,9 +84,6 @@ export default async function SettingsPage({ searchParams }: SearchPageProps) {
 						<SettingsTabs activeTab={activeTab} />
 
 						<div className="min-w-0">
-							{params.saved === "1" && (
-								<div className="mb-4 rounded border border-success/40 bg-success/10 px-4 py-3 text-sm font-bold text-success">Settings saved.</div>
-							)}
 							{params.error && (
 								<div className="mb-4 rounded border border-error/40 bg-error/10 px-4 py-3 text-sm font-bold text-error">{settingsErrorMessage(params.error)}</div>
 							)}
@@ -108,16 +106,6 @@ export default async function SettingsPage({ searchParams }: SearchPageProps) {
 
 function settingsErrorMessage(error: string) {
 	switch (error) {
-		case "duplicate":
-			return "That username or email is already in use.";
-		case "invalid-username":
-			return "Use 1-32 letters, numbers, underscores, or hyphens.";
-		case "invalid-password":
-			return "Enter matching passwords with at least 8 characters.";
-		case "current-password":
-			return "Your current password was incorrect.";
-		case "email-required":
-			return "Add an email before setting a password.";
 		case "last-login":
 			return "Add another login method before unlinking that provider.";
 		case "invalid-provider":

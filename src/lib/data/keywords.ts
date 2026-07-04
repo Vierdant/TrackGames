@@ -1,14 +1,9 @@
-import db from "../db";
-import { formatRawKeyword } from "../external/igdb/util";
-import type { KeywordModel } from "../generated/prisma/models/Keyword";
-import type { MaybeArray } from "../types";
-import { getByIds, getBySlugs } from "./getter";
+import { makeGetById, makeGetBySlug } from "@/lib/data/getter";
+import db from "@/lib/db";
+import { formatRawKeyword } from "@/lib/external/igdb/util";
+import type { KeywordModel } from "@/lib/generated/prisma/models/Keyword";
 
 export type Keyword = Pick<KeywordModel, "id" | "slug" | "name">;
-
-type DataResult<T extends MaybeArray<number>> = T extends number[] ? Keyword[] : Keyword | null;
-
-type SlugResult<T extends string | string[]> = T extends string[] ? Keyword[] : Keyword | null;
 
 const select = {
 	id: true,
@@ -21,17 +16,9 @@ const fetching = {
 	body: `fields slug, name;`,
 };
 
-export async function getKeyword<T extends MaybeArray<number>>(id: T): Promise<DataResult<T>> {
-	const ids = Array.isArray(id) ? id : [id];
-	const res = await getByIds(ids as number[], select, db.keyword, fetching, formatRawKeyword);
-	return (Array.isArray(id) ? res : (res[0] ?? null)) as DataResult<T>;
-}
+export const getKeyword = makeGetById<Keyword>(select, db.keyword, fetching, formatRawKeyword);
 
-export async function getKeywordBySlug<T extends string | string[]>(slug: T): Promise<SlugResult<T>> {
-	const slugs = Array.isArray(slug) ? slug : [slug];
-	const res = await getBySlugs(slugs as string[], select, db.keyword, fetching, formatRawKeyword);
-	return (Array.isArray(slug) ? res : (res[0] ?? null)) as SlugResult<T>;
-}
+export const getKeywordBySlug = makeGetBySlug<Keyword>(select, db.keyword, fetching, formatRawKeyword);
 
 export async function searchKeywords(query: string): Promise<Keyword[]> {
 	const search = query.trim();

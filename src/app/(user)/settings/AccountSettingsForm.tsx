@@ -2,13 +2,23 @@
 
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
+import { DiscordIcon, GithubIcon, GoogleIcon, TwitchIcon } from "@/components/SVG";
 import { GhostButton } from "@/components/ui/Buttons";
 import ConfirmAction from "@/components/ui/ConfirmAction";
 import { Field, Input } from "@/components/ui/Inputs";
-import { type SecuredUser } from "@/lib/account/user";
 import { linkProvider, unlinkProvider } from "@/lib/actions/auth";
 import { clearUserLibrary, deleteUserAccount, resetUserAccountData } from "@/lib/actions/settings";
-import { AUTHPROVIDERS } from "@/lib/constants";
+import { AUTH_PROVIDERS } from "@/lib/constants";
+import { type SecuredUser } from "@/lib/data/user";
+
+const authIcons = {
+	google: GoogleIcon,
+	github: GithubIcon,
+	twitch: TwitchIcon,
+	discord: DiscordIcon,
+} as const;
+
+const authProviders = AUTH_PROVIDERS.map((provider) => ({ ...provider, icon: authIcons[provider.slug as keyof typeof authIcons] }));
 
 export default function AccountSettingsForm({ profile, linkedProviders, hasPassword }: Readonly<{ profile: SecuredUser; linkedProviders: string[]; hasPassword: boolean }>) {
 	const [email, setEmail] = useState(profile.email ?? "");
@@ -23,16 +33,18 @@ export default function AccountSettingsForm({ profile, linkedProviders, hasPassw
 		startTransition(async () => {
 			if (action === "library") {
 				await clearUserLibrary(profile.name!);
-				router.refresh();
 			}
 
 			if (action === "data") {
 				await resetUserAccountData(profile.name!);
-				router.refresh();
 			}
 
 			if (action === "account") {
 				await deleteUserAccount(profile.name!);
+			}
+
+			if (action !== "account") {
+				router.refresh();
 			}
 
 			setConfirming(null);
@@ -97,7 +109,7 @@ export default function AccountSettingsForm({ profile, linkedProviders, hasPassw
 			<div>
 				<h3>Login providers</h3>
 				<div className="mt-2 grid gap-2 md:grid-cols-2">
-					{AUTHPROVIDERS.map((provider) => {
+					{authProviders.map((provider) => {
 						const linked = linkedProviders.includes(provider.slug);
 						const Icon = provider.icon;
 

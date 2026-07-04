@@ -1,18 +1,18 @@
 import { Suspense } from "react";
+import { viewerThemeStyle } from "@/app/_util/theme";
 import { GameCard, StatInfoCard } from "@/components/game/GameDisplays";
 import GameFeature from "@/components/game/GameFeature";
 import Container from "@/components/layout/Container";
 import Gallary from "@/components/layout/Gallery";
 import HorizontalScroller from "@/components/layout/HorizontalScroller";
-import PlaylistDisplay from "@/components/playlist/PlaylistCard";
+import PlaylistCoverCard from "@/components/playlist/PlaylistCoverCard";
 import StatBlock from "@/components/StatBlock";
 import { HeroImage } from "@/components/SVG";
 import { GhostButton, PrimaryButton } from "@/components/ui/Buttons";
 import Loading from "@/components/ui/Loading";
-import { viewerThemeStyle } from "@/lib/account/preferences";
-import { getUser } from "@/lib/account/user";
 import { auth } from "@/lib/auth";
 import { comingSoon, hiddenGames, mostAnticipated, recentReleases, siteStats, topPlaylists, trendingGames, yearlyGames } from "@/lib/cache/resources";
+import { getUser } from "@/lib/data/user";
 import { formatRawGame } from "@/lib/external/igdb/util";
 
 export default async function Home() {
@@ -105,7 +105,7 @@ export default async function Home() {
 							{playlists.length ? (
 								<div className="grid grid-cols-2 items-center justify-between gap-5 md:grid-cols-4">
 									{playlists.map((playlist, index) => (
-										<PlaylistDisplay key={playlist.id} playlist={playlist} rank={index + 1} hasHref />
+										<PlaylistCoverCard key={playlist.id} playlist={playlist} rank={index + 1} hasHref />
 									))}
 								</div>
 							) : (

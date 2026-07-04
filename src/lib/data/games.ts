@@ -1,9 +1,8 @@
-import db from "../db";
-import { formatRawGame } from "../external/igdb/util";
-import { GameListType, GameStatus } from "../generated/prisma/enums";
-import type { GameModel } from "../generated/prisma/models/Game";
-import type { MaybeArray } from "../types";
-import { getByIds, getBySlugs } from "./getter";
+import { makeGetById, makeGetBySlug } from "@/lib/data/getter";
+import db from "@/lib/db";
+import { formatRawGame } from "@/lib/external/igdb/util";
+import { GameListType, GameStatus } from "@/lib/generated/prisma/enums";
+import type { GameModel } from "@/lib/generated/prisma/models/Game";
 
 export type Game = Partial<
 	Pick<
@@ -39,10 +38,6 @@ export type Game = Partial<
 		| "gameType"
 	>
 >;
-
-type DataResult<T extends MaybeArray<number>> = T extends number[] ? Game[] : Game | null;
-
-type SlugResult<T extends string | string[]> = T extends string[] ? Game[] : Game | null;
 
 const gameSelect = {
 	id: true,
@@ -92,23 +87,13 @@ const fetching = {
     `,
 };
 
-export async function getGame<T extends MaybeArray<number>>(id: T): Promise<DataResult<T>> {
-	const ids = Array.isArray(id) ? id : [id];
-	const res = await getByIds(ids as number[], gameSelect, db.game, fetching, formatRawGame);
-	return (Array.isArray(id) ? res : (res[0] ?? null)) as DataResult<T>;
-}
+export const getGame = makeGetById<Game>(gameSelect, db.game, fetching, formatRawGame);
 
-export async function getMinifiedGame<T extends MaybeArray<number>>(id: T): Promise<DataResult<T>> {
-	const ids = Array.isArray(id) ? id : [id];
-	const res = await getByIds(ids as number[], minifiedSelect, db.game, fetching, formatRawGame);
-	return (Array.isArray(id) ? res : (res[0] ?? null)) as DataResult<T>;
-}
+export const getMinifiedGame = makeGetById<Game>(minifiedSelect, db.game, fetching, formatRawGame);
 
-export async function getGameBySlug<T extends string | string[]>(slug: T): Promise<SlugResult<T>> {
-	const slugs = Array.isArray(slug) ? slug : [slug];
-	const res = await getBySlugs(slugs as string[], gameSelect, db.game, fetching, formatRawGame);
-	return (Array.isArray(slug) ? res : (res[0] ?? null)) as SlugResult<T>;
-}
+export const getGameBySlug = makeGetBySlug<Game>(gameSelect, db.game, fetching, formatRawGame);
+
+export const getMinifiedGameBySlug = makeGetBySlug<Game>(minifiedSelect, db.game, fetching, formatRawGame);
 
 export async function getGameStats(gameId: number) {
 	const [plays, backlog, wishlisted, publicPlaylistEntries, averageTimes, ratings] = await Promise.all([
@@ -175,13 +160,6 @@ export async function getGameStats(gameId: number) {
 		averageMasteryTime: averageTimes._avg.timeMastered,
 		ratingDistribution,
 	};
-}
-
-export async function getMinifiedGameBySlug(slug: string): Promise<Game | null>;
-export async function getMinifiedGameBySlug(slug: string[]): Promise<Game[]>;
-export async function getMinifiedGameBySlug(slug: string | string[]): Promise<Game | Game[] | null> {
-	const res = await getBySlugs(Array.isArray(slug) ? slug : [slug], minifiedSelect, db.game, fetching, formatRawGame);
-	return Array.isArray(slug) ? res : (res[0] ?? null);
 }
 
 export async function searchGames(query: string, limit = 8): Promise<Game[]> {

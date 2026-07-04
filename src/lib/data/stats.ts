@@ -1,5 +1,5 @@
-import db from "../db";
-import { GameListType } from "../generated/prisma/enums";
+import db from "@/lib/db";
+import { GameListType } from "@/lib/generated/prisma/enums";
 
 export async function getSiteStats() {
 	const [games, users, libraries, playlists] = await Promise.all([

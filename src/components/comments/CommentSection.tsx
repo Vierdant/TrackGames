@@ -1,7 +1,7 @@
+import CommentSectionClient from "@/components/comments/CommentSectionClient";
 import { auth } from "@/lib/auth";
 import { getComments } from "@/lib/data/comments";
 import { type InteractionTargetType } from "@/lib/generated/prisma/enums";
-import CommentSectionClient from "./CommentSectionClient";
 
 export default async function CommentSection({ targetType, targetId }: Readonly<{ targetType: InteractionTargetType; targetId: string }>) {
 	const session = await auth();

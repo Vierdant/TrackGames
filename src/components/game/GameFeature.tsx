@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { joinClass } from "@/app/_util/func";
 import type { Game } from "@/lib/data/games";
 import { ImageIdToURL } from "@/lib/external/igdb/util";
 
@@ -63,7 +64,10 @@ export default function GameFeature({ game }: Readonly<{ game: Game }>) {
 										type="button"
 										aria-label={`Show ${game.name ?? "game"} screenshot ${index + 1}`}
 										aria-pressed={isActive}
-										className={`relative h-12 flex-1 overflow-hidden rounded bg-bg ring-primary transition hover:ring-2 focus-visible:ring-2 focus-visible:outline-none ${isActive ? "ring-2" : ""}`}
+										className={joinClass(
+											"relative h-12 flex-1 overflow-hidden rounded bg-bg ring-primary transition hover:ring-2 focus-visible:ring-2 focus-visible:outline-none",
+											isActive && "ring-2",
+										)}
 										onClick={() => selectScreenshot(src, index)}
 										onFocus={() => selectScreenshot(src, index)}
 									>
@@ -72,7 +76,7 @@ export default function GameFeature({ game }: Readonly<{ game: Game }>) {
 											alt={`${game.name ?? "Game"} screenshot ${index + 1}`}
 											fill
 											sizes="(max-width: 768px) 25vw, 72px"
-											className={`object-cover object-center transition select-none ${isActive ? "opacity-100" : "opacity-65"}`}
+											className={joinClass("object-cover object-center transition select-none", isActive ? "opacity-100" : "opacity-65")}
 										/>
 									</button>
 								);

@@ -3,11 +3,11 @@
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { Edit3, Trash2 } from "lucide-react";
+import { GhostButton, PrimaryButton } from "@/components/ui/Buttons";
+import { Checkbox, Input, Select, Textarea } from "@/components/ui/Inputs";
+import MenuPanel from "@/components/ui/MenuPanel";
 import { deletePlaylist, updateGameListSettings } from "@/lib/actions/playlists";
 import type { GameListModel } from "@/lib/generated/prisma/models/GameList";
-import { GhostButton, PrimaryButton } from "../ui/Buttons";
-import { Checkbox, Input, Select, Textarea } from "../ui/Inputs";
-import MenuPanel from "../ui/MenuPanel";
 
 export default function GameListEditButton({
 	list,
@@ -15,6 +15,7 @@ export default function GameListEditButton({
 	list: Pick<GameListModel, "id" | "type" | "name" | "description" | "image" | "background" | "color" | "accentColor" | "privacy" | "commentsHidden">;
 }>) {
 	const [open, setOpen] = useState(false);
+	const [error, setError] = useState("");
 	const [pending, startTransition] = useTransition();
 	const router = useRouter();
 	const action = updateGameListSettings.bind(null, list.id);
@@ -22,8 +23,15 @@ export default function GameListEditButton({
 	const canDelete = list.type === "PLAYLIST";
 
 	function save(formData: FormData) {
+		setError("");
 		startTransition(async () => {
-			await action(formData);
+			const response = await action(formData);
+
+			if (response?.error) {
+				setError(response.error);
+				return;
+			}
+
 			router.refresh();
 			setOpen(false);
 		});
@@ -77,6 +85,7 @@ export default function GameListEditButton({
 						<Checkbox name="commentsHidden" defaultChecked={list.commentsHidden} />
 						Hide comments
 					</label>
+					{error && <p className="text-sm font-bold text-error">{error}</p>}
 					<div className="mt-2 flex flex-wrap justify-between gap-2">
 						{canDelete && (
 							<button

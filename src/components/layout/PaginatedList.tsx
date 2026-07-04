@@ -1,7 +1,7 @@
 "use client";
 
 import { Children, type ReactNode, useState } from "react";
-import PaginationControls from "./PaginationControls";
+import PaginationControls from "@/components/layout/PaginationControls";
 
 type PaginatedListProps = Readonly<{ children: ReactNode; pageSize: number; className?: string }>;
 

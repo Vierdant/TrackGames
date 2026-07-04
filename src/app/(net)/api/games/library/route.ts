@@ -5,7 +5,7 @@ export async function GET(request: Request) {
 	const session = await auth();
 
 	if (!session?.user?.id) {
-		return Response.json([], { status: 401 });
+		return Response.json({ error: "Unauthorized" }, { status: 401 });
 	}
 
 	const params = new URL(request.url).searchParams;
@@ -14,17 +14,15 @@ export async function GET(request: Request) {
 		.map(Number)
 		.filter((id) => Number.isInteger(id) && id > 0);
 
-	if (ids.length) {
-		return Response.json(await getUserLibraryGamesByIds(session.user.id, ids), {
+	try {
+		const games = ids.length ? await getUserLibraryGamesByIds(session.user.id, ids) : await searchUserLibraryGames(session.user.id, params.get("q") ?? "");
+
+		return Response.json(games, {
 			headers: {
 				"Cache-Control": "private, max-age=30",
 			},
 		});
+	} catch {
+		return Response.json({ error: "Failed to load library games" }, { status: 500 });
 	}
-
-	return Response.json(await searchUserLibraryGames(session.user.id, params.get("q") ?? ""), {
-		headers: {
-			"Cache-Control": "private, max-age=30",
-		},
-	});
 }

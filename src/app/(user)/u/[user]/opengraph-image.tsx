@@ -1,6 +1,6 @@
-import { getPublicUser } from "@/lib/account/user";
-import { DEFAULT_OG_IMAGE, metadataDescription, metadataImage } from "@/lib/metadata";
-import { createOpenGraphImage } from "../../../(net)/opengraph/OpenGraphImage";
+import { createOpenGraphImage } from "@/app/(net)/opengraph/OpenGraphImage";
+import { getPublicUser } from "@/lib/data/user";
+import { DEFAULT_OG_IMAGE, metadataDescription, metadataImage } from "@/lib/util/metadata";
 
 export const alt = "Profile on TrackGames";
 export const size = {

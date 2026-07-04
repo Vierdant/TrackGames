@@ -1,5 +1,6 @@
 import { type ButtonHTMLAttributes, type ReactNode } from "react";
 import Link from "next/link";
+import { joinClass } from "@/app/_util/func";
 
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
 	children: ReactNode;
@@ -18,10 +19,6 @@ const classes: Record<NonNullable<ButtonProps["variant"]>, string> = {
 	secondary: "flex items-center gap-5 justify-center bg-secondary text-text-inverse px-6 py-2 rounded cursor-pointer font-bold transition-colors hover:bg-secondary-hover",
 	ghost: "flex items-center gap-5 justify-center bg-primary/0 border-text-faint border text-text-muted px-6 py-2 rounded cursor-pointer font-bold hover:border-primary hover:text-primary transition-colors",
 };
-
-function joinClass(base: string, extra?: string) {
-	return [base, extra].filter(Boolean).join(" ");
-}
 
 export function Button({ children, href, className, variant = "primary", ...props }: ButtonProps) {
 	const cls = joinClass(classes[variant], className);

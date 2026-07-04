@@ -2,16 +2,17 @@
 
 import { type SetStateAction, useMemo, useState } from "react";
 import { ChevronDown, ChevronUp, Trash2 } from "lucide-react";
+import { ColorField, MediaModal } from "@/app/(user)/settings/SettingsShared";
+import { socialPlatformIcons } from "@/components/config";
 import { GhostButton } from "@/components/ui/Buttons";
 import { Field, Input, Select, Textarea } from "@/components/ui/Inputs";
 import AvatarPreview from "@/components/user/AvatarView";
 import BackgroundView from "@/components/user/BackgroundView";
-import { getSocialOption, getSocialPlaceholder, getSocialPlatform, getSocialPlatformLabel, parseSocials, serializeSocials } from "@/lib/account/socials";
-import { type SecuredUser } from "@/lib/account/user";
-import { SOCIALPLATFORMS } from "@/lib/constants";
-import { LinkType } from "@/lib/enums";
+import { SOCIAL_PLATFORMS } from "@/lib/constants";
+import { type SecuredUser } from "@/lib/data/user";
 import type { SocialLink } from "@/lib/types";
-import { ColorField, MediaModal } from "./SettingsShared";
+import { LinkType } from "@/lib/types";
+import { getSocialOption, getSocialPlaceholder, getSocialPlatform, getSocialPlatformLabel, parseSocials, serializeSocials } from "@/lib/util/parse/socials";
 
 type SocialLinksEditorProps = Readonly<{
 	socials: SocialLink[];
@@ -111,7 +112,7 @@ export default function ProfileSettingsForm({ profile }: Readonly<{ profile: Sec
 					<option value="" disabled>
 						Add platform
 					</option>
-					{SOCIALPLATFORMS.map((platform) => (
+					{SOCIAL_PLATFORMS.map((platform) => (
 						<option key={platform.id} value={platform.id}>
 							{platform.label}
 						</option>
@@ -208,7 +209,7 @@ function SocialPlatformLabel({ platform, kind }: Readonly<{ platform: string; ki
 
 	if (!platformConfig) return <>{platform}</>;
 
-	const Icon = platformConfig.icon;
+	const Icon = socialPlatformIcons[platformConfig.id as keyof typeof socialPlatformIcons];
 
 	return (
 		<span className="flex min-w-0 items-center gap-2">

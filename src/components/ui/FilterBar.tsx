@@ -3,7 +3,8 @@
 import type { ReactNode } from "react";
 import { useRouter } from "next/navigation";
 import { Search } from "lucide-react";
-import { Input, Select } from "./Inputs";
+import { joinClass } from "@/app/_util/func";
+import { Input, Select } from "@/components/ui/Inputs";
 
 type Filter =
 	| {
@@ -47,9 +48,9 @@ function SelectFilter({ filter }: Readonly<{ filter: SelectFilter }>) {
 	);
 }
 
-export function FilterBar({ filters, actions, className }: FilterBarProps) {
+export default function FilterBar({ filters, actions, className }: FilterBarProps) {
 	const router = useRouter();
-	className = ["grid gap-3 md:flex md:items-center md:justify-between", className].filter(Boolean).join(" ");
+	className = joinClass("grid gap-3 md:flex md:items-center md:justify-between", className);
 
 	return (
 		<div className={className}>

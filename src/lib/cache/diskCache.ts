@@ -9,7 +9,8 @@ export async function readDiskCache<T>(key: string): Promise<T | null> {
 		const raw = await fs.readFile(file, "utf-8");
 
 		return JSON.parse(raw) as T;
-	} catch {
+	} catch (error: unknown) {
+		console.error("Corrupted cache: " + key, error);
 		return null;
 	}
 }

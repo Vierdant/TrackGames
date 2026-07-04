@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { isSafeLinkHref, isVideoUrl } from "./util/safety";
+import { isSafeLinkHref, isVideoUrl } from "@/lib/util/validate/safety";
 
 export const SITE_NAME = "TrackGames";
 export const DEFAULT_SITE_URL = "https://trackgames.app";

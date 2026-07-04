@@ -1,14 +1,9 @@
-import db from "../db";
-import { formatRawPlatform } from "../external/igdb/util";
-import type { PlatformModel } from "../generated/prisma/models/Platform";
-import type { MaybeArray } from "../types";
-import { getByIds, getBySlugs } from "./getter";
+import { makeGetById, makeGetBySlug } from "@/lib/data/getter";
+import db from "@/lib/db";
+import { formatRawPlatform } from "@/lib/external/igdb/util";
+import type { PlatformModel } from "@/lib/generated/prisma/models/Platform";
 
 export type Platform = Pick<PlatformModel, "id" | "slug" | "name">;
-
-type DataResult<T extends MaybeArray<number>> = T extends number[] ? Platform[] : Platform | null;
-
-type SlugResult<T extends string | string[]> = T extends string[] ? Platform[] : Platform | null;
 
 const select = {
 	id: true,
@@ -21,14 +16,6 @@ const fetching = {
 	body: `fields slug, name;`,
 };
 
-export async function getPlatform<T extends MaybeArray<number>>(id: T): Promise<DataResult<T>> {
-	const ids = Array.isArray(id) ? id : [id];
-	const res = await getByIds(ids as number[], select, db.platform, fetching, formatRawPlatform);
-	return (Array.isArray(id) ? res : (res[0] ?? null)) as DataResult<T>;
-}
+export const getPlatform = makeGetById<Platform>(select, db.platform, fetching, formatRawPlatform);
 
-export async function getPlatformBySlug<T extends string | string[]>(slug: T): Promise<SlugResult<T>> {
-	const slugs = Array.isArray(slug) ? slug : [slug];
-	const res = await getBySlugs(slugs as string[], select, db.platform, fetching, formatRawPlatform);
-	return (Array.isArray(slug) ? res : (res[0] ?? null)) as SlugResult<T>;
-}
+export const getPlatformBySlug = makeGetBySlug<Platform>(select, db.platform, fetching, formatRawPlatform);

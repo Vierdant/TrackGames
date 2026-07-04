@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Lock } from "lucide-react";
 
-export function PrivateDisplay({ message, canBackOption }: Readonly<{ message?: string; canBackOption?: boolean }>) {
+export default function PrivateDisplay({ message, canBackOption }: Readonly<{ message?: string; canBackOption?: boolean }>) {
 	return (
 		<div className="grid h-full min-h-64 w-full place-items-center p-6">
 			<div className="flex flex-col items-center justify-center gap-3 text-center">

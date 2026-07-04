@@ -1,7 +1,7 @@
 import { after } from "next/server";
 import db from "@/lib/db";
 import { IGDB_BASE_URL, importConfigs } from "@/lib/external/igdb/import";
-import { getAccessToken } from "@/lib/token";
+import { getAccessToken } from "@/lib/external/igdb/token";
 
 type WebhookParams = {
 	params: Promise<{

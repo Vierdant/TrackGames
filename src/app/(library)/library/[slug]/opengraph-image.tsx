@@ -1,7 +1,7 @@
 import { createOpenGraphImage } from "@/app/(net)/opengraph/OpenGraphImage";
 import db from "@/lib/db";
 import { GameListType } from "@/lib/generated/prisma/enums";
-import { DEFAULT_OG_IMAGE, metadataDescription, metadataImage } from "@/lib/metadata";
+import { DEFAULT_OG_IMAGE, metadataDescription, metadataImage } from "@/lib/util/metadata";
 
 export const alt = "Library on TrackGames";
 export const size = {

@@ -2,10 +2,10 @@
 
 import type { ReactNode } from "react";
 import { useEffect, useState } from "react";
-import { deferEffect } from "@/lib/util/effects";
-import { GhostButton, PrimaryButton } from "./Buttons";
-import { Input } from "./Inputs";
-import MenuPanel from "./MenuPanel";
+import { deferHook } from "@/app/_util/func";
+import { GhostButton, PrimaryButton } from "@/components/ui/Buttons";
+import { Input } from "@/components/ui/Inputs";
+import MenuPanel from "@/components/ui/MenuPanel";
 
 type ConfirmActionProps = Readonly<{
 	open: boolean;
@@ -15,11 +15,12 @@ type ConfirmActionProps = Readonly<{
 	pending?: boolean;
 	requireText?: string;
 	requireLabel?: string;
+	error?: string;
 	onClose: () => void;
 	onConfirm: () => void;
 }>;
 
-export default function ConfirmAction({ open, title, message, confirmLabel, pending, requireText, requireLabel, onClose, onConfirm }: ConfirmActionProps) {
+export default function ConfirmAction({ open, title, message, confirmLabel, pending, requireText, requireLabel, error, onClose, onConfirm }: ConfirmActionProps) {
 	const [step, setStep] = useState(1);
 	const [text, setText] = useState("");
 	const needsText = Boolean(requireText);
@@ -28,7 +29,7 @@ export default function ConfirmAction({ open, title, message, confirmLabel, pend
 	useEffect(() => {
 		if (!open) return;
 
-		return deferEffect(() => {
+		return deferHook(() => {
 			setStep(1);
 			setText("");
 		});
@@ -44,6 +45,7 @@ export default function ConfirmAction({ open, title, message, confirmLabel, pend
 						<Input value={text} onChange={(event) => setText(event.target.value)} className="mt-1" autoFocus />
 					</label>
 				)}
+				{error && <p className="text-sm font-bold text-error">{error}</p>}
 				<div className="flex justify-end gap-2">
 					<GhostButton type="button" onClick={onClose} disabled={pending} className="px-4 py-2">
 						Cancel

@@ -4,13 +4,13 @@ import { useRef, useState, useTransition } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Heart, MessageCircle, Send, Trash2 } from "lucide-react";
+import StarRating from "@/components/game/StarRating";
+import { PrimaryButton } from "@/components/ui/Buttons";
 import AvatarView from "@/components/user/AvatarView";
+import RoleTags from "@/components/user/RoleTags";
 import { addComment, deleteComment, toggleLike } from "@/lib/actions/social";
 import { InteractionTargetType, LikeTargetType, type UserRole } from "@/lib/generated/prisma/enums";
-import { ratingToFive } from "@/lib/util/rating";
-import StarRating from "../game/StarRating";
-import { PrimaryButton } from "../ui/Buttons";
-import RoleTags from "../user/RoleTags";
+import { ratingToFive } from "@/lib/util/format/rating";
 
 type Comment = {
 	id: string;
@@ -29,7 +29,7 @@ type Comment = {
 	};
 };
 
-type CommentFormProps = Readonly<{ action: (formData: FormData) => Promise<void>; placeholder?: string }>;
+type CommentFormProps = Readonly<{ action: (formData: FormData) => ReturnType<typeof addComment>; placeholder?: string }>;
 
 type CommentItemProps = Readonly<{
 	comment: Comment;
@@ -89,14 +89,16 @@ function CommentForm({ action, placeholder = "Write a comment" }: CommentFormPro
 	function save(formData: FormData) {
 		setError(null);
 		startTransition(async () => {
-			try {
-				await action(formData);
-				setContent("");
-				ref.current?.reset();
-				router.refresh();
-			} catch {
-				setError("Could not post comment.");
+			const response = await action(formData);
+
+			if (response?.error) {
+				setError(response.error);
+				return;
 			}
+
+			setContent("");
+			ref.current?.reset();
+			router.refresh();
 		});
 	}
 
@@ -135,12 +137,14 @@ function CommentItem({ comment, comments, targetType, targetId, currentUserId }:
 	function like() {
 		setError(null);
 		startTransition(async () => {
-			try {
-				await toggleLike(LikeTargetType.COMMENT, comment.id);
-				router.refresh();
-			} catch {
-				setError("Could not update like.");
+			const response = await toggleLike(LikeTargetType.COMMENT, comment.id);
+
+			if (response?.error) {
+				setError(response.error);
+				return;
 			}
+
+			router.refresh();
 		});
 	}
 

@@ -1,14 +1,9 @@
-import db from "../db";
-import { formatRawCompany } from "../external/igdb/util";
-import type { CompanyModel } from "../generated/prisma/models/Company";
-import type { MaybeArray } from "../types";
-import { getByIds, getBySlugs } from "./getter";
+import { makeGetById, makeGetBySlug } from "@/lib/data/getter";
+import db from "@/lib/db";
+import { formatRawCompany } from "@/lib/external/igdb/util";
+import type { CompanyModel } from "@/lib/generated/prisma/models/Company";
 
 export type Company = Partial<Pick<CompanyModel, "id" | "slug" | "name" | "logo" | "description" | "developed" | "published">>;
-
-type DataResult<T extends MaybeArray<number>> = T extends number[] ? Company[] : Company | null;
-
-type SlugResult<T extends string | string[]> = T extends string[] ? Company[] : Company | null;
 
 const select = {
 	id: true,
@@ -31,26 +26,10 @@ const fetching = {
 	body: `fields slug, name, logo.image_id, description, developed, published;`,
 };
 
-export async function getCompany<T extends MaybeArray<number>>(id: T): Promise<DataResult<T>> {
-	const ids = Array.isArray(id) ? id : [id];
-	const res = await getByIds(ids as number[], select, db.company, fetching, formatRawCompany);
-	return (Array.isArray(id) ? res : (res[0] ?? null)) as DataResult<T>;
-}
+export const getCompany = makeGetById<Company>(select, db.company, fetching, formatRawCompany);
 
-export async function getCompanyBySlug<T extends string | string[]>(slug: T): Promise<SlugResult<T>> {
-	const slugs = Array.isArray(slug) ? slug : [slug];
-	const res = await getBySlugs(slugs as string[], select, db.company, fetching, formatRawCompany);
-	return (Array.isArray(slug) ? res : (res[0] ?? null)) as SlugResult<T>;
-}
+export const getCompanyBySlug = makeGetBySlug<Company>(select, db.company, fetching, formatRawCompany);
 
-export async function getMinifiedCompany<T extends MaybeArray<number>>(id: T): Promise<DataResult<T>> {
-	const ids = Array.isArray(id) ? id : [id];
-	const res = await getByIds(ids as number[], minifiedSelect, db.company, fetching, formatRawCompany);
-	return (Array.isArray(id) ? res : (res[0] ?? null)) as DataResult<T>;
-}
+export const getMinifiedCompany = makeGetById<Company>(minifiedSelect, db.company, fetching, formatRawCompany);
 
-export async function getMinifiedCompanyBySlug<T extends string | string[]>(slug: T): Promise<SlugResult<T>> {
-	const slugs = Array.isArray(slug) ? slug : [slug];
-	const res = await getBySlugs(slugs as string[], minifiedSelect, db.company, fetching, formatRawCompany);
-	return (Array.isArray(slug) ? res : (res[0] ?? null)) as SlugResult<T>;
-}
+export const getMinifiedCompanyBySlug = makeGetBySlug<Company>(minifiedSelect, db.company, fetching, formatRawCompany);

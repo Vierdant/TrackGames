@@ -1,5 +1,5 @@
-import { DEFAULT_DESCRIPTION } from "@/lib/metadata";
-import { createOpenGraphImage } from "./OpenGraphImage";
+import { createOpenGraphImage } from "@/app/(net)/opengraph/OpenGraphImage";
+import { DEFAULT_DESCRIPTION } from "@/lib/util/metadata";
 
 export const size = {
 	width: 1200,
@@ -14,4 +14,4 @@ export default async function Image() {
 	});
 }
 
-export { SITE_NAME as alt } from "@/lib/metadata";
+export { SITE_NAME as alt } from "@/lib/util/metadata";

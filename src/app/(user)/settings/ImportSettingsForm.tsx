@@ -23,7 +23,7 @@ export default function ImportSettingsForm() {
 		startTransition(async () => {
 			const response = await getSteamProfileImportPreview(steamId);
 
-			if (response.error) {
+			if ("error" in response) {
 				setProfile(null);
 				setError(response.error);
 				return;
@@ -43,11 +43,14 @@ export default function ImportSettingsForm() {
 
 		setError("");
 		startTransition(async () => {
-			try {
-				setResult(await importSteamLibrary(profile.steamId, skipImportedLogsRecap));
-			} catch {
-				setError("Steam import failed. Check your profile ID and try again.");
+			const response = await importSteamLibrary(profile.steamId, skipImportedLogsRecap);
+
+			if ("error" in response) {
+				setError(response.error);
+				return;
 			}
+
+			setResult(response);
 		});
 	}
 
@@ -82,11 +85,14 @@ export default function ImportSettingsForm() {
 
 		const contents = await file.text();
 		startTransition(async () => {
-			try {
-				setTgResult(await importTgLibrary(contents));
-			} catch {
-				setTgError("Import failed. Make sure this is a valid .tg backup.");
+			const response = await importTgLibrary(contents);
+
+			if ("error" in response) {
+				setTgError(response.error);
+				return;
 			}
+
+			setTgResult(response);
 		});
 	}
 

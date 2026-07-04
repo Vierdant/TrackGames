@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { Plus } from "lucide-react";
 import { GhostButton, PrimaryButton } from "@/components/ui/Buttons";
 import { Input, Textarea } from "@/components/ui/Inputs";
@@ -9,6 +9,19 @@ import { createPlaylist } from "@/lib/actions/playlists";
 
 export default function PlaylistCreatorModal({ canCreate }: Readonly<{ canCreate: boolean }>) {
 	const [open, setOpen] = useState(false);
+	const [error, setError] = useState("");
+	const [pending, startTransition] = useTransition();
+
+	function save(formData: FormData) {
+		setError("");
+		startTransition(async () => {
+			const response = await createPlaylist(formData);
+
+			if (response?.error) {
+				setError(response.error);
+			}
+		});
+	}
 
 	return (
 		<>
@@ -23,7 +36,7 @@ export default function PlaylistCreatorModal({ canCreate }: Readonly<{ canCreate
 				</button>
 			)}
 			<MenuPanel open={open} onClose={() => setOpen(false)} title="Create playlist" panelClassName="max-w-lg bg-bg">
-				<form action={createPlaylist} className="flex flex-col gap-3">
+				<form action={save} className="flex flex-col gap-3">
 					<label className="w-full text-sm font-bold text-text-muted">
 						Name
 						<Input name="name" required maxLength={80} />
@@ -32,11 +45,14 @@ export default function PlaylistCreatorModal({ canCreate }: Readonly<{ canCreate
 						Description
 						<Textarea name="description" rows={1} maxLength={500} />
 					</label>
+					{error && <p className="text-sm font-bold text-error">{error}</p>}
 					<div className="mt-2 flex justify-end gap-2">
 						<GhostButton type="button" onClick={() => setOpen(false)}>
 							Cancel
 						</GhostButton>
-						<PrimaryButton type="submit">Create</PrimaryButton>
+						<PrimaryButton type="submit" disabled={pending}>
+							{pending ? "Creating..." : "Create"}
+						</PrimaryButton>
 					</div>
 				</form>
 			</MenuPanel>

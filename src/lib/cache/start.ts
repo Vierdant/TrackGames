@@ -1,4 +1,4 @@
-import { cachedResources } from "./resources";
+import { cachedResources } from "@/lib/cache/resources";
 
 let started = false;
 

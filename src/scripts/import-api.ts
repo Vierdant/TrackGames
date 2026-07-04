@@ -132,7 +132,7 @@ function requestedKinds(): Set<ImportKind> | null {
 }
 
 async function main() {
-	const [{ getAccessToken }, dbModule] = await Promise.all([import("@/lib/token"), import("@/lib/db")]);
+	const [{ getAccessToken }, dbModule] = await Promise.all([import("@/lib/external/igdb/token"), import("@/lib/db")]);
 
 	db = dbModule.default;
 

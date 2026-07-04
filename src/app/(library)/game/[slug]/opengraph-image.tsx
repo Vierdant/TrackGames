@@ -1,7 +1,7 @@
+import { createOpenGraphImage } from "@/app/(net)/opengraph/OpenGraphImage";
 import { getGameBySlug } from "@/lib/data/games";
 import { ImageIdToURL } from "@/lib/external/igdb/util";
-import { metadataDescription } from "@/lib/metadata";
-import { createOpenGraphImage } from "../../../(net)/opengraph/OpenGraphImage";
+import { metadataDescription } from "@/lib/util/metadata";
 
 export const alt = "Game on TrackGames";
 export const size = {

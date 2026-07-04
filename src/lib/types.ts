@@ -1,7 +1,27 @@
-import type { LinkType, MarkdownAlign, WidgetType } from "./enums";
-import type { UserRole } from "./generated/prisma/enums";
+import type { UserRole } from "@/lib/generated/prisma/enums";
+
+export enum WidgetType {
+	STATS,
+	GAMELIST,
+	MARKDOWN,
+}
+
+export enum LinkType {
+	LINK,
+	COPY,
+}
+
+export enum MarkdownAlign {
+	START,
+	END,
+	CENTER,
+}
 
 export type MaybeArray<T> = T | T[];
+
+export type ActionResult = {
+	error: string;
+};
 
 export type TrendingScore = {
 	game_id: number;

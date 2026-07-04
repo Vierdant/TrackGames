@@ -44,7 +44,6 @@ const eslintConfig = defineConfig([
 				},
 			],
 
-			"no-console": "warn",
 			"no-else-return": "warn",
 			"no-lonely-if": "warn",
 			"no-multi-spaces": "warn",

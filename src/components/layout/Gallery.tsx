@@ -2,6 +2,7 @@
 
 import { Children, type ReactNode, useEffect, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { joinClass, stepIndex } from "@/app/_util/func";
 
 type GallaryMode = "slide" | "fade";
 
@@ -39,7 +40,7 @@ export default function Gallary({ children, mode = "slide", shouldAutoRotate = f
 
 	function move(direction: -1 | 1) {
 		markInteraction();
-		setIndex((current) => (current + direction + items.length) % items.length);
+		setIndex((current) => stepIndex(current, direction, items.length, "wrap"));
 	}
 
 	if (!items.length) return null;
@@ -69,7 +70,10 @@ export default function Gallary({ children, mode = "slide", shouldAutoRotate = f
 						{items.map((child, itemIndex) => (
 							<div
 								key={itemIndex.toLocaleString()}
-								className={`col-start-1 row-start-1 transition-opacity duration-300 ease-out ${itemIndex === index ? "z-10 opacity-100" : "pointer-events-none z-0 opacity-0"}`}
+								className={joinClass(
+									"col-start-1 row-start-1 transition-opacity duration-300 ease-out",
+									itemIndex === index ? "z-10 opacity-100" : "pointer-events-none z-0 opacity-0",
+								)}
 							>
 								{child}
 							</div>
@@ -105,7 +109,7 @@ export default function Gallary({ children, mode = "slide", shouldAutoRotate = f
 							markInteraction();
 							setIndex(itemIndex);
 						}}
-						className={`size-3.5 h-2.5 w-4 rounded transition ${itemIndex === index ? "bg-secondary" : "bg-border hover:bg-border-strong"}`}
+						className={joinClass("size-3.5 h-2.5 w-4 rounded transition", itemIndex === index ? "bg-secondary" : "bg-border hover:bg-border-strong")}
 					/>
 				))}
 			</div>

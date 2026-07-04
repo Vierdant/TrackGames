@@ -1,4 +1,4 @@
-import IncrementedNumber from "./ui/IncrementedNumber";
+import IncrementedNumber from "@/components/ui/IncrementedNumber";
 
 type StatBlockProps = Readonly<{ color: string; title: string; value: number }>;
 

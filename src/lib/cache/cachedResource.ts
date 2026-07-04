@@ -1,4 +1,4 @@
-import { readDiskCache, writeDiskCache } from "./diskCache";
+import { readDiskCache, writeDiskCache } from "@/lib/cache/diskCache";
 
 export default class CachedResource<T> {
 	private data: T | null = null;
@@ -40,7 +40,9 @@ export default class CachedResource<T> {
 		}
 
 		if ((this.data === null || this.isExpired) && !this.isUpdating) {
-			this.refresh().catch(Error);
+			this.refresh().catch((error) => {
+				throw new Error(error);
+			});
 		}
 
 		return this.data ?? this.options.fallback;

@@ -1,11 +1,11 @@
 "use client";
 
 import { useState } from "react";
+import { GameCard } from "@/components/game/GameDisplays";
+import HorizontalScroller from "@/components/layout/HorizontalScroller";
+import SubTabs from "@/components/layout/SubTabs";
 import type { Game } from "@/lib/data/games";
-import * as normalize from "@/lib/util/normalize";
-import HorizontalScroller from "../layout/HorizontalScroller";
-import SubTabs from "../layout/SubTabs";
-import { GameCard } from "./GameDisplays";
+import * as lookup from "@/lib/util/validate/lookup";
 
 type RelatedGamesTabsProps = Readonly<{ franchiseGames: Game[]; seriesGames: Game[]; similarGames: Game[] }>;
 
@@ -17,7 +17,7 @@ export default function RelatedGamesTabs({ franchiseGames, seriesGames, similarG
 	].filter((tab) => tab.games.length > 0);
 
 	const [activeTab, setActiveTab] = useState<string>(tabs[0]?.id ?? "similar");
-	const activeGames = normalize.byKey(tabs, "id", activeTab)?.games ?? tabs[0]?.games ?? [];
+	const activeGames = lookup.byKey(tabs, "id", activeTab)?.games ?? tabs[0]?.games ?? [];
 
 	if (!tabs.length) {
 		return null;

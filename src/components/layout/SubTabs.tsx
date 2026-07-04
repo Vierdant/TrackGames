@@ -2,6 +2,7 @@
 
 import { type Dispatch, type ReactNode, type SetStateAction } from "react";
 import { ArrowRight } from "lucide-react";
+import { joinClass } from "@/app/_util/func";
 
 type SubTabsProps = Readonly<{
 	tabs: { id: string; label: string }[];
@@ -31,7 +32,10 @@ export default function SubTabs({ tabs, active, setter, hasViewAll, shouldCompac
 									key={tab.id}
 									type="button"
 									onClick={() => setter(tab.id)}
-									className={`max-w-28 min-w-0 shrink-0 rounded px-2 py-2 text-xs font-bold transition ${isActive ? "bg-primary text-text-inverse" : "border border-border bg-bg-secondary/50 text-text-muted hover:text-text"}`}
+									className={joinClass(
+										"max-w-28 min-w-0 shrink-0 rounded px-2 py-2 text-xs font-bold transition",
+										isActive ? "bg-primary text-text-inverse" : "border border-border bg-bg-secondary/50 text-text-muted hover:text-text",
+									)}
 									aria-pressed={isActive}
 								>
 									<span className="block truncate">{tab.label}</span>
@@ -50,7 +54,7 @@ export default function SubTabs({ tabs, active, setter, hasViewAll, shouldCompac
 				</div>
 			)}
 
-			<nav className={`mb-5 min-w-0 flex-row items-center gap-2 border-b border-border ${shouldCompact ? "hidden md:flex" : "flex"}`} aria-label="Tabs">
+			<nav className={joinClass("mb-5 min-w-0 flex-row items-center gap-2 border-b border-border", shouldCompact ? "hidden md:flex" : "flex")} aria-label="Tabs">
 				{tabs.map((tab) => {
 					const isActive = tab.id === active;
 
@@ -59,11 +63,12 @@ export default function SubTabs({ tabs, active, setter, hasViewAll, shouldCompac
 							key={tab.id}
 							type="button"
 							onClick={() => setter(tab.id)}
-							className={`rounded-t border-b-2 px-4 py-3 text-xl font-bold transition-colors ${
+							className={joinClass(
+								"rounded-t border-b-2 px-4 py-3 text-xl font-bold transition-colors",
 								isActive
 									? "border-primary bg-linear-to-b from-transparent to-primary/25 bg-no-repeat text-text"
-									: "border-transparent text-text-muted hover:bg-bg-secondary/60 hover:text-text"
-							}`}
+									: "border-transparent text-text-muted hover:bg-bg-secondary/60 hover:text-text",
+							)}
 							aria-pressed={isActive}
 						>
 							{tab.label}

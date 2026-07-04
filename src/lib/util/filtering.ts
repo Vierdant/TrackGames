@@ -1,6 +1,6 @@
-import { type UserLibraryEntryWithTags } from "../data/library";
-import { ratingToFive } from "./rating";
-import { filterNumber, matchesNumberRange } from "./tools";
+import { type UserLibraryEntryWithTags } from "@/lib/data/library";
+import { filterNumber, matchesNumberRange } from "@/lib/util/format/numbers";
+import { ratingToFive } from "@/lib/util/format/rating";
 
 type FilterChoice = "any" | "yes" | "no";
 

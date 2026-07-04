@@ -3,13 +3,15 @@
 import type { CSSProperties } from "react";
 import { useMemo, useState } from "react";
 import { Grid2X2, List, SlidersHorizontal } from "lucide-react";
+import { formLabel, joinClass } from "@/app/_util/func";
+import PaginatedList from "@/components/layout/PaginatedList";
+import AdvancedLibraryFilterPanel, { emptyAdvancedLibraryFilters } from "@/components/library/AdvancedLibraryFilterPanel";
+import PlaylistCard from "@/components/library/PlaylistCard";
+import { GhostButton } from "@/components/ui/Buttons";
+import FilterBar from "@/components/ui/FilterBar";
 import type { UserLibraryEntryWithTags } from "@/lib/data/library";
 import { GameStatus } from "@/lib/generated/prisma/enums";
 import { advancedFilterCount, matchesAdvancedFilters } from "@/lib/util/filtering";
-import PaginatedList from "../layout/PaginatedList";
-import { FilterBar } from "../ui/FilterBar";
-import AdvancedLibraryFilterPanel, { emptyAdvancedLibraryFilters } from "./AdvancedLibraryFilterPanel";
-import PlaylistCard from "./PlaylistCard";
 
 type LibraryEntriesPanelProps = Readonly<{
 	entries: UserLibraryEntryWithTags[];
@@ -17,10 +19,6 @@ type LibraryEntriesPanelProps = Readonly<{
 	themeStyle?: CSSProperties;
 	defaults?: { status: string; sort: string; mode: "grid" | "list" };
 }>;
-
-function statusLabel(status: string) {
-	return status.toLowerCase().replace("_", " ");
-}
 
 export default function LibraryEntriesPanel({ entries, canEdit, themeStyle, defaults }: LibraryEntriesPanelProps) {
 	const [items, setItems] = useState(entries);
@@ -71,7 +69,7 @@ export default function LibraryEntriesPanel({ entries, canEdit, themeStyle, defa
 							label: "Filter by status",
 							value: status,
 							onChange: setStatus,
-							options: [{ value: "all", label: "All statuses" }, ...Object.values(GameStatus).map((value) => ({ value, label: statusLabel(value) }))],
+							options: [{ value: "all", label: "All statuses" }, ...Object.values(GameStatus).map((value) => ({ value, label: formLabel(value) }))],
 						},
 						{
 							type: "select",
@@ -90,19 +88,21 @@ export default function LibraryEntriesPanel({ entries, canEdit, themeStyle, defa
 					]}
 					actions={
 						<div className="flex flex-row justify-end gap-2">
-							<button
-								type="button"
+							<GhostButton
 								onClick={() => setShowAdvancedFilters(true)}
-								className={`flex h-9 cursor-pointer items-center gap-2 rounded border px-3 text-sm font-bold ${filterCount ? "border-primary text-primary" : "border-border text-text-muted"}`}
+								className={joinClass("h-9 border-border", filterCount ? "border-primary text-primary" : "border-border text-text-muted")}
 								aria-label="Advanced filters"
 							>
 								<SlidersHorizontal size={17} aria-hidden="true" />
 								Filter{filterCount ? ` (${filterCount})` : ""}
-							</button>
+							</GhostButton>
 							<button
 								type="button"
 								onClick={() => setMode("grid")}
-								className={`grid size-9 cursor-pointer place-items-center rounded border ${mode === "grid" ? "border-primary text-primary" : "border-border text-text-muted"}`}
+								className={joinClass(
+									"grid size-9 cursor-pointer place-items-center rounded border",
+									mode === "grid" ? "border-primary text-primary" : "border-border text-text-muted",
+								)}
 								aria-label="Grid view"
 							>
 								<Grid2X2 size={18} aria-hidden="true" />
@@ -110,7 +110,10 @@ export default function LibraryEntriesPanel({ entries, canEdit, themeStyle, defa
 							<button
 								type="button"
 								onClick={() => setMode("list")}
-								className={`grid size-9 cursor-pointer place-items-center rounded border ${mode === "list" ? "border-primary text-primary" : "border-border text-text-muted"}`}
+								className={joinClass(
+									"grid size-9 cursor-pointer place-items-center rounded border",
+									mode === "list" ? "border-primary text-primary" : "border-border text-text-muted",
+								)}
 								aria-label="List view"
 							>
 								<List size={18} aria-hidden="true" />

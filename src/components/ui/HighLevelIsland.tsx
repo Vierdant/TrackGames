@@ -3,13 +3,13 @@
 import type { ReactNode } from "react";
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
-import { deferEffect } from "@/lib/util/effects";
+import { deferHook } from "@/app/_util/func";
 
-export default function HighLevelIsland({ children, className = "" }: { children: ReactNode; className?: string }) {
+export default function HighLevelIsland({ children, className = "" }: Readonly<{ children: ReactNode; className?: string }>) {
 	const [mounted, setMounted] = useState(false);
 
 	useEffect(() => {
-		return deferEffect(() => {
+		return deferHook(() => {
 			setMounted(true);
 		});
 	}, []);

@@ -1,5 +1,5 @@
-import db from "../db";
-import { InteractionTargetType } from "../generated/prisma/enums";
+import db from "@/lib/db";
+import { InteractionTargetType } from "@/lib/generated/prisma/enums";
 
 export async function getComments(targetType: InteractionTargetType, targetId: string, userId?: string) {
 	const comments = await db.comment.findMany({

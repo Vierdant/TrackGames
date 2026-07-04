@@ -1,7 +1,7 @@
-import { NotificationType } from "../generated/prisma/enums";
-import type { UserModel } from "../generated/prisma/models/User";
-import { hexColor } from "../util/normalize";
-import { profileThemeStyle } from "./user";
+import { profileThemeStyle } from "@/app/_util/theme";
+import { NotificationType } from "@/lib/generated/prisma/enums";
+import type { UserModel } from "@/lib/generated/prisma/models/User";
+import { hexColor } from "@/lib/util/validate/normalize";
 
 export function viewerThemeStyle(user: Pick<UserModel, "profileColor" | "accentColor" | "siteThemeMode" | "siteThemeColor" | "siteAccentColor">) {
 	if (user.siteThemeMode === "custom") {

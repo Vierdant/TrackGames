@@ -1,5 +1,5 @@
-import { GameDevStatus, GameType, PlayerPerspective } from "../../generated/prisma/enums";
-import type { RawCollection, RawCompany, RawFranchise, RawGame, RawGenre, RawKeyword, RawMultiplayerMode, RawPlatform, RawTheme } from "./types";
+import type { RawCollection, RawCompany, RawFranchise, RawGame, RawGenre, RawKeyword, RawMultiplayerMode, RawPlatform, RawTheme } from "@/lib/external/igdb/types";
+import { GameDevStatus, GameType, PlayerPerspective } from "@/lib/generated/prisma/enums";
 
 function requireBaseEntity(entity: { id?: number; name?: string; slug?: string }, label: string) {
 	if (!entity.id || !entity.name || !entity.slug) {

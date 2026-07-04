@@ -2,25 +2,16 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { auth } from "../auth";
-import { siteStats } from "../cache/resources";
-import db from "../db";
-import { ActivityType, GameListType, InteractionTargetType, NotificationType } from "../generated/prisma/enums";
-import { formDataString, formDataStrings } from "../util/formData";
+import { getCurrentUserId } from "@/lib/auth";
+import { siteStats } from "@/lib/cache/resources";
+import db from "@/lib/db";
+import { ActivityType, GameListType, InteractionTargetType, NotificationType } from "@/lib/generated/prisma/enums";
+import { inputError } from "@/lib/logger";
+import { formDataString, formDataStrings } from "@/lib/util/parse/formData";
 
 const displayModes = new Set(["GRID", "RANKING", "TIER"]);
 const fallbackTiers = ["S", "A", "B", "C", "D"];
 const fallbackTierColors = ["#f59e0b", "#22c55e", "#3b82f6", "#a855f7", "#ef4444"];
-
-async function getCurrentUserId() {
-	const session = await auth();
-
-	if (!session?.user?.id) {
-		redirect("/login");
-	}
-
-	return session.user.id;
-}
 
 async function getOwnedPlaylist(listId: string, userId: string) {
 	const playlist = await db.gameList.findFirst({
@@ -95,7 +86,7 @@ export async function createPlaylist(formData: FormData) {
 	});
 
 	if (!name) {
-		throw new Error("Playlist name is required.");
+		return inputError("Playlist name is required.");
 	}
 
 	const playlist = await db.gameList.create({
@@ -144,7 +135,9 @@ export async function createPlaylist(formData: FormData) {
 		});
 	}
 
-	siteStats.refresh().catch(Error);
+	siteStats.refresh().catch((error) => {
+		throw new Error(error);
+	});
 	revalidatePath("/u/[user]", "page");
 	redirect(`/playlist/${playlist.id}`);
 }
@@ -298,7 +291,7 @@ export async function updateGameListSettings(listId: string, formData: FormData)
 	const name = nullableText(formData.get("name"), 80);
 
 	if (!name) {
-		throw new Error("Name is required.");
+		return inputError("Name is required.");
 	}
 
 	await db.gameList.update({
@@ -360,7 +353,9 @@ export async function deletePlaylist(listId: string) {
 		throw new Error("Playlist not found.");
 	}
 
-	siteStats.refresh().catch(Error);
+	siteStats.refresh().catch((error) => {
+		throw new Error(error);
+	});
 	revalidatePath(`/playlist/${playlist.id}`);
 	revalidatePath("/u/[user]", "page");
 	redirect(playlist.user.name ? `/u/${playlist.user.name}?tab=playlists` : "/");

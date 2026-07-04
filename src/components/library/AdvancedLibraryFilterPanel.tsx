@@ -2,10 +2,10 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Search, X } from "lucide-react";
+import { deferHook, formLabel, joinClass } from "@/app/_util/func";
+import { GhostButton, PrimaryButton } from "@/components/ui/Buttons";
+import { Input, Select } from "@/components/ui/Inputs";
 import { GameStatus } from "@/lib/generated/prisma/enums";
-import { deferEffect } from "@/lib/util/effects";
-import { GhostButton, PrimaryButton } from "../ui/Buttons";
-import { Input, Select } from "../ui/Inputs";
 
 type AdvancedLibraryFilterPanelProps = Readonly<{
 	open: boolean;
@@ -15,14 +15,6 @@ type AdvancedLibraryFilterPanelProps = Readonly<{
 	tags: string[];
 	onReset: () => void;
 }>;
-
-function statusLabel(status: string) {
-	return status.toLowerCase().replace("_", " ");
-}
-
-function removeValue(values: string[], value: string) {
-	return values.filter((item) => item !== value);
-}
 
 export type AdvancedLibraryFilters = {
 	statuses: GameStatus[];
@@ -57,17 +49,17 @@ export default function AdvancedLibraryFilterPanel({ open, onClose, filters, onC
 	const dialogRef = useRef<HTMLDialogElement>(null);
 	const pickerRef = useRef<HTMLDivElement>(null);
 	const search = filterSearch.trim().toLowerCase();
-	const statusOptions = useMemo(() => Object.values(GameStatus).filter((status) => statusLabel(status).includes(search) || status.toLowerCase().includes(search)), [search]);
+	const statusOptions = useMemo(() => Object.values(GameStatus).filter((status) => formLabel(status).includes(search) || status.toLowerCase().includes(search)), [search]);
 	const tagOptions = useMemo(() => tags.filter((tag) => tag.toLowerCase().includes(search)), [search, tags]);
 
 	useEffect(() => {
 		if (open) {
-			return deferEffect(() => {
+			return deferHook(() => {
 				setRendered(true);
 			});
 		}
 
-		return deferEffect(() => {
+		return deferHook(() => {
 			setPickerOpen(false);
 		});
 	}, [open]);
@@ -113,7 +105,10 @@ export default function AdvancedLibraryFilterPanel({ open, onClose, filters, onC
 		<dialog
 			ref={dialogRef}
 			aria-labelledby="advanced-library-filters-title"
-			className={`m-0 h-dvh max-h-none w-dvw max-w-none border-0 bg-overlay p-0 text-text backdrop:bg-transparent ${open ? "animate-menu-overlay-in" : "animate-menu-overlay-out"}`}
+			className={joinClass(
+				"m-0 h-dvh max-h-none w-dvw max-w-none border-0 bg-overlay p-0 text-text backdrop:bg-transparent",
+				open ? "animate-menu-overlay-in" : "animate-menu-overlay-out",
+			)}
 			onCancel={(event) => {
 				event.preventDefault();
 
@@ -137,7 +132,10 @@ export default function AdvancedLibraryFilterPanel({ open, onClose, filters, onC
 						setRendered(false);
 					}
 				}}
-				className={`h-full w-[min(28rem,calc(100vw-2rem))] overflow-y-auto bg-bg p-5 shadow-main ${open ? "animate-menu-drawer-left-in" : "animate-menu-drawer-left-out"}`}
+				className={joinClass(
+					"h-full w-[min(28rem,calc(100vw-2rem))] overflow-y-auto bg-bg p-5 shadow-main",
+					open ? "animate-menu-drawer-left-in" : "animate-menu-drawer-left-out",
+				)}
 			>
 				<div className="mb-5 flex items-center justify-between gap-3 border-b border-border pb-4">
 					<h3 id="advanced-library-filters-title" className="text-lg font-bold">
@@ -181,7 +179,7 @@ export default function AdvancedLibraryFilterPanel({ open, onClose, filters, onC
 											<div className="grid gap-1">
 												{statusOptions.map((status) => (
 													<div key={status} className="grid grid-cols-[minmax(0,1fr)_auto_auto] items-center gap-2 rounded px-2 py-1.5 hover:bg-bg">
-														<span className="truncate text-text-muted capitalize">{statusLabel(status)}</span>
+														<span className="truncate text-text-muted capitalize">{formLabel(status)}</span>
 														<button
 															type="button"
 															onClick={() => addStatus(status, "include")}
@@ -247,7 +245,7 @@ export default function AdvancedLibraryFilterPanel({ open, onClose, filters, onC
 											onClick={() => onChange({ ...filters, statuses: filters.statuses.filter((item) => item !== status) })}
 											className="flex max-w-full items-center gap-1 rounded border border-primary/60 bg-primary/10 px-2 py-1 text-xs font-bold text-primary capitalize"
 										>
-											<span className="truncate">{statusLabel(status)}</span>
+											<span className="truncate">{formLabel(status)}</span>
 											<X size={13} aria-hidden="true" />
 										</button>
 									))}
@@ -283,7 +281,7 @@ export default function AdvancedLibraryFilterPanel({ open, onClose, filters, onC
 											}
 											className="flex max-w-full items-center gap-1 rounded border border-error/60 bg-error/10 px-2 py-1 text-xs font-bold text-error capitalize"
 										>
-											<span className="truncate">{statusLabel(status)}</span>
+											<span className="truncate">{formLabel(status)}</span>
 											<X size={13} aria-hidden="true" />
 										</button>
 									))}
@@ -386,4 +384,8 @@ export default function AdvancedLibraryFilterPanel({ open, onClose, filters, onC
 			</aside>
 		</dialog>
 	);
+}
+
+function removeValue(values: string[], value: string) {
+	return values.filter((item) => item !== value);
 }

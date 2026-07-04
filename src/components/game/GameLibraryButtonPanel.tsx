@@ -1,16 +1,17 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import Link from "next/link";
-import { Bookmark, CheckCircle2, CirclePause, Heart, Library, ListPlus, NotebookText, Plus, Trophy, X, XCircle } from "lucide-react";
+import { Bookmark, CheckCircle2, CirclePause, Heart, Library, ListPlus, NotebookText, Trophy, XCircle } from "lucide-react";
+import { joinClass } from "@/app/_util/func";
+import ManageListsPanel from "@/components/game/ManageListsPanel";
+import StarRating from "@/components/game/StarRating";
+import { FloatedSquareButton, GhostButton, PrimaryButton } from "@/components/ui/Buttons";
+import ConfirmAction from "@/components/ui/ConfirmAction";
+import MenuPanel from "@/components/ui/MenuPanel";
 import { addGameToLibrary, removeGameFromLibrary, setGameLibraryStatus, updateGameQuickRating } from "@/lib/actions/library";
 import { addGameToPlaylist, removeGameFromPlaylist } from "@/lib/actions/playlists";
 import { GameStatus } from "@/lib/generated/prisma/enums";
-import { ratingToFive } from "@/lib/util/rating";
-import { FloatedSquareButton, GhostButton, PrimaryButton } from "../ui/Buttons";
-import ConfirmAction from "../ui/ConfirmAction";
-import MenuPanel from "../ui/MenuPanel";
-import StarRating from "./StarRating";
+import { ratingToFive } from "@/lib/util/format/rating";
 
 type UserPlaylist = {
 	id: string;
@@ -250,7 +251,11 @@ export default function GameLibraryButtonPanel({ gameId, gameSlug, isLoggedIn, e
 										type="button"
 										disabled={pending}
 										onClick={() => setStatus(option.status)}
-										className={`flex cursor-pointer items-center gap-3 rounded border p-3 text-sm font-bold transition hover:bg-bg-secondary disabled:cursor-wait disabled:opacity-60 ${option.className} ${currentEntry?.status === option.status ? "bg-bg-secondary" : ""}`}
+										className={joinClass(
+											"flex cursor-pointer items-center gap-3 rounded border p-3 text-sm font-bold transition hover:bg-bg-secondary disabled:cursor-wait disabled:opacity-60",
+											option.className,
+											currentEntry?.status === option.status && "bg-bg-secondary",
+										)}
 									>
 										<Icon size={17} />
 										{option.label}
@@ -286,34 +291,14 @@ export default function GameLibraryButtonPanel({ gameId, gameSlug, isLoggedIn, e
 					Manage lists
 				</GhostButton>
 			</div>
-			<MenuPanel open={managingLists} onClose={() => setManagingLists(false)} title="Manage lists" width="30rem" hasPortal>
-				<div className="flex flex-col gap-2">
-					{userPlaylists.length ? (
-						userPlaylists.map((playlist) => {
-							const existing = playlist.entries.find((entry) => entry.gameId === gameId);
-
-							return (
-								<div key={playlist.id} className="flex min-w-0 items-center gap-3 rounded border border-border bg-bg-secondary p-3">
-									<Link href={`/playlist/${playlist.id}`} className="min-w-0 flex-1 truncate font-bold text-text hover:text-primary">
-										{playlist.name}
-									</Link>
-									<button
-										type="button"
-										disabled={pending}
-										onClick={() => togglePlaylist(playlist.id, existing?.id)}
-										className={`grid size-8 shrink-0 cursor-pointer place-items-center rounded border transition disabled:cursor-wait disabled:opacity-60 ${existing ? "border-error text-error hover:bg-error/10" : "border-primary text-primary hover:bg-primary/10"}`}
-										aria-label={existing ? `Remove from ${playlist.name}` : `Add to ${playlist.name}`}
-									>
-										{existing ? <X size={16} /> : <Plus size={16} />}
-									</button>
-								</div>
-							);
-						})
-					) : (
-						<p className="rounded border border-border bg-bg-secondary p-3 text-sm text-text-muted">No playlists yet.</p>
-					)}
-				</div>
-			</MenuPanel>
+			<ManageListsPanel
+				open={managingLists}
+				onClose={() => setManagingLists(false)}
+				gameId={gameId}
+				playlists={userPlaylists}
+				pending={pending}
+				onTogglePlaylist={togglePlaylist}
+			/>
 		</div>
 	);
 }

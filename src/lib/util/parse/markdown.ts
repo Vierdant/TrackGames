@@ -1,7 +1,6 @@
-import { MarkdownAlign } from "./enums";
-import type { MarkdownBlock } from "./types";
-import * as normalize from "./util/normalize";
-import { isSafeLinkHref, isSafeUrl } from "./util/safety";
+import { MarkdownAlign, type MarkdownBlock } from "@/lib/types";
+import * as normalize from "@/lib/util/validate/normalize";
+import { isSafeLinkHref, isSafeUrl } from "@/lib/util/validate/safety";
 
 type ActiveState =
 	| {

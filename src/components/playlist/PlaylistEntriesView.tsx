@@ -4,16 +4,17 @@ import { type ReactNode, useMemo, useState, useTransition } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Edit3, SlidersHorizontal, Trash2 } from "lucide-react";
+import { joinClass } from "@/app/_util/func";
 import { GameCard } from "@/components/game/GameDisplays";
 import AdvancedLibraryFilterPanel, { emptyAdvancedLibraryFilters } from "@/components/library/AdvancedLibraryFilterPanel";
-import { FilterBar } from "@/components/ui/FilterBar";
+import { GhostButton, PrimaryButton } from "@/components/ui/Buttons";
+import FilterBar from "@/components/ui/FilterBar";
 import { Input, Select } from "@/components/ui/Inputs";
 import MenuPanel from "@/components/ui/MenuPanel";
 import { removeGameFromPlaylist, updatePlaylistEntry } from "@/lib/actions/playlists";
 import { type UserLibraryEntryWithTags } from "@/lib/data/library";
 import type { PlaylistEntry } from "@/lib/data/playlists";
 import { advancedFilterCount, matchesAdvancedFilters } from "@/lib/util/filtering";
-import { GhostButton, PrimaryButton } from "../ui/Buttons";
 
 type EntryShellProps = Readonly<{
 	listId: string;
@@ -216,15 +217,14 @@ export default function PlaylistEntriesView({ listId, entries, mode, canEdit, ti
 					},
 				]}
 				actions={
-					<button
-						type="button"
+					<GhostButton
 						onClick={() => setShowAdvancedFilters(true)}
-						className={`flex h-9 cursor-pointer items-center gap-2 rounded border px-3 text-sm font-bold ${filterCount ? "border-primary text-primary" : "border-border text-text-muted"}`}
+						className={joinClass("h-9 border-border", filterCount ? "border-primary text-primary" : "border-border text-text-muted")}
 						aria-label="Advanced filters"
 					>
 						<SlidersHorizontal size={17} aria-hidden="true" />
 						Filter{filterCount ? ` (${filterCount})` : ""}
-					</button>
+					</GhostButton>
 				}
 			/>
 			<AdvancedLibraryFilterPanel

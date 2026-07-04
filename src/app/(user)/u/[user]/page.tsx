@@ -1,25 +1,26 @@
 import { Suspense } from "react";
 import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
+import { profileThemeStyle } from "@/app/_util/theme";
+import ActivityList from "@/app/(user)/u/[user]/ActivityList";
+import FollowerPreviewPanel from "@/app/(user)/u/[user]/FollowerPreviewPanel";
+import ProfilePlaylists from "@/app/(user)/u/[user]/ProfilePlaylists";
+import ProfileSwitcherPanel from "@/app/(user)/u/[user]/ProfileSwitcherPanel";
+import UserWidget from "@/app/(user)/u/[user]/UserWidget";
 import CommentSection from "@/components/comments/CommentSection";
 import Container from "@/components/layout/Container";
 import BadgeView from "@/components/social/BadgeView";
 import Loading from "@/components/ui/Loading";
-import { PrivateDisplay } from "@/components/ui/PrivateDisplay";
+import PrivateDisplay from "@/components/ui/PrivateDisplay";
 import BackgroundView from "@/components/user/BackgroundView";
 import ProfileHeader from "@/components/user/ProfileHeader";
-import { shouldHideComments } from "@/lib/account/preferences";
-import { checkPublicPrivacy, getPublicUser, getUser, isFollower, profileThemeStyle } from "@/lib/account/user";
-import { parseWidgets } from "@/lib/account/widget";
 import { auth } from "@/lib/auth";
 import { getProfileSocialState, getUserBadges } from "@/lib/data/social";
+import { getPublicUser, getUser, isFollower } from "@/lib/data/user";
 import { InteractionTargetType } from "@/lib/generated/prisma/enums";
-import { absoluteUrl, metadataDescription, robotsForPrivacy, SITE_NAME } from "@/lib/metadata";
-import ActivityList from "./ActivityList";
-import FollowerPreviewPanel from "./FollowerPreviewPanel";
-import ProfilePlaylists from "./ProfilePlaylists";
-import ProfileSwitcherPanel from "./ProfileSwitcherPanel";
-import UserWidget from "./UserWidget";
+import { absoluteUrl, metadataDescription, robotsForPrivacy, SITE_NAME } from "@/lib/util/metadata";
+import { parseWidgets } from "@/lib/util/parse/widgets";
+import { checkPublicPrivacy, shouldHideComments } from "@/lib/util/privacy";
 
 type UserPageProps = Readonly<{
 	params: Promise<{ user: string }>;

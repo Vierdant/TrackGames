@@ -1,6 +1,6 @@
-import { notificationAllowed } from "../account/preferences";
-import db from "../db";
-import { ActivityType, InteractionTargetType, NotificationType } from "../generated/prisma/enums";
+import db from "@/lib/db";
+import { ActivityType, InteractionTargetType, NotificationType } from "@/lib/generated/prisma/enums";
+import { notificationAllowed } from "@/lib/util/preferences";
 
 export const activityPageSize = 32;
 

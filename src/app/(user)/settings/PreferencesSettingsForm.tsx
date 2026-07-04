@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Checkbox, Field, Input, Select } from "@/components/ui/Inputs";
-import { type SecuredUser } from "@/lib/account/user";
+import { type SecuredUser } from "@/lib/data/user";
 
 export default function PreferencesSettingsForm({ profile }: Readonly<{ profile: SecuredUser }>) {
 	const [themeMode, setThemeMode] = useState(profile.siteThemeMode);

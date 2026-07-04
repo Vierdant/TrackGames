@@ -1,3 +1,4 @@
+import { joinClass } from "@/app/_util/func";
 import { type UserRole } from "@/lib/generated/prisma/enums";
 
 const roleClasses: Record<UserRole, string> = {
@@ -12,7 +13,7 @@ export default function RoleTags({ roles }: Readonly<{ roles?: UserRole[] | null
 	return (
 		<span className="flex flex-wrap items-center gap-1">
 			{roles.map((role) => (
-				<span key={role} className={`rounded border px-1.5 py-0.5 text-[0.65rem] font-bold ${roleClasses[role]}`}>
+				<span key={role} className={joinClass("rounded border px-1.5 py-0.5 text-[0.65rem] font-bold", roleClasses[role])}>
 					{role}
 				</span>
 			))}

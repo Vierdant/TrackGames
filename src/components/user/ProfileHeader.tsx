@@ -1,11 +1,11 @@
 import Container from "@/components/layout/Container";
-import { SocialIconLinks } from "@/components/user/SocialIconLinks";
-import { parseSocials } from "@/lib/account/socials";
+import FollowButton from "@/components/social/FollowButton";
+import { GhostButton, PrimaryButton } from "@/components/ui/Buttons";
+import AvatarPreview from "@/components/user/AvatarView";
+import RoleTags from "@/components/user/RoleTags";
+import SocialIconLinks from "@/components/user/SocialIconLinks";
 import type { PublicUser } from "@/lib/types";
-import FollowButton from "../social/FollowButton";
-import { GhostButton, PrimaryButton } from "../ui/Buttons";
-import AvatarPreview from "./AvatarView";
-import RoleTags from "./RoleTags";
+import { parseSocials } from "@/lib/util/parse/socials";
 
 type ProfileHeaderProps = Readonly<{
 	isOwned?: boolean;

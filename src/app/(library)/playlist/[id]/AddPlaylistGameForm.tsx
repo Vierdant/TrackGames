@@ -2,11 +2,11 @@
 
 import { useEffect, useState } from "react";
 import { Plus, Search, X } from "lucide-react";
+import { deferHook } from "@/app/_util/func";
 import { PrimaryButton } from "@/components/ui/Buttons";
 import { Input, Select } from "@/components/ui/Inputs";
 import { addGameToPlaylist } from "@/lib/actions/playlists";
 import type { Game } from "@/lib/data/games";
-import { deferEffect } from "@/lib/util/effects";
 
 type AddPlaylistGameFormProps = Readonly<{ playlistId: string; mode: string; tiers: string[]; existingGameIds: number[] }>;
 
@@ -23,7 +23,7 @@ export default function AddPlaylistGameForm({ playlistId, mode, tiers, existingG
 		const search = query.trim();
 
 		if (search.length < 2) {
-			return deferEffect(() => {
+			return deferHook(() => {
 				setResults([]);
 				setLoading(false);
 			});

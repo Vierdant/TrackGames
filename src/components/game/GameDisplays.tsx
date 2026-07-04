@@ -4,10 +4,11 @@ import { useCallback, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Star } from "lucide-react";
+import { rippleEffect } from "@/app/_util/effects";
+import { joinClass } from "@/app/_util/func";
 import type { Game } from "@/lib/data/games";
 import { ImageIdToURL } from "@/lib/external/igdb/util";
-import { rippleEffect } from "@/lib/util/effects";
-import { ratingToFive } from "@/lib/util/rating";
+import { ratingToFive } from "@/lib/util/format/rating";
 
 type GameCardGame = {
 	cover?: string | null;
@@ -46,11 +47,7 @@ export function GameCard({ game, size = 140, effect, hover, hasHref = false, pre
 		[effect],
 	);
 
-	let imageClass = "object-cover object-center select-none";
-
-	if (hover === "name") {
-		imageClass += " " + "hover:opacity-15 transition-opacity";
-	}
+	const imageClass = joinClass("object-cover object-center select-none", hover === "name" && "hover:opacity-15 transition-opacity");
 
 	const card = (
 		<div

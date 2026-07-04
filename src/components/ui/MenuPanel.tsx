@@ -3,7 +3,8 @@
 import type { CSSProperties, ReactNode, RefObject } from "react";
 import { useEffect, useRef, useState } from "react";
 import { X } from "lucide-react";
-import HighLevelIsland from "./HighLevelIsland";
+import { joinClass } from "@/app/_util/func";
+import HighLevelIsland from "@/components/ui/HighLevelIsland";
 
 type MenuPanelProps = Readonly<{
 	open: boolean;
@@ -23,10 +24,6 @@ type MenuPanelProps = Readonly<{
 	width?: string;
 	style?: CSSProperties;
 }>;
-
-function join(base: string, extra?: string) {
-	return [base, extra].filter(Boolean).join(" ");
-}
 
 export default function MenuPanel({
 	open,
@@ -92,7 +89,7 @@ export default function MenuPanel({
 			onAnimationEnd={() => {
 				if (!open) setRendered(false);
 			}}
-			className={join(
+			className={joinClass(
 				variant === "modal"
 					? "pointer-events-auto max-h-[calc(100vh-2rem)] w-[min(var(--menu-panel-width,32rem),calc(100vw-2rem))] max-w-none overflow-y-auto rounded bg-bg p-5 shadow-main"
 					: "pointer-events-auto absolute top-full right-0 z-50 mt-3 w-80 rounded border border-border bg-bg p-2 text-sm shadow-main",
@@ -125,7 +122,7 @@ export default function MenuPanel({
 		content = (
 			<dialog
 				open
-				className={join(
+				className={joinClass(
 					"pointer-events-auto fixed inset-0 m-0 flex h-dvh max-h-none w-dvw max-w-none items-center justify-center border-0 bg-overlay p-4",
 					`${open ? "animate-menu-overlay-in" : "animate-menu-overlay-out"} ${className ?? ""}`,
 				)}
@@ -140,7 +137,7 @@ export default function MenuPanel({
 		content = (
 			<dialog
 				open
-				className={join("pointer-events-auto fixed inset-0 m-0 h-dvh max-h-none w-dvw max-w-none border-0", className)}
+				className={joinClass("pointer-events-auto fixed inset-0 m-0 h-dvh max-h-none w-dvw max-w-none border-0", className)}
 				onPointerDown={(event) => {
 					if (event.target === event.currentTarget) onClose();
 				}}

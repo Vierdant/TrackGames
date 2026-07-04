@@ -5,11 +5,12 @@ import { redirect } from "next/navigation";
 import { AuthError } from "next-auth";
 import { type PrismaClientKnownRequestError } from "@prisma/client/runtime/client";
 import * as zod from "zod";
-import { USERNAME_ERROR, usernameSchema } from "../account/username";
-import { auth, OAUTH_USERNAME_COOKIE, signIn, signOut } from "../auth";
-import db from "../db";
-import { Prisma } from "../generated/prisma/client";
-import { hashPassword } from "../util/password";
+import { auth, OAUTH_USERNAME_COOKIE, signIn, signOut } from "@/lib/auth";
+import { USERNAME_ERROR, usernameSchema } from "@/lib/constants";
+import db from "@/lib/db";
+import { Prisma } from "@/lib/generated/prisma/client";
+import { inputError } from "@/lib/logger";
+import { hashPassword } from "@/lib/util/server/password";
 
 type AuthActionResult = {
 	error?: string;
@@ -159,7 +160,7 @@ export async function login(formData: FormData): Promise<AuthActionResult> {
 	const password = zod.string().safeParse(formData.get("password"));
 
 	if (!email.success || !password.success || password.data?.length === 0 || password.data?.length > 128) {
-		return { error: "Invalid email or password." };
+		return inputError("Invalid email or password.");
 	}
 
 	try {
@@ -170,7 +171,7 @@ export async function login(formData: FormData): Promise<AuthActionResult> {
 		});
 	} catch (error) {
 		if (error instanceof AuthError) {
-			return { error: "Invalid email or password." };
+			return inputError("Invalid email or password.");
 		}
 
 		throw error;
@@ -266,7 +267,7 @@ export async function signup(formData: FormData): Promise<AuthActionResult> {
 		});
 	} catch (error) {
 		if (error instanceof AuthError) {
-			return { error: "Your account was created. Please log in." };
+			return inputError("Your account was created. Please log in.");
 		}
 
 		throw error;

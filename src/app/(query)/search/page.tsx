@@ -3,7 +3,7 @@ import Link from "next/link";
 import { GameCard } from "@/components/game/GameDisplays";
 import Container from "@/components/layout/Container";
 import { searchGames } from "@/lib/data/games";
-import { absoluteUrl, DEFAULT_OG_IMAGE, metadataDescription, SITE_NAME } from "@/lib/metadata";
+import { absoluteUrl, DEFAULT_OG_IMAGE, metadataDescription, SITE_NAME } from "@/lib/util/metadata";
 
 type SearchPageProps = Readonly<{ searchParams: Promise<{ q?: string | string[]; page?: string | string[] }> }>;
 

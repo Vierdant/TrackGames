@@ -1,5 +1,5 @@
 import RequestQueue from "@/lib/cache/requestQueue";
-import { getAccessToken } from "../../token";
+import { getAccessToken } from "@/lib/external/igdb/token";
 
 const queue = new RequestQueue(3, 1100);
 

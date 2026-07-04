@@ -3,11 +3,11 @@ import ReactMarkdown, { type Components } from "react-markdown";
 import Image from "next/image";
 import rehypeSanitize from "rehype-sanitize";
 import remarkGfm from "remark-gfm";
-import { ALLOWEDTAGS } from "@/lib/constants";
-import { MarkdownAlign } from "@/lib/enums";
+import { ALLOWED_TAGS } from "@/lib/constants";
 import type { MarkdownBlock } from "@/lib/types";
-import * as normalize from "@/lib/util/normalize";
-import { isSafeLinkHref, isSafeUrl } from "@/lib/util/safety";
+import { MarkdownAlign } from "@/lib/types";
+import * as normalize from "@/lib/util/validate/normalize";
+import { isSafeLinkHref, isSafeUrl } from "@/lib/util/validate/safety";
 
 type MarkdownImageProps = Readonly<{
 	src: string;
@@ -168,7 +168,7 @@ function MarkdownContent({ block, parentAlign }: MarkdownContentProps) {
 
 	return (
 		<div className={alignClassName(align)} style={{ color: block.color }}>
-			<ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeSanitize]} allowedElements={ALLOWEDTAGS} components={markdownComponents}>
+			<ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeSanitize]} allowedElements={ALLOWED_TAGS} components={markdownComponents}>
 				{block.content}
 			</ReactMarkdown>
 		</div>

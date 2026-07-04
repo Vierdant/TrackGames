@@ -3,8 +3,9 @@
 import { useState } from "react";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight, Play } from "lucide-react";
+import { joinClass, stepIndex } from "@/app/_util/func";
+import HorizontalScroller from "@/components/layout/HorizontalScroller";
 import { ImageIdToURL } from "@/lib/external/igdb/util";
-import HorizontalScroller from "./HorizontalScroller";
 
 type MediaItem =
 	| {
@@ -42,7 +43,7 @@ export default function MediaGallery({ media }: Readonly<{ media: MediaItem[] }>
 					<button
 						type="button"
 						aria-label="Show previous media"
-						onClick={() => setMediaActive(mediaActive - 1)}
+						onClick={() => setMediaActive(stepIndex(mediaActive, -1, media.length, "clamp"))}
 						className="absolute top-1/2 left-3 z-10 grid size-10 -translate-y-1/2 cursor-pointer place-items-center"
 					>
 						<ChevronLeft size={30} strokeWidth={3} />
@@ -52,7 +53,7 @@ export default function MediaGallery({ media }: Readonly<{ media: MediaItem[] }>
 					<button
 						type="button"
 						aria-label="Show next media"
-						onClick={() => setMediaActive(mediaActive + 1)}
+						onClick={() => setMediaActive(stepIndex(mediaActive, 1, media.length, "clamp"))}
 						className="absolute top-1/2 right-3 z-10 grid size-10 -translate-y-1/2 cursor-pointer place-items-center"
 					>
 						<ChevronRight size={30} strokeWidth={3} />
@@ -67,9 +68,10 @@ export default function MediaGallery({ media }: Readonly<{ media: MediaItem[] }>
 							key={`${item.type}-${item.id}`}
 							type="button"
 							onClick={() => setMediaActive(index)}
-							className={`shrink-0 cursor-pointer snap-start overflow-hidden rounded-md border-2 transition ${
-								mediaActive === index ? "border-primary" : "border-transparent opacity-80 hover:opacity-100"
-							}`}
+							className={joinClass(
+								"shrink-0 cursor-pointer snap-start overflow-hidden rounded-md border-2 transition",
+								mediaActive === index ? "border-primary" : "border-transparent opacity-80 hover:opacity-100",
+							)}
 							aria-label={`Show media ${index + 1}`}
 						>
 							{item.type === "video" ? (

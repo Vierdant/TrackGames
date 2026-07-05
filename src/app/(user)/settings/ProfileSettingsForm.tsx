@@ -3,9 +3,9 @@
 import { type SetStateAction, useMemo, useState } from "react";
 import { ChevronDown, ChevronUp, Trash2 } from "lucide-react";
 import { ColorField, MediaModal } from "@/app/(user)/settings/SettingsShared";
-import { socialPlatformIcons } from "@/components/config";
 import { GhostButton } from "@/components/ui/Buttons";
 import { Field, Input, Select, Textarea } from "@/components/ui/Inputs";
+import { SOCIAL_PLATFORM_ICONS } from "@/components/ui/SVG";
 import AvatarPreview from "@/components/user/AvatarView";
 import BackgroundView from "@/components/user/BackgroundView";
 import { SOCIAL_PLATFORMS } from "@/lib/constants";
@@ -19,6 +19,15 @@ type SocialLinksEditorProps = Readonly<{
 	update: (id: string, patch: Partial<SocialLink>) => void;
 	move: (id: string, direction: -1 | 1) => void;
 	setter: (value: SetStateAction<SocialLink[]>) => void;
+}>;
+
+type SocialLinkRowProps = Readonly<{
+	social: SocialLink;
+	isFirst: boolean;
+	isLast: boolean;
+	update: SocialLinksEditorProps["update"];
+	move: SocialLinksEditorProps["move"];
+	setter: SocialLinksEditorProps["setter"];
 }>;
 
 export default function ProfileSettingsForm({ profile }: Readonly<{ profile: SecuredUser }>) {
@@ -153,53 +162,57 @@ function SocialLinksEditor({ socials, update, move, setter }: SocialLinksEditorP
 	return (
 		<div className="mt-3 flex flex-col gap-2">
 			{socials.map((social, index) => (
-				<div key={social.id} className="grid gap-2 rounded md:grid-cols-[9rem_minmax(0,1fr)_auto] md:items-center">
-					<span className="min-w-0 text-sm font-bold text-text-muted">
-						<SocialPlatformLabel platform={social.platform} kind={social.kind} />
-					</span>
-					<label>
-						<span className="sr-only">
-							{getSocialPlatformLabel(social.platform, social.kind)} {social.kind === LinkType.COPY ? "username" : "link"}
-						</span>
-						<Input
-							type={social.kind === LinkType.COPY ? "text" : "url"}
-							value={social.value}
-							onChange={(event) => update(social.id, { value: event.target.value })}
-							placeholder={getSocialPlaceholder(social.platform, social.kind)}
-						/>
-					</label>
-					<div className="flex items-center gap-1">
-						<button
-							type="button"
-							onClick={() => move(social.id, -1)}
-							disabled={index === 0}
-							className="cursor-pointer rounded p-2 text-text-muted hover:text-primary disabled:cursor-not-allowed disabled:opacity-40"
-							aria-label="Move social link up"
-						>
-							<ChevronUp size={18} />
-						</button>
-						<button
-							type="button"
-							onClick={() => move(social.id, 1)}
-							disabled={index === socials.length - 1}
-							className="cursor-pointer rounded p-2 text-text-muted hover:text-primary disabled:cursor-not-allowed disabled:opacity-40"
-							aria-label="Move social link down"
-						>
-							<ChevronDown size={18} />
-						</button>
-						<button
-							type="button"
-							onClick={() => {
-								setter((items) => filterSocialButtons(items, social));
-							}}
-							className="cursor-pointer rounded p-2 text-text-muted hover:text-error"
-							aria-label="Remove social link"
-						>
-							<Trash2 size={18} />
-						</button>
-					</div>
-				</div>
+				<SocialLinkRow key={social.id} social={social} isFirst={index === 0} isLast={index === socials.length - 1} update={update} move={move} setter={setter} />
 			))}
+		</div>
+	);
+}
+
+function SocialLinkRow({ social, isFirst, isLast, update, move, setter }: SocialLinkRowProps) {
+	return (
+		<div className="grid gap-2 rounded md:grid-cols-[9rem_minmax(0,1fr)_auto] md:items-center">
+			<span className="min-w-0 text-sm font-bold text-text-muted">
+				<SocialPlatformLabel platform={social.platform} kind={social.kind} />
+			</span>
+			<label>
+				<span className="sr-only">
+					{getSocialPlatformLabel(social.platform, social.kind)} {social.kind === LinkType.COPY ? "username" : "link"}
+				</span>
+				<Input
+					type={social.kind === LinkType.COPY ? "text" : "url"}
+					value={social.value}
+					onChange={(event) => update(social.id, { value: event.target.value })}
+					placeholder={getSocialPlaceholder(social.platform, social.kind)}
+				/>
+			</label>
+			<div className="flex items-center gap-1">
+				<button
+					type="button"
+					onClick={() => move(social.id, -1)}
+					disabled={isFirst}
+					className="cursor-pointer rounded p-2 text-text-muted hover:text-primary disabled:cursor-not-allowed disabled:opacity-40"
+					aria-label="Move social link up"
+				>
+					<ChevronUp size={18} />
+				</button>
+				<button
+					type="button"
+					onClick={() => move(social.id, 1)}
+					disabled={isLast}
+					className="cursor-pointer rounded p-2 text-text-muted hover:text-primary disabled:cursor-not-allowed disabled:opacity-40"
+					aria-label="Move social link down"
+				>
+					<ChevronDown size={18} />
+				</button>
+				<button
+					type="button"
+					onClick={() => setter((items) => items.filter((item) => item.id !== social.id))}
+					className="cursor-pointer rounded p-2 text-text-muted hover:text-error"
+					aria-label="Remove social link"
+				>
+					<Trash2 size={18} />
+				</button>
+			</div>
 		</div>
 	);
 }
@@ -209,7 +222,7 @@ function SocialPlatformLabel({ platform, kind }: Readonly<{ platform: string; ki
 
 	if (!platformConfig) return <>{platform}</>;
 
-	const Icon = socialPlatformIcons[platformConfig.id as keyof typeof socialPlatformIcons];
+	const Icon = SOCIAL_PLATFORM_ICONS[platformConfig.id as keyof typeof SOCIAL_PLATFORM_ICONS];
 
 	return (
 		<span className="flex min-w-0 items-center gap-2">
@@ -217,8 +230,4 @@ function SocialPlatformLabel({ platform, kind }: Readonly<{ platform: string; ki
 			<span className="min-w-0 truncate">{platformConfig.label}</span>
 		</span>
 	);
-}
-
-function filterSocialButtons(items: SocialLink[], social: SocialLink) {
-	return items.filter((item) => item.id !== social.id);
 }

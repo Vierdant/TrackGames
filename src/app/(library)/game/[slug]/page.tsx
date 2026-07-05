@@ -102,7 +102,7 @@ export default async function Page({ params }: Readonly<{ params: Promise<{ slug
 				)}
 				<div className="pointer-events-none absolute inset-x-0 bottom-0 h-full bg-linear-to-t from-bg via-bg/95 via-50% to-transparent md:via-30%" />
 
-				<Container className="relative z-1 flex min-h-136 flex-row items-end justify-center gap-10 pt-20 pb-8 md:min-h-152 md:justify-start">
+				<Container className="relative z-raised flex min-h-136 flex-row items-end justify-center gap-10 pt-20 pb-8 md:min-h-152 md:justify-start">
 					<div className="flex min-h-max max-w-full min-w-0 flex-col items-center gap-3 text-text md:flex-row md:items-end md:gap-6">
 						<div className="hidden md:flex">
 							<GameCard game={game} size={210} priority />

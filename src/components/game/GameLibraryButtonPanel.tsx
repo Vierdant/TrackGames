@@ -1,9 +1,9 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { Bookmark, CheckCircle2, CirclePause, Heart, Library, ListPlus, NotebookText, Trophy, XCircle } from "lucide-react";
+import { Bookmark, Heart, Library, ListPlus, NotebookText } from "lucide-react";
+import ManageListsPanel from "@/app/(library)/game/[slug]/ManageListsPanel";
 import StarRating from "@/components/game/StarRating";
-import ManageListsPanel from "@/components/library/ManageListsPanel";
 import { FloatedSquareButton, GhostButton, PrimaryButton } from "@/components/ui/Buttons";
 import ConfirmAction from "@/components/ui/ConfirmAction";
 import MenuPanel from "@/components/ui/MenuPanel";
@@ -11,6 +11,7 @@ import { addGameToLibrary, removeGameFromLibrary, setGameLibraryStatus, updateGa
 import { addGameToPlaylist, removeGameFromPlaylist } from "@/lib/actions/playlists";
 import { GameStatus } from "@/lib/generated/prisma/enums";
 import { joinClass } from "@/lib/util/client/func";
+import { GAME_STATUS_META } from "@/lib/util/format/gameStatus";
 import { ratingToFive } from "@/lib/util/format/rating";
 
 type UserPlaylist = {
@@ -37,81 +38,24 @@ type GameLibraryButtonPanelProps = Readonly<{
 	logsHref?: string;
 }>;
 
-const statusOptions = [
-	{
-		status: GameStatus.PLAYING,
-		label: "Playing",
-		icon: CheckCircle2,
-		className: "border-primary text-primary",
-		activeClassName: "border-primary bg-primary text-text-inverse",
-	},
-	{
-		status: GameStatus.COMPLETED,
-		label: "Completed",
-		icon: Trophy,
-		className: "border-success text-success",
-		activeClassName: "border-success bg-success text-text-inverse",
-	},
-	{
-		status: GameStatus.PAUSED,
-		label: "Paused",
-		icon: CirclePause,
-		className: "border-warning text-warning",
-		activeClassName: "border-warning bg-warning text-text-inverse",
-	},
-	{
-		status: GameStatus.DROPPED,
-		label: "Dropped",
-		icon: XCircle,
-		className: "border-error text-error",
-		activeClassName: "border-error bg-error text-text-inverse",
-	},
+const statusClassNames: Partial<Record<GameStatus, { className: string; activeClassName: string }>> = {
+	[GameStatus.PLAYING]: { className: "border-primary text-primary", activeClassName: "border-primary bg-primary text-text-inverse" },
+	[GameStatus.COMPLETED]: { className: "border-success text-success", activeClassName: "border-success bg-success text-text-inverse" },
+	[GameStatus.PAUSED]: { className: "border-warning text-warning", activeClassName: "border-warning bg-warning text-text-inverse" },
+	[GameStatus.DROPPED]: { className: "border-error text-error", activeClassName: "border-error bg-error text-text-inverse" },
+};
+
+const secondaryStatusButtons = [
+	{ status: GameStatus.BACKLOG, label: "Backlog", Icon: Bookmark },
+	{ status: GameStatus.WISHLIST, label: "Wishlist", Icon: Heart },
 ];
 
-function removeGameEntryFromPlaylists(current: UserPlaylist[], listId: string, entryId: string) {
-	const next: UserPlaylist[] = [];
-
-	for (const playlist of current) {
-		if (playlist.id !== listId) {
-			next.push(playlist);
-			continue;
-		}
-
-		const entries: { id: string; gameId: number }[] = [];
-		for (const playlistEntry of playlist.entries) {
-			if (playlistEntry.id !== entryId) {
-				entries.push(playlistEntry);
-			}
-		}
-
-		next.push({ ...playlist, entries });
-	}
-
-	return next;
-}
-
-function addGameEntryToPlaylists(current: UserPlaylist[], listId: string, entryId: string, gameId: number) {
-	const next: UserPlaylist[] = [];
-
-	for (const playlist of current) {
-		if (playlist.id !== listId) {
-			next.push(playlist);
-			continue;
-		}
-
-		const entries: { id: string; gameId: number }[] = [];
-		for (const playlistEntry of playlist.entries) {
-			if (playlistEntry.gameId !== gameId) {
-				entries.push(playlistEntry);
-			}
-		}
-
-		entries.push({ id: entryId, gameId });
-		next.push({ ...playlist, entries });
-	}
-
-	return next;
-}
+const statusOptions = [GameStatus.PLAYING, GameStatus.COMPLETED, GameStatus.PAUSED, GameStatus.DROPPED].map((status) => ({
+	status,
+	label: GAME_STATUS_META[status].label,
+	icon: GAME_STATUS_META[status].icon,
+	...statusClassNames[status]!,
+}));
 
 export default function GameLibraryButtonPanel({ gameId, gameSlug, isLoggedIn, entry, playlists, logsHref }: GameLibraryButtonPanelProps) {
 	const [currentEntry, setCurrentEntry] = useState(entry);
@@ -224,36 +168,24 @@ export default function GameLibraryButtonPanel({ gameId, gameSlug, isLoggedIn, e
 				>
 					<CurrentStatusIcon size={21} />
 				</FloatedSquareButton>
-				<FloatedSquareButton
-					type="button"
-					title="Backlog"
-					aria-label="Backlog"
-					label="Backlog"
-					disabled={pending}
-					onClick={() => setStatus(GameStatus.BACKLOG)}
-					className={
-						currentEntry?.status === GameStatus.BACKLOG
-							? "border-secondary bg-secondary text-text-inverse"
-							: "border-text-faint text-text-muted hover:border-secondary hover:text-secondary"
-					}
-				>
-					<Bookmark size={21} />
-				</FloatedSquareButton>
-				<FloatedSquareButton
-					type="button"
-					title="Wishlist"
-					aria-label="Wishlist"
-					label="Wishlist"
-					disabled={pending}
-					onClick={() => setStatus(GameStatus.WISHLIST)}
-					className={
-						currentEntry?.status === GameStatus.WISHLIST
-							? "border-secondary bg-secondary text-text-inverse"
-							: "border-text-faint text-text-muted hover:border-secondary hover:text-secondary"
-					}
-				>
-					<Heart size={21} />
-				</FloatedSquareButton>
+				{secondaryStatusButtons.map(({ status, label, Icon }) => (
+					<FloatedSquareButton
+						key={status}
+						type="button"
+						title={label}
+						aria-label={label}
+						label={label}
+						disabled={pending}
+						onClick={() => setStatus(status)}
+						className={
+							currentEntry?.status === status
+								? "border-secondary bg-secondary text-text-inverse"
+								: "border-text-faint text-text-muted hover:border-secondary hover:text-secondary"
+						}
+					>
+						<Icon size={21} />
+					</FloatedSquareButton>
+				))}
 				<ConfirmAction
 					open={confirming}
 					title="Remove from library?"
@@ -336,5 +268,15 @@ export default function GameLibraryButtonPanel({ gameId, gameSlug, isLoggedIn, e
 				onTogglePlaylist={togglePlaylist}
 			/>
 		</div>
+	);
+}
+
+function removeGameEntryFromPlaylists(current: UserPlaylist[], listId: string, entryId: string) {
+	return current.map((playlist) => (playlist.id === listId ? { ...playlist, entries: playlist.entries.filter((entry) => entry.id !== entryId) } : playlist));
+}
+
+function addGameEntryToPlaylists(current: UserPlaylist[], listId: string, entryId: string, gameId: number) {
+	return current.map((playlist) =>
+		playlist.id === listId ? { ...playlist, entries: [...playlist.entries.filter((entry) => entry.gameId !== gameId), { id: entryId, gameId }] } : playlist,
 	);
 }

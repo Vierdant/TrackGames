@@ -2,10 +2,10 @@
 
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { DiscordIcon, GithubIcon, GoogleIcon, TwitchIcon } from "@/components/SVG";
 import { GhostButton } from "@/components/ui/Buttons";
 import ConfirmAction from "@/components/ui/ConfirmAction";
 import { Field, Input } from "@/components/ui/Inputs";
+import { DiscordIcon, GithubIcon, GoogleIcon, TwitchIcon } from "@/components/ui/SVG";
 import { linkProvider, unlinkProvider } from "@/lib/actions/auth";
 import { clearUserLibrary, deleteUserAccount, resetUserAccountData } from "@/lib/actions/settings";
 import { AUTH_PROVIDERS } from "@/lib/constants";
@@ -63,9 +63,9 @@ export default function AccountSettingsForm({ profile, linkedProviders, hasPassw
 				<h3>Password</h3>
 				<div className="mt-1 grid gap-3 md:grid-cols-3">
 					{hasPassword && (
-						<div className="flex flex-col">
+						<label className="flex flex-col">
 							<span className="text-sm text-text-muted">Current password</span>
-							<label className="relative">
+							<span className="relative">
 								<Input
 									name="currentPassword"
 									type="password"
@@ -74,8 +74,8 @@ export default function AccountSettingsForm({ profile, linkedProviders, hasPassw
 									className="pl-2"
 									autoComplete="current-password"
 								/>
-							</label>
-						</div>
+							</span>
+						</label>
 					)}
 					<label className="flex flex-col">
 						<span className="text-sm text-text-muted">{hasPassword ? "New password" : "Set password"}</span>
@@ -90,9 +90,9 @@ export default function AccountSettingsForm({ profile, linkedProviders, hasPassw
 							/>
 						</span>
 					</label>
-					<div className="flex flex-col">
+					<label className="flex flex-col">
 						<span className="text-sm text-text-muted">Confirm password</span>
-						<label className="relative">
+						<span className="relative">
 							<Input
 								name="passwordConfirm"
 								type="password"
@@ -101,8 +101,8 @@ export default function AccountSettingsForm({ profile, linkedProviders, hasPassw
 								className="pl-2"
 								autoComplete="new-password"
 							/>
-						</label>
-					</div>
+						</span>
+					</label>
 				</div>
 			</div>
 

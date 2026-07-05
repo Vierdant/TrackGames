@@ -81,7 +81,7 @@ function Stats({ widget, stats }: Readonly<{ widget: Widget; stats: Awaited<Retu
 						return (
 							<div
 								key={`${stat}-${index}`}
-								className="flex h-16 w-full flex-col items-center justify-center gap-2 rounded-md border-2 border-primary/40 bg-primary/10 p-10 text-center text-2xl font-bold md:h-32"
+								className="flex h-16 w-full flex-col items-center justify-center gap-2 rounded border-2 border-primary/40 bg-primary/10 p-10 text-center text-2xl font-bold md:h-32"
 							>
 								<p className="flex flex-1 items-center">
 									<IncrementedNumber value={(value as number) ?? "0"} />

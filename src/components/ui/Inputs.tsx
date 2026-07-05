@@ -1,4 +1,5 @@
 import { forwardRef, type InputHTMLAttributes, type ReactNode, type SelectHTMLAttributes, type TextareaHTMLAttributes } from "react";
+import type { LucideIcon } from "lucide-react";
 import { joinClass } from "@/lib/util/client/func";
 
 type FieldProps = Readonly<{ label: string; hint?: string; children: ReactNode; className?: string }>;
@@ -48,6 +49,35 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaHTMLAttributes<H
 export const Select = forwardRef<HTMLSelectElement, SelectHTMLAttributes<HTMLSelectElement>>(function Select({ className, ...props }, ref) {
 	return <select ref={ref} {...props} className={joinClass(base, className)} />;
 });
+
+export const IconField = forwardRef<HTMLInputElement, InputHTMLAttributes<HTMLInputElement> & { icon: LucideIcon; label: string; error?: string; endAdornment?: ReactNode }>(
+	function IconField({ icon: Icon, label, error, endAdornment, id, className, ...props }, ref) {
+		const errorId = id ? `${id}-error` : undefined;
+
+		return (
+			<label className="flex flex-col gap-2 text-sm font-bold text-text-muted">
+				<span>{label}</span>
+				<span className="relative">
+					<Icon className="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 text-text-faint" size={18} aria-hidden="true" />
+					<Input
+						ref={ref}
+						id={id}
+						{...props}
+						aria-invalid={Boolean(error)}
+						aria-describedby={error ? errorId : undefined}
+						className={joinClass("mt-0 h-10 bg-surface pl-10 focus:border-primary", endAdornment ? "pr-12" : "", className)}
+					/>
+					{endAdornment}
+				</span>
+				{error && (
+					<span id={errorId} className="text-xs font-bold text-error">
+						{error}
+					</span>
+				)}
+			</label>
+		);
+	},
+);
 
 export const Checkbox = forwardRef<HTMLInputElement, InputHTMLAttributes<HTMLInputElement>>(function Checkbox({ className, type, ...props }, ref) {
 	return (

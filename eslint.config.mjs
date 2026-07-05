@@ -4,14 +4,16 @@ import nextTs from "eslint-config-next/typescript";
 import simpleImportSort from "eslint-plugin-simple-import-sort";
 import eslintConfigPrettier from "eslint-config-prettier";
 import importPlugin from "eslint-plugin-import";
+import jsxA11y from "eslint-plugin-jsx-a11y";
 import yamikhal from "./eslint/index.js";
 
 const eslintConfig = defineConfig([
 	...nextVitals,
 	...nextTs,
+	{ rules: jsxA11y.flatConfigs.recommended.rules },
 	eslintConfigPrettier,
 
-	globalIgnores([".next/**", "out/**", "build/**", "next-env.d.ts", "src/scripts/**"]),
+	globalIgnores([".next/**", "out/**", "build/**", "next-env.d.ts", "src/scripts/**", "src/lib/generated/**"]),
 
 	{
 		files: ["**/*.{ts,tsx}"],
@@ -23,6 +25,16 @@ const eslintConfig = defineConfig([
 		},
 
 		rules: {
+			"react/jsx-no-target-blank": "error",
+
+			"jsx-a11y/label-has-associated-control": [
+				"error",
+				{
+					controlComponents: ["Input", "SuffixedInput", "Textarea", "Select", "Checkbox"],
+					depth: 4,
+				},
+			],
+
 			"import/first": "error",
 			"import/newline-after-import": "warn",
 			"import/no-duplicates": "error",

@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { SearchX } from "lucide-react";
 import { GameCard } from "@/components/game/GameDisplays";
 import Container from "@/components/layout/Container";
+import EmptyState from "@/components/ui/EmptyState";
 import { searchGames } from "@/lib/data/games";
 import { absoluteUrl, DEFAULT_OG_IMAGE, metadataDescription, SITE_NAME } from "@/lib/util/metadata";
 
@@ -67,7 +69,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
 					)}
 				</header>
 
-				{query.length >= 2 && games.length === 0 ? <p className="rounded border border-border bg-bg-secondary p-4 text-sm text-text-muted">No games found.</p> : null}
+				{query.length >= 2 && games.length === 0 ? <EmptyState icon={SearchX} message="No games found." /> : null}
 
 				{games.length > 0 ? (
 					<>

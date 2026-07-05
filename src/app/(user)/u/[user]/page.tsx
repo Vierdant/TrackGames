@@ -54,7 +54,7 @@ export default async function Page({ params, searchParams }: UserPageProps) {
 				<ProfileHeader isOwned={isOwnProfile} profile={profile} isFollowing={isFollowingOwner} isLoggedIn={Boolean(session?.user?.id)} />
 
 				{/* INFO SETION */}
-				<section className="relative z-10 bg-bg/95 pt-5 pb-10">
+				<section className="relative z-elevated bg-bg/95 pt-5 pb-10">
 					<Container className="flex flex-col-reverse gap-5 lg:flex-row lg:items-start">
 						{/* LEFT SIDE */}
 						<aside className="flex w-full flex-col gap-5 lg:w-60 lg:shrink-0">

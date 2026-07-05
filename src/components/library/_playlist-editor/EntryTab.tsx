@@ -110,6 +110,7 @@ export default function EntryTab({
 					{isAddingTag ? (
 						<input
 							name="tags"
+							// eslint-disable-next-line jsx-a11y/no-autofocus -- intentional: focus new tag input when it appears
 							autoFocus
 							value={tagInput}
 							onChange={(event) => setTagInput(event.target.value)}

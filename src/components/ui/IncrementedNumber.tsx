@@ -32,7 +32,7 @@ function animateValue(obj: HTMLElement, start: number, value: number, duration: 
 		if (!startTimestamp) startTimestamp = timestamp;
 		const progress = Math.min((timestamp - startTimestamp) / duration, 1);
 		const current = progress * (value - start) + start;
-		obj.innerHTML = formatNumber(chunked ? Math.min(Math.ceil(current / step) * step, value) : Math.floor(current));
+		obj.textContent = formatNumber(chunked ? Math.min(Math.ceil(current / step) * step, value) : Math.floor(current));
 		if (progress < 1) {
 			globalThis.requestAnimationFrame(tick);
 		}

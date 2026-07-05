@@ -3,7 +3,8 @@
 import { useEffect, useRef, useState, useTransition } from "react";
 import Link from "next/link";
 import type { User } from "next-auth";
-import { ArrowRight, Bell, Book, LogOut, Menu, Settings, User as UserIcon } from "lucide-react";
+import { ArrowRight, Bell, BellOff, Book, LogOut, Menu, Settings, User as UserIcon } from "lucide-react";
+import EmptyState from "@/components/ui/EmptyState";
 import MenuPanel from "@/components/ui/MenuPanel";
 import ThemeSwitch from "@/components/ui/ThemeSwitch";
 import AvatarPreview from "@/components/user/AvatarView";
@@ -43,7 +44,7 @@ function Notifications({ notifications, onClose }: Readonly<{ notifications: Not
 			</Link>
 		))
 	) : (
-		<p className="px-3 py-4 text-text-muted">No notifications yet.</p>
+		<EmptyState icon={BellOff} message="No notifications yet." />
 	);
 }
 

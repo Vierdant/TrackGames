@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
-import { Bell, Download, LayoutGrid, Settings, Shield, UserIcon } from "lucide-react";
 import SettingsPanel from "@/app/(user)/settings/SettingsPanel";
-import SettingsTabs from "@/app/(user)/settings/SettingsTabs";
 import Container from "@/components/layout/Container";
+import Tabs from "@/components/layout/Tabs";
 import ProfileBackground from "@/components/user/BackgroundView";
 import ProfileHeader from "@/components/user/ProfileHeader";
 import { auth } from "@/lib/auth";
+import { SETTING_TABS } from "@/lib/constants";
 import { getUser, getUserProviders, hasUserPassword } from "@/lib/data/user";
 import { type PublicUser } from "@/lib/types";
 import { profileThemeStyle } from "@/lib/util/client/theme";
@@ -50,18 +50,9 @@ export const metadata: Metadata = {
 	},
 };
 
-export const SETTINGTABS: { id: string; label: string; icon: typeof UserIcon }[] = [
-	{ id: "profile", label: "Profile", icon: UserIcon },
-	{ id: "privacy", label: "Privacy", icon: Shield },
-	{ id: "widgets", label: "Widgets", icon: LayoutGrid },
-	{ id: "preferences", label: "Preferences", icon: Bell },
-	{ id: "import", label: "Import", icon: Download },
-	{ id: "account", label: "Account", icon: Settings },
-];
-
 export default async function SettingsPage({ searchParams }: SearchPageProps) {
 	const params = await searchParams;
-	const activeTab = lookup.value(params.tab, SETTINGTABS, "id", "profile");
+	const activeTab = lookup.value(params.tab, SETTING_TABS, "id", "profile");
 	const session = await auth();
 	if (!session?.user) redirect("/login");
 
@@ -69,7 +60,7 @@ export default async function SettingsPage({ searchParams }: SearchPageProps) {
 	if (!profile) redirect("/login");
 
 	const [hasPassword, accounts] = await Promise.all([hasUserPassword(profile.email!), activeTab === "account" ? getUserProviders(profile.id) : []]);
-	const active = lookup.byKey(SETTINGTABS, "id", activeTab) ?? SETTINGTABS[0];
+	const active = lookup.byKey(SETTING_TABS, "id", activeTab) ?? SETTING_TABS[0];
 
 	return (
 		<main className="relative z-0 flex-1" style={profileThemeStyle(profile.profileColor, profile.accentColor)}>
@@ -78,10 +69,9 @@ export default async function SettingsPage({ searchParams }: SearchPageProps) {
 			<Container>
 				<ProfileHeader isSettings={true} profile={profile as PublicUser} />
 
-				<section className="relative z-10 bg-bg/95 py-5">
+				<section className="relative z-elevated bg-bg/95 py-5">
 					<Container className="grid gap-5 lg:grid-cols-[15rem_minmax(0,1fr)] lg:items-start">
-						<SettingsTabs activeTab={activeTab} />
-
+						<Tabs tabs={SETTING_TABS} active={activeTab} responsive="drawer" drawerTitle="Settings" />
 						<div className="min-w-0">
 							<div className="rounded bg-bg p-5">
 								<div className="mb-5 flex flex-col gap-3 border-b border-border pb-4 md:flex-row md:items-start md:justify-between">

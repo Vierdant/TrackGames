@@ -144,7 +144,7 @@ export default function HorizontalScroller({ children, className = "", selectedI
 					type="button"
 					aria-label={onSelectedIndexChange ? "Show previous media" : "Scroll left"}
 					onClick={() => select("left")}
-					className="absolute top-1/2 left-0 z-10 grid size-10 -translate-y-1/2 cursor-pointer place-items-center rounded border-border transition-colors outline-none hover:border hover:bg-bg-secondary/80 hover:text-primary md:h-full md:bg-bg-secondary/60"
+					className="absolute top-1/2 left-0 z-elevated grid size-10 -translate-y-1/2 cursor-pointer place-items-center rounded border-border transition-colors outline-none hover:border hover:bg-bg-secondary/80 hover:text-primary md:h-full md:bg-bg-secondary/60"
 				>
 					<ChevronLeft size={20} strokeWidth={2} />
 				</button>
@@ -183,7 +183,7 @@ export default function HorizontalScroller({ children, className = "", selectedI
 					type="button"
 					aria-label={onSelectedIndexChange ? "Show next media" : "Scroll right"}
 					onClick={() => select("right")}
-					className="absolute top-1/2 right-0 z-10 grid size-10 -translate-y-1/2 cursor-pointer place-items-center rounded border-border transition-colors outline-none hover:border hover:bg-bg-secondary/80 hover:text-primary md:h-full md:bg-bg-secondary/60"
+					className="absolute top-1/2 right-0 z-elevated grid size-10 -translate-y-1/2 cursor-pointer place-items-center rounded border-border transition-colors outline-none hover:border hover:bg-bg-secondary/80 hover:text-primary md:h-full md:bg-bg-secondary/60"
 				>
 					<ChevronRight size={20} strokeWidth={2} />
 				</button>

@@ -61,7 +61,7 @@ export default function MenuPanel({
 			className={joinClass(
 				variant === "modal" &&
 					"pointer-events-auto max-h-[calc(100vh-2rem)] w-[min(var(--menu-panel-width,32rem),calc(100vw-2rem))] max-w-none overflow-y-auto rounded bg-bg p-5 shadow-main",
-				variant === "anchored" && "pointer-events-auto absolute top-full right-0 z-50 mt-3 w-80 rounded border border-border bg-bg p-2 text-sm shadow-main",
+				variant === "anchored" && "pointer-events-auto absolute top-full right-0 z-dropdown mt-3 w-80 rounded border border-border bg-bg p-2 text-sm shadow-main",
 				isDrawer &&
 					joinClass(
 						"pointer-events-auto fixed inset-y-0 h-full w-[min(var(--menu-panel-width,20rem),100vw)] overflow-y-auto bg-bg p-5 shadow-main",

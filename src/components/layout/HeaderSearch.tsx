@@ -124,7 +124,7 @@ function SearchBox({ autoFocus = false, onPick }: Readonly<{ autoFocus?: boolean
 			)}
 
 			{open && search.length >= 2 && (
-				<div className="absolute top-full right-0 left-0 z-50 mt-2 overflow-hidden rounded border border-border bg-bg-secondary shadow-main">
+				<div className="absolute top-full right-0 left-0 z-dropdown mt-2 overflow-hidden rounded border border-border bg-bg-secondary shadow-main">
 					<Link
 						href={searchHref}
 						prefetch={false}
@@ -176,6 +176,7 @@ export default function HeaderSearch() {
 			/>
 			<MenuPanel open={open} onClose={() => setOpen(false)} variant="drawer-right" width="100%" shouldShowClose={false} panelClassName="md:hidden" className="md:hidden">
 				<div className="flex items-center gap-3">
+					{/* eslint-disable-next-line jsx-a11y/no-autofocus -- intentional: focus search on drawer open */}
 					<SearchBox autoFocus={open} onPick={() => setOpen(false)} />
 					<IconButton
 						onClick={() => setOpen(false)}

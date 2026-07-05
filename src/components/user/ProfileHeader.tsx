@@ -33,9 +33,9 @@ export default function ProfileHeader({ isOwned, isSettings, profile, isFollowin
 	const followUserId = profile.id;
 
 	return (
-		<section className="relative z-10 w-full border-b border-border bg-bg/95">
-			<Container className="relative z-1 flex flex-row items-end justify-start gap-10 pt-5 md:pt-5">
-				<div className="relative z-1 mx-5 mb-3 flex min-h-max w-full min-w-0 flex-col items-center gap-3 text-center text-text md:flex-row md:items-end md:gap-6 md:text-left">
+		<section className="relative z-elevated w-full border-b border-border bg-bg/95">
+			<Container className="relative z-raised flex flex-row items-end justify-start gap-10 pt-5 md:pt-5">
+				<div className="relative z-raised mx-5 mb-3 flex min-h-max w-full min-w-0 flex-col items-center gap-3 text-center text-text md:flex-row md:items-end md:gap-6 md:text-left">
 					<AvatarPreview image={profileImage} size={20} priority alt={`${displayName} profile image`} />
 
 					<div className="flex min-w-0 flex-1 flex-col justify-end gap-3 md:flex-row md:items-end md:justify-between md:gap-5">

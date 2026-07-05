@@ -33,8 +33,6 @@
 
 	/* ===== Effects ===== */
 	--shadow: 0 24px 70px rgba(25, 27, 35, 0.16);
-
-	--games-header-bg: url("/lucid-games-bg.webp");
 }
 
 :root.dark {
@@ -103,6 +101,13 @@
 
 	/* Effects */
 	--shadow-main: var(--shadow);
+
+	/* Z-Index */
+	--z-index-raised: 1;
+	--z-index-elevated: 10;
+	--z-index-nav: 20;
+	--z-index-dropdown: 50;
+	--z-index-modal: 1000;
 
 	/* Fonts */
 	--font-body: var(--font-manrope);

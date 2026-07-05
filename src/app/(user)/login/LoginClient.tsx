@@ -3,10 +3,10 @@
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Eye, EyeOff, Lock, Mail, User } from "lucide-react";
-import { DiscordIcon, GithubIcon, GoogleIcon, TwitchIcon } from "@/components/SVG";
 import { GhostButton, IconButton, PrimaryButton } from "@/components/ui/Buttons";
-import { Input } from "@/components/ui/Inputs";
+import { IconField } from "@/components/ui/Inputs";
 import MenuPanel from "@/components/ui/MenuPanel";
+import { DiscordIcon, GithubIcon, GoogleIcon, TwitchIcon } from "@/components/ui/SVG";
 import { login, loginProvider, signup } from "@/lib/actions/auth";
 import { deferHook } from "@/lib/util/client/func";
 
@@ -128,77 +128,42 @@ export default function LoginClient() {
 				<h1 className="pb-5 text-center text-2xl font-bold text-text sm:text-3xl">{isRegister ? "Join" : "Login"}</h1>
 			</div>
 			{errorMessage && (
-				<div className="mb-2 rounded-md border-2 border-error/50 bg-error/20 p-5 text-error">
+				<div className="mb-2 rounded border-2 border-error/50 bg-error/20 p-5 text-error">
 					<p className="text-sm">{errorMessage}</p>
 				</div>
 			)}
 			<form action={handleSubmit} key={mode} className="animate-auth-mode-in flex flex-col gap-4">
 				{isRegister && (
-					<label className="flex flex-col gap-2 text-sm font-bold text-text-muted">
-						<span>Username</span>
-						<span className="relative">
-							<User className="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 text-text-faint" size={18} aria-hidden="true" />
-							<Input
-								id="name"
-								name="name"
-								type="text"
-								autoComplete="username"
-								placeholder="Your display name"
-								maxLength={32}
-								pattern="[A-Za-z0-9_\-]+"
-								value={name}
-								onChange={(event) => setName(event.target.value)}
-								aria-invalid={Boolean(fieldErrors.name)}
-								aria-describedby={fieldErrors.name ?? undefined}
-								className="mt-0 h-10 bg-surface pl-10 focus:border-primary"
-							/>
-						</span>
-						{fieldErrors.name && (
-							<span id="name-error" className="text-xs font-bold text-error">
-								{fieldErrors.name}
-							</span>
-						)}
-					</label>
+					<IconField
+						icon={User}
+						label="Username"
+						id="name"
+						name="name"
+						type="text"
+						autoComplete="username"
+						placeholder="Your display name"
+						maxLength={32}
+						pattern="[A-Za-z0-9_\-]+"
+						value={name}
+						onChange={(event) => setName(event.target.value)}
+						error={fieldErrors.name}
+					/>
 				)}
 
-				<label className="flex flex-col gap-2 text-sm font-bold text-text-muted">
-					<span>Email</span>
-					<span className="relative">
-						<Mail className="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 text-text-faint" size={18} aria-hidden="true" />
-						<Input
-							id="email"
-							name="email"
-							type="email"
-							autoComplete="email"
-							placeholder="Email address"
-							aria-invalid={Boolean(fieldErrors.email)}
-							aria-describedby={fieldErrors.name ? "name-error" : undefined}
-							className="mt-0 h-10 bg-surface pl-10 focus:border-primary"
-						/>
-					</span>
-					{fieldErrors.email && (
-						<span id="email-error" className="text-xs font-bold text-error">
-							{fieldErrors.email}
-						</span>
-					)}
-				</label>
+				<IconField icon={Mail} label="Email" id="email" name="email" type="email" autoComplete="email" placeholder="Email address" error={fieldErrors.email} />
 
-				<label className="flex flex-col gap-2 text-sm font-bold text-text-muted">
-					<span>Password</span>
-					<span className="relative">
-						<Lock className="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 text-text-faint" size={18} aria-hidden="true" />
-						<Input
-							id="password"
-							name="password"
-							type={showPassword ? "text" : "password"}
-							autoComplete={isRegister ? "new-password" : "current-password"}
-							placeholder="Password"
-							value={password}
-							onChange={(event) => setPassword(event.target.value)}
-							aria-invalid={Boolean(passwordMessage)}
-							aria-describedby={passwordMessage ? "name-error" : undefined}
-							className="mt-0 h-10 bg-surface pr-12 pl-10 focus:border-primary"
-						/>
+				<IconField
+					icon={Lock}
+					label="Password"
+					id="password"
+					name="password"
+					type={showPassword ? "text" : "password"}
+					autoComplete={isRegister ? "new-password" : "current-password"}
+					placeholder="Password"
+					value={password}
+					onChange={(event) => setPassword(event.target.value)}
+					error={passwordMessage}
+					endAdornment={
 						<IconButton
 							onClick={() => setShowPassword((value) => !value)}
 							pressed={showPassword}
@@ -206,36 +171,20 @@ export default function LoginClient() {
 							icon={showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
 							className="absolute top-1/2 right-2 -translate-y-1/2"
 						/>
-					</span>
-					{passwordMessage && (
-						<span id="password-error" className="text-xs font-bold text-error">
-							{passwordMessage}
-						</span>
-					)}
-				</label>
+					}
+				/>
 
 				{isRegister && (
-					<label className="flex flex-col gap-2 text-sm font-bold text-text-muted">
-						<span>Confirm password</span>
-						<span className="relative">
-							<Lock className="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 text-text-faint" size={18} aria-hidden="true" />
-							<Input
-								id="passwordConfirm"
-								name="passwordConfirm"
-								type={showPassword ? "text" : "password"}
-								autoComplete="new-password"
-								placeholder="Repeat your password"
-								aria-invalid={Boolean(fieldErrors.passwordConfirm)}
-								aria-describedby={fieldErrors.passwordConfirm ? "name-error" : undefined}
-								className="mt-0 h-10 bg-surface pl-10 focus:border-primary"
-							/>
-						</span>
-						{fieldErrors.passwordConfirm && (
-							<span id="passwordConfirm-error" className="text-xs font-bold text-error">
-								{fieldErrors.passwordConfirm}
-							</span>
-						)}
-					</label>
+					<IconField
+						icon={Lock}
+						label="Confirm password"
+						id="passwordConfirm"
+						name="passwordConfirm"
+						type={showPassword ? "text" : "password"}
+						autoComplete="new-password"
+						placeholder="Repeat your password"
+						error={fieldErrors.passwordConfirm}
+					/>
 				)}
 
 				{!isRegister && (
@@ -281,33 +230,23 @@ export default function LoginClient() {
 
 			<MenuPanel open={Boolean(providerSignup)} onClose={() => setProviderSignup(null)} title={providerSignup ? `Register with ${providerSignup.name}` : ""} width="24rem">
 				<form action={handleProviderSignup}>
-					<label className="flex flex-col gap-2 text-sm font-bold text-text-muted">
-						<span>Username</span>
-						<span className="relative">
-							<User className="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 text-text-faint" size={18} aria-hidden="true" />
-							<Input
-								name="name"
-								type="text"
-								autoComplete="username"
-								placeholder="profile-name"
-								maxLength={32}
-								pattern="[A-Za-z0-9_\-]+"
-								value={providerUsername}
-								onChange={(event) => {
-									setProviderUsername(event.target.value);
-									setProviderUsernameError("");
-								}}
-								aria-invalid={Boolean(providerUsernameError)}
-								aria-describedby={providerUsernameError ? "provider-username-error" : undefined}
-								className="mt-0 h-10 bg-surface pl-10 focus:border-primary"
-							/>
-						</span>
-						{providerUsernameError && (
-							<span id="provider-username-error" className="text-xs font-bold text-error">
-								{providerUsernameError}
-							</span>
-						)}
-					</label>
+					<IconField
+						icon={User}
+						label="Username"
+						id="provider-username"
+						name="name"
+						type="text"
+						autoComplete="username"
+						placeholder="profile-name"
+						maxLength={32}
+						pattern="[A-Za-z0-9_\-]+"
+						value={providerUsername}
+						onChange={(event) => {
+							setProviderUsername(event.target.value);
+							setProviderUsernameError("");
+						}}
+						error={providerUsernameError}
+					/>
 					<div className="mt-5 flex justify-end gap-2">
 						<GhostButton type="button" onClick={() => setProviderSignup(null)} className="px-4 py-2">
 							Cancel

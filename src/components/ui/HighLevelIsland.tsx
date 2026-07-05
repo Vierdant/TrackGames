@@ -18,5 +18,5 @@ export default function HighLevelIsland({ children, className = "" }: HighLevelI
 
 	if (!mounted) return null;
 
-	return createPortal(<div className={`pointer-events-none fixed inset-0 z-1000 ${className}`}>{children}</div>, document.body);
+	return createPortal(<div className={`pointer-events-none fixed inset-0 z-modal ${className}`}>{children}</div>, document.body);
 }

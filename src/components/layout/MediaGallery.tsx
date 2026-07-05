@@ -22,13 +22,13 @@ export default function MediaGallery({ media }: Readonly<{ media: MediaItem[] }>
 	const activeItem = media[mediaActive];
 
 	if (!activeItem) {
-		return <div className="mb-4 aspect-video overflow-hidden rounded-md bg-black/50" />;
+		return <div className="mb-4 aspect-video overflow-hidden rounded bg-black/50" />;
 	}
 
 	return (
 		<div className="w-full max-w-full min-w-0 overflow-hidden">
 			<HorizontalScroller
-				className="mb-4 aspect-video rounded-md bg-black/50 [&>div]:h-full [&>div]:w-full [&>div]:gap-0 [&>div>div]:w-full"
+				className="mb-4 aspect-video rounded bg-black/50 [&>div]:h-full [&>div]:w-full [&>div]:gap-0 [&>div>div]:w-full"
 				selectedIndex={mediaActive}
 				onSelectedIndexChange={setMediaActive}
 			>
@@ -63,7 +63,7 @@ export default function MediaGallery({ media }: Readonly<{ media: MediaItem[] }>
 							type="button"
 							onClick={() => setMediaActive(index)}
 							className={joinClass(
-								"shrink-0 cursor-pointer snap-start overflow-hidden rounded-md border-2 transition",
+								"shrink-0 cursor-pointer snap-start overflow-hidden rounded border-2 transition",
 								mediaActive === index ? "border-primary" : "border-transparent opacity-80 hover:opacity-100",
 							)}
 							aria-label={`Show media ${index + 1}`}

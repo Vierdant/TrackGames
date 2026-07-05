@@ -49,8 +49,8 @@ export default async function Page({ params }: Readonly<{ params: Promise<{ id: 
 		<main className="relative z-0 flex-1" style={profileThemeStyle(playlist.color, playlist.accentColor)}>
 			<BackgroundView src={playlist.background ?? null} />
 			<Container>
-				<section className="relative z-10 w-full border-b border-border bg-bg/95">
-					<Container className="relative z-1 flex flex-row items-end justify-start gap-10 pt-5">
+				<section className="relative z-elevated w-full border-b border-border bg-bg/95">
+					<Container className="relative z-raised flex flex-row items-end justify-start gap-10 pt-5">
 						<div className="mb-4 flex min-w-0 flex-1 flex-col justify-end gap-3 md:flex-row md:items-end md:justify-between md:gap-5">
 							<div>
 								<div className="flex flex-col gap-2 md:flex-row md:items-end">
@@ -74,7 +74,7 @@ export default async function Page({ params }: Readonly<{ params: Promise<{ id: 
 					</Container>
 				</section>
 
-				<section className="relative z-10 bg-bg/95 py-5">
+				<section className="relative z-elevated bg-bg/95 py-5">
 					<Container className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_18rem] lg:items-start">
 						<div className="order-2 flex min-w-0 flex-col gap-5 md:order-1">
 							<PlaylistEntriesView

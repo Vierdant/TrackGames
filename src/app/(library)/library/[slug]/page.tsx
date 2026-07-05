@@ -1,10 +1,12 @@
 import { type CSSProperties, Suspense } from "react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { SearchX } from "lucide-react";
 import Container from "@/components/layout/Container";
 import LibraryEntriesPanel from "@/components/library/LibraryEntriesPanel";
 import GameListEditButton from "@/components/playlist/GameListEditButton";
 import { GhostButton } from "@/components/ui/Buttons";
+import EmptyState from "@/components/ui/EmptyState";
 import Loading from "@/components/ui/Loading";
 import PrivateDisplay from "@/components/ui/PrivateDisplay";
 import BackgroundView from "@/components/user/BackgroundView";
@@ -36,8 +38,8 @@ export default async function Page({ params }: Readonly<{ params: Promise<{ slug
 			<BackgroundView src={background} />
 			<Container>
 				{/* HEADER */}
-				<section className="relative z-10 w-full border-b border-border bg-bg/95">
-					<Container className="relative z-1 flex flex-row items-end justify-start gap-10 pt-5">
+				<section className="relative z-elevated w-full border-b border-border bg-bg/95">
+					<Container className="relative z-raised flex flex-row items-end justify-start gap-10 pt-5">
 						<div className="mb-4 flex min-w-0 flex-1 flex-col justify-end gap-3 md:flex-row md:items-end md:justify-between md:gap-5">
 							<div>
 								<h1 className="text-center text-3xl md:text-start">{library.name}</h1>
@@ -51,7 +53,7 @@ export default async function Page({ params }: Readonly<{ params: Promise<{ slug
 					</Container>
 				</section>
 
-				<section className="relative z-10 bg-bg/95 pt-5 pb-10">
+				<section className="relative z-elevated bg-bg/95 pt-5 pb-10">
 					<Container className="flex flex-col-reverse gap-5 lg:flex-row lg:items-start">
 						{canViewLibrary ? (
 							<Suspense fallback={<Loading />}>
@@ -83,7 +85,7 @@ async function Entries({
 	return entries.length ? (
 		<LibraryEntriesPanel entries={entries} canEdit={isOwnLibrary} themeStyle={themeStyle} defaults={viewer ? defaultLibraryFilters(viewer) : undefined} />
 	) : (
-		<p>No games found.</p>
+		<EmptyState icon={SearchX} message="No games found." />
 	);
 }
 

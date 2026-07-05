@@ -14,7 +14,7 @@ type GallaryProps = Readonly<{
 	idleMs?: number;
 }>;
 
-export default function Gallary({ children, mode = "slide", shouldAutoRotate = false, autoRotateMs = 6000, idleMs = 8000 }: GallaryProps) {
+export default function Gallery({ children, mode = "slide", shouldAutoRotate = false, autoRotateMs = 6000, idleMs = 8000 }: GallaryProps) {
 	const items = Children.toArray(children);
 	const [index, setIndex] = useState(0);
 	const hoveredRef = useRef(false);
@@ -59,7 +59,7 @@ export default function Gallary({ children, mode = "slide", shouldAutoRotate = f
 				type="button"
 				aria-label="Previous item"
 				onClick={() => move(-1)}
-				className="absolute top-6 left-0 z-20 grid h-66 w-8 place-items-center rounded text-text transition-all hover:text-primary focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none md:top-0 md:bottom-9 md:h-auto md:w-14 md:border-border/70 md:bg-bg md:backdrop-blur md:hover:border md:hover:bg-bg-secondary/50"
+				className="absolute top-6 left-0 z-nav grid h-66 w-8 place-items-center rounded text-text transition-all hover:text-primary focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none md:top-0 md:bottom-9 md:h-auto md:w-14 md:border-border/70 md:bg-bg md:backdrop-blur md:hover:border md:hover:bg-bg-secondary/50"
 			>
 				<ChevronLeft className="size-5 md:size-7" />
 			</button>
@@ -72,7 +72,7 @@ export default function Gallary({ children, mode = "slide", shouldAutoRotate = f
 								key={itemIndex.toLocaleString()}
 								className={joinClass(
 									"col-start-1 row-start-1 transition-opacity duration-300 ease-out",
-									itemIndex === index ? "z-10 opacity-100" : "pointer-events-none z-0 opacity-0",
+									itemIndex === index ? "z-elevated opacity-100" : "pointer-events-none z-0 opacity-0",
 								)}
 							>
 								{child}
@@ -94,7 +94,7 @@ export default function Gallary({ children, mode = "slide", shouldAutoRotate = f
 				type="button"
 				aria-label="Next item"
 				onClick={() => move(1)}
-				className="absolute top-6 right-0 z-20 grid h-66 w-8 place-items-center rounded text-text transition-all hover:text-primary focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none md:top-0 md:bottom-9 md:h-auto md:w-14 md:border-border/70 md:bg-bg md:backdrop-blur md:hover:border md:hover:bg-bg-secondary/50"
+				className="absolute top-6 right-0 z-nav grid h-66 w-8 place-items-center rounded text-text transition-all hover:text-primary focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none md:top-0 md:bottom-9 md:h-auto md:w-14 md:border-border/70 md:bg-bg md:backdrop-blur md:hover:border md:hover:bg-bg-secondary/50"
 			>
 				<ChevronRight className="size-5 md:size-7" />
 			</button>

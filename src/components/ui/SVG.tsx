@@ -1,4 +1,5 @@
 import type { SVGProps } from "react";
+import { Rss } from "lucide-react";
 import { joinClass } from "@/lib/util/client/func";
 
 type ImageProps = SVGProps<SVGSVGElement> & {
@@ -9,6 +10,16 @@ type IconProps = SVGProps<SVGSVGElement> & {
 	size?: number | string;
 	title?: string;
 };
+
+export const SOCIAL_PLATFORM_ICONS = {
+	"x-link": XIcon,
+	"discord-copy": DiscordIcon,
+	"discord-link": DiscordIcon,
+	"github-link": GithubIcon,
+	"twitch-link": TwitchIcon,
+	"youtube-link": YoutubeIcon,
+	"website-link": Rss,
+} as const;
 
 export function HeroImage({ title, className, ...props }: ImageProps) {
 	return (

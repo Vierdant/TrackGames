@@ -2,11 +2,12 @@
 
 import type { CSSProperties } from "react";
 import { useMemo, useState } from "react";
-import { Grid2X2, List } from "lucide-react";
+import { Grid2X2, List, SearchX } from "lucide-react";
 import PaginatedList from "@/components/layout/PaginatedList";
 import AdvancedLibraryFilterPanel, { emptyAdvancedLibraryFilters } from "@/components/library/AdvancedLibraryFilterPanel";
 import PlaylistCard from "@/components/library/PlaylistCard";
 import { AdvancedFilterButton } from "@/components/ui/Buttons";
+import EmptyState from "@/components/ui/EmptyState";
 import FilterBar from "@/components/ui/FilterBar";
 import type { UserLibraryEntryWithTags } from "@/lib/data/library";
 import { GameStatus } from "@/lib/generated/prisma/enums";
@@ -137,7 +138,7 @@ export default function LibraryEntriesPanel({ entries, canEdit, themeStyle, defa
 					))}
 				</PaginatedList>
 			) : (
-				<p className="text-text-muted">No games found.</p>
+				<EmptyState icon={SearchX} message="No games found." />
 			)}
 		</div>
 	);

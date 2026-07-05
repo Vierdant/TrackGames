@@ -7,8 +7,9 @@ import StarRating from "@/components/game/StarRating";
 import { GhostButton } from "@/components/ui/Buttons";
 import type { UserLibraryEntryWithTags } from "@/lib/data/library";
 import { ImageIdToURL } from "@/lib/external/igdb/util";
-import { GameStatus } from "@/lib/generated/prisma/enums";
+import type { GameStatus } from "@/lib/generated/prisma/enums";
 import { formLabel, joinClass } from "@/lib/util/client/func";
+import { GAME_STATUS_META } from "@/lib/util/format/gameStatus";
 import { ratingToFive } from "@/lib/util/format/rating";
 
 type PlaylistCardPreviewProps = Readonly<{
@@ -20,13 +21,16 @@ type PlaylistCardPreviewProps = Readonly<{
 	onOpenEditor: () => void;
 }>;
 
+const statusDotColor: Record<string, string> = {
+	primary: "bg-primary",
+	success: "bg-success",
+	error: "bg-error",
+	warning: "bg-warning",
+	secondary: "bg-secondary",
+};
+
 export function statusColor(status: GameStatus) {
-	if (status === GameStatus.PLAYING) return "bg-primary";
-	if (status === GameStatus.COMPLETED) return "bg-success";
-	if (status === GameStatus.DROPPED) return "bg-error";
-	if (status === GameStatus.PAUSED) return "bg-warning";
-	if (status === GameStatus.WISHLIST) return "bg-secondary";
-	return "bg-text-faint";
+	return statusDotColor[GAME_STATUS_META[status].color] ?? "bg-text-faint";
 }
 
 export default function PlaylistCardPreview({ entry, mode, canEdit, onOpenInfo, onOpenNotes, onOpenEditor }: PlaylistCardPreviewProps) {
@@ -43,7 +47,7 @@ export default function PlaylistCardPreview({ entry, mode, canEdit, onOpenInfo, 
 				<Link href={`/game/${game.slug}`} className="hidden md:block">
 					<div className="relative aspect-5/7 bg-bg">
 						{src && <Image src={src} alt={game.name ?? "game cover"} fill sizes="160px" className="object-cover" />}
-						<span className="absolute top-2 left-2 z-10 hidden max-w-[calc(100%-1rem)] items-center gap-2 rounded bg-bg-secondary/90 px-2 py-1 text-xs font-bold text-text capitalize opacity-0 transition-opacity group-hover:opacity-100 md:flex">
+						<span className="absolute top-2 left-2 z-elevated hidden max-w-[calc(100%-1rem)] items-center gap-2 rounded bg-bg-secondary/90 px-2 py-1 text-xs font-bold text-text capitalize opacity-0 transition-opacity group-hover:opacity-100 md:flex">
 							<span className={joinClass("size-2 shrink-0 rounded-full", statusColor(entry.status))} aria-hidden="true" />
 							<span className="truncate">{formLabel(entry.status)}</span>
 						</span>

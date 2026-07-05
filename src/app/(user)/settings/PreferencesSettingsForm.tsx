@@ -77,8 +77,8 @@ export default function PreferencesSettingsForm({ profile }: Readonly<{ profile:
 
 			<div className="flex flex-col gap-2">
 				<h3>Display</h3>
-				<input type="hidden" name="hideCommentsEverywhere" value="false" />
 				<label className="flex items-center gap-2 text-sm font-bold text-text-muted">
+					<input type="hidden" name="hideCommentsEverywhere" value="false" />
 					<Checkbox name="hideCommentsEverywhere" value="true" defaultChecked={profile.hideCommentsEverywhere} />
 					Hide comments across the website
 				</label>

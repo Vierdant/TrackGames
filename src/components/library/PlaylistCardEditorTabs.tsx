@@ -1,7 +1,7 @@
 "use client";
 
 import type { Dispatch, SetStateAction } from "react";
-import SubTabs from "@/components/layout/SubTabs";
+import Tabs from "@/components/layout/Tabs";
 import EntryTab from "@/components/library/_playlist-editor/EntryTab";
 import HistoryTab from "@/components/library/_playlist-editor/HistoryTab";
 import LogTab from "@/components/library/_playlist-editor/LogTab";
@@ -116,7 +116,7 @@ export default function PlaylistCardEditorTabs({
 					))}
 				</div>
 				<div className="hidden md:block">
-					<SubTabs
+					<Tabs
 						tabs={[
 							{ id: "entry", label: "Entry" },
 							{ id: "log", label: "Log" },
@@ -124,7 +124,7 @@ export default function PlaylistCardEditorTabs({
 							{ id: "time", label: "Time" },
 						]}
 						active={activeTab}
-						setter={setActiveTab}
+						onSelect={setActiveTab}
 					/>
 				</div>
 			</div>

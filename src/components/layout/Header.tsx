@@ -14,7 +14,7 @@ export default async function Header() {
 	const notifications = user ? await getUserNotifications(user.id) : [];
 
 	return (
-		<header className="relative z-20 flex min-h-20 flex-row items-center justify-center border-b border-border bg-bg p-4 md:p-5">
+		<header className="relative z-nav flex min-h-20 flex-row items-center justify-center border-b border-border bg-bg p-4 md:p-5">
 			<Container className="flex flex-row items-center justify-between gap-3">
 				<Link href="/" className="min-w-0 shrink-0">
 					<h1 className="text-xl font-bold text-text md:text-2xl">

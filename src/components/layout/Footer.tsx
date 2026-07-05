@@ -12,7 +12,7 @@ export default function Footer() {
 	];
 
 	return (
-		<footer className="relative z-20 border-t border-border bg-bg">
+		<footer className="relative z-nav border-t border-border bg-bg">
 			<Container className="flex min-h-20 flex-col gap-6 py-10 sm:flex-row sm:items-start sm:justify-between">
 				<div className="flex flex-col gap-2">
 					<h1 className="text-2xl font-bold text-text">

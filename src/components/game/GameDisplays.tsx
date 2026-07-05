@@ -52,7 +52,7 @@ export function GameCard({ game, size = 140, effect, hover, hasHref = false, pri
 	const card = (
 		<div
 			ref={cardRef}
-			className="relative shrink-0 overflow-hidden rounded-md border border-border bg-bg shadow-sm"
+			className="relative shrink-0 overflow-hidden rounded border border-border bg-bg shadow-sm"
 			style={{ width: isFullSize ? "100%" : size, height }}
 			onPointerDown={createRipple}
 		>

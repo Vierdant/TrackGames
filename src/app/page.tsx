@@ -1,14 +1,16 @@
 import { Suspense } from "react";
+import { ListMusic } from "lucide-react";
 import { GameCard, StatInfoCard } from "@/components/game/GameDisplays";
 import GameFeature from "@/components/game/GameFeature";
 import Container from "@/components/layout/Container";
-import Gallary from "@/components/layout/Gallery";
+import Gallery from "@/components/layout/Gallery";
 import HorizontalScroller from "@/components/layout/HorizontalScroller";
 import PlaylistCoverCard from "@/components/playlist/PlaylistCoverCard";
-import StatBlock from "@/components/StatBlock";
-import { HeroImage } from "@/components/SVG";
 import { GhostButton, PrimaryButton } from "@/components/ui/Buttons";
+import EmptyState from "@/components/ui/EmptyState";
 import Loading from "@/components/ui/Loading";
+import StatBlock from "@/components/ui/StatBlock";
+import { HeroImage } from "@/components/ui/SVG";
 import { auth } from "@/lib/auth";
 import { comingSoon, hiddenGames, mostAnticipated, recentReleases, siteStats, topPlaylists, trendingGames, yearlyGames } from "@/lib/cache/resources";
 import { getUser } from "@/lib/data/user";
@@ -33,7 +35,7 @@ export default async function Home() {
 		<div style={viewer ? viewerThemeStyle(viewer) : undefined}>
 			<section className="relative flex items-center justify-center overflow-hidden p-20">
 				<div className="pointer-events-none absolute inset-0 bg-[url('/assets/lucid-games-bg.webp')] mask-[radial-gradient(ellipse_at_center,black_48%,transparent_78%)] bg-cover bg-center mask-size-[120%_120%] mask-no-repeat before:absolute before:inset-0 before:bg-bg/92 before:content-['']" />
-				<Container className="relative z-1 flex flex-col items-center justify-between gap-10 lg:flex-row">
+				<Container className="relative z-raised flex flex-col items-center justify-between gap-10 lg:flex-row">
 					<div className="flex max-w-100 min-w-100 flex-col items-center justify-center gap-6 text-center text-text md:items-start md:justify-start md:text-start">
 						<div className="mb-5 rounded">
 							<h1 className="text-4xl font-bold text-nowrap md:text-5xl">
@@ -65,7 +67,7 @@ export default async function Home() {
 						</div>
 					</div>
 
-					<div className="relative z-1 hidden w-82 lg:block lg:w-115">
+					<div className="relative z-raised hidden w-82 lg:block lg:w-115">
 						<HeroImage className="text-text dark:text-primary" />
 					</div>
 				</Container>
@@ -76,7 +78,7 @@ export default async function Home() {
 					<Container>
 						<div className="flex flex-col items-start rounded border-b-2 border-primary/30 pb-10">
 							<h1 className="flex flex-row items-center gap-2 text-xl font-bold text-text-muted">Trending Today</h1>
-							<HorizontalScroller className="animate-content-in mt-4 max-w-full gap-5 overflow-clip rounded-md">
+							<HorizontalScroller className="animate-content-in mt-4 max-w-full gap-5 overflow-clip rounded">
 								{trendingDataList.map((game) => (
 									<GameCard key={game.id} game={formatRawGame(game)} effect="ripple" hover="name" hasHref={true} />
 								))}
@@ -89,11 +91,11 @@ export default async function Home() {
 					<Container>
 						<div className="rounded border-b-2 border-primary/30 pb-10">
 							<h1 className="mb-5 flex flex-row items-center gap-2 text-xl font-bold text-text-muted">Hits of the Year</h1>
-							<Gallary mode="fade" shouldAutoRotate autoRotateMs={20000} idleMs={8000}>
+							<Gallery mode="fade" shouldAutoRotate autoRotateMs={20000} idleMs={8000}>
 								{yearlyDataList.map((game) => (
 									<GameFeature key={game.id} game={formatRawGame(game)} />
 								))}
-							</Gallary>
+							</Gallery>
 						</div>
 					</Container>
 				</section>
@@ -109,7 +111,7 @@ export default async function Home() {
 									))}
 								</div>
 							) : (
-								<p className="p-4 text-sm text-text-muted">No public playlists yet.</p>
+								<EmptyState icon={ListMusic} message="No public playlists yet." />
 							)}
 						</div>
 					</Container>

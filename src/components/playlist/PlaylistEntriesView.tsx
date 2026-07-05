@@ -3,10 +3,11 @@
 import { type ReactNode, useMemo, useState, useTransition } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Edit3, Trash2 } from "lucide-react";
+import { Edit3, SearchX, Trash2 } from "lucide-react";
 import { GameCard } from "@/components/game/GameDisplays";
 import AdvancedLibraryFilterPanel, { emptyAdvancedLibraryFilters } from "@/components/library/AdvancedLibraryFilterPanel";
 import { AdvancedFilterButton, GhostButton, PrimaryButton } from "@/components/ui/Buttons";
+import EmptyState from "@/components/ui/EmptyState";
 import FilterBar from "@/components/ui/FilterBar";
 import { Input, Select } from "@/components/ui/Inputs";
 import MenuPanel from "@/components/ui/MenuPanel";
@@ -239,7 +240,7 @@ export default function PlaylistEntriesView({ listId, entries, mode, canEdit, ti
 					))}
 				</div>
 			) : (
-				<p className="rounded border border-border bg-bg p-4 text-text-muted">No games found.</p>
+				<EmptyState icon={SearchX} message="No games found." />
 			)}
 		</div>
 	);

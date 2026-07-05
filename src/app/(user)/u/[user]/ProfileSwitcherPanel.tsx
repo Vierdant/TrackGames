@@ -2,7 +2,7 @@
 
 import { type ReactNode, useState } from "react";
 import { useRouter } from "next/navigation";
-import SubTabs from "@/components/layout/SubTabs";
+import Tabs from "@/components/layout/Tabs";
 
 type ProfileSwitcherPanelProps = Readonly<{ user: string; defaultTab: string; children: ReactNode }>;
 
@@ -23,8 +23,8 @@ export default function ProfileSwitcherPanel({ user, defaultTab, children }: Pro
 	const [activeTab, setActiveTab] = useState(defaultTab);
 
 	return (
-		<SubTabs tabs={tabs} active={activeTab} setter={setTab} shouldCompact>
+		<Tabs tabs={tabs} active={activeTab} onSelect={setTab} responsive="compact">
 			{children}
-		</SubTabs>
+		</Tabs>
 	);
 }

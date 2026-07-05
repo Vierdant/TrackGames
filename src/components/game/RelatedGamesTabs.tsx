@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { GameCard } from "@/components/game/GameDisplays";
 import HorizontalScroller from "@/components/layout/HorizontalScroller";
-import SubTabs from "@/components/layout/SubTabs";
+import Tabs from "@/components/layout/Tabs";
 import type { Game } from "@/lib/data/games";
 import * as lookup from "@/lib/util/validate/lookup";
 
@@ -24,12 +24,12 @@ export default function RelatedGamesTabs({ franchiseGames, seriesGames, similarG
 	}
 
 	return (
-		<SubTabs tabs={tabs} active={activeTab} setter={setActiveTab} hasViewAll={activeTab !== "similar"} shouldCompact>
-			<HorizontalScroller className="mt-4 max-w-full gap-5 overflow-clip rounded-md">
+		<Tabs tabs={tabs} active={activeTab} onSelect={setActiveTab} hasViewAll={activeTab !== "similar"} responsive="compact">
+			<HorizontalScroller className="mt-4 max-w-full gap-5 overflow-clip rounded">
 				{activeGames.map((game) => (
 					<GameCard key={game.id} game={game} size={160} effect="ripple" hover="name" hasHref={true} />
 				))}
 			</HorizontalScroller>
-		</SubTabs>
+		</Tabs>
 	);
 }

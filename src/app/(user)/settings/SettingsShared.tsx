@@ -65,7 +65,7 @@ export function MediaModal({ open, title, value, onClose, onSave }: MediaModelPr
 
 export function SaveBar({ pending }: Readonly<{ pending?: boolean }>) {
 	return (
-		<div className="bottom-4 z-20 mt-5 flex justify-end">
+		<div className="bottom-4 z-nav mt-5 flex justify-end">
 			<div className="flex gap-2 rounded p-2">
 				<PrimaryButton type="submit" disabled={pending}>
 					{pending ? "Saving..." : "Save"}

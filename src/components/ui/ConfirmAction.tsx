@@ -42,6 +42,7 @@ export default function ConfirmAction({ open, title, message, confirmLabel, pend
 				{needsText && step === 2 && (
 					<label className="text-sm font-bold text-text-muted">
 						{requireLabel ?? `Type ${requireText} to confirm`}
+						{/* eslint-disable-next-line jsx-a11y/no-autofocus -- intentional: focus confirmation input when step appears */}
 						<Input value={text} onChange={(event) => setText(event.target.value)} className="mt-1" autoFocus />
 					</label>
 				)}

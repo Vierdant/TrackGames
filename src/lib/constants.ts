@@ -42,6 +42,15 @@ export const AUTH_PROVIDERS = [
 	{ slug: "discord", label: "Discord" },
 ];
 
+export const SETTING_TABS: { id: string; label: string; href: string }[] = [
+	{ id: "profile", label: "Profile", href: "/settings?tab=profile" },
+	{ id: "privacy", label: "Privacy", href: "/settings?tab=privacy" },
+	{ id: "widgets", label: "Widgets", href: "/settings?tab=widgets" },
+	{ id: "preferences", label: "Preferences", href: "/settings?tab=preferences" },
+	{ id: "import", label: "Import", href: "/settings?tab=import" },
+	{ id: "account", label: "Account", href: "/settings?tab=account" },
+];
+
 export const ALLOWED_HOSTS = new Set(["i.imgur.com", "images.unsplash.com", "media.discordapp.net", "cdn.discordapp.com", "cdn.pixabay.com"]);
 
 export const ALLOWED_TAGS = [

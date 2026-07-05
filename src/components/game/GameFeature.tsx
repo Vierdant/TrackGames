@@ -28,7 +28,7 @@ export default function GameFeature({ game }: Readonly<{ game: Game }>) {
 				</div>
 			) : null}
 
-			<div className="relative z-1 order-2 flex min-h-96 flex-col justify-between gap-0 bg-transparent md:order-1 md:h-96 md:min-h-0 md:justify-between md:bg-bg-secondary/80 md:p-5">
+			<div className="relative z-raised order-2 flex min-h-96 flex-col justify-between gap-0 bg-transparent md:order-1 md:h-96 md:min-h-0 md:justify-between md:bg-bg-secondary/80 md:p-5">
 				<div className="flex flex-1 flex-col items-center justify-center p-5 text-center md:flex-none md:items-stretch md:justify-start md:p-0 md:text-start">
 					<Link href={`/game/${game.slug}`} className="relative block aspect-3/4 w-44 shrink-0 overflow-hidden rounded border border-border bg-bg shadow-main md:hidden">
 						{coverSrc ? <Image src={coverSrc} alt={game.name ?? "Game cover"} fill sizes="176px" className="object-cover object-center select-none" /> : null}

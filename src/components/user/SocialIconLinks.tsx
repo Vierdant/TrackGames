@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Check } from "lucide-react";
-import { socialPlatformIcons } from "@/components/config";
+import { SOCIAL_PLATFORM_ICONS } from "@/components/ui/SVG";
 import type { SocialLink } from "@/lib/types";
 import { LinkType } from "@/lib/types";
 import { joinClass } from "@/lib/util/client/func";
@@ -26,7 +26,7 @@ export default function SocialIconLinks({ socials }: Readonly<{ socials: SocialL
 
 				if (!platform) return null;
 
-				const Icon = socialPlatformIcons[platform.id as keyof typeof socialPlatformIcons];
+				const Icon = SOCIAL_PLATFORM_ICONS[platform.id as keyof typeof SOCIAL_PLATFORM_ICONS];
 				const key = `${social.platform}-${social.kind}-${index}`;
 				const copied = copiedKey === key;
 

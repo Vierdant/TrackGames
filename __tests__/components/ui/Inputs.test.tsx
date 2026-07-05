@@ -56,7 +56,7 @@ describe("Textarea", () => {
 });
 
 describe("Select", () => {
-	it("fires onChange with the selected value", () => {
+	it("fires onChange with the selected value", async () => {
 		const onChange = jest.fn();
 		render(
 			<Select aria-label="Status" onChange={onChange} defaultValue="playing">
@@ -64,8 +64,10 @@ describe("Select", () => {
 				<option value="completed">Completed</option>
 			</Select>,
 		);
-		fireEvent.change(screen.getByLabelText("Status"), { target: { value: "completed" } });
+		fireEvent.click(screen.getByRole("button", { name: "Status" }));
+		fireEvent.click(await screen.findByRole("option", { name: "Completed" }));
 		expect(onChange).toHaveBeenCalledTimes(1);
+		expect(onChange).toHaveBeenCalledWith(expect.objectContaining({ target: expect.objectContaining({ value: "completed" }) }));
 	});
 });
 

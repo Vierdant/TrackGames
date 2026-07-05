@@ -1,5 +1,5 @@
 import { Home } from "lucide-react";
-import { PrimaryButton } from "@/components/ui/Buttons";
+import { PrimaryButton } from "@/components/ui/control/Button";
 
 export default function NotFound() {
 	return (

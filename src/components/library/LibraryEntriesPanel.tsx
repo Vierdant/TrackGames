@@ -6,10 +6,10 @@ import { Grid2X2, List, SearchX } from "lucide-react";
 import PaginatedList from "@/components/layout/PaginatedList";
 import AdvancedLibraryFilterPanel, { emptyAdvancedLibraryFilters } from "@/components/library/AdvancedLibraryFilterPanel";
 import PlaylistCard from "@/components/library/PlaylistCard";
-import { AdvancedFilterButton } from "@/components/ui/Buttons";
+import { AdvancedFilterButton } from "@/components/ui/control/Button";
 import EmptyState from "@/components/ui/EmptyState";
 import FilterBar from "@/components/ui/FilterBar";
-import type { UserLibraryEntryWithTags } from "@/lib/data/library";
+import type { UserLibraryEntryWithTags, ViewerGameEntry } from "@/lib/data/library";
 import { GameStatus } from "@/lib/generated/prisma/enums";
 import { formLabel, joinClass } from "@/lib/util/client/func";
 import { advancedFilterCount, matchesAdvancedFilters } from "@/lib/util/filtering";
@@ -17,11 +17,13 @@ import { advancedFilterCount, matchesAdvancedFilters } from "@/lib/util/filterin
 type LibraryEntriesPanelProps = Readonly<{
 	entries: UserLibraryEntryWithTags[];
 	canEdit: boolean;
+	isLoggedIn: boolean;
+	viewerEntries?: Record<number, ViewerGameEntry>;
 	themeStyle?: CSSProperties;
 	defaults?: { status: string; sort: string; mode: "grid" | "list" };
 }>;
 
-export default function LibraryEntriesPanel({ entries, canEdit, themeStyle, defaults }: LibraryEntriesPanelProps) {
+export default function LibraryEntriesPanel({ entries, canEdit, isLoggedIn, viewerEntries, themeStyle, defaults }: LibraryEntriesPanelProps) {
 	const [items, setItems] = useState(entries);
 	const [mode, setMode] = useState<"grid" | "list">(defaults?.mode ?? "grid");
 	const [status, setStatus] = useState(defaults?.status ?? "all");
@@ -134,7 +136,17 @@ export default function LibraryEntriesPanel({ entries, canEdit, themeStyle, defa
 					}
 				>
 					{filtered.map((entry) => (
-						<PlaylistCard key={entry.id} entry={entry} mode={mode} canEdit={canEdit} onUpdate={updateEntry} onRemove={removeEntry} themeStyle={themeStyle} />
+						<PlaylistCard
+							key={entry.id}
+							entry={entry}
+							mode={mode}
+							canEdit={canEdit}
+							isLoggedIn={isLoggedIn}
+							viewerEntry={viewerEntries?.[entry.gameId] ?? null}
+							onUpdate={updateEntry}
+							onRemove={removeEntry}
+							themeStyle={themeStyle}
+						/>
 					))}
 				</PaginatedList>
 			) : (

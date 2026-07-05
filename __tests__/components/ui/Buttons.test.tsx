@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { AdvancedFilterButton, Button, FloatedSquareButton, IconButton } from "@/components/ui/Buttons";
+import { AdvancedFilterButton, Button, FloatedSquareButton, IconButton } from "@/components/ui/control/Button";
 
 describe("Button", () => {
 	it("renders a button element by default", () => {

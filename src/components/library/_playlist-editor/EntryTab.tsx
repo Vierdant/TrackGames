@@ -4,8 +4,10 @@ import type { Dispatch, SetStateAction } from "react";
 import { Plus, X } from "lucide-react";
 import StarRating from "@/components/game/StarRating";
 import { timeModeLabel } from "@/components/library/_playlist-editor/shared";
-import { GhostButton, PrimaryButton } from "@/components/ui/Buttons";
-import { Checkbox, Select, Textarea } from "@/components/ui/Inputs";
+import { GhostButton, PrimaryButton } from "@/components/ui/control/Button";
+import { Checkbox } from "@/components/ui/control/Checkbox";
+import { Select } from "@/components/ui/control/Select";
+import { TextArea } from "@/components/ui/control/TextArea";
 import type { UserLibraryEntryWithTags } from "@/lib/data/library";
 import { GameStatus } from "@/lib/generated/prisma/enums";
 import { formLabel } from "@/lib/util/client/func";
@@ -61,35 +63,33 @@ export default function EntryTab({
 			{tags.map((tag) => (
 				<input key={tag} type="hidden" name="tags" value={tag} />
 			))}
-			<label className="text-sm font-bold text-text-muted">
-				Status
-				<Select
-					name="status"
-					value={entryStatus}
-					onChange={(event) => {
-						const status = event.target.value as GameStatus;
-						setEntryStatus(status);
-						if (status === GameStatus.COMPLETED) setEntryFinished(true);
-					}}
-					className="w-full capitalize"
-				>
-					{Object.values(GameStatus).map((status) => (
-						<option key={status} value={status}>
-							{formLabel(status)}
-						</option>
-					))}
-				</Select>
-			</label>
+			<Select
+				label="Status"
+				name="status"
+				value={entryStatus}
+				onChange={(event) => {
+					const status = event.target.value as GameStatus;
+					setEntryStatus(status);
+					if (status === GameStatus.COMPLETED) setEntryFinished(true);
+				}}
+				className="w-full capitalize"
+			>
+				{Object.values(GameStatus).map((status) => (
+					<option key={status} value={status}>
+						{formLabel(status)}
+					</option>
+				))}
+			</Select>
 			<div className="grid gap-2 text-sm font-bold text-text-muted sm:grid-cols-[minmax(0,1fr)_auto_auto] sm:items-center">
 				<StarRating rating={rating} size={28} isInteractive shouldShowValue name="rating" onChange={setRating} />
-				<label className="flex cursor-pointer items-center gap-2 rounded border border-border p-2">
-					<Checkbox name="finished" checked={isFinished} onChange={(event) => setEntryFinished(event.target.checked)} />
-					Finished
-				</label>
-				<label className="flex cursor-pointer items-center gap-2 rounded border border-border p-2">
-					<Checkbox name="mastered" defaultChecked={entry.timeMastered != null} />
-					Mastered
-				</label>
+				<Checkbox
+					label="Finished"
+					name="finished"
+					checked={isFinished}
+					onChange={(event) => setEntryFinished(event.target.checked)}
+					fieldClassName="rounded border border-border p-2"
+				/>
+				<Checkbox label="Mastered" name="mastered" defaultChecked={entry.timeMastered != null} fieldClassName="rounded border border-border p-2" />
 			</div>
 			<div className="text-sm font-bold text-text-muted">
 				Tags
@@ -136,10 +136,7 @@ export default function EntryTab({
 					)}
 				</div>
 			</div>
-			<label className="text-sm font-bold text-text-muted">
-				Notes
-				<Textarea name="notes" rows={3} defaultValue={entry.notes ?? ""} />
-			</label>
+			<TextArea label="Notes" name="notes" rows={3} defaultValue={entry.notes ?? ""} />
 			<div className="mt-auto grid grid-cols-3 gap-2 pt-2 md:flex md:justify-end">
 				<GhostButton type="button" className="md:text-md text-sm" onClick={() => setActiveTab("log")}>
 					Create Log

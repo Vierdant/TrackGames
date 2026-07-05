@@ -3,24 +3,30 @@
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { Edit3, Trash2 } from "lucide-react";
-import { GhostButton, PrimaryButton } from "@/components/ui/Buttons";
-import { Checkbox, Input, Select, Textarea } from "@/components/ui/Inputs";
+import TierLabelsForm from "@/app/(library)/playlist/[id]/TierLabelsForm";
+import { GhostButton, PrimaryButton } from "@/components/ui/control/Button";
+import { Select } from "@/components/ui/control/Select";
+import { TextArea } from "@/components/ui/control/TextArea";
+import { TextInput } from "@/components/ui/control/TextInput";
 import MenuPanel from "@/components/ui/MenuPanel";
 import { deletePlaylist, updateGameListSettings } from "@/lib/actions/playlists";
 import type { GameListModel } from "@/lib/generated/prisma/models/GameList";
+import { ColorPicker } from "../ui/control/ColorPicker";
 
-export default function GameListEditButton({
-	list,
-}: Readonly<{
-	list: Pick<GameListModel, "id" | "type" | "name" | "description" | "image" | "background" | "color" | "accentColor" | "privacy" | "commentsHidden">;
-}>) {
+type GameListEditButtonProps = Readonly<{
+	list: Pick<GameListModel, "id" | "type" | "name" | "description" | "image" | "background" | "color" | "accentColor" | "privacy" | "commentsHidden" | "displayMode">;
+	tiers?: string[];
+	tierColors?: string[];
+}>;
+
+export default function GameListEditButton({ list, tiers, tierColors }: GameListEditButtonProps) {
 	const [open, setOpen] = useState(false);
 	const [error, setError] = useState("");
 	const [pending, startTransition] = useTransition();
 	const router = useRouter();
 	const action = updateGameListSettings.bind(null, list.id);
 	const removeAction = deletePlaylist.bind(null, list.id);
-	const canDelete = list.type === "PLAYLIST";
+	const isPlaylist = list.type === "PLAYLIST";
 
 	function save(formData: FormData) {
 		setError("");
@@ -38,7 +44,7 @@ export default function GameListEditButton({
 	}
 
 	function remove() {
-		if (!canDelete || !globalThis.confirm(`Delete "${list.name}"? This cannot be undone.`)) return;
+		if (!isPlaylist || !globalThis.confirm(`Delete "${list.name}"? This cannot be undone.`)) return;
 
 		startTransition(async () => {
 			await removeAction();
@@ -52,42 +58,32 @@ export default function GameListEditButton({
 			</GhostButton>
 			<MenuPanel open={open} onClose={() => setOpen(false)} title="Edit list" panelClassName="max-w-lg bg-bg">
 				<form action={save} className="flex flex-col gap-3">
-					<label className="text-sm font-bold text-text-muted">
-						Name
-						<Input name="name" required maxLength={80} defaultValue={list.name} />
-					</label>
-					<label className="text-sm font-bold text-text-muted">
-						Bio
-						<Textarea name="description" rows={1} maxLength={500} defaultValue={list.description ?? ""} />
-					</label>
-					<label className="text-sm font-bold text-text-muted">
-						Background image
-						<Input name="background" type="url" placeholder="https://..." defaultValue={list.background ?? ""} />
-					</label>
+					<TextInput label="Name" name="name" required maxLength={80} defaultValue={list.name} fieldClassName="text-text" />
+					<TextArea label="Bio" name="description" rows={1} maxLength={500} defaultValue={list.description ?? ""} fieldClassName="text-text" />
+					<TextInput label="Background image" name="background" type="url" placeholder="https://..." defaultValue={list.background ?? ""} fieldClassName="text-text" />
 					<div className="grid gap-3 md:grid-cols-2">
-						<label className="flex flex-row items-center gap-2 text-sm font-bold text-text-muted">
-							<Input name="color" type="color" defaultValue={list.color ?? "#7b5cdb"} className="max-h-10 max-w-10" />
-							Theme
-						</label>
-						<label className="flex flex-row items-center gap-2 text-sm font-bold text-text-muted">
-							<Input name="accentColor" type="color" defaultValue={list.accentColor ?? "#b8842f"} className="max-h-10 max-w-10" />
-							Accent
-						</label>
+						<ColorPicker label="Color" name="color" defaultValue={list.color ?? "#7b5cdb"} />
+						<ColorPicker label="Accent color" name="accentColor" defaultValue={list.accentColor ?? "#b8842f"} />
 					</div>
-					<label className="text-sm font-bold text-text-muted">
-						Privacy
-						<Select name="privacy" defaultValue={list.privacy} className="w-full">
-							<option value="public">Public</option>
-							<option value="private">Private</option>
+					<Select label="Privacy" name="privacy" defaultValue={list.privacy} className="w-full">
+						<option value="public">Public</option>
+						<option value="private">Private</option>
+					</Select>
+					<Select label="Comments" name="commentsHidden" defaultValue={list.commentsHidden ? "true" : "false"} className="w-full">
+						<option value="false">Enabled</option>
+						<option value="true">Disabled</option>
+					</Select>
+					{isPlaylist && (
+						<Select label="Display mode" name="displayMode" defaultValue={list.displayMode} className="w-full">
+							<option value="GRID">Grid</option>
+							<option value="RANKING">Ranking</option>
+							<option value="TIER">Tier list</option>
 						</Select>
-					</label>
-					<label className="flex items-center gap-2 text-sm font-bold text-text-muted">
-						<Checkbox name="commentsHidden" defaultChecked={list.commentsHidden} />
-						Hide comments
-					</label>
+					)}
+					{isPlaylist && tiers && tierColors && <TierLabelsForm tiers={tiers} colors={tierColors} />}
 					{error && <p className="text-sm font-bold text-error">{error}</p>}
 					<div className="mt-2 flex flex-wrap justify-between gap-2">
-						{canDelete && (
+						{isPlaylist && (
 							<button
 								type="button"
 								onClick={remove}

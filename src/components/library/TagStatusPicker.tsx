@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Search } from "lucide-react";
-import { Input } from "@/components/ui/Inputs";
+import { TextInput } from "@/components/ui/control/TextInput";
 import { GameStatus } from "@/lib/generated/prisma/enums";
 import { deferHook, formLabel } from "@/lib/util/client/func";
 
@@ -63,7 +63,7 @@ export default function TagStatusPicker({ open, tags, onAddStatus, onAddTag }: T
 	return (
 		<div ref={pickerRef} className="relative">
 			<Search size={16} className="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 text-text-faint" aria-hidden="true" />
-			<Input
+			<TextInput
 				value={filterSearch}
 				onChange={(event) => {
 					setFilterSearch(event.target.value);

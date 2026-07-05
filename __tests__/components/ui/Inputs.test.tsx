@@ -1,6 +1,11 @@
 import { createRef } from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
-import { Checkbox, Field, Input, Select, SuffixedInput, Textarea } from "@/components/ui/Inputs";
+import { Checkbox } from "@/components/ui/control/Checkbox";
+import { Field } from "@/components/ui/control/Field";
+import { NumberInput } from "@/components/ui/control/NumberInput";
+import { Select } from "@/components/ui/control/Select";
+import { TextArea } from "@/components/ui/control/TextArea";
+import { TextInput } from "@/components/ui/control/TextInput";
 
 describe("Field", () => {
 	it("renders label, children and optional hint", () => {
@@ -19,7 +24,7 @@ describe("Field", () => {
 describe("Input", () => {
 	it("forwards ref and accepts user input", () => {
 		const ref = createRef<HTMLInputElement>();
-		render(<Input ref={ref} aria-label="Username" />);
+		render(<TextInput ref={ref} aria-label="Username" />);
 		const input = screen.getByLabelText("Username");
 		expect(ref.current).toBe(input);
 
@@ -30,20 +35,20 @@ describe("Input", () => {
 
 describe("SuffixedInput", () => {
 	it("renders the suffix and disables the input when disabled", () => {
-		render(<SuffixedInput aria-label="Price" suffix="USD" disabled />);
+		render(<NumberInput aria-label="Price" suffix="USD" disabled />);
 		expect(screen.getByText("USD")).toBeInTheDocument();
 		expect(screen.getByLabelText("Price")).toBeDisabled();
 	});
 
 	it("is enabled by default", () => {
-		render(<SuffixedInput aria-label="Price" suffix="USD" />);
+		render(<NumberInput aria-label="Price" suffix="USD" />);
 		expect(screen.getByLabelText("Price")).toBeEnabled();
 	});
 });
 
 describe("Textarea", () => {
 	it("accepts multiline input", () => {
-		render(<Textarea aria-label="Bio" />);
+		render(<TextArea aria-label="Bio" />);
 		const textarea = screen.getByLabelText("Bio");
 		fireEvent.change(textarea, { target: { value: "line one\nline two" } });
 		expect(textarea).toHaveValue("line one\nline two");

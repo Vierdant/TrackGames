@@ -208,7 +208,7 @@ export function formatRawMultiplayerMode(multiplayerMode: RawMultiplayerMode) {
 		onlineCoop: multiplayerMode.onlinecoop ?? false,
 		onlineCoopMax: multiplayerMode.onlinecoopmax ?? 0,
 		onlineMax: multiplayerMode.onlinemax ?? 0,
-		platform: multiplayerMode.platform,
+		platform: multiplayerMode.platform ?? undefined,
 		splitscreen: multiplayerMode.splitscreen ?? false,
 	};
 }

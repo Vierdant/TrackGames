@@ -1,8 +1,9 @@
 "use client";
 
 import { Check, Clock, Crown } from "lucide-react";
-import { GhostButton, PrimaryButton } from "@/components/ui/Buttons";
-import { Input, SuffixedInput } from "@/components/ui/Inputs";
+import { GhostButton, PrimaryButton } from "@/components/ui/control/Button";
+import { NumberInput } from "@/components/ui/control/NumberInput";
+import { TextInput } from "@/components/ui/control/TextInput";
 import type { UserLibraryEntryWithTags } from "@/lib/data/library";
 import { ratingToFive } from "@/lib/util/format/rating";
 
@@ -48,7 +49,7 @@ export default function TimeTab({ entry, save, onClose, pending, timeMode, setTi
 						<Clock size={15} aria-hidden="true" />
 						Current total
 					</span>
-					<SuffixedInput
+					<NumberInput
 						name="timeplayed"
 						type="number"
 						min={0}
@@ -66,7 +67,7 @@ export default function TimeTab({ entry, save, onClose, pending, timeMode, setTi
 							<Check size={15} aria-hidden="true" />
 							Finished
 						</span>
-						<SuffixedInput
+						<NumberInput
 							name="timefinished"
 							type="number"
 							min={0}
@@ -75,7 +76,7 @@ export default function TimeTab({ entry, save, onClose, pending, timeMode, setTi
 							suffix="h"
 							aria-label="Finished time"
 						/>
-						<Input name="finishedat" type="date" max={today} defaultValue={finishedAtValue || today} aria-label="Finished date" />
+						<TextInput name="finishedat" type="date" max={today} defaultValue={finishedAtValue || today} aria-label="Finished date" />
 					</div>
 				)}
 				{entry.timeMastered != null && (
@@ -84,8 +85,8 @@ export default function TimeTab({ entry, save, onClose, pending, timeMode, setTi
 							<Crown size={15} aria-hidden="true" />
 							Mastered
 						</span>
-						<SuffixedInput name="timemastered" type="number" min={0} step={0.1} defaultValue={entry.timeMastered} suffix="h" aria-label="Mastered time" />
-						<Input name="masteredat" type="date" max={today} defaultValue={masteredAtValue || today} aria-label="Mastered date" />
+						<NumberInput name="timemastered" type="number" min={0} step={0.1} defaultValue={entry.timeMastered} suffix="h" aria-label="Mastered time" />
+						<TextInput name="masteredat" type="date" max={today} defaultValue={masteredAtValue || today} aria-label="Mastered date" />
 					</div>
 				)}
 			</div>

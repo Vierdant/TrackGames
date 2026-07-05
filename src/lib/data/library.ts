@@ -167,6 +167,66 @@ export async function getUserGameEntry(userId: string, gameId: number) {
 	});
 }
 
+export async function getUserGameEntryWithTags(userId: string, gameId: number): Promise<UserLibraryEntryWithTags | null> {
+	const entry = await db.userGameEntry.findUnique({
+		where: {
+			userId_gameId: {
+				userId,
+				gameId,
+			},
+		},
+		include: userGameEntryInclude,
+	});
+
+	if (!entry) return null;
+
+	const tags = await getTagsForEntries([entry.id]);
+
+	return {
+		...entry,
+		tags: tags.get(entry.id) ?? [],
+	};
+}
+
+const viewerEntrySelect = {
+	id: true,
+	gameId: true,
+	status: true,
+	rating: true,
+	timePlayed: true,
+	timeFinished: true,
+	timeMastered: true,
+	finishedAt: true,
+	masteredAt: true,
+} as const;
+
+export type ViewerGameEntry = UserGameEntryGetPayload<{ select: typeof viewerEntrySelect }> & { tags: UserLibraryTag[] };
+
+export async function getViewerEntriesForGames(viewerId: string, gameIds: number[]): Promise<Map<number, ViewerGameEntry>> {
+	if (!gameIds.length) return new Map();
+
+	const entries = await db.userGameEntry.findMany({
+		where: {
+			userId: viewerId,
+			gameId: {
+				in: gameIds,
+			},
+		},
+		select: viewerEntrySelect,
+	});
+	const tags = await getTagsForEntries(entries.map((entry) => entry.id));
+
+	return new Map(
+		entries.map((entry) => [
+			entry.gameId,
+			{
+				...entry,
+				tags: tags.get(entry.id) ?? [],
+			},
+		]),
+	);
+}
+
 export async function getUserGameStats(userId: string) {
 	const entries = await db.userGameEntry.findMany({
 		where: {

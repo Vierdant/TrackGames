@@ -1,13 +1,10 @@
 import { cache } from "react";
-import { getTagsForEntries } from "@/lib/data/library";
+import { getViewerEntriesForGames, type ViewerGameEntry } from "@/lib/data/library";
 import db from "@/lib/db";
 import { GameListType } from "@/lib/generated/prisma/enums";
 import type { GameListDefaultArgs, GameListGetPayload } from "@/lib/generated/prisma/models/GameList";
-import type { UserGameEntryGetPayload } from "@/lib/generated/prisma/models/UserGameEntry";
 
-type PlaylistUserEntry = UserGameEntryGetPayload<{ select: typeof playlistUserEntrySelect }> & {
-	tags: { id: string; name: string }[];
-};
+export type PlaylistUserEntry = ViewerGameEntry;
 
 export type PlaylistEntry = PlaylistDisplayData["entries"][number] & {
 	userEntry?: PlaylistUserEntry | null;
@@ -36,18 +33,6 @@ const playlistInclude = {
 		},
 	},
 } satisfies GameListDefaultArgs;
-
-const playlistUserEntrySelect = {
-	id: true,
-	gameId: true,
-	status: true,
-	rating: true,
-	timePlayed: true,
-	timeFinished: true,
-	timeMastered: true,
-	finishedAt: true,
-	masteredAt: true,
-} as const;
 
 export async function getUserPlaylists(userId: string, privacy: "public" | "followers" | "private" | "all" = "all") {
 	const followerFilter = privacy === "followers" ? { in: ["public", "followers"] } : privacy;
@@ -95,24 +80,9 @@ export const getPlaylist = cache(async (id: string, viewerId?: string): Promise<
 
 	if (!playlist || !viewerId || !playlist.entries.length) return playlist;
 
-	const libraryEntries = await db.userGameEntry.findMany({
-		where: {
-			userId: viewerId,
-			gameId: {
-				in: playlist.entries.map((entry) => entry.gameId),
-			},
-		},
-		select: playlistUserEntrySelect,
-	});
-	const tags = await getTagsForEntries(libraryEntries.map((entry) => entry.id));
-	const entriesByGame = new Map(
-		libraryEntries.map((entry) => [
-			entry.gameId,
-			{
-				...entry,
-				tags: tags.get(entry.id) ?? [],
-			},
-		]),
+	const entriesByGame = await getViewerEntriesForGames(
+		viewerId,
+		playlist.entries.map((entry) => entry.gameId),
 	);
 
 	return {

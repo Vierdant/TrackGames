@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { getCurrentUserId } from "@/lib/auth";
-import { getTagsForEntries, replaceEntryTags } from "@/lib/data/library";
+import { getTagsForEntries, getUserGameEntryWithTags, replaceEntryTags } from "@/lib/data/library";
 import db from "@/lib/db";
 import { ActivityType, GameStatus, InteractionTargetType } from "@/lib/generated/prisma/enums";
 import { inputError, logger } from "@/lib/logger";
@@ -50,15 +50,19 @@ export async function addGameToLibrary(gameId: number, gameSlug: string) {
 			userId,
 			gameId,
 		},
-		select: {
-			id: true,
-			status: true,
-			rating: true,
+		include: {
+			game: true,
+			logs: {
+				orderBy: {
+					playedAt: "desc",
+				},
+			},
 		},
 	});
+	const tags = await getTagsForEntries([entry.id]);
 
 	revalidatePath(`/game/${gameSlug}`);
-	return entry;
+	return { ...entry, tags: tags.get(entry.id) ?? [] };
 }
 
 export async function removeGameFromLibrary(gameId: number, gameSlug: string) {
@@ -114,15 +118,19 @@ export async function setGameLibraryStatus(gameId: number, gameSlug: string, sta
 			status,
 			finishedAt: status === GameStatus.COMPLETED ? new Date() : undefined,
 		},
-		select: {
-			id: true,
-			status: true,
-			rating: true,
+		include: {
+			game: true,
+			logs: {
+				orderBy: {
+					playedAt: "desc",
+				},
+			},
 		},
 	});
+	const tags = await getTagsForEntries([entry.id]);
 
 	revalidatePath(`/game/${gameSlug}`);
-	return entry;
+	return { ...entry, tags: tags.get(entry.id) ?? [] };
 }
 
 export async function updateGameQuickRating(gameId: number, gameSlug: string, value: number) {
@@ -144,15 +152,24 @@ export async function updateGameQuickRating(gameId: number, gameSlug: string, va
 			gameId,
 			rating,
 		},
-		select: {
-			id: true,
-			status: true,
-			rating: true,
+		include: {
+			game: true,
+			logs: {
+				orderBy: {
+					playedAt: "desc",
+				},
+			},
 		},
 	});
+	const tags = await getTagsForEntries([entry.id]);
 
 	revalidatePath(`/game/${gameSlug}`);
-	return entry;
+	return { ...entry, tags: tags.get(entry.id) ?? [] };
+}
+
+export async function fetchUserGameEntry(gameId: number) {
+	const userId = await getCurrentUserId();
+	return await getUserGameEntryWithTags(userId, gameId);
 }
 
 export async function updateUserGameEntry(entryId: string, formData: FormData) {

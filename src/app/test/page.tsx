@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { Home, RotateCcw } from "lucide-react";
-import { GhostButton, PrimaryButton } from "@/components/ui/Buttons";
+import { GhostButton, PrimaryButton } from "@/components/ui/control/Button";
 
 export default function ErrorPage({ error, reset }: Readonly<{ error: Error & { digest?: string }; reset: () => void }>) {
 	useEffect(() => {

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Container from "@/components/layout/Container";
 import HeaderSearch from "@/components/layout/HeaderSearch";
-import { PrimaryButton } from "@/components/ui/Buttons";
+import { PrimaryButton } from "@/components/ui/control/Button";
 import ThemeSwitch from "@/components/ui/ThemeSwitch";
 import UserMenu from "@/components/ui/UserMenu";
 import { auth } from "@/lib/auth";

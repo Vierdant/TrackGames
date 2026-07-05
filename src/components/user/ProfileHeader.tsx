@@ -1,6 +1,6 @@
 import Container from "@/components/layout/Container";
 import FollowButton from "@/components/social/FollowButton";
-import { GhostButton, PrimaryButton } from "@/components/ui/Buttons";
+import { GhostButton, PrimaryButton } from "@/components/ui/control/Button";
 import AvatarPreview from "@/components/user/AvatarView";
 import RoleTags from "@/components/user/RoleTags";
 import SocialIconLinks from "@/components/user/SocialIconLinks";

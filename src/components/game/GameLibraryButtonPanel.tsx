@@ -4,14 +4,14 @@ import { useState, useTransition } from "react";
 import { Bookmark, Heart, Library, ListPlus, NotebookText } from "lucide-react";
 import ManageListsPanel from "@/app/(library)/game/[slug]/ManageListsPanel";
 import StarRating from "@/components/game/StarRating";
-import { FloatedSquareButton, GhostButton, PrimaryButton } from "@/components/ui/Buttons";
 import ConfirmAction from "@/components/ui/ConfirmAction";
+import { FloatedSquareButton, GhostButton, PrimaryButton } from "@/components/ui/control/Button";
 import MenuPanel from "@/components/ui/MenuPanel";
 import { addGameToLibrary, removeGameFromLibrary, setGameLibraryStatus, updateGameQuickRating } from "@/lib/actions/library";
 import { addGameToPlaylist, removeGameFromPlaylist } from "@/lib/actions/playlists";
 import { GameStatus } from "@/lib/generated/prisma/enums";
 import { joinClass } from "@/lib/util/client/func";
-import { GAME_STATUS_META } from "@/lib/util/format/gameStatus";
+import { GAME_STATUS_META, gameStatusColorClasses } from "@/lib/util/format/gameStatus";
 import { ratingToFive } from "@/lib/util/format/rating";
 
 type UserPlaylist = {
@@ -38,13 +38,6 @@ type GameLibraryButtonPanelProps = Readonly<{
 	logsHref?: string;
 }>;
 
-const statusClassNames: Partial<Record<GameStatus, { className: string; activeClassName: string }>> = {
-	[GameStatus.PLAYING]: { className: "border-primary text-primary", activeClassName: "border-primary bg-primary text-text-inverse" },
-	[GameStatus.COMPLETED]: { className: "border-success text-success", activeClassName: "border-success bg-success text-text-inverse" },
-	[GameStatus.PAUSED]: { className: "border-warning text-warning", activeClassName: "border-warning bg-warning text-text-inverse" },
-	[GameStatus.DROPPED]: { className: "border-error text-error", activeClassName: "border-error bg-error text-text-inverse" },
-};
-
 const secondaryStatusButtons = [
 	{ status: GameStatus.BACKLOG, label: "Backlog", Icon: Bookmark },
 	{ status: GameStatus.WISHLIST, label: "Wishlist", Icon: Heart },
@@ -54,7 +47,7 @@ const statusOptions = [GameStatus.PLAYING, GameStatus.COMPLETED, GameStatus.PAUS
 	status,
 	label: GAME_STATUS_META[status].label,
 	icon: GAME_STATUS_META[status].icon,
-	...statusClassNames[status]!,
+	...gameStatusColorClasses(status),
 }));
 
 export default function GameLibraryButtonPanel({ gameId, gameSlug, isLoggedIn, entry, playlists, logsHref }: GameLibraryButtonPanelProps) {

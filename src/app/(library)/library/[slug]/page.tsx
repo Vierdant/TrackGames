@@ -5,13 +5,13 @@ import { SearchX } from "lucide-react";
 import Container from "@/components/layout/Container";
 import LibraryEntriesPanel from "@/components/library/LibraryEntriesPanel";
 import GameListEditButton from "@/components/playlist/GameListEditButton";
-import { GhostButton } from "@/components/ui/Buttons";
+import { GhostButton } from "@/components/ui/control/Button";
 import EmptyState from "@/components/ui/EmptyState";
 import Loading from "@/components/ui/Loading";
 import PrivateDisplay from "@/components/ui/PrivateDisplay";
 import BackgroundView from "@/components/user/BackgroundView";
 import { auth } from "@/lib/auth";
-import { ensureAndGetUserLibrary, getUserGameEntries } from "@/lib/data/library";
+import { ensureAndGetUserLibrary, getUserGameEntries, getViewerEntriesForGames, type ViewerGameEntry } from "@/lib/data/library";
 import { getUser, isFollower, type SecuredUser } from "@/lib/data/user";
 import { profileThemeStyle } from "@/lib/util/client/theme";
 import { absoluteUrl, metadataDescription, robotsForPrivacy, SITE_NAME } from "@/lib/util/metadata";
@@ -57,7 +57,14 @@ export default async function Page({ params }: Readonly<{ params: Promise<{ slug
 					<Container className="flex flex-col-reverse gap-5 lg:flex-row lg:items-start">
 						{canViewLibrary ? (
 							<Suspense fallback={<Loading />}>
-								<Entries userId={library.userId} isOwnLibrary themeStyle={themeStyle} viewer={viewer} />
+								<Entries
+									userId={library.userId}
+									isOwnLibrary={isOwnLibrary}
+									isLoggedIn={Boolean(session?.user)}
+									viewerId={session?.user?.id}
+									themeStyle={themeStyle}
+									viewer={viewer}
+								/>
 							</Suspense>
 						) : (
 							<p className="rounded border border-border bg-bg p-4 text-sm text-text-muted">This library is private.</p>
@@ -72,18 +79,38 @@ export default async function Page({ params }: Readonly<{ params: Promise<{ slug
 async function Entries({
 	userId,
 	isOwnLibrary,
+	isLoggedIn,
+	viewerId,
 	themeStyle,
 	viewer,
 }: {
 	userId: string;
 	isOwnLibrary: boolean;
+	isLoggedIn: boolean;
+	viewerId?: string;
 	themeStyle: CSSProperties & Record<string, string>;
 	viewer: SecuredUser | null;
 }) {
 	const entries = await getUserGameEntries(userId);
+	const viewerEntries =
+		!isOwnLibrary && viewerId && entries.length
+			? (Object.fromEntries(
+					await getViewerEntriesForGames(
+						viewerId,
+						entries.map((entry) => entry.gameId),
+					),
+				) as Record<number, ViewerGameEntry>)
+			: undefined;
 
 	return entries.length ? (
-		<LibraryEntriesPanel entries={entries} canEdit={isOwnLibrary} themeStyle={themeStyle} defaults={viewer ? defaultLibraryFilters(viewer) : undefined} />
+		<LibraryEntriesPanel
+			entries={entries}
+			canEdit={isOwnLibrary}
+			isLoggedIn={isLoggedIn}
+			viewerEntries={viewerEntries}
+			themeStyle={themeStyle}
+			defaults={viewer ? defaultLibraryFilters(viewer) : undefined}
+		/>
 	) : (
 		<EmptyState icon={SearchX} message="No games found." />
 	);

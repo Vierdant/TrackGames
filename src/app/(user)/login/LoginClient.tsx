@@ -3,8 +3,8 @@
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Eye, EyeOff, Lock, Mail, User } from "lucide-react";
-import { GhostButton, IconButton, PrimaryButton } from "@/components/ui/Buttons";
-import { IconField } from "@/components/ui/Inputs";
+import { GhostButton, IconButton, PrimaryButton } from "@/components/ui/control/Button";
+import { IconField } from "@/components/ui/control/Field";
 import MenuPanel from "@/components/ui/MenuPanel";
 import { DiscordIcon, GithubIcon, GoogleIcon, TwitchIcon } from "@/components/ui/SVG";
 import { login, loginProvider, signup } from "@/lib/actions/auth";

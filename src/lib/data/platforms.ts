@@ -19,3 +19,13 @@ const fetching = {
 export const getPlatform = makeGetById<Platform>(select, db.platform, fetching, formatRawPlatform);
 
 export const getPlatformBySlug = makeGetBySlug<Platform>(select, db.platform, fetching, formatRawPlatform);
+
+/** Lists platforms for the filter picker, optionally narrowed by a case-insensitive name query. */
+export async function listPlatforms(query?: string): Promise<Platform[]> {
+	return db.platform.findMany({
+		where: query ? { name: { contains: query.trim(), mode: "insensitive" } } : undefined,
+		select,
+		orderBy: { name: "asc" },
+		take: 50,
+	});
+}

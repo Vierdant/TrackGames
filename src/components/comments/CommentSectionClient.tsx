@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Heart, MessageCircle, Send, Trash2 } from "lucide-react";
 import StarRating from "@/components/game/StarRating";
-import { PrimaryButton } from "@/components/ui/Buttons";
+import { PrimaryButton } from "@/components/ui/control/Button";
 import AvatarView from "@/components/user/AvatarView";
 import RoleTags from "@/components/user/RoleTags";
 import { addComment, deleteComment, toggleLike } from "@/lib/actions/social";

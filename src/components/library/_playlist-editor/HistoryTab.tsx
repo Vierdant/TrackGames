@@ -1,8 +1,11 @@
 "use client";
 
 import { Trash2 } from "lucide-react";
-import { GhostButton, PrimaryButton } from "@/components/ui/Buttons";
-import { Checkbox, Input, SuffixedInput, Textarea } from "@/components/ui/Inputs";
+import { GhostButton, PrimaryButton } from "@/components/ui/control/Button";
+import { Checkbox } from "@/components/ui/control/Checkbox";
+import { NumberInput } from "@/components/ui/control/NumberInput";
+import { TextArea } from "@/components/ui/control/TextArea";
+import { TextInput } from "@/components/ui/control/TextInput";
 import type { UserLibraryEntryWithTags } from "@/lib/data/library";
 import { joinClass } from "@/lib/util/client/func";
 
@@ -36,10 +39,7 @@ export default function HistoryTab({
 	return (
 		<div className="grid min-h-full gap-3 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
 			<div className="flex max-h-112 flex-col gap-2 overflow-y-auto pr-1">
-				<label className="text-sm font-bold text-text-muted">
-					Filter
-					<Input name="logdate" type="date" max={today} value={logDate} onChange={(event) => setLogDate(event.target.value)} />
-				</label>
+				<TextInput label="Filter" name="logdate" type="date" max={today} value={logDate} onChange={(event) => setLogDate(event.target.value)} />
 				{logDate && (
 					<GhostButton type="button" onClick={() => setLogDate("")} className="justify-center py-2">
 						Clear
@@ -70,23 +70,11 @@ export default function HistoryTab({
 			{selectedLog ? (
 				<form key={selectedLog.id} action={saveHistoryLog} className="flex flex-col gap-3">
 					<div className="grid gap-3 sm:grid-cols-2">
-						<label className="text-sm font-bold text-text-muted">
-							Date played
-							<Input name="playedat" type="date" max={today} defaultValue={new Date(selectedLog.playedAt).toISOString().slice(0, 10)} />
-						</label>
-						<label className="text-sm font-bold text-text-muted">
-							Hours played
-							<SuffixedInput name="hours" type="number" min={0.1} step={0.1} defaultValue={selectedLog.hours} suffix="h" />
-						</label>
+						<TextInput label="Date played" name="playedat" type="date" max={today} defaultValue={new Date(selectedLog.playedAt).toISOString().slice(0, 10)} />
+						<NumberInput label="Hours played" name="hours" type="number" min={0.1} step={0.1} defaultValue={selectedLog.hours} suffix="h" />
 					</div>
-					<label className="text-sm font-bold text-text-muted">
-						Log note
-						<Textarea name="note" rows={4} defaultValue={selectedLog.note} />
-					</label>
-					<label className="flex cursor-pointer items-center gap-2 rounded border border-border p-2 text-sm font-bold text-text-muted">
-						<Checkbox name="skipRecap" defaultChecked={selectedLog.skipRecap} />
-						Skip recap
-					</label>
+					<TextArea label="Log note" name="note" rows={4} defaultValue={selectedLog.note} />
+					<Checkbox label="Skip recap" name="skipRecap" defaultChecked={selectedLog.skipRecap} fieldClassName="rounded border border-border p-2" />
 					<div className="mt-2 flex justify-end gap-2">
 						<GhostButton
 							type="button"

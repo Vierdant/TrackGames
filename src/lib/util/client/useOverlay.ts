@@ -46,7 +46,8 @@ export function useOverlay(open: boolean, onClose: () => void, anchorRef?: RefOb
 		if (dialogRef.current || !rendered || !open) return;
 
 		const panel = panelRef.current;
-		const focusable = panel?.querySelector<HTMLElement>('a[href], button:not([disabled]), input, select, textarea, [tabindex]:not([tabindex="-1"])');
+		const selected = panel?.querySelector<HTMLElement>('[aria-selected="true"]');
+		const focusable = selected ?? panel?.querySelector<HTMLElement>('a[href], button:not([disabled]), input, select, textarea, [tabindex]:not([tabindex="-1"])');
 		(focusable ?? panel)?.focus();
 	}, [rendered, open]);
 

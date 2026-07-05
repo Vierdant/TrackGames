@@ -1,17 +1,15 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import AddPlaylistGameForm from "@/app/(library)/playlist/[id]/AddPlaylistGameForm";
-import TierLabelsForm from "@/app/(library)/playlist/[id]/TierLabelsForm";
+import GamesTrackedWidget from "@/app/(library)/playlist/[id]/GamesTrackedWidget";
 import CommentSection from "@/components/comments/CommentSection";
 import Container from "@/components/layout/Container";
 import GameListEditButton from "@/components/playlist/GameListEditButton";
 import PlaylistEntriesView from "@/components/playlist/PlaylistEntriesView";
 import LikeButton from "@/components/social/LikeButton";
-import { GhostButton } from "@/components/ui/Buttons";
-import { Select } from "@/components/ui/Inputs";
+import { GhostButton } from "@/components/ui/control/Button";
 import PrivateDisplay from "@/components/ui/PrivateDisplay";
 import BackgroundView from "@/components/user/BackgroundView";
-import { updatePlaylistDisplayMode } from "@/lib/actions/playlists";
 import { auth } from "@/lib/auth";
 import { getPlaylist, getPlaylistLibraryCount } from "@/lib/data/playlists";
 import { getPlaylistLikeState } from "@/lib/data/social";
@@ -43,7 +41,6 @@ export default async function Page({ params }: Readonly<{ params: Promise<{ id: 
 	const ownedPercent = playlist.entries.length ? Math.round((ownedCount / playlist.entries.length) * 100) : 0;
 	const tiers = playlist.tierLabels.length ? playlist.tierLabels : ["S", "A", "B", "C", "D"];
 	const tierColors = tiers.map((_, index) => playlist.tierColors[index] ?? "#64748b");
-	const modeAction = updatePlaylistDisplayMode.bind(null, playlist.id);
 
 	return (
 		<main className="relative z-0 flex-1" style={profileThemeStyle(playlist.color, playlist.accentColor)}>
@@ -67,7 +64,7 @@ export default async function Page({ params }: Readonly<{ params: Promise<{ id: 
 									hasLikedState={likeState.liked}
 									isLoggedIn={Boolean(session?.user?.id)}
 								/>
-								{canEdit && <GameListEditButton list={playlist} />}
+								{canEdit && <GameListEditButton list={playlist} tiers={tiers} tierColors={tierColors} />}
 								{playlist.user?.name && <GhostButton href={`/u/${playlist.user.name}?tab=profile`}>View Profile</GhostButton>}
 							</div>
 						</div>
@@ -82,6 +79,7 @@ export default async function Page({ params }: Readonly<{ params: Promise<{ id: 
 								entries={playlist.entries}
 								mode={playlist.displayMode}
 								canEdit={canEdit}
+								isLoggedIn={Boolean(session?.user?.id)}
 								tiers={tiers}
 								tierColors={tierColors}
 							/>
@@ -89,41 +87,8 @@ export default async function Page({ params }: Readonly<{ params: Promise<{ id: 
 						</div>
 
 						<aside className="order-1 flex flex-col gap-4 border-border md:order-2 md:border-l">
-							<div className="rounded bg-bg p-4">
-								<h2 className="border-b border-border pb-2 text-sm font-bold">Games tracked</h2>
-								<div className="mt-4 flex flex-col items-center">
-									<div
-										className="grid size-32 place-items-center rounded-full"
-										style={{ background: `conic-gradient(var(--primary) ${ownedPercent}%, var(--border) 0)` }}
-									>
-										<div className="grid size-24 place-items-center rounded-full bg-bg">
-											<p className="text-2xl font-bold text-primary">{ownedPercent}%</p>
-										</div>
-									</div>
-									<p className="mt-3 text-sm text-text-muted">
-										{ownedCount} of {playlist.entries.length} playlist games
-									</p>
-								</div>
-							</div>
-							{canEdit && (
-								<>
-									<AddPlaylistGameForm playlistId={playlist.id} mode={playlist.displayMode} tiers={tiers} existingGameIds={gameIds} />
-									<form action={modeAction} className="rounded bg-bg p-4 text-sm font-bold">
-										<h2 className="border-b border-border pb-2 text-sm font-bold">Change display</h2>
-										<div className="mt-2 flex gap-2 text-text-muted">
-											<Select name="displayMode" defaultValue={playlist.displayMode} className="min-w-0 flex-1">
-												<option value="GRID">Grid</option>
-												<option value="RANKING">Ranking</option>
-												<option value="TIER">Tier list</option>
-											</Select>
-											<GhostButton type="submit" className="px-4">
-												Save
-											</GhostButton>
-										</div>
-									</form>
-									{playlist.displayMode === "TIER" && <TierLabelsForm playlistId={playlist.id} tiers={tiers} colors={tierColors} />}
-								</>
-							)}
+							<GamesTrackedWidget ownedCount={ownedCount} total={playlist.entries.length} ownedPercent={ownedPercent} />
+							{canEdit && <AddPlaylistGameForm playlistId={playlist.id} mode={playlist.displayMode} tiers={tiers} existingGameIds={gameIds} />}
 						</aside>
 					</Container>
 				</section>

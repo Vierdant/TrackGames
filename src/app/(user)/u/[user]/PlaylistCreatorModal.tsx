@@ -2,8 +2,9 @@
 
 import { useState, useTransition } from "react";
 import { Plus } from "lucide-react";
-import { GhostButton, PrimaryButton } from "@/components/ui/Buttons";
-import { Input, Textarea } from "@/components/ui/Inputs";
+import { GhostButton, PrimaryButton } from "@/components/ui/control/Button";
+import { TextArea } from "@/components/ui/control/TextArea";
+import { TextInput } from "@/components/ui/control/TextInput";
 import MenuPanel from "@/components/ui/MenuPanel";
 import { createPlaylist } from "@/lib/actions/playlists";
 
@@ -37,14 +38,8 @@ export default function PlaylistCreatorModal({ canCreate }: Readonly<{ canCreate
 			)}
 			<MenuPanel open={open} onClose={() => setOpen(false)} title="Create playlist" panelClassName="max-w-lg bg-bg">
 				<form action={save} className="flex flex-col gap-3">
-					<label className="w-full text-sm font-bold text-text-muted">
-						Name
-						<Input name="name" required maxLength={80} />
-					</label>
-					<label className="text-sm font-bold text-text-muted">
-						Description
-						<Textarea name="description" rows={1} maxLength={500} />
-					</label>
+					<TextInput label="Name" name="name" required maxLength={80} />
+					<TextArea label="Description" name="description" rows={1} maxLength={500} />
 					{error && <p className="text-sm font-bold text-error">{error}</p>}
 					<div className="mt-2 flex justify-end gap-2">
 						<GhostButton type="button" onClick={() => setOpen(false)}>

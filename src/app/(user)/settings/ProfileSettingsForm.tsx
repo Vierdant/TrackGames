@@ -2,9 +2,12 @@
 
 import { type SetStateAction, useMemo, useState } from "react";
 import { ChevronDown, ChevronUp, Trash2 } from "lucide-react";
-import { ColorField, MediaModal } from "@/app/(user)/settings/SettingsShared";
-import { GhostButton } from "@/components/ui/Buttons";
-import { Field, Input, Select, Textarea } from "@/components/ui/Inputs";
+import { MediaModal } from "@/app/(user)/settings/SettingsShared";
+import { GhostButton } from "@/components/ui/control/Button";
+import { ColorPicker } from "@/components/ui/control/ColorPicker";
+import { Select } from "@/components/ui/control/Select";
+import { TextArea } from "@/components/ui/control/TextArea";
+import { TextInput } from "@/components/ui/control/TextInput";
 import { SOCIAL_PLATFORM_ICONS } from "@/components/ui/SVG";
 import AvatarPreview from "@/components/user/AvatarView";
 import BackgroundView from "@/components/user/BackgroundView";
@@ -72,12 +75,18 @@ export default function ProfileSettingsForm({ profile }: Readonly<{ profile: Sec
 			<input type="hidden" name="image" value={image} />
 			<input type="hidden" name="background" value={background} />
 			<input type="hidden" name="socials" value={socialPayload} />
-			<Field label="Username" hint="You can change your name once every 30 days.">
-				<Input name="name" type="text" value={name} onChange={(event) => setName(event.target.value)} maxLength={32} pattern="[A-Za-z0-9_\-]+" className="w-auto" />
-			</Field>
-			<Field label="Bio" hint="Maximum of 150 characters.">
-				<Textarea name="bio" value={bio} onChange={(event) => setBio(event.target.value)} maxLength={150} className="min-h-24" />
-			</Field>
+			<TextInput
+				label="Username"
+				hint="You can change your name once every 30 days."
+				name="name"
+				type="text"
+				value={name}
+				onChange={(event) => setName(event.target.value)}
+				maxLength={32}
+				pattern="[A-Za-z0-9_\-]+"
+				className="w-auto"
+			/>
+			<TextArea label="Bio" hint="Maximum of 150 characters." name="bio" value={bio} onChange={(event) => setBio(event.target.value)} maxLength={150} className="min-h-24" />
 			<div>
 				<div className="flex flex-col gap-8 md:flex-row md:gap-28">
 					<div className="flex flex-col">
@@ -103,8 +112,22 @@ export default function ProfileSettingsForm({ profile }: Readonly<{ profile: Sec
 			<div>
 				<h3>Colors</h3>
 				<div className="flex flex-col gap-4 md:flex-row md:gap-10">
-					<ColorField name="profileColor" value={profileColor} onChange={setProfileColor} placeholder="#7B5CDB" label="Primary color" />
-					<ColorField name="accentColor" value={accentColor} onChange={setAccentColor} placeholder="#B8842F" label="Accent color" />
+					<ColorPicker
+						name="profileColor"
+						value={profileColor}
+						onChange={(event) => setProfileColor(event.target.value)}
+						defaultValue="#7B5CDB"
+						label="Primary color"
+						swatchClassName="h-8 w-8"
+					/>
+					<ColorPicker
+						name="accentColor"
+						value={accentColor}
+						onChange={(event) => setAccentColor(event.target.value)}
+						defaultValue="#B8842F"
+						label="Accent color"
+						swatchClassName="h-8 w-8"
+					/>
 				</div>
 			</div>
 			<div>
@@ -178,7 +201,7 @@ function SocialLinkRow({ social, isFirst, isLast, update, move, setter }: Social
 				<span className="sr-only">
 					{getSocialPlatformLabel(social.platform, social.kind)} {social.kind === LinkType.COPY ? "username" : "link"}
 				</span>
-				<Input
+				<TextInput
 					type={social.kind === LinkType.COPY ? "text" : "url"}
 					value={social.value}
 					onChange={(event) => update(social.id, { value: event.target.value })}

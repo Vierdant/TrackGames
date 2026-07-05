@@ -2,9 +2,9 @@
 
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { GhostButton } from "@/components/ui/Buttons";
 import ConfirmAction from "@/components/ui/ConfirmAction";
-import { Field, Input } from "@/components/ui/Inputs";
+import { GhostButton } from "@/components/ui/control/Button";
+import { TextInput } from "@/components/ui/control/TextInput";
 import { DiscordIcon, GithubIcon, GoogleIcon, TwitchIcon } from "@/components/ui/SVG";
 import { linkProvider, unlinkProvider } from "@/lib/actions/auth";
 import { clearUserLibrary, deleteUserAccount, resetUserAccountData } from "@/lib/actions/settings";
@@ -53,56 +53,40 @@ export default function AccountSettingsForm({ profile, linkedProviders, hasPassw
 
 	return (
 		<div className="flex flex-col gap-5">
-			<Field label="Email">
-				<div className="relative max-w-md">
-					<Input name="email" type="email" value={email} onChange={(event) => setEmail(event.target.value)} className="pl-2" />
-				</div>
-			</Field>
+			<TextInput label="Email" name="email" type="email" value={email} onChange={(event) => setEmail(event.target.value)} className="max-w-md pl-2" />
 
 			<div>
 				<h3>Password</h3>
 				<div className="mt-1 grid gap-3 md:grid-cols-3">
 					{hasPassword && (
-						<label className="flex flex-col">
-							<span className="text-sm text-text-muted">Current password</span>
-							<span className="relative">
-								<Input
-									name="currentPassword"
-									type="password"
-									value={currentPassword}
-									onChange={(event) => setCurrentPassword(event.target.value)}
-									className="pl-2"
-									autoComplete="current-password"
-								/>
-							</span>
-						</label>
+						<TextInput
+							label="Current password"
+							name="currentPassword"
+							type="password"
+							value={currentPassword}
+							onChange={(event) => setCurrentPassword(event.target.value)}
+							className="pl-2"
+							autoComplete="current-password"
+						/>
 					)}
-					<label className="flex flex-col">
-						<span className="text-sm text-text-muted">{hasPassword ? "New password" : "Set password"}</span>
-						<span className="relative">
-							<Input
-								name="newPassword"
-								type="password"
-								value={newPassword}
-								onChange={(event) => setNewPassword(event.target.value)}
-								className="pl-2"
-								autoComplete="new-password"
-							/>
-						</span>
-					</label>
-					<label className="flex flex-col">
-						<span className="text-sm text-text-muted">Confirm password</span>
-						<span className="relative">
-							<Input
-								name="passwordConfirm"
-								type="password"
-								value={passwordConfirm}
-								onChange={(event) => setPasswordConfirm(event.target.value)}
-								className="pl-2"
-								autoComplete="new-password"
-							/>
-						</span>
-					</label>
+					<TextInput
+						label={hasPassword ? "New password" : "Set password"}
+						name="newPassword"
+						type="password"
+						value={newPassword}
+						onChange={(event) => setNewPassword(event.target.value)}
+						className="pl-2"
+						autoComplete="new-password"
+					/>
+					<TextInput
+						label="Confirm password"
+						name="passwordConfirm"
+						type="password"
+						value={passwordConfirm}
+						onChange={(event) => setPasswordConfirm(event.target.value)}
+						className="pl-2"
+						autoComplete="new-password"
+					/>
 				</div>
 			</div>
 

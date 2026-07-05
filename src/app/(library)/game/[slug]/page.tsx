@@ -13,12 +13,15 @@ import MediaGallary from "@/components/layout/MediaGallery";
 import { auth } from "@/lib/auth";
 import { type Collection, getCollection } from "@/lib/data/collections";
 import { getCompany } from "@/lib/data/companies";
+import { MULTIPLAYER_FILTERS } from "@/lib/data/filters";
 import { type Franchise, getFranchise } from "@/lib/data/franchises";
-import { type Game, getGame, getGameBySlug, getGameStats } from "@/lib/data/games";
+import { type Game, getGame, getGameBySlug, getGameStats, getMinifiedGame } from "@/lib/data/games";
 import { getGenre } from "@/lib/data/genre";
 import { getUserGameEntry } from "@/lib/data/library";
+import { getMultiplayerFeatures } from "@/lib/data/multiplayer";
 import { getPlatform } from "@/lib/data/platforms";
 import { getUserPlaylists } from "@/lib/data/playlists";
+import { getTheme } from "@/lib/data/themes";
 import { getUser } from "@/lib/data/user";
 import { ImageIdToURL } from "@/lib/external/igdb/util";
 import { InteractionTargetType } from "@/lib/generated/prisma/enums";
@@ -60,12 +63,24 @@ export default async function Page({ params }: Readonly<{ params: Promise<{ slug
 	const developerIds = game.developers ? game.developers.map((id) => id) : [];
 	const publisherIds = game.publishers ? game.publishers.filter((id) => !developerIds.includes(id)) : [];
 
-	const [owned, viewer, gameStats, franchises, collections, developers, publishers, similarGames, genres, platforms, userPlaylists] = await fetchSubData(
-		session,
-		game,
-		developerIds,
-		publisherIds,
-	);
+	const [
+		owned,
+		viewer,
+		gameStats,
+		franchises,
+		collections,
+		developers,
+		publishers,
+		similarGames,
+		genres,
+		themes,
+		platforms,
+		userPlaylists,
+		multiplayerFeatures,
+		dlcGames,
+		expansionGames,
+		versionParentGame,
+	] = await fetchSubData(session, game, developerIds, publisherIds);
 	const [franchiseGames, collectionsGames]: [Game[], Game[]] = await fetchGroupedData(franchises, collections);
 
 	if (game.screenshots && game.screenshots.length > 0) {
@@ -90,6 +105,12 @@ export default async function Page({ params }: Readonly<{ params: Promise<{ slug
 		})),
 	}));
 	const logsHref = viewer?.name && game.slug ? `/library/${viewer.name}/logs/${game.slug}` : undefined;
+	// Themes behave like genres in our data, so they render together under "Genres" (deduped by name).
+	// Track each tag's source facet so its keyword link points at the right filter param.
+	const genreTags: { id: number; name: string; facet: "genres" | "themes" }[] = [
+		...genres.map((genre) => ({ id: genre.id, name: genre.name, facet: "genres" as const })),
+		...themes.filter((theme) => !genres.some((genre) => genre.name === theme.name)).map((theme) => ({ id: theme.id, name: theme.name, facet: "themes" as const })),
+	];
 
 	return (
 		<div className="animate-content-fade-in" style={viewer ? viewerThemeStyle(viewer) : undefined}>
@@ -166,11 +187,16 @@ export default async function Page({ params }: Readonly<{ params: Promise<{ slug
 							<div className="grid w-full min-w-0 grid-cols-1 items-start gap-x-10 gap-y-2 border-border pb-5 md:grid-cols-[auto_minmax(0,1fr)] md:gap-y-5 md:border-b md:pb-1.5">
 								<p className="text-md border-b border-border p-1 text-start font-body md:border-none md:bg-bg md:p-0">Genres</p>
 								<div className="text-md flex min-w-0 flex-row flex-wrap gap-x-2 gap-y-1 font-body">
-									{genres.length
-										? genres.map((genre, index) => (
-												<span key={genre.id ?? genre.name} className="flex min-w-0 flex-row items-center gap-1">
-													<span className="wrap-break-words md:text-md cursor-pointer text-sm transition-colors hover:text-primary">{genre.name}</span>
-													<p className="select-none">{index < game.genres!.length - 1 ? " • " : ""}</p>
+									{genreTags.length
+										? genreTags.map((tag, index) => (
+												<span key={`${tag.facet}-${tag.id ?? tag.name}`} className="flex min-w-0 flex-row items-center gap-1">
+													<Link
+														href={`/filter?${tag.facet}=${tag.id}`}
+														className="wrap-break-words md:text-md cursor-pointer text-sm transition-colors hover:text-primary"
+													>
+														{tag.name}
+													</Link>
+													<p className="select-none">{index < genreTags.length - 1 ? " • " : ""}</p>
 												</span>
 											))
 										: "N/A"}
@@ -181,10 +207,13 @@ export default async function Page({ params }: Readonly<{ params: Promise<{ slug
 									{platforms?.length
 										? platforms.map((platform, index) => (
 												<span key={platform.id ?? platform.name} className="flex min-w-0 flex-row items-center gap-1">
-													<span className="wrap-break-words md:text-md flex min-w-0 cursor-pointer items-center gap-2 text-sm transition-colors hover:text-primary">
+													<Link
+														href={`/filter?platforms=${platform.id}`}
+														className="wrap-break-words md:text-md flex min-w-0 cursor-pointer items-center gap-2 text-sm transition-colors hover:text-primary"
+													>
 														{platformIcon(platform.name)}
 														{platform.name}
-													</span>
+													</Link>
 													<p className="select-none">{index < game.platforms!.length - 1 ? " • " : ""}</p>
 												</span>
 											))
@@ -192,6 +221,20 @@ export default async function Page({ params }: Readonly<{ params: Promise<{ slug
 								</div>
 							</div>
 						</section>
+
+						{/* VERSION PARENT NOTICE */}
+						{versionParentGame && (
+							<section className="mt-4 flex min-w-0 flex-row flex-wrap items-center gap-2 rounded border border-border bg-bg-secondary p-4">
+								<Library size={18} className="shrink-0 text-secondary" />
+								<p className="text-md min-w-0 font-body text-text-muted">
+									This is an edition of{" "}
+									<Link href={`/game/${versionParentGame.slug}`} className="cursor-pointer font-bold text-primary transition-colors hover:text-primary-hover">
+										{versionParentGame.name}
+									</Link>
+									.
+								</p>
+							</section>
+						)}
 
 						{/* MEDIA */}
 						<section className="mt-4 flex flex-col">
@@ -239,7 +282,7 @@ export default async function Page({ params }: Readonly<{ params: Promise<{ slug
 						<section className="flex min-w-50 flex-col items-start justify-start gap-2 rounded bg-bg-secondary p-4">
 							<LogStatFormat className="border-b border-border pr-5 pb-2" title="Plays" stat={gameStats.plays} Icon={Play} />
 							<LogStatFormat className="border-b border-border pr-5 pb-2" title="Backlog" stat={gameStats.backlog} Icon={Library} />
-							<LogStatFormat title="Wishlists" stat={gameStats.wishlisted} Icon={Astroid} />
+							<LogStatFormat className="pr-5" title="Wishlists" stat={gameStats.wishlisted} Icon={Astroid} />
 						</section>
 
 						{/* PLAYLIST STATS */}
@@ -247,6 +290,35 @@ export default async function Page({ params }: Readonly<{ params: Promise<{ slug
 							<h2 className="text-md ml-5 shrink-0 text-text-muted">This entry is in</h2>
 							<p className="text-md ml-auto min-w-0 pr-5 text-right font-bold text-text">{formatNumber(gameStats.publicPlaylistEntries)} playlists</p>
 						</section>
+
+						{/* ONLINE / MULTIPLAYER FEATURES */}
+						{multiplayerFeatures.length > 0 && (
+							<section className="flex min-w-0 flex-col gap-3 rounded bg-bg-secondary p-4">
+								<h2 className="text-md ml-5 flex shrink-0 items-center gap-2 text-text-muted">Online features</h2>
+								<div className="flex flex-row flex-wrap gap-2 px-5">
+									{multiplayerFeatures.map((feature) => {
+										// Link tags that map to a filterable mode; derived ones (e.g. "Up to 4 online") stay static.
+										const modeKey = (Object.keys(MULTIPLAYER_FILTERS) as (keyof typeof MULTIPLAYER_FILTERS)[]).find(
+											(key) => MULTIPLAYER_FILTERS[key] === feature,
+										);
+
+										return modeKey ? (
+											<Link
+												key={feature}
+												href={`/filter?modes=${modeKey}`}
+												className="text-md rounded bg-bg px-2 py-1 font-body text-text-muted transition-colors hover:text-primary"
+											>
+												{feature}
+											</Link>
+										) : (
+											<span key={feature} className="text-md rounded bg-bg px-2 py-1 font-body text-text-muted">
+												{feature}
+											</span>
+										);
+									})}
+								</div>
+							</section>
+						)}
 
 						{/* TIME SPENT */}
 						<section className="grid min-w-0 grid-cols-3 gap-3">
@@ -261,7 +333,13 @@ export default async function Page({ params }: Readonly<{ params: Promise<{ slug
 			{/* RELATED GAMES */}
 			<section className="mt-20 mb-10 w-full">
 				<Container>
-					<RelatedGamesTabs franchiseGames={franchiseGames} seriesGames={collectionsGames} similarGames={similarGames} />
+					<RelatedGamesTabs
+						franchiseGames={franchiseGames}
+						seriesGames={collectionsGames}
+						similarGames={similarGames}
+						dlcGames={dlcGames}
+						expansionGames={expansionGames}
+					/>
 					<div className="mt-10">{!shouldHideComments(viewer) && <CommentSection targetType={InteractionTargetType.GAME} targetId={game.id!.toString()} />}</div>
 				</Container>
 			</section>
@@ -370,8 +448,15 @@ async function fetchSubData(session: Session | null, game: Game, developerIds: n
 		getCompany(Array.from(publisherIds.values())),
 		game.similarGames?.length ? getGame(game.similarGames) : [],
 		game.genres?.length ? getGenre(game.genres) : [],
+		game.themes?.length ? getTheme(game.themes) : [],
 		game.platforms?.length ? getPlatform(game.platforms) : [],
 		session?.user?.id ? getUserPlaylists(session.user.id) : [],
+		game.id ? getMultiplayerFeatures(game.id) : [],
+		game.dlcs?.length ? getMinifiedGame(game.dlcs) : [],
+		[...(game.expansions ?? []), ...(game.standaloneExpansions ?? []), ...(game.expandedGames ?? [])].length
+			? getMinifiedGame([...(game.expansions ?? []), ...(game.standaloneExpansions ?? []), ...(game.expandedGames ?? [])])
+			: [],
+		game.versionParent ? getMinifiedGame(game.versionParent) : null,
 	]);
 }
 

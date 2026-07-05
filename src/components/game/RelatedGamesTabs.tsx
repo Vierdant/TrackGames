@@ -7,11 +7,13 @@ import Tabs from "@/components/layout/Tabs";
 import type { Game } from "@/lib/data/games";
 import * as lookup from "@/lib/util/validate/lookup";
 
-type RelatedGamesTabsProps = Readonly<{ franchiseGames: Game[]; seriesGames: Game[]; similarGames: Game[] }>;
+type RelatedGamesTabsProps = Readonly<{ franchiseGames: Game[]; seriesGames: Game[]; similarGames: Game[]; dlcGames: Game[]; expansionGames: Game[] }>;
 
-export default function RelatedGamesTabs({ franchiseGames, seriesGames, similarGames }: RelatedGamesTabsProps) {
+export default function RelatedGamesTabs({ franchiseGames, seriesGames, similarGames, dlcGames, expansionGames }: RelatedGamesTabsProps) {
 	const tabs = [
 		{ id: "series" as const, label: "Series", games: seriesGames },
+		{ id: "dlcs" as const, label: "DLCs", games: dlcGames },
+		{ id: "expansions" as const, label: "Expansions", games: expansionGames },
 		{ id: "franchies" as const, label: "Franchise", games: franchiseGames },
 		{ id: "similar" as const, label: "Similar Games", games: similarGames },
 	].filter((tab) => tab.games.length > 0);

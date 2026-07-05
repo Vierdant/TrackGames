@@ -28,7 +28,7 @@ export default function MediaGallery({ media }: Readonly<{ media: MediaItem[] }>
 	return (
 		<div className="w-full max-w-full min-w-0 overflow-hidden">
 			<HorizontalScroller
-				className="mb-4 aspect-video rounded bg-black/50 [&>div]:h-full [&>div]:w-full [&>div]:gap-0 [&>div>div]:w-full"
+				className="mb-4 aspect-video rounded bg-black/50 [&>div]:h-full [&>div]:w-full [&>div]:gap-0 [&>div>div]:h-full [&>div>div]:w-full"
 				selectedIndex={mediaActive}
 				onSelectedIndexChange={setMediaActive}
 			>

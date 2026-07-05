@@ -5,16 +5,24 @@ import Tabs from "@/components/layout/Tabs";
 import EntryTab from "@/components/library/_playlist-editor/EntryTab";
 import HistoryTab from "@/components/library/_playlist-editor/HistoryTab";
 import LogTab from "@/components/library/_playlist-editor/LogTab";
+import PlaylistTab from "@/components/library/_playlist-editor/PlaylistTab";
 import type { EditorTab } from "@/components/library/_playlist-editor/shared";
 import TimeTab from "@/components/library/_playlist-editor/TimeTab";
 import type { UserLibraryEntryWithTags } from "@/lib/data/library";
 import type { GameStatus } from "@/lib/generated/prisma/enums";
-import { joinClass } from "@/lib/util/client/func";
 
 export { timeModeLabel } from "@/components/library/_playlist-editor/shared";
 export type { EditorTab } from "@/components/library/_playlist-editor/shared";
 
-type PlaylistCardEditorTabsProps = Readonly<{
+type PlaylistEditorContext = Readonly<{
+	position: number | null;
+	tier: string | null;
+	tiers: string[];
+	save: (formData: FormData) => void;
+	onRemove: () => void;
+}>;
+
+export type PlaylistCardEditorTabsProps = Readonly<{
 	entry: UserLibraryEntryWithTags;
 	activeTab: string;
 	setActiveTab: Dispatch<SetStateAction<string>>;
@@ -50,6 +58,7 @@ type PlaylistCardEditorTabsProps = Readonly<{
 	setSelectedLogId: (id: string) => void;
 	finishedAtValue: string;
 	masteredAtValue: string;
+	playlistEditor?: PlaylistEditorContext | null;
 }>;
 
 export default function PlaylistCardEditorTabs({
@@ -88,46 +97,19 @@ export default function PlaylistCardEditorTabs({
 	setSelectedLogId,
 	finishedAtValue,
 	masteredAtValue,
+	playlistEditor,
 }: PlaylistCardEditorTabsProps) {
+	const tabs = [
+		{ id: "entry", label: "Entry" },
+		{ id: "log", label: "Log" },
+		{ id: "history", label: "History" },
+		{ id: "time", label: "Time" },
+		...(playlistEditor ? [{ id: "playlist", label: "Playlist" }] : []),
+	];
+
 	return (
 		<>
-			<div className="shrink-0">
-				<div className="mb-4 grid grid-cols-4 gap-1 p-1 md:hidden">
-					{[
-						{ id: "entry", label: "Entry" },
-						{ id: "log", label: "Log" },
-						{ id: "history", label: "History" },
-						{ id: "time", label: "Time" },
-					].map((tab) => (
-						<button
-							key={tab.id}
-							type="button"
-							onClick={() => setActiveTab(tab.id as EditorTab)}
-							className={joinClass(
-								"min-w-0 rounded px-2 py-2 text-xs font-bold transition",
-								activeTab === tab.id
-									? "bg-primary text-text-inverse"
-									: "border border-border bg-bg-secondary/50 text-text-muted hover:bg-bg-secondary hover:text-text",
-							)}
-							aria-pressed={activeTab === tab.id}
-						>
-							<span className="block truncate">{tab.label}</span>
-						</button>
-					))}
-				</div>
-				<div className="hidden md:block">
-					<Tabs
-						tabs={[
-							{ id: "entry", label: "Entry" },
-							{ id: "log", label: "Log" },
-							{ id: "history", label: "History" },
-							{ id: "time", label: "Time" },
-						]}
-						active={activeTab}
-						onSelect={setActiveTab}
-					/>
-				</div>
-			</div>
+			<Tabs tabs={tabs} active={activeTab} onSelect={(id) => setActiveTab(id as EditorTab)} responsive="compact" />
 			{error && <p className="mb-3 shrink-0 rounded border border-error/50 bg-error/15 p-2 text-sm text-error">{error}</p>}
 			<div className="min-h-0 flex-1 overflow-y-auto pr-1">
 				<EntryTab
@@ -178,6 +160,17 @@ export default function PlaylistCardEditorTabs({
 						today={today}
 						finishedAtValue={finishedAtValue}
 						masteredAtValue={masteredAtValue}
+					/>
+				)}
+				{activeTab === "playlist" && playlistEditor && (
+					<PlaylistTab
+						position={playlistEditor.position}
+						tier={playlistEditor.tier}
+						tiers={playlistEditor.tiers}
+						save={playlistEditor.save}
+						onRemove={playlistEditor.onRemove}
+						onClose={onClose}
+						pending={pending}
 					/>
 				)}
 			</div>

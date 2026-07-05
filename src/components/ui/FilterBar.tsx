@@ -3,7 +3,8 @@
 import type { ReactNode } from "react";
 import { useRouter } from "next/navigation";
 import { Search } from "lucide-react";
-import { Input, Select } from "@/components/ui/Inputs";
+import { Select } from "@/components/ui/control/Select";
+import { TextInput } from "@/components/ui/control/TextInput";
 import { joinClass } from "@/lib/util/client/func";
 
 type Filter =
@@ -34,7 +35,7 @@ type FilterBarProps = Readonly<{ filters: Filter[]; actions?: ReactNode; classNa
 function SelectFilter({ filter }: Readonly<{ filter: SelectFilter }>) {
 	return (
 		<Select
-			className="w-full rounded-none border-t-0 border-r-0 border-l-0 md:w-auto"
+			className="w-full min-w-30 rounded-none border-t-0 border-r-0 border-l-0 md:w-auto"
 			value={filter.value}
 			onChange={(event) => filter.onChange(event.target.value)}
 			aria-label={filter.label}
@@ -54,13 +55,13 @@ export default function FilterBar({ filters, actions, className }: FilterBarProp
 
 	return (
 		<div className={className}>
-			<div className="grid min-w-0 gap-3 sm:grid-cols-[minmax(0,1fr)_auto] md:flex md:flex-row md:flex-wrap">
+			<div className="grid min-w-0 gap-3 sm:grid-cols-[minmax(0,1fr)_auto] lg:flex lg:flex-row">
 				{filters.map((filter) => {
 					if (filter.type === "search") {
 						return (
 							<div key={filter.placeholder} className="relative min-w-0 md:min-w-64">
 								<Search className="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 text-text-faint" size={17} />
-								<Input value={filter.value} onChange={(event) => filter.onChange(event.target.value)} placeholder={filter.placeholder} className="pl-9" />
+								<TextInput value={filter.value} onChange={(event) => filter.onChange(event.target.value)} placeholder={filter.placeholder} className="pl-9" />
 							</div>
 						);
 					}

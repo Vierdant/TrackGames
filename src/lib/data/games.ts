@@ -1,7 +1,9 @@
+import { type MultiplayerFilterKey } from "@/lib/data/filters";
 import { makeGetById, makeGetBySlug } from "@/lib/data/getter";
 import db from "@/lib/db";
 import { formatRawGame } from "@/lib/external/igdb/util";
-import { GameListType, GameStatus } from "@/lib/generated/prisma/enums";
+import type { Prisma } from "@/lib/generated/prisma/client";
+import { GameListType, GameStatus, type PlayerPerspective } from "@/lib/generated/prisma/enums";
 import type { GameModel } from "@/lib/generated/prisma/models/Game";
 
 export type Game = Partial<
@@ -53,9 +55,17 @@ const gameSelect = {
 	publishers: true,
 	platforms: true,
 	genres: true,
+	themes: true,
 	franchises: true,
 	collections: true,
 	similarGames: true,
+	dlcs: true,
+	expansions: true,
+	standaloneExpansions: true,
+	expandedGames: true,
+	multiplayerModes: true,
+	versionParent: true,
+	parentGame: true,
 };
 
 const minifiedSelect = {
@@ -83,7 +93,7 @@ const searchSelect = {
 const fetching = {
 	endpoint: "games",
 	body: `
-        fields slug, name, summary, total_rating, first_release_date, cover.image_id, screenshots.image_id, videos.video_id, platforms.name, platforms.slug, involved_companies.company, involved_companies.developer, involved_companies.publisher, genres.name, genres.slug, franchises.name, franchises.slug, franchises.games, similar_games, collections.name, collections.slug, collections.games;
+        fields slug, name, summary, total_rating, first_release_date, cover.image_id, screenshots.image_id, videos.video_id, platforms.name, platforms.slug, involved_companies.company, involved_companies.developer, involved_companies.publisher, genres.name, genres.slug, themes, franchises.name, franchises.slug, franchises.games, similar_games, collections.name, collections.slug, collections.games, dlcs, expansions, standalone_expansions, expanded_games, multiplayer_modes, version_parent, parent_game;
     `,
 };
 
@@ -262,5 +272,77 @@ export async function searchGames(query: string, limit = 8): Promise<Game[]> {
 		...game,
 		totalRating: game.totalRating ?? undefined,
 		releaseDate: game.releaseDate ?? undefined,
+	}));
+}
+
+export type GameFilters = {
+	genres?: number[];
+	themes?: number[];
+	platforms?: number[];
+	perspectives?: PlayerPerspective[];
+	multiplayerModes?: MultiplayerFilterKey[];
+	releaseFrom?: string;
+	releaseTill?: string;
+};
+
+/**
+ * Multi-facet game filter. Games must match every selected value across every facet (strict AND):
+ * e.g. picking two genres returns only games that have both. Backs the `/filter` page.
+ */
+export async function filterGames(filters: GameFilters, limit = 32): Promise<Game[]> {
+	const resultLimit = Math.max(1, Math.min(limit, 320));
+	const where: Prisma.GameWhereInput = { versionParent: null };
+	const and: Prisma.GameWhereInput[] = [];
+
+	if (filters.genres?.length) and.push({ genres: { hasEvery: filters.genres } });
+	if (filters.themes?.length) and.push({ themes: { hasEvery: filters.themes } });
+	if (filters.platforms?.length) and.push({ platforms: { hasEvery: filters.platforms } });
+	if (filters.perspectives?.length) and.push({ playerPerspectives: { hasEvery: filters.perspectives } });
+
+	if (filters.multiplayerModes?.length) {
+		// Multiplayer data lives in a separate table (one row per platform), so resolve the game ids
+		// per mode and intersect them: a game must offer every selected mode across its rows.
+		const perModeIds = await Promise.all(
+			filters.multiplayerModes.map(async (mode) => {
+				const rows = await db.multiplayerMode.findMany({ where: { [mode]: true }, select: { game: true } });
+				return new Set(rows.map((row) => row.game));
+			}),
+		);
+		const gameIds = perModeIds.reduce((acc, ids) => acc.filter((id) => ids.has(id)), Array.from(perModeIds[0]));
+
+		if (!gameIds.length) return [];
+
+		and.push({ id: { in: gameIds } });
+	}
+
+	if (filters.releaseFrom || filters.releaseTill) {
+		// `till` is inclusive of the whole day, so bump it to the start of the next day.
+		const till = filters.releaseTill ? new Date(filters.releaseTill) : undefined;
+		if (till) till.setUTCDate(till.getUTCDate() + 1);
+
+		and.push({
+			releaseDate: {
+				...(filters.releaseFrom ? { gte: new Date(filters.releaseFrom) } : {}),
+				...(till ? { lt: till } : {}),
+			},
+		});
+	}
+
+	if (!and.length) return [];
+
+	where.AND = and;
+
+	const games = await db.game.findMany({
+		where,
+		select: searchSelect,
+		orderBy: [{ totalRating: "desc" }, { name: "asc" }],
+		take: resultLimit,
+	});
+
+	return games.map((game) => ({
+		...game,
+		totalRating: game.totalRating ?? undefined,
+		releaseDate: game.releaseDate ?? undefined,
+		versionParent: game.versionParent ?? null,
 	}));
 }

@@ -2,8 +2,8 @@
 
 import type { ReactNode } from "react";
 import { useEffect, useState } from "react";
-import { GhostButton, PrimaryButton } from "@/components/ui/Buttons";
-import { Input } from "@/components/ui/Inputs";
+import { GhostButton, PrimaryButton } from "@/components/ui/control/Button";
+import { TextInput } from "@/components/ui/control/TextInput";
 import MenuPanel from "@/components/ui/MenuPanel";
 import { deferHook } from "@/lib/util/client/func";
 
@@ -40,11 +40,10 @@ export default function ConfirmAction({ open, title, message, confirmLabel, pend
 			<div className="flex flex-col gap-4">
 				<p className="text-sm text-text-muted">{message}</p>
 				{needsText && step === 2 && (
-					<label className="text-sm font-bold text-text-muted">
-						{requireLabel ?? `Type ${requireText} to confirm`}
-						{/* eslint-disable-next-line jsx-a11y/no-autofocus -- intentional: focus confirmation input when step appears */}
-						<Input value={text} onChange={(event) => setText(event.target.value)} className="mt-1" autoFocus />
-					</label>
+					<>
+						{}
+						<TextInput label={requireLabel ?? `Type ${requireText} to confirm`} value={text} onChange={(event) => setText(event.target.value)} className="mt-1" />
+					</>
 				)}
 				{error && <p className="text-sm font-bold text-error">{error}</p>}
 				<div className="flex justify-end gap-2">

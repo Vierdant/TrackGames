@@ -2,8 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { Plus, Search, X } from "lucide-react";
-import { PrimaryButton } from "@/components/ui/Buttons";
-import { Input, Select } from "@/components/ui/Inputs";
+import { PrimaryButton } from "@/components/ui/control/Button";
+import { Select } from "@/components/ui/control/Select";
+import { TextInput } from "@/components/ui/control/TextInput";
 import { addGameToPlaylist } from "@/lib/actions/playlists";
 import type { Game } from "@/lib/data/games";
 import { deferHook } from "@/lib/util/client/func";
@@ -61,7 +62,7 @@ export default function AddPlaylistGameForm({ playlistId, mode, tiers, existingG
 			<div className="flex flex-col gap-3">
 				<div className="relative">
 					<Search className="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 text-text-faint" size={17} />
-					<Input
+					<TextInput
 						value={game?.name ?? query}
 						onChange={(event) => {
 							setGame(null);
@@ -110,16 +111,13 @@ export default function AddPlaylistGameForm({ playlistId, mode, tiers, existingG
 				)}
 
 				{mode === "TIER" && (
-					<label className="text-sm font-bold text-text-muted">
-						Tier
-						<Select name="tier" defaultValue="A" className="w-full">
-							{tiers.map((tier) => (
-								<option key={tier} value={tier}>
-									{tier}
-								</option>
-							))}
-						</Select>
-					</label>
+					<Select label="Tier" name="tier" defaultValue="A" className="w-full">
+						{tiers.map((tier) => (
+							<option key={tier} value={tier}>
+								{tier}
+							</option>
+						))}
+					</Select>
 				)}
 
 				<PrimaryButton type="submit" disabled={!game} className="w-fit px-4">

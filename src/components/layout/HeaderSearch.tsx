@@ -4,8 +4,8 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ArrowRight, Search, X } from "lucide-react";
-import { IconButton } from "@/components/ui/Buttons";
-import { Input } from "@/components/ui/Inputs";
+import { IconButton } from "@/components/ui/control/Button";
+import { TextInput } from "@/components/ui/control/TextInput";
 import MenuPanel from "@/components/ui/MenuPanel";
 import type { Game } from "@/lib/data/games";
 import { deferHook } from "@/lib/util/client/func";
@@ -89,7 +89,7 @@ function SearchBox({ autoFocus = false, onPick }: Readonly<{ autoFocus?: boolean
 	return (
 		<div ref={boxRef} className="relative w-full">
 			<Search className="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 text-text-faint" size={18} aria-hidden="true" />
-			<Input
+			<TextInput
 				ref={inputRef}
 				value={query}
 				onChange={(event) => {

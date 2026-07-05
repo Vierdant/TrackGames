@@ -1,7 +1,8 @@
 "use client";
 
-import { GhostButton, PrimaryButton } from "@/components/ui/Buttons";
-import { Input, Select } from "@/components/ui/Inputs";
+import { GhostButton, PrimaryButton } from "@/components/ui/control/Button";
+import { Select } from "@/components/ui/control/Select";
+import { TextInput } from "@/components/ui/control/TextInput";
 import MenuPanel from "@/components/ui/MenuPanel";
 import RemovableChip from "@/components/ui/RemovableChip";
 import type { GameStatus } from "@/lib/generated/prisma/enums";
@@ -126,7 +127,7 @@ export default function AdvancedLibraryFilterPanel({ open, onClose, filters, onC
 
 				<section className="grid gap-3 sm:grid-cols-2">
 					<h4 className="font-bold text-text sm:col-span-2">Rating</h4>
-					<Input
+					<TextInput
 						type="number"
 						min={0}
 						max={5}
@@ -135,7 +136,7 @@ export default function AdvancedLibraryFilterPanel({ open, onClose, filters, onC
 						onChange={(event) => onChange({ ...filters, ratingMin: event.target.value })}
 						placeholder="Min"
 					/>
-					<Input
+					<TextInput
 						type="number"
 						min={0}
 						max={5}
@@ -148,7 +149,7 @@ export default function AdvancedLibraryFilterPanel({ open, onClose, filters, onC
 
 				<section className="grid gap-3 sm:grid-cols-2">
 					<h4 className="font-bold text-text sm:col-span-2">Game hours</h4>
-					<Input
+					<TextInput
 						type="number"
 						min={0}
 						step={0.1}
@@ -156,7 +157,7 @@ export default function AdvancedLibraryFilterPanel({ open, onClose, filters, onC
 						onChange={(event) => onChange({ ...filters, hoursMin: event.target.value })}
 						placeholder="Min"
 					/>
-					<Input
+					<TextInput
 						type="number"
 						min={0}
 						step={0.1}

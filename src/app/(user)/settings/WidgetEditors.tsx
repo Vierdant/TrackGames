@@ -4,7 +4,8 @@ import { useEffect, useState } from "react";
 import { ChevronDown, ChevronLeft, ChevronRight, ChevronUp, Eye, EyeOff, Plus, Search, Trash2, X } from "lucide-react";
 import MarkdownWidgetEditor from "@/app/(user)/settings/MarkdownWidgetEditor";
 import { GameCard } from "@/components/game/GameDisplays";
-import { Input, Select } from "@/components/ui/Inputs";
+import { Select } from "@/components/ui/control/Select";
+import { TextInput } from "@/components/ui/control/TextInput";
 import type { Game } from "@/lib/data/games";
 import type { Widget } from "@/lib/types";
 import { WidgetType } from "@/lib/types";
@@ -229,16 +230,13 @@ function GameListEditor({ widget, onChange }: GameListEditor) {
 
 	return (
 		<div className="mt-3 flex flex-col gap-3">
-			<label>
-				<span className="text-sm font-bold text-text-muted">Title</span>
-				<Input value={widget.title} onChange={(event) => onChange({ title: event.target.value })} />
-			</label>
+			<TextInput title="Title" value={widget.title} onChange={(event) => onChange({ title: event.target.value })} />
 			<div>
 				<span className="text-sm font-bold text-text-muted">Games</span>
 				<div className="mt-2 flex flex-col gap-3">
 					<div className="relative">
 						<Search className="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 text-text-faint" size={17} aria-hidden="true" />
-						<Input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Add game from your library" className="pr-9 pl-9" />
+						<TextInput value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Add game from your library" className="pr-9 pl-9" />
 						{query && (
 							<button
 								type="button"

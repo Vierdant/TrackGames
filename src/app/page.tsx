@@ -6,7 +6,7 @@ import Container from "@/components/layout/Container";
 import Gallery from "@/components/layout/Gallery";
 import HorizontalScroller from "@/components/layout/HorizontalScroller";
 import PlaylistCoverCard from "@/components/playlist/PlaylistCoverCard";
-import { GhostButton, PrimaryButton } from "@/components/ui/Buttons";
+import { GhostButton, PrimaryButton } from "@/components/ui/control/Button";
 import EmptyState from "@/components/ui/EmptyState";
 import Loading from "@/components/ui/Loading";
 import StatBlock from "@/components/ui/StatBlock";

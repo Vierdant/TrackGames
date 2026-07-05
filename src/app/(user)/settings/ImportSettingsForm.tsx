@@ -2,8 +2,9 @@
 
 import { useState, useTransition } from "react";
 import Image from "next/image";
-import { GhostButton, PrimaryButton } from "@/components/ui/Buttons";
-import { Checkbox, Input } from "@/components/ui/Inputs";
+import { GhostButton, PrimaryButton } from "@/components/ui/control/Button";
+import { Checkbox } from "@/components/ui/control/Checkbox";
+import { TextInput } from "@/components/ui/control/TextInput";
 import { exportTgLibrary, getSteamProfileImportPreview, importSteamLibrary, importTgLibrary } from "@/lib/actions/import";
 
 export default function ImportSettingsForm() {
@@ -104,7 +105,7 @@ export default function ImportSettingsForm() {
 				</div>
 
 				<div className="flex max-w-xl flex-col gap-3">
-					<label className="text-sm text-text-muted">
+					<label htmlFor="steamfield" className="text-sm text-text-muted">
 						<div className="flex flex-row justify-between">
 							<p className="font-bold">Steam profile ID</p>
 
@@ -112,7 +113,7 @@ export default function ImportSettingsForm() {
 								Get your profile ID
 							</a>
 						</div>
-						<Input value={steamId} onChange={(event) => setSteamId(event.target.value)} placeholder="7656119..." />
+						<TextInput id="steamfield" value={steamId} onChange={(event) => setSteamId(event.target.value)} placeholder="7656119..." />
 					</label>
 					<div className="flex flex-row gap-2">
 						<GhostButton type="button" onClick={previewProfile} disabled={pending || !steamId.trim()}>
@@ -203,7 +204,7 @@ export default function ImportSettingsForm() {
 
 				<div className="grid grid-cols-1 items-center gap-2 md:grid-cols-2">
 					<p className="text-sm text-text-muted">Import a .tg library backup:</p>
-					<Input
+					<TextInput
 						type="file"
 						accept=".tg"
 						disabled={pending}

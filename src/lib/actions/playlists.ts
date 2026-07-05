@@ -242,72 +242,6 @@ export async function updatePlaylistEntry(listId: string, entryId: string, formD
 	revalidatePath(`/playlist/${listId}`);
 }
 
-export async function updatePlaylistDisplayMode(listId: string, formData: FormData) {
-	const userId = await getCurrentUserId();
-	const displayMode = formDataString(formData.get("displayMode"), "GRID");
-
-	const playlist = await getOwnedPlaylist(listId, userId);
-
-	if ("error" in playlist) {
-		throw new Error(playlist.error);
-	}
-
-	await db.gameList.update({
-		where: {
-			id: listId,
-		},
-		data: {
-			displayMode: displayModes.has(displayMode) ? displayMode : "GRID",
-		},
-	});
-
-	revalidatePath(`/playlist/${listId}`);
-}
-
-export async function updatePlaylistTiers(listId: string, formData: FormData) {
-	const userId = await getCurrentUserId();
-	const tiers = formData
-		.getAll("tiers")
-		.map((tier) => formDataString(tier).trim())
-		.filter(Boolean)
-		.slice(0, 12);
-	const tierLabels = tiers.length ? tiers : fallbackTiers;
-	const colors = formDataStrings(formData.getAll("colors")).map((color) => color.trim());
-	const tierColors = tierLabels.map((_, index) => {
-		const color = colors[index] || fallbackTierColors[index] || "#64748b";
-		return /^#[0-9a-f]{6}$/i.test(color) ? color : fallbackTierColors[index] || "#64748b";
-	});
-
-	const playlist = await getOwnedPlaylist(listId, userId);
-
-	if ("error" in playlist) {
-		throw new Error(playlist.error);
-	}
-
-	await db.$transaction([
-		db.gameList.update({
-			where: {
-				id: listId,
-			},
-			data: {
-				tierLabels,
-				tierColors,
-			},
-		}),
-		db.gameListEntry.updateMany({
-			where: {
-				listId,
-				OR: [{ tier: null }, { tier: { notIn: tierLabels } }],
-			},
-			data: {
-				tier: tierLabels[0],
-			},
-		}),
-	]);
-
-	revalidatePath(`/playlist/${listId}`);
-}
-
 export async function updateGameListSettings(listId: string, formData: FormData) {
 	const userId = await getCurrentUserId();
 	const list = await getOwnedList(listId, userId);
@@ -322,25 +256,63 @@ export async function updateGameListSettings(listId: string, formData: FormData)
 		return inputError("Name is required.");
 	}
 
-	await db.gameList.update({
-		where: {
-			id: listId,
-		},
-		data: {
-			name,
-			description: nullableText(formData.get("description"), 500),
-			image: url(formData.get("image")),
-			background: url(formData.get("background")),
-			color: color(formData.get("color")),
-			accentColor: color(formData.get("accentColor")),
-			privacy: formDataString(formData.get("privacy"), "public") === "private" ? "private" : "public",
-			commentsHidden: formData.get("commentsHidden") === "on",
-		},
-	});
+	const displayMode = formDataString(formData.get("displayMode"));
+	const data = {
+		name,
+		description: nullableText(formData.get("description"), 500),
+		image: url(formData.get("image")),
+		background: url(formData.get("background")),
+		color: color(formData.get("color")),
+		accentColor: color(formData.get("accentColor")),
+		privacy: formDataString(formData.get("privacy"), "public") === "private" ? "private" : "public",
+		commentsHidden: formData.get("commentsHidden") === "on",
+		displayMode: list.type === GameListType.PLAYLIST && displayModes.has(displayMode) ? displayMode : undefined,
+	};
 
 	if (list.type === GameListType.PLAYLIST) {
+		const tiers = formData
+			.getAll("tiers")
+			.map((tier) => formDataString(tier).trim())
+			.filter(Boolean)
+			.slice(0, 12);
+		const tierLabels = tiers.length ? tiers : fallbackTiers;
+		const colors = formDataStrings(formData.getAll("colors")).map((color) => color.trim());
+		const tierColors = tierLabels.map((_, index) => {
+			const color = colors[index] || fallbackTierColors[index] || "#64748b";
+			return /^#[0-9a-f]{6}$/i.test(color) ? color : fallbackTierColors[index] || "#64748b";
+		});
+
+		await db.$transaction([
+			db.gameList.update({
+				where: {
+					id: listId,
+				},
+				data: {
+					...data,
+					tierLabels,
+					tierColors,
+				},
+			}),
+			db.gameListEntry.updateMany({
+				where: {
+					listId,
+					OR: [{ tier: null }, { tier: { notIn: tierLabels } }],
+				},
+				data: {
+					tier: tierLabels[0],
+				},
+			}),
+		]);
+
 		revalidatePath(`/playlist/${list.id}`);
 	} else {
+		await db.gameList.update({
+			where: {
+				id: listId,
+			},
+			data,
+		});
+
 		revalidatePath(`/library/${list.slug}`);
 	}
 

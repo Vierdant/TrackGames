@@ -3,8 +3,9 @@
 import { useRef, useState } from "react";
 import { AlignCenter, AlignLeft, AlignRight, Bold, Eye, Image as ImageIcon, Italic, Link, Palette, Strikethrough, Table, Video } from "lucide-react";
 import { MarkdownBlocks } from "@/components/markdown/MarkdownBlocks";
-import { GhostButton } from "@/components/ui/Buttons";
-import { Input, Textarea } from "@/components/ui/Inputs";
+import { GhostButton } from "@/components/ui/control/Button";
+import { TextArea } from "@/components/ui/control/TextArea";
+import { TextInput } from "@/components/ui/control/TextInput";
 import MenuPanel from "@/components/ui/MenuPanel";
 import { parseMarkdownBlocks } from "@/lib/util/parse/markdown";
 
@@ -153,7 +154,7 @@ export default function MarkdownWidgetEditor({ value, onChange }: MarkdownWidget
 				</GhostButton>
 			</div>
 
-			<Textarea
+			<TextArea
 				ref={textareaRef}
 				value={value}
 				onChange={(event) => onChange(event.target.value)}
@@ -188,15 +189,15 @@ export default function MarkdownWidgetEditor({ value, onChange }: MarkdownWidget
 				<div className="flex flex-col gap-2">
 					{lastMediaModal === "image" ? (
 						<>
-							<Input value={imageSrc} onChange={(event) => setImageSrc(event.target.value)} placeholder="https://images.unsplash.com/..." />
-							<Input value={mediaAlt} onChange={(event) => setMediaAlt(event.target.value)} placeholder="Alt text" />
+							<TextInput value={imageSrc} onChange={(event) => setImageSrc(event.target.value)} placeholder="https://images.unsplash.com/..." />
+							<TextInput value={mediaAlt} onChange={(event) => setMediaAlt(event.target.value)} placeholder="Alt text" />
 						</>
 					) : (
-						<Input value={videoSrc} onChange={(event) => setVideoSrc(event.target.value)} placeholder="https://cdn.pixabay.com/video.mp4" />
+						<TextInput value={videoSrc} onChange={(event) => setVideoSrc(event.target.value)} placeholder="https://cdn.pixabay.com/video.mp4" />
 					)}
 					<div className="grid grid-cols-2 gap-2">
-						<Input value={mediaWidth} onChange={(event) => setMediaWidth(event.target.value)} placeholder="Width" inputMode="numeric" />
-						<Input value={mediaHeight} onChange={(event) => setMediaHeight(event.target.value)} placeholder="Height" inputMode="numeric" />
+						<TextInput value={mediaWidth} onChange={(event) => setMediaWidth(event.target.value)} placeholder="Width" inputMode="numeric" />
+						<TextInput value={mediaHeight} onChange={(event) => setMediaHeight(event.target.value)} placeholder="Height" inputMode="numeric" />
 					</div>
 				</div>
 				<div className="mt-5 flex justify-end gap-2">

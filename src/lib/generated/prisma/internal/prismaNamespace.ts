@@ -16,10 +16,10 @@
  */
 
 import * as runtime from "@prisma/client/runtime/client"
-import type * as Prisma from "@/lib/generated/prisma/models"
-import { type PrismaClient } from "@/lib/generated/prisma/internal/class"
+import type * as Prisma from "../models"
+import { type PrismaClient } from "./class"
 
-export type * from '@/lib/generated/prisma/models'
+export type * from '../models'
 
 export type DMMF = typeof runtime.DMMF
 

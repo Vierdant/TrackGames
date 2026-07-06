@@ -456,6 +456,11 @@ export type UserWhereInput = {
   followers?: Prisma.UserFollowListRelationFilter
   badges?: Prisma.UserBadgeListRelationFilter
   userGamePlayLogs?: Prisma.UserGamePlayLogListRelationFilter
+  roadmapVotes?: Prisma.RoadmapVoteListRelationFilter
+  reportsMade?: Prisma.ReportListRelationFilter
+  reportsAgainst?: Prisma.ReportListRelationFilter
+  reportsHandled?: Prisma.ReportListRelationFilter
+  feedback?: Prisma.FeedbackListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -511,6 +516,11 @@ export type UserOrderByWithRelationInput = {
   followers?: Prisma.UserFollowOrderByRelationAggregateInput
   badges?: Prisma.UserBadgeOrderByRelationAggregateInput
   userGamePlayLogs?: Prisma.UserGamePlayLogOrderByRelationAggregateInput
+  roadmapVotes?: Prisma.RoadmapVoteOrderByRelationAggregateInput
+  reportsMade?: Prisma.ReportOrderByRelationAggregateInput
+  reportsAgainst?: Prisma.ReportOrderByRelationAggregateInput
+  reportsHandled?: Prisma.ReportOrderByRelationAggregateInput
+  feedback?: Prisma.FeedbackOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -569,6 +579,11 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   followers?: Prisma.UserFollowListRelationFilter
   badges?: Prisma.UserBadgeListRelationFilter
   userGamePlayLogs?: Prisma.UserGamePlayLogListRelationFilter
+  roadmapVotes?: Prisma.RoadmapVoteListRelationFilter
+  reportsMade?: Prisma.ReportListRelationFilter
+  reportsAgainst?: Prisma.ReportListRelationFilter
+  reportsHandled?: Prisma.ReportListRelationFilter
+  feedback?: Prisma.FeedbackListRelationFilter
 }, "id" | "name" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -712,6 +727,11 @@ export type UserCreateInput = {
   followers?: Prisma.UserFollowCreateNestedManyWithoutFollowingInput
   badges?: Prisma.UserBadgeCreateNestedManyWithoutUserInput
   userGamePlayLogs?: Prisma.UserGamePlayLogCreateNestedManyWithoutUserInput
+  roadmapVotes?: Prisma.RoadmapVoteCreateNestedManyWithoutUserInput
+  reportsMade?: Prisma.ReportCreateNestedManyWithoutReporterInput
+  reportsAgainst?: Prisma.ReportCreateNestedManyWithoutReportedUserInput
+  reportsHandled?: Prisma.ReportCreateNestedManyWithoutHandlerInput
+  feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -767,6 +787,11 @@ export type UserUncheckedCreateInput = {
   followers?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowingInput
   badges?: Prisma.UserBadgeUncheckedCreateNestedManyWithoutUserInput
   userGamePlayLogs?: Prisma.UserGamePlayLogUncheckedCreateNestedManyWithoutUserInput
+  roadmapVotes?: Prisma.RoadmapVoteUncheckedCreateNestedManyWithoutUserInput
+  reportsMade?: Prisma.ReportUncheckedCreateNestedManyWithoutReporterInput
+  reportsAgainst?: Prisma.ReportUncheckedCreateNestedManyWithoutReportedUserInput
+  reportsHandled?: Prisma.ReportUncheckedCreateNestedManyWithoutHandlerInput
+  feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -822,6 +847,11 @@ export type UserUpdateInput = {
   followers?: Prisma.UserFollowUpdateManyWithoutFollowingNestedInput
   badges?: Prisma.UserBadgeUpdateManyWithoutUserNestedInput
   userGamePlayLogs?: Prisma.UserGamePlayLogUpdateManyWithoutUserNestedInput
+  roadmapVotes?: Prisma.RoadmapVoteUpdateManyWithoutUserNestedInput
+  reportsMade?: Prisma.ReportUpdateManyWithoutReporterNestedInput
+  reportsAgainst?: Prisma.ReportUpdateManyWithoutReportedUserNestedInput
+  reportsHandled?: Prisma.ReportUpdateManyWithoutHandlerNestedInput
+  feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -877,6 +907,11 @@ export type UserUncheckedUpdateInput = {
   followers?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowingNestedInput
   badges?: Prisma.UserBadgeUncheckedUpdateManyWithoutUserNestedInput
   userGamePlayLogs?: Prisma.UserGamePlayLogUncheckedUpdateManyWithoutUserNestedInput
+  roadmapVotes?: Prisma.RoadmapVoteUncheckedUpdateManyWithoutUserNestedInput
+  reportsMade?: Prisma.ReportUncheckedUpdateManyWithoutReporterNestedInput
+  reportsAgainst?: Prisma.ReportUncheckedUpdateManyWithoutReportedUserNestedInput
+  reportsHandled?: Prisma.ReportUncheckedUpdateManyWithoutHandlerNestedInput
+  feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -1368,6 +1403,84 @@ export type UserUpdateOneWithoutSentNotificationsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutSentNotificationsInput, Prisma.UserUpdateWithoutSentNotificationsInput>, Prisma.UserUncheckedUpdateWithoutSentNotificationsInput>
 }
 
+export type UserCreateNestedOneWithoutRoadmapVotesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutRoadmapVotesInput, Prisma.UserUncheckedCreateWithoutRoadmapVotesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutRoadmapVotesInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutRoadmapVotesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutRoadmapVotesInput, Prisma.UserUncheckedCreateWithoutRoadmapVotesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutRoadmapVotesInput
+  upsert?: Prisma.UserUpsertWithoutRoadmapVotesInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutRoadmapVotesInput, Prisma.UserUpdateWithoutRoadmapVotesInput>, Prisma.UserUncheckedUpdateWithoutRoadmapVotesInput>
+}
+
+export type UserCreateNestedOneWithoutReportsMadeInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutReportsMadeInput, Prisma.UserUncheckedCreateWithoutReportsMadeInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutReportsMadeInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserCreateNestedOneWithoutReportsAgainstInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutReportsAgainstInput, Prisma.UserUncheckedCreateWithoutReportsAgainstInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutReportsAgainstInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserCreateNestedOneWithoutReportsHandledInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutReportsHandledInput, Prisma.UserUncheckedCreateWithoutReportsHandledInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutReportsHandledInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneWithoutReportsMadeNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutReportsMadeInput, Prisma.UserUncheckedCreateWithoutReportsMadeInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutReportsMadeInput
+  upsert?: Prisma.UserUpsertWithoutReportsMadeInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutReportsMadeInput, Prisma.UserUpdateWithoutReportsMadeInput>, Prisma.UserUncheckedUpdateWithoutReportsMadeInput>
+}
+
+export type UserUpdateOneWithoutReportsAgainstNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutReportsAgainstInput, Prisma.UserUncheckedCreateWithoutReportsAgainstInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutReportsAgainstInput
+  upsert?: Prisma.UserUpsertWithoutReportsAgainstInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutReportsAgainstInput, Prisma.UserUpdateWithoutReportsAgainstInput>, Prisma.UserUncheckedUpdateWithoutReportsAgainstInput>
+}
+
+export type UserUpdateOneWithoutReportsHandledNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutReportsHandledInput, Prisma.UserUncheckedCreateWithoutReportsHandledInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutReportsHandledInput
+  upsert?: Prisma.UserUpsertWithoutReportsHandledInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutReportsHandledInput, Prisma.UserUpdateWithoutReportsHandledInput>, Prisma.UserUncheckedUpdateWithoutReportsHandledInput>
+}
+
+export type UserCreateNestedOneWithoutFeedbackInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutFeedbackInput, Prisma.UserUncheckedCreateWithoutFeedbackInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutFeedbackInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneWithoutFeedbackNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutFeedbackInput, Prisma.UserUncheckedCreateWithoutFeedbackInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutFeedbackInput
+  upsert?: Prisma.UserUpsertWithoutFeedbackInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutFeedbackInput, Prisma.UserUpdateWithoutFeedbackInput>, Prisma.UserUncheckedUpdateWithoutFeedbackInput>
+}
+
 export type UserCreateWithoutAccountsInput = {
   id?: string
   name?: string | null
@@ -1420,6 +1533,11 @@ export type UserCreateWithoutAccountsInput = {
   followers?: Prisma.UserFollowCreateNestedManyWithoutFollowingInput
   badges?: Prisma.UserBadgeCreateNestedManyWithoutUserInput
   userGamePlayLogs?: Prisma.UserGamePlayLogCreateNestedManyWithoutUserInput
+  roadmapVotes?: Prisma.RoadmapVoteCreateNestedManyWithoutUserInput
+  reportsMade?: Prisma.ReportCreateNestedManyWithoutReporterInput
+  reportsAgainst?: Prisma.ReportCreateNestedManyWithoutReportedUserInput
+  reportsHandled?: Prisma.ReportCreateNestedManyWithoutHandlerInput
+  feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutAccountsInput = {
@@ -1474,6 +1592,11 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   followers?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowingInput
   badges?: Prisma.UserBadgeUncheckedCreateNestedManyWithoutUserInput
   userGamePlayLogs?: Prisma.UserGamePlayLogUncheckedCreateNestedManyWithoutUserInput
+  roadmapVotes?: Prisma.RoadmapVoteUncheckedCreateNestedManyWithoutUserInput
+  reportsMade?: Prisma.ReportUncheckedCreateNestedManyWithoutReporterInput
+  reportsAgainst?: Prisma.ReportUncheckedCreateNestedManyWithoutReportedUserInput
+  reportsHandled?: Prisma.ReportUncheckedCreateNestedManyWithoutHandlerInput
+  feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutAccountsInput = {
@@ -1544,6 +1667,11 @@ export type UserUpdateWithoutAccountsInput = {
   followers?: Prisma.UserFollowUpdateManyWithoutFollowingNestedInput
   badges?: Prisma.UserBadgeUpdateManyWithoutUserNestedInput
   userGamePlayLogs?: Prisma.UserGamePlayLogUpdateManyWithoutUserNestedInput
+  roadmapVotes?: Prisma.RoadmapVoteUpdateManyWithoutUserNestedInput
+  reportsMade?: Prisma.ReportUpdateManyWithoutReporterNestedInput
+  reportsAgainst?: Prisma.ReportUpdateManyWithoutReportedUserNestedInput
+  reportsHandled?: Prisma.ReportUpdateManyWithoutHandlerNestedInput
+  feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAccountsInput = {
@@ -1598,6 +1726,11 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   followers?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowingNestedInput
   badges?: Prisma.UserBadgeUncheckedUpdateManyWithoutUserNestedInput
   userGamePlayLogs?: Prisma.UserGamePlayLogUncheckedUpdateManyWithoutUserNestedInput
+  roadmapVotes?: Prisma.RoadmapVoteUncheckedUpdateManyWithoutUserNestedInput
+  reportsMade?: Prisma.ReportUncheckedUpdateManyWithoutReporterNestedInput
+  reportsAgainst?: Prisma.ReportUncheckedUpdateManyWithoutReportedUserNestedInput
+  reportsHandled?: Prisma.ReportUncheckedUpdateManyWithoutHandlerNestedInput
+  feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutSessionsInput = {
@@ -1652,6 +1785,11 @@ export type UserCreateWithoutSessionsInput = {
   followers?: Prisma.UserFollowCreateNestedManyWithoutFollowingInput
   badges?: Prisma.UserBadgeCreateNestedManyWithoutUserInput
   userGamePlayLogs?: Prisma.UserGamePlayLogCreateNestedManyWithoutUserInput
+  roadmapVotes?: Prisma.RoadmapVoteCreateNestedManyWithoutUserInput
+  reportsMade?: Prisma.ReportCreateNestedManyWithoutReporterInput
+  reportsAgainst?: Prisma.ReportCreateNestedManyWithoutReportedUserInput
+  reportsHandled?: Prisma.ReportCreateNestedManyWithoutHandlerInput
+  feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutSessionsInput = {
@@ -1706,6 +1844,11 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   followers?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowingInput
   badges?: Prisma.UserBadgeUncheckedCreateNestedManyWithoutUserInput
   userGamePlayLogs?: Prisma.UserGamePlayLogUncheckedCreateNestedManyWithoutUserInput
+  roadmapVotes?: Prisma.RoadmapVoteUncheckedCreateNestedManyWithoutUserInput
+  reportsMade?: Prisma.ReportUncheckedCreateNestedManyWithoutReporterInput
+  reportsAgainst?: Prisma.ReportUncheckedCreateNestedManyWithoutReportedUserInput
+  reportsHandled?: Prisma.ReportUncheckedCreateNestedManyWithoutHandlerInput
+  feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutSessionsInput = {
@@ -1776,6 +1919,11 @@ export type UserUpdateWithoutSessionsInput = {
   followers?: Prisma.UserFollowUpdateManyWithoutFollowingNestedInput
   badges?: Prisma.UserBadgeUpdateManyWithoutUserNestedInput
   userGamePlayLogs?: Prisma.UserGamePlayLogUpdateManyWithoutUserNestedInput
+  roadmapVotes?: Prisma.RoadmapVoteUpdateManyWithoutUserNestedInput
+  reportsMade?: Prisma.ReportUpdateManyWithoutReporterNestedInput
+  reportsAgainst?: Prisma.ReportUpdateManyWithoutReportedUserNestedInput
+  reportsHandled?: Prisma.ReportUpdateManyWithoutHandlerNestedInput
+  feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -1830,6 +1978,11 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   followers?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowingNestedInput
   badges?: Prisma.UserBadgeUncheckedUpdateManyWithoutUserNestedInput
   userGamePlayLogs?: Prisma.UserGamePlayLogUncheckedUpdateManyWithoutUserNestedInput
+  roadmapVotes?: Prisma.RoadmapVoteUncheckedUpdateManyWithoutUserNestedInput
+  reportsMade?: Prisma.ReportUncheckedUpdateManyWithoutReporterNestedInput
+  reportsAgainst?: Prisma.ReportUncheckedUpdateManyWithoutReportedUserNestedInput
+  reportsHandled?: Prisma.ReportUncheckedUpdateManyWithoutHandlerNestedInput
+  feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutGamesInput = {
@@ -1884,6 +2037,11 @@ export type UserCreateWithoutGamesInput = {
   followers?: Prisma.UserFollowCreateNestedManyWithoutFollowingInput
   badges?: Prisma.UserBadgeCreateNestedManyWithoutUserInput
   userGamePlayLogs?: Prisma.UserGamePlayLogCreateNestedManyWithoutUserInput
+  roadmapVotes?: Prisma.RoadmapVoteCreateNestedManyWithoutUserInput
+  reportsMade?: Prisma.ReportCreateNestedManyWithoutReporterInput
+  reportsAgainst?: Prisma.ReportCreateNestedManyWithoutReportedUserInput
+  reportsHandled?: Prisma.ReportCreateNestedManyWithoutHandlerInput
+  feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutGamesInput = {
@@ -1938,6 +2096,11 @@ export type UserUncheckedCreateWithoutGamesInput = {
   followers?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowingInput
   badges?: Prisma.UserBadgeUncheckedCreateNestedManyWithoutUserInput
   userGamePlayLogs?: Prisma.UserGamePlayLogUncheckedCreateNestedManyWithoutUserInput
+  roadmapVotes?: Prisma.RoadmapVoteUncheckedCreateNestedManyWithoutUserInput
+  reportsMade?: Prisma.ReportUncheckedCreateNestedManyWithoutReporterInput
+  reportsAgainst?: Prisma.ReportUncheckedCreateNestedManyWithoutReportedUserInput
+  reportsHandled?: Prisma.ReportUncheckedCreateNestedManyWithoutHandlerInput
+  feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutGamesInput = {
@@ -2008,6 +2171,11 @@ export type UserUpdateWithoutGamesInput = {
   followers?: Prisma.UserFollowUpdateManyWithoutFollowingNestedInput
   badges?: Prisma.UserBadgeUpdateManyWithoutUserNestedInput
   userGamePlayLogs?: Prisma.UserGamePlayLogUpdateManyWithoutUserNestedInput
+  roadmapVotes?: Prisma.RoadmapVoteUpdateManyWithoutUserNestedInput
+  reportsMade?: Prisma.ReportUpdateManyWithoutReporterNestedInput
+  reportsAgainst?: Prisma.ReportUpdateManyWithoutReportedUserNestedInput
+  reportsHandled?: Prisma.ReportUpdateManyWithoutHandlerNestedInput
+  feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutGamesInput = {
@@ -2062,6 +2230,11 @@ export type UserUncheckedUpdateWithoutGamesInput = {
   followers?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowingNestedInput
   badges?: Prisma.UserBadgeUncheckedUpdateManyWithoutUserNestedInput
   userGamePlayLogs?: Prisma.UserGamePlayLogUncheckedUpdateManyWithoutUserNestedInput
+  roadmapVotes?: Prisma.RoadmapVoteUncheckedUpdateManyWithoutUserNestedInput
+  reportsMade?: Prisma.ReportUncheckedUpdateManyWithoutReporterNestedInput
+  reportsAgainst?: Prisma.ReportUncheckedUpdateManyWithoutReportedUserNestedInput
+  reportsHandled?: Prisma.ReportUncheckedUpdateManyWithoutHandlerNestedInput
+  feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutTagsInput = {
@@ -2116,6 +2289,11 @@ export type UserCreateWithoutTagsInput = {
   followers?: Prisma.UserFollowCreateNestedManyWithoutFollowingInput
   badges?: Prisma.UserBadgeCreateNestedManyWithoutUserInput
   userGamePlayLogs?: Prisma.UserGamePlayLogCreateNestedManyWithoutUserInput
+  roadmapVotes?: Prisma.RoadmapVoteCreateNestedManyWithoutUserInput
+  reportsMade?: Prisma.ReportCreateNestedManyWithoutReporterInput
+  reportsAgainst?: Prisma.ReportCreateNestedManyWithoutReportedUserInput
+  reportsHandled?: Prisma.ReportCreateNestedManyWithoutHandlerInput
+  feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutTagsInput = {
@@ -2170,6 +2348,11 @@ export type UserUncheckedCreateWithoutTagsInput = {
   followers?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowingInput
   badges?: Prisma.UserBadgeUncheckedCreateNestedManyWithoutUserInput
   userGamePlayLogs?: Prisma.UserGamePlayLogUncheckedCreateNestedManyWithoutUserInput
+  roadmapVotes?: Prisma.RoadmapVoteUncheckedCreateNestedManyWithoutUserInput
+  reportsMade?: Prisma.ReportUncheckedCreateNestedManyWithoutReporterInput
+  reportsAgainst?: Prisma.ReportUncheckedCreateNestedManyWithoutReportedUserInput
+  reportsHandled?: Prisma.ReportUncheckedCreateNestedManyWithoutHandlerInput
+  feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutTagsInput = {
@@ -2240,6 +2423,11 @@ export type UserUpdateWithoutTagsInput = {
   followers?: Prisma.UserFollowUpdateManyWithoutFollowingNestedInput
   badges?: Prisma.UserBadgeUpdateManyWithoutUserNestedInput
   userGamePlayLogs?: Prisma.UserGamePlayLogUpdateManyWithoutUserNestedInput
+  roadmapVotes?: Prisma.RoadmapVoteUpdateManyWithoutUserNestedInput
+  reportsMade?: Prisma.ReportUpdateManyWithoutReporterNestedInput
+  reportsAgainst?: Prisma.ReportUpdateManyWithoutReportedUserNestedInput
+  reportsHandled?: Prisma.ReportUpdateManyWithoutHandlerNestedInput
+  feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutTagsInput = {
@@ -2294,6 +2482,11 @@ export type UserUncheckedUpdateWithoutTagsInput = {
   followers?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowingNestedInput
   badges?: Prisma.UserBadgeUncheckedUpdateManyWithoutUserNestedInput
   userGamePlayLogs?: Prisma.UserGamePlayLogUncheckedUpdateManyWithoutUserNestedInput
+  roadmapVotes?: Prisma.RoadmapVoteUncheckedUpdateManyWithoutUserNestedInput
+  reportsMade?: Prisma.ReportUncheckedUpdateManyWithoutReporterNestedInput
+  reportsAgainst?: Prisma.ReportUncheckedUpdateManyWithoutReportedUserNestedInput
+  reportsHandled?: Prisma.ReportUncheckedUpdateManyWithoutHandlerNestedInput
+  feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutUserGamePlayLogsInput = {
@@ -2348,6 +2541,11 @@ export type UserCreateWithoutUserGamePlayLogsInput = {
   following?: Prisma.UserFollowCreateNestedManyWithoutFollowerInput
   followers?: Prisma.UserFollowCreateNestedManyWithoutFollowingInput
   badges?: Prisma.UserBadgeCreateNestedManyWithoutUserInput
+  roadmapVotes?: Prisma.RoadmapVoteCreateNestedManyWithoutUserInput
+  reportsMade?: Prisma.ReportCreateNestedManyWithoutReporterInput
+  reportsAgainst?: Prisma.ReportCreateNestedManyWithoutReportedUserInput
+  reportsHandled?: Prisma.ReportCreateNestedManyWithoutHandlerInput
+  feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutUserGamePlayLogsInput = {
@@ -2402,6 +2600,11 @@ export type UserUncheckedCreateWithoutUserGamePlayLogsInput = {
   following?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowerInput
   followers?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowingInput
   badges?: Prisma.UserBadgeUncheckedCreateNestedManyWithoutUserInput
+  roadmapVotes?: Prisma.RoadmapVoteUncheckedCreateNestedManyWithoutUserInput
+  reportsMade?: Prisma.ReportUncheckedCreateNestedManyWithoutReporterInput
+  reportsAgainst?: Prisma.ReportUncheckedCreateNestedManyWithoutReportedUserInput
+  reportsHandled?: Prisma.ReportUncheckedCreateNestedManyWithoutHandlerInput
+  feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutUserGamePlayLogsInput = {
@@ -2472,6 +2675,11 @@ export type UserUpdateWithoutUserGamePlayLogsInput = {
   following?: Prisma.UserFollowUpdateManyWithoutFollowerNestedInput
   followers?: Prisma.UserFollowUpdateManyWithoutFollowingNestedInput
   badges?: Prisma.UserBadgeUpdateManyWithoutUserNestedInput
+  roadmapVotes?: Prisma.RoadmapVoteUpdateManyWithoutUserNestedInput
+  reportsMade?: Prisma.ReportUpdateManyWithoutReporterNestedInput
+  reportsAgainst?: Prisma.ReportUpdateManyWithoutReportedUserNestedInput
+  reportsHandled?: Prisma.ReportUpdateManyWithoutHandlerNestedInput
+  feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutUserGamePlayLogsInput = {
@@ -2526,6 +2734,11 @@ export type UserUncheckedUpdateWithoutUserGamePlayLogsInput = {
   following?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowerNestedInput
   followers?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowingNestedInput
   badges?: Prisma.UserBadgeUncheckedUpdateManyWithoutUserNestedInput
+  roadmapVotes?: Prisma.RoadmapVoteUncheckedUpdateManyWithoutUserNestedInput
+  reportsMade?: Prisma.ReportUncheckedUpdateManyWithoutReporterNestedInput
+  reportsAgainst?: Prisma.ReportUncheckedUpdateManyWithoutReportedUserNestedInput
+  reportsHandled?: Prisma.ReportUncheckedUpdateManyWithoutHandlerNestedInput
+  feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutGameListsInput = {
@@ -2580,6 +2793,11 @@ export type UserCreateWithoutGameListsInput = {
   followers?: Prisma.UserFollowCreateNestedManyWithoutFollowingInput
   badges?: Prisma.UserBadgeCreateNestedManyWithoutUserInput
   userGamePlayLogs?: Prisma.UserGamePlayLogCreateNestedManyWithoutUserInput
+  roadmapVotes?: Prisma.RoadmapVoteCreateNestedManyWithoutUserInput
+  reportsMade?: Prisma.ReportCreateNestedManyWithoutReporterInput
+  reportsAgainst?: Prisma.ReportCreateNestedManyWithoutReportedUserInput
+  reportsHandled?: Prisma.ReportCreateNestedManyWithoutHandlerInput
+  feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutGameListsInput = {
@@ -2634,6 +2852,11 @@ export type UserUncheckedCreateWithoutGameListsInput = {
   followers?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowingInput
   badges?: Prisma.UserBadgeUncheckedCreateNestedManyWithoutUserInput
   userGamePlayLogs?: Prisma.UserGamePlayLogUncheckedCreateNestedManyWithoutUserInput
+  roadmapVotes?: Prisma.RoadmapVoteUncheckedCreateNestedManyWithoutUserInput
+  reportsMade?: Prisma.ReportUncheckedCreateNestedManyWithoutReporterInput
+  reportsAgainst?: Prisma.ReportUncheckedCreateNestedManyWithoutReportedUserInput
+  reportsHandled?: Prisma.ReportUncheckedCreateNestedManyWithoutHandlerInput
+  feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutGameListsInput = {
@@ -2704,6 +2927,11 @@ export type UserUpdateWithoutGameListsInput = {
   followers?: Prisma.UserFollowUpdateManyWithoutFollowingNestedInput
   badges?: Prisma.UserBadgeUpdateManyWithoutUserNestedInput
   userGamePlayLogs?: Prisma.UserGamePlayLogUpdateManyWithoutUserNestedInput
+  roadmapVotes?: Prisma.RoadmapVoteUpdateManyWithoutUserNestedInput
+  reportsMade?: Prisma.ReportUpdateManyWithoutReporterNestedInput
+  reportsAgainst?: Prisma.ReportUpdateManyWithoutReportedUserNestedInput
+  reportsHandled?: Prisma.ReportUpdateManyWithoutHandlerNestedInput
+  feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutGameListsInput = {
@@ -2758,6 +2986,11 @@ export type UserUncheckedUpdateWithoutGameListsInput = {
   followers?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowingNestedInput
   badges?: Prisma.UserBadgeUncheckedUpdateManyWithoutUserNestedInput
   userGamePlayLogs?: Prisma.UserGamePlayLogUncheckedUpdateManyWithoutUserNestedInput
+  roadmapVotes?: Prisma.RoadmapVoteUncheckedUpdateManyWithoutUserNestedInput
+  reportsMade?: Prisma.ReportUncheckedUpdateManyWithoutReporterNestedInput
+  reportsAgainst?: Prisma.ReportUncheckedUpdateManyWithoutReportedUserNestedInput
+  reportsHandled?: Prisma.ReportUncheckedUpdateManyWithoutHandlerNestedInput
+  feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutActivitiesInput = {
@@ -2812,6 +3045,11 @@ export type UserCreateWithoutActivitiesInput = {
   followers?: Prisma.UserFollowCreateNestedManyWithoutFollowingInput
   badges?: Prisma.UserBadgeCreateNestedManyWithoutUserInput
   userGamePlayLogs?: Prisma.UserGamePlayLogCreateNestedManyWithoutUserInput
+  roadmapVotes?: Prisma.RoadmapVoteCreateNestedManyWithoutUserInput
+  reportsMade?: Prisma.ReportCreateNestedManyWithoutReporterInput
+  reportsAgainst?: Prisma.ReportCreateNestedManyWithoutReportedUserInput
+  reportsHandled?: Prisma.ReportCreateNestedManyWithoutHandlerInput
+  feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutActivitiesInput = {
@@ -2866,6 +3104,11 @@ export type UserUncheckedCreateWithoutActivitiesInput = {
   followers?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowingInput
   badges?: Prisma.UserBadgeUncheckedCreateNestedManyWithoutUserInput
   userGamePlayLogs?: Prisma.UserGamePlayLogUncheckedCreateNestedManyWithoutUserInput
+  roadmapVotes?: Prisma.RoadmapVoteUncheckedCreateNestedManyWithoutUserInput
+  reportsMade?: Prisma.ReportUncheckedCreateNestedManyWithoutReporterInput
+  reportsAgainst?: Prisma.ReportUncheckedCreateNestedManyWithoutReportedUserInput
+  reportsHandled?: Prisma.ReportUncheckedCreateNestedManyWithoutHandlerInput
+  feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutActivitiesInput = {
@@ -2936,6 +3179,11 @@ export type UserUpdateWithoutActivitiesInput = {
   followers?: Prisma.UserFollowUpdateManyWithoutFollowingNestedInput
   badges?: Prisma.UserBadgeUpdateManyWithoutUserNestedInput
   userGamePlayLogs?: Prisma.UserGamePlayLogUpdateManyWithoutUserNestedInput
+  roadmapVotes?: Prisma.RoadmapVoteUpdateManyWithoutUserNestedInput
+  reportsMade?: Prisma.ReportUpdateManyWithoutReporterNestedInput
+  reportsAgainst?: Prisma.ReportUpdateManyWithoutReportedUserNestedInput
+  reportsHandled?: Prisma.ReportUpdateManyWithoutHandlerNestedInput
+  feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutActivitiesInput = {
@@ -2990,6 +3238,11 @@ export type UserUncheckedUpdateWithoutActivitiesInput = {
   followers?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowingNestedInput
   badges?: Prisma.UserBadgeUncheckedUpdateManyWithoutUserNestedInput
   userGamePlayLogs?: Prisma.UserGamePlayLogUncheckedUpdateManyWithoutUserNestedInput
+  roadmapVotes?: Prisma.RoadmapVoteUncheckedUpdateManyWithoutUserNestedInput
+  reportsMade?: Prisma.ReportUncheckedUpdateManyWithoutReporterNestedInput
+  reportsAgainst?: Prisma.ReportUncheckedUpdateManyWithoutReportedUserNestedInput
+  reportsHandled?: Prisma.ReportUncheckedUpdateManyWithoutHandlerNestedInput
+  feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutLikesInput = {
@@ -3044,6 +3297,11 @@ export type UserCreateWithoutLikesInput = {
   followers?: Prisma.UserFollowCreateNestedManyWithoutFollowingInput
   badges?: Prisma.UserBadgeCreateNestedManyWithoutUserInput
   userGamePlayLogs?: Prisma.UserGamePlayLogCreateNestedManyWithoutUserInput
+  roadmapVotes?: Prisma.RoadmapVoteCreateNestedManyWithoutUserInput
+  reportsMade?: Prisma.ReportCreateNestedManyWithoutReporterInput
+  reportsAgainst?: Prisma.ReportCreateNestedManyWithoutReportedUserInput
+  reportsHandled?: Prisma.ReportCreateNestedManyWithoutHandlerInput
+  feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutLikesInput = {
@@ -3098,6 +3356,11 @@ export type UserUncheckedCreateWithoutLikesInput = {
   followers?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowingInput
   badges?: Prisma.UserBadgeUncheckedCreateNestedManyWithoutUserInput
   userGamePlayLogs?: Prisma.UserGamePlayLogUncheckedCreateNestedManyWithoutUserInput
+  roadmapVotes?: Prisma.RoadmapVoteUncheckedCreateNestedManyWithoutUserInput
+  reportsMade?: Prisma.ReportUncheckedCreateNestedManyWithoutReporterInput
+  reportsAgainst?: Prisma.ReportUncheckedCreateNestedManyWithoutReportedUserInput
+  reportsHandled?: Prisma.ReportUncheckedCreateNestedManyWithoutHandlerInput
+  feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutLikesInput = {
@@ -3168,6 +3431,11 @@ export type UserUpdateWithoutLikesInput = {
   followers?: Prisma.UserFollowUpdateManyWithoutFollowingNestedInput
   badges?: Prisma.UserBadgeUpdateManyWithoutUserNestedInput
   userGamePlayLogs?: Prisma.UserGamePlayLogUpdateManyWithoutUserNestedInput
+  roadmapVotes?: Prisma.RoadmapVoteUpdateManyWithoutUserNestedInput
+  reportsMade?: Prisma.ReportUpdateManyWithoutReporterNestedInput
+  reportsAgainst?: Prisma.ReportUpdateManyWithoutReportedUserNestedInput
+  reportsHandled?: Prisma.ReportUpdateManyWithoutHandlerNestedInput
+  feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutLikesInput = {
@@ -3222,6 +3490,11 @@ export type UserUncheckedUpdateWithoutLikesInput = {
   followers?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowingNestedInput
   badges?: Prisma.UserBadgeUncheckedUpdateManyWithoutUserNestedInput
   userGamePlayLogs?: Prisma.UserGamePlayLogUncheckedUpdateManyWithoutUserNestedInput
+  roadmapVotes?: Prisma.RoadmapVoteUncheckedUpdateManyWithoutUserNestedInput
+  reportsMade?: Prisma.ReportUncheckedUpdateManyWithoutReporterNestedInput
+  reportsAgainst?: Prisma.ReportUncheckedUpdateManyWithoutReportedUserNestedInput
+  reportsHandled?: Prisma.ReportUncheckedUpdateManyWithoutHandlerNestedInput
+  feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutCommentsInput = {
@@ -3276,6 +3549,11 @@ export type UserCreateWithoutCommentsInput = {
   followers?: Prisma.UserFollowCreateNestedManyWithoutFollowingInput
   badges?: Prisma.UserBadgeCreateNestedManyWithoutUserInput
   userGamePlayLogs?: Prisma.UserGamePlayLogCreateNestedManyWithoutUserInput
+  roadmapVotes?: Prisma.RoadmapVoteCreateNestedManyWithoutUserInput
+  reportsMade?: Prisma.ReportCreateNestedManyWithoutReporterInput
+  reportsAgainst?: Prisma.ReportCreateNestedManyWithoutReportedUserInput
+  reportsHandled?: Prisma.ReportCreateNestedManyWithoutHandlerInput
+  feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutCommentsInput = {
@@ -3330,6 +3608,11 @@ export type UserUncheckedCreateWithoutCommentsInput = {
   followers?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowingInput
   badges?: Prisma.UserBadgeUncheckedCreateNestedManyWithoutUserInput
   userGamePlayLogs?: Prisma.UserGamePlayLogUncheckedCreateNestedManyWithoutUserInput
+  roadmapVotes?: Prisma.RoadmapVoteUncheckedCreateNestedManyWithoutUserInput
+  reportsMade?: Prisma.ReportUncheckedCreateNestedManyWithoutReporterInput
+  reportsAgainst?: Prisma.ReportUncheckedCreateNestedManyWithoutReportedUserInput
+  reportsHandled?: Prisma.ReportUncheckedCreateNestedManyWithoutHandlerInput
+  feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutCommentsInput = {
@@ -3400,6 +3683,11 @@ export type UserUpdateWithoutCommentsInput = {
   followers?: Prisma.UserFollowUpdateManyWithoutFollowingNestedInput
   badges?: Prisma.UserBadgeUpdateManyWithoutUserNestedInput
   userGamePlayLogs?: Prisma.UserGamePlayLogUpdateManyWithoutUserNestedInput
+  roadmapVotes?: Prisma.RoadmapVoteUpdateManyWithoutUserNestedInput
+  reportsMade?: Prisma.ReportUpdateManyWithoutReporterNestedInput
+  reportsAgainst?: Prisma.ReportUpdateManyWithoutReportedUserNestedInput
+  reportsHandled?: Prisma.ReportUpdateManyWithoutHandlerNestedInput
+  feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCommentsInput = {
@@ -3454,6 +3742,11 @@ export type UserUncheckedUpdateWithoutCommentsInput = {
   followers?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowingNestedInput
   badges?: Prisma.UserBadgeUncheckedUpdateManyWithoutUserNestedInput
   userGamePlayLogs?: Prisma.UserGamePlayLogUncheckedUpdateManyWithoutUserNestedInput
+  roadmapVotes?: Prisma.RoadmapVoteUncheckedUpdateManyWithoutUserNestedInput
+  reportsMade?: Prisma.ReportUncheckedUpdateManyWithoutReporterNestedInput
+  reportsAgainst?: Prisma.ReportUncheckedUpdateManyWithoutReportedUserNestedInput
+  reportsHandled?: Prisma.ReportUncheckedUpdateManyWithoutHandlerNestedInput
+  feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutFollowingInput = {
@@ -3508,6 +3801,11 @@ export type UserCreateWithoutFollowingInput = {
   followers?: Prisma.UserFollowCreateNestedManyWithoutFollowingInput
   badges?: Prisma.UserBadgeCreateNestedManyWithoutUserInput
   userGamePlayLogs?: Prisma.UserGamePlayLogCreateNestedManyWithoutUserInput
+  roadmapVotes?: Prisma.RoadmapVoteCreateNestedManyWithoutUserInput
+  reportsMade?: Prisma.ReportCreateNestedManyWithoutReporterInput
+  reportsAgainst?: Prisma.ReportCreateNestedManyWithoutReportedUserInput
+  reportsHandled?: Prisma.ReportCreateNestedManyWithoutHandlerInput
+  feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutFollowingInput = {
@@ -3562,6 +3860,11 @@ export type UserUncheckedCreateWithoutFollowingInput = {
   followers?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowingInput
   badges?: Prisma.UserBadgeUncheckedCreateNestedManyWithoutUserInput
   userGamePlayLogs?: Prisma.UserGamePlayLogUncheckedCreateNestedManyWithoutUserInput
+  roadmapVotes?: Prisma.RoadmapVoteUncheckedCreateNestedManyWithoutUserInput
+  reportsMade?: Prisma.ReportUncheckedCreateNestedManyWithoutReporterInput
+  reportsAgainst?: Prisma.ReportUncheckedCreateNestedManyWithoutReportedUserInput
+  reportsHandled?: Prisma.ReportUncheckedCreateNestedManyWithoutHandlerInput
+  feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutFollowingInput = {
@@ -3621,6 +3924,11 @@ export type UserCreateWithoutFollowersInput = {
   following?: Prisma.UserFollowCreateNestedManyWithoutFollowerInput
   badges?: Prisma.UserBadgeCreateNestedManyWithoutUserInput
   userGamePlayLogs?: Prisma.UserGamePlayLogCreateNestedManyWithoutUserInput
+  roadmapVotes?: Prisma.RoadmapVoteCreateNestedManyWithoutUserInput
+  reportsMade?: Prisma.ReportCreateNestedManyWithoutReporterInput
+  reportsAgainst?: Prisma.ReportCreateNestedManyWithoutReportedUserInput
+  reportsHandled?: Prisma.ReportCreateNestedManyWithoutHandlerInput
+  feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutFollowersInput = {
@@ -3675,6 +3983,11 @@ export type UserUncheckedCreateWithoutFollowersInput = {
   following?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowerInput
   badges?: Prisma.UserBadgeUncheckedCreateNestedManyWithoutUserInput
   userGamePlayLogs?: Prisma.UserGamePlayLogUncheckedCreateNestedManyWithoutUserInput
+  roadmapVotes?: Prisma.RoadmapVoteUncheckedCreateNestedManyWithoutUserInput
+  reportsMade?: Prisma.ReportUncheckedCreateNestedManyWithoutReporterInput
+  reportsAgainst?: Prisma.ReportUncheckedCreateNestedManyWithoutReportedUserInput
+  reportsHandled?: Prisma.ReportUncheckedCreateNestedManyWithoutHandlerInput
+  feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutFollowersInput = {
@@ -3745,6 +4058,11 @@ export type UserUpdateWithoutFollowingInput = {
   followers?: Prisma.UserFollowUpdateManyWithoutFollowingNestedInput
   badges?: Prisma.UserBadgeUpdateManyWithoutUserNestedInput
   userGamePlayLogs?: Prisma.UserGamePlayLogUpdateManyWithoutUserNestedInput
+  roadmapVotes?: Prisma.RoadmapVoteUpdateManyWithoutUserNestedInput
+  reportsMade?: Prisma.ReportUpdateManyWithoutReporterNestedInput
+  reportsAgainst?: Prisma.ReportUpdateManyWithoutReportedUserNestedInput
+  reportsHandled?: Prisma.ReportUpdateManyWithoutHandlerNestedInput
+  feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutFollowingInput = {
@@ -3799,6 +4117,11 @@ export type UserUncheckedUpdateWithoutFollowingInput = {
   followers?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowingNestedInput
   badges?: Prisma.UserBadgeUncheckedUpdateManyWithoutUserNestedInput
   userGamePlayLogs?: Prisma.UserGamePlayLogUncheckedUpdateManyWithoutUserNestedInput
+  roadmapVotes?: Prisma.RoadmapVoteUncheckedUpdateManyWithoutUserNestedInput
+  reportsMade?: Prisma.ReportUncheckedUpdateManyWithoutReporterNestedInput
+  reportsAgainst?: Prisma.ReportUncheckedUpdateManyWithoutReportedUserNestedInput
+  reportsHandled?: Prisma.ReportUncheckedUpdateManyWithoutHandlerNestedInput
+  feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserUpsertWithoutFollowersInput = {
@@ -3864,6 +4187,11 @@ export type UserUpdateWithoutFollowersInput = {
   following?: Prisma.UserFollowUpdateManyWithoutFollowerNestedInput
   badges?: Prisma.UserBadgeUpdateManyWithoutUserNestedInput
   userGamePlayLogs?: Prisma.UserGamePlayLogUpdateManyWithoutUserNestedInput
+  roadmapVotes?: Prisma.RoadmapVoteUpdateManyWithoutUserNestedInput
+  reportsMade?: Prisma.ReportUpdateManyWithoutReporterNestedInput
+  reportsAgainst?: Prisma.ReportUpdateManyWithoutReportedUserNestedInput
+  reportsHandled?: Prisma.ReportUpdateManyWithoutHandlerNestedInput
+  feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutFollowersInput = {
@@ -3918,6 +4246,11 @@ export type UserUncheckedUpdateWithoutFollowersInput = {
   following?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowerNestedInput
   badges?: Prisma.UserBadgeUncheckedUpdateManyWithoutUserNestedInput
   userGamePlayLogs?: Prisma.UserGamePlayLogUncheckedUpdateManyWithoutUserNestedInput
+  roadmapVotes?: Prisma.RoadmapVoteUncheckedUpdateManyWithoutUserNestedInput
+  reportsMade?: Prisma.ReportUncheckedUpdateManyWithoutReporterNestedInput
+  reportsAgainst?: Prisma.ReportUncheckedUpdateManyWithoutReportedUserNestedInput
+  reportsHandled?: Prisma.ReportUncheckedUpdateManyWithoutHandlerNestedInput
+  feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutBadgesInput = {
@@ -3972,6 +4305,11 @@ export type UserCreateWithoutBadgesInput = {
   following?: Prisma.UserFollowCreateNestedManyWithoutFollowerInput
   followers?: Prisma.UserFollowCreateNestedManyWithoutFollowingInput
   userGamePlayLogs?: Prisma.UserGamePlayLogCreateNestedManyWithoutUserInput
+  roadmapVotes?: Prisma.RoadmapVoteCreateNestedManyWithoutUserInput
+  reportsMade?: Prisma.ReportCreateNestedManyWithoutReporterInput
+  reportsAgainst?: Prisma.ReportCreateNestedManyWithoutReportedUserInput
+  reportsHandled?: Prisma.ReportCreateNestedManyWithoutHandlerInput
+  feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutBadgesInput = {
@@ -4026,6 +4364,11 @@ export type UserUncheckedCreateWithoutBadgesInput = {
   following?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowerInput
   followers?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowingInput
   userGamePlayLogs?: Prisma.UserGamePlayLogUncheckedCreateNestedManyWithoutUserInput
+  roadmapVotes?: Prisma.RoadmapVoteUncheckedCreateNestedManyWithoutUserInput
+  reportsMade?: Prisma.ReportUncheckedCreateNestedManyWithoutReporterInput
+  reportsAgainst?: Prisma.ReportUncheckedCreateNestedManyWithoutReportedUserInput
+  reportsHandled?: Prisma.ReportUncheckedCreateNestedManyWithoutHandlerInput
+  feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutBadgesInput = {
@@ -4096,6 +4439,11 @@ export type UserUpdateWithoutBadgesInput = {
   following?: Prisma.UserFollowUpdateManyWithoutFollowerNestedInput
   followers?: Prisma.UserFollowUpdateManyWithoutFollowingNestedInput
   userGamePlayLogs?: Prisma.UserGamePlayLogUpdateManyWithoutUserNestedInput
+  roadmapVotes?: Prisma.RoadmapVoteUpdateManyWithoutUserNestedInput
+  reportsMade?: Prisma.ReportUpdateManyWithoutReporterNestedInput
+  reportsAgainst?: Prisma.ReportUpdateManyWithoutReportedUserNestedInput
+  reportsHandled?: Prisma.ReportUpdateManyWithoutHandlerNestedInput
+  feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutBadgesInput = {
@@ -4150,6 +4498,11 @@ export type UserUncheckedUpdateWithoutBadgesInput = {
   following?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowerNestedInput
   followers?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowingNestedInput
   userGamePlayLogs?: Prisma.UserGamePlayLogUncheckedUpdateManyWithoutUserNestedInput
+  roadmapVotes?: Prisma.RoadmapVoteUncheckedUpdateManyWithoutUserNestedInput
+  reportsMade?: Prisma.ReportUncheckedUpdateManyWithoutReporterNestedInput
+  reportsAgainst?: Prisma.ReportUncheckedUpdateManyWithoutReportedUserNestedInput
+  reportsHandled?: Prisma.ReportUncheckedUpdateManyWithoutHandlerNestedInput
+  feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutNotificationsInput = {
@@ -4204,6 +4557,11 @@ export type UserCreateWithoutNotificationsInput = {
   followers?: Prisma.UserFollowCreateNestedManyWithoutFollowingInput
   badges?: Prisma.UserBadgeCreateNestedManyWithoutUserInput
   userGamePlayLogs?: Prisma.UserGamePlayLogCreateNestedManyWithoutUserInput
+  roadmapVotes?: Prisma.RoadmapVoteCreateNestedManyWithoutUserInput
+  reportsMade?: Prisma.ReportCreateNestedManyWithoutReporterInput
+  reportsAgainst?: Prisma.ReportCreateNestedManyWithoutReportedUserInput
+  reportsHandled?: Prisma.ReportCreateNestedManyWithoutHandlerInput
+  feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -4258,6 +4616,11 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   followers?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowingInput
   badges?: Prisma.UserBadgeUncheckedCreateNestedManyWithoutUserInput
   userGamePlayLogs?: Prisma.UserGamePlayLogUncheckedCreateNestedManyWithoutUserInput
+  roadmapVotes?: Prisma.RoadmapVoteUncheckedCreateNestedManyWithoutUserInput
+  reportsMade?: Prisma.ReportUncheckedCreateNestedManyWithoutReporterInput
+  reportsAgainst?: Prisma.ReportUncheckedCreateNestedManyWithoutReportedUserInput
+  reportsHandled?: Prisma.ReportUncheckedCreateNestedManyWithoutHandlerInput
+  feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -4317,6 +4680,11 @@ export type UserCreateWithoutSentNotificationsInput = {
   followers?: Prisma.UserFollowCreateNestedManyWithoutFollowingInput
   badges?: Prisma.UserBadgeCreateNestedManyWithoutUserInput
   userGamePlayLogs?: Prisma.UserGamePlayLogCreateNestedManyWithoutUserInput
+  roadmapVotes?: Prisma.RoadmapVoteCreateNestedManyWithoutUserInput
+  reportsMade?: Prisma.ReportCreateNestedManyWithoutReporterInput
+  reportsAgainst?: Prisma.ReportCreateNestedManyWithoutReportedUserInput
+  reportsHandled?: Prisma.ReportCreateNestedManyWithoutHandlerInput
+  feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutSentNotificationsInput = {
@@ -4371,6 +4739,11 @@ export type UserUncheckedCreateWithoutSentNotificationsInput = {
   followers?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowingInput
   badges?: Prisma.UserBadgeUncheckedCreateNestedManyWithoutUserInput
   userGamePlayLogs?: Prisma.UserGamePlayLogUncheckedCreateNestedManyWithoutUserInput
+  roadmapVotes?: Prisma.RoadmapVoteUncheckedCreateNestedManyWithoutUserInput
+  reportsMade?: Prisma.ReportUncheckedCreateNestedManyWithoutReporterInput
+  reportsAgainst?: Prisma.ReportUncheckedCreateNestedManyWithoutReportedUserInput
+  reportsHandled?: Prisma.ReportUncheckedCreateNestedManyWithoutHandlerInput
+  feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutSentNotificationsInput = {
@@ -4441,6 +4814,11 @@ export type UserUpdateWithoutNotificationsInput = {
   followers?: Prisma.UserFollowUpdateManyWithoutFollowingNestedInput
   badges?: Prisma.UserBadgeUpdateManyWithoutUserNestedInput
   userGamePlayLogs?: Prisma.UserGamePlayLogUpdateManyWithoutUserNestedInput
+  roadmapVotes?: Prisma.RoadmapVoteUpdateManyWithoutUserNestedInput
+  reportsMade?: Prisma.ReportUpdateManyWithoutReporterNestedInput
+  reportsAgainst?: Prisma.ReportUpdateManyWithoutReportedUserNestedInput
+  reportsHandled?: Prisma.ReportUpdateManyWithoutHandlerNestedInput
+  feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -4495,6 +4873,11 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   followers?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowingNestedInput
   badges?: Prisma.UserBadgeUncheckedUpdateManyWithoutUserNestedInput
   userGamePlayLogs?: Prisma.UserGamePlayLogUncheckedUpdateManyWithoutUserNestedInput
+  roadmapVotes?: Prisma.RoadmapVoteUncheckedUpdateManyWithoutUserNestedInput
+  reportsMade?: Prisma.ReportUncheckedUpdateManyWithoutReporterNestedInput
+  reportsAgainst?: Prisma.ReportUncheckedUpdateManyWithoutReportedUserNestedInput
+  reportsHandled?: Prisma.ReportUncheckedUpdateManyWithoutHandlerNestedInput
+  feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserUpsertWithoutSentNotificationsInput = {
@@ -4560,6 +4943,11 @@ export type UserUpdateWithoutSentNotificationsInput = {
   followers?: Prisma.UserFollowUpdateManyWithoutFollowingNestedInput
   badges?: Prisma.UserBadgeUpdateManyWithoutUserNestedInput
   userGamePlayLogs?: Prisma.UserGamePlayLogUpdateManyWithoutUserNestedInput
+  roadmapVotes?: Prisma.RoadmapVoteUpdateManyWithoutUserNestedInput
+  reportsMade?: Prisma.ReportUpdateManyWithoutReporterNestedInput
+  reportsAgainst?: Prisma.ReportUpdateManyWithoutReportedUserNestedInput
+  reportsHandled?: Prisma.ReportUpdateManyWithoutHandlerNestedInput
+  feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSentNotificationsInput = {
@@ -4614,6 +5002,1271 @@ export type UserUncheckedUpdateWithoutSentNotificationsInput = {
   followers?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowingNestedInput
   badges?: Prisma.UserBadgeUncheckedUpdateManyWithoutUserNestedInput
   userGamePlayLogs?: Prisma.UserGamePlayLogUncheckedUpdateManyWithoutUserNestedInput
+  roadmapVotes?: Prisma.RoadmapVoteUncheckedUpdateManyWithoutUserNestedInput
+  reportsMade?: Prisma.ReportUncheckedUpdateManyWithoutReporterNestedInput
+  reportsAgainst?: Prisma.ReportUncheckedUpdateManyWithoutReportedUserNestedInput
+  reportsHandled?: Prisma.ReportUncheckedUpdateManyWithoutHandlerNestedInput
+  feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutRoadmapVotesInput = {
+  id?: string
+  name?: string | null
+  email?: string | null
+  emailVerified?: Date | string | null
+  passwordHash?: string | null
+  image?: string | null
+  background?: string | null
+  bio?: string | null
+  profileColor?: string | null
+  accentColor?: string | null
+  privacy?: string
+  libraryPrivacy?: string
+  logsPrivacy?: string
+  activityPrivacy?: string
+  playlistPrivacy?: string
+  contactEmail?: string | null
+  website?: string | null
+  socials?: string | null
+  preferences?: string | null
+  widgets?: string | null
+  commentsHidden?: boolean
+  hideCommentsEverywhere?: boolean
+  defaultGameListStatus?: string
+  defaultGameListSort?: string
+  defaultGameListView?: string
+  defaultActivityFilter?: string
+  siteThemeMode?: string
+  siteThemeColor?: string | null
+  siteAccentColor?: string | null
+  notifyCommentReplies?: boolean
+  notifyProfileComments?: boolean
+  notifyLikes?: boolean
+  notifyFollows?: boolean
+  notifyFollowerLists?: boolean
+  notifyBadges?: boolean
+  roles?: Prisma.UserCreaterolesInput | $Enums.UserRole[]
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  games?: Prisma.UserGameEntryCreateNestedManyWithoutUserInput
+  tags?: Prisma.UserTagCreateNestedManyWithoutUserInput
+  gameLists?: Prisma.GameListCreateNestedManyWithoutUserInput
+  likes?: Prisma.LikeCreateNestedManyWithoutUserInput
+  comments?: Prisma.CommentCreateNestedManyWithoutUserInput
+  activities?: Prisma.ActivityCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  sentNotifications?: Prisma.NotificationCreateNestedManyWithoutActorInput
+  following?: Prisma.UserFollowCreateNestedManyWithoutFollowerInput
+  followers?: Prisma.UserFollowCreateNestedManyWithoutFollowingInput
+  badges?: Prisma.UserBadgeCreateNestedManyWithoutUserInput
+  userGamePlayLogs?: Prisma.UserGamePlayLogCreateNestedManyWithoutUserInput
+  reportsMade?: Prisma.ReportCreateNestedManyWithoutReporterInput
+  reportsAgainst?: Prisma.ReportCreateNestedManyWithoutReportedUserInput
+  reportsHandled?: Prisma.ReportCreateNestedManyWithoutHandlerInput
+  feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutRoadmapVotesInput = {
+  id?: string
+  name?: string | null
+  email?: string | null
+  emailVerified?: Date | string | null
+  passwordHash?: string | null
+  image?: string | null
+  background?: string | null
+  bio?: string | null
+  profileColor?: string | null
+  accentColor?: string | null
+  privacy?: string
+  libraryPrivacy?: string
+  logsPrivacy?: string
+  activityPrivacy?: string
+  playlistPrivacy?: string
+  contactEmail?: string | null
+  website?: string | null
+  socials?: string | null
+  preferences?: string | null
+  widgets?: string | null
+  commentsHidden?: boolean
+  hideCommentsEverywhere?: boolean
+  defaultGameListStatus?: string
+  defaultGameListSort?: string
+  defaultGameListView?: string
+  defaultActivityFilter?: string
+  siteThemeMode?: string
+  siteThemeColor?: string | null
+  siteAccentColor?: string | null
+  notifyCommentReplies?: boolean
+  notifyProfileComments?: boolean
+  notifyLikes?: boolean
+  notifyFollows?: boolean
+  notifyFollowerLists?: boolean
+  notifyBadges?: boolean
+  roles?: Prisma.UserCreaterolesInput | $Enums.UserRole[]
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  games?: Prisma.UserGameEntryUncheckedCreateNestedManyWithoutUserInput
+  tags?: Prisma.UserTagUncheckedCreateNestedManyWithoutUserInput
+  gameLists?: Prisma.GameListUncheckedCreateNestedManyWithoutUserInput
+  likes?: Prisma.LikeUncheckedCreateNestedManyWithoutUserInput
+  comments?: Prisma.CommentUncheckedCreateNestedManyWithoutUserInput
+  activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  sentNotifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutActorInput
+  following?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowerInput
+  followers?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowingInput
+  badges?: Prisma.UserBadgeUncheckedCreateNestedManyWithoutUserInput
+  userGamePlayLogs?: Prisma.UserGamePlayLogUncheckedCreateNestedManyWithoutUserInput
+  reportsMade?: Prisma.ReportUncheckedCreateNestedManyWithoutReporterInput
+  reportsAgainst?: Prisma.ReportUncheckedCreateNestedManyWithoutReportedUserInput
+  reportsHandled?: Prisma.ReportUncheckedCreateNestedManyWithoutHandlerInput
+  feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutRoadmapVotesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutRoadmapVotesInput, Prisma.UserUncheckedCreateWithoutRoadmapVotesInput>
+}
+
+export type UserUpsertWithoutRoadmapVotesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutRoadmapVotesInput, Prisma.UserUncheckedUpdateWithoutRoadmapVotesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutRoadmapVotesInput, Prisma.UserUncheckedCreateWithoutRoadmapVotesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutRoadmapVotesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutRoadmapVotesInput, Prisma.UserUncheckedUpdateWithoutRoadmapVotesInput>
+}
+
+export type UserUpdateWithoutRoadmapVotesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  background?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profileColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  accentColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  privacy?: Prisma.StringFieldUpdateOperationsInput | string
+  libraryPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  logsPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  activityPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  playlistPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  contactEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  socials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferences?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  widgets?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  commentsHidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hideCommentsEverywhere?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  defaultGameListStatus?: Prisma.StringFieldUpdateOperationsInput | string
+  defaultGameListSort?: Prisma.StringFieldUpdateOperationsInput | string
+  defaultGameListView?: Prisma.StringFieldUpdateOperationsInput | string
+  defaultActivityFilter?: Prisma.StringFieldUpdateOperationsInput | string
+  siteThemeMode?: Prisma.StringFieldUpdateOperationsInput | string
+  siteThemeColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  siteAccentColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notifyCommentReplies?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyProfileComments?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyLikes?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyFollows?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyFollowerLists?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyBadges?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  roles?: Prisma.UserUpdaterolesInput | $Enums.UserRole[]
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  games?: Prisma.UserGameEntryUpdateManyWithoutUserNestedInput
+  tags?: Prisma.UserTagUpdateManyWithoutUserNestedInput
+  gameLists?: Prisma.GameListUpdateManyWithoutUserNestedInput
+  likes?: Prisma.LikeUpdateManyWithoutUserNestedInput
+  comments?: Prisma.CommentUpdateManyWithoutUserNestedInput
+  activities?: Prisma.ActivityUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  sentNotifications?: Prisma.NotificationUpdateManyWithoutActorNestedInput
+  following?: Prisma.UserFollowUpdateManyWithoutFollowerNestedInput
+  followers?: Prisma.UserFollowUpdateManyWithoutFollowingNestedInput
+  badges?: Prisma.UserBadgeUpdateManyWithoutUserNestedInput
+  userGamePlayLogs?: Prisma.UserGamePlayLogUpdateManyWithoutUserNestedInput
+  reportsMade?: Prisma.ReportUpdateManyWithoutReporterNestedInput
+  reportsAgainst?: Prisma.ReportUpdateManyWithoutReportedUserNestedInput
+  reportsHandled?: Prisma.ReportUpdateManyWithoutHandlerNestedInput
+  feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutRoadmapVotesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  background?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profileColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  accentColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  privacy?: Prisma.StringFieldUpdateOperationsInput | string
+  libraryPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  logsPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  activityPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  playlistPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  contactEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  socials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferences?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  widgets?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  commentsHidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hideCommentsEverywhere?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  defaultGameListStatus?: Prisma.StringFieldUpdateOperationsInput | string
+  defaultGameListSort?: Prisma.StringFieldUpdateOperationsInput | string
+  defaultGameListView?: Prisma.StringFieldUpdateOperationsInput | string
+  defaultActivityFilter?: Prisma.StringFieldUpdateOperationsInput | string
+  siteThemeMode?: Prisma.StringFieldUpdateOperationsInput | string
+  siteThemeColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  siteAccentColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notifyCommentReplies?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyProfileComments?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyLikes?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyFollows?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyFollowerLists?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyBadges?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  roles?: Prisma.UserUpdaterolesInput | $Enums.UserRole[]
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  games?: Prisma.UserGameEntryUncheckedUpdateManyWithoutUserNestedInput
+  tags?: Prisma.UserTagUncheckedUpdateManyWithoutUserNestedInput
+  gameLists?: Prisma.GameListUncheckedUpdateManyWithoutUserNestedInput
+  likes?: Prisma.LikeUncheckedUpdateManyWithoutUserNestedInput
+  comments?: Prisma.CommentUncheckedUpdateManyWithoutUserNestedInput
+  activities?: Prisma.ActivityUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  sentNotifications?: Prisma.NotificationUncheckedUpdateManyWithoutActorNestedInput
+  following?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowerNestedInput
+  followers?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowingNestedInput
+  badges?: Prisma.UserBadgeUncheckedUpdateManyWithoutUserNestedInput
+  userGamePlayLogs?: Prisma.UserGamePlayLogUncheckedUpdateManyWithoutUserNestedInput
+  reportsMade?: Prisma.ReportUncheckedUpdateManyWithoutReporterNestedInput
+  reportsAgainst?: Prisma.ReportUncheckedUpdateManyWithoutReportedUserNestedInput
+  reportsHandled?: Prisma.ReportUncheckedUpdateManyWithoutHandlerNestedInput
+  feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutReportsMadeInput = {
+  id?: string
+  name?: string | null
+  email?: string | null
+  emailVerified?: Date | string | null
+  passwordHash?: string | null
+  image?: string | null
+  background?: string | null
+  bio?: string | null
+  profileColor?: string | null
+  accentColor?: string | null
+  privacy?: string
+  libraryPrivacy?: string
+  logsPrivacy?: string
+  activityPrivacy?: string
+  playlistPrivacy?: string
+  contactEmail?: string | null
+  website?: string | null
+  socials?: string | null
+  preferences?: string | null
+  widgets?: string | null
+  commentsHidden?: boolean
+  hideCommentsEverywhere?: boolean
+  defaultGameListStatus?: string
+  defaultGameListSort?: string
+  defaultGameListView?: string
+  defaultActivityFilter?: string
+  siteThemeMode?: string
+  siteThemeColor?: string | null
+  siteAccentColor?: string | null
+  notifyCommentReplies?: boolean
+  notifyProfileComments?: boolean
+  notifyLikes?: boolean
+  notifyFollows?: boolean
+  notifyFollowerLists?: boolean
+  notifyBadges?: boolean
+  roles?: Prisma.UserCreaterolesInput | $Enums.UserRole[]
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  games?: Prisma.UserGameEntryCreateNestedManyWithoutUserInput
+  tags?: Prisma.UserTagCreateNestedManyWithoutUserInput
+  gameLists?: Prisma.GameListCreateNestedManyWithoutUserInput
+  likes?: Prisma.LikeCreateNestedManyWithoutUserInput
+  comments?: Prisma.CommentCreateNestedManyWithoutUserInput
+  activities?: Prisma.ActivityCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  sentNotifications?: Prisma.NotificationCreateNestedManyWithoutActorInput
+  following?: Prisma.UserFollowCreateNestedManyWithoutFollowerInput
+  followers?: Prisma.UserFollowCreateNestedManyWithoutFollowingInput
+  badges?: Prisma.UserBadgeCreateNestedManyWithoutUserInput
+  userGamePlayLogs?: Prisma.UserGamePlayLogCreateNestedManyWithoutUserInput
+  roadmapVotes?: Prisma.RoadmapVoteCreateNestedManyWithoutUserInput
+  reportsAgainst?: Prisma.ReportCreateNestedManyWithoutReportedUserInput
+  reportsHandled?: Prisma.ReportCreateNestedManyWithoutHandlerInput
+  feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutReportsMadeInput = {
+  id?: string
+  name?: string | null
+  email?: string | null
+  emailVerified?: Date | string | null
+  passwordHash?: string | null
+  image?: string | null
+  background?: string | null
+  bio?: string | null
+  profileColor?: string | null
+  accentColor?: string | null
+  privacy?: string
+  libraryPrivacy?: string
+  logsPrivacy?: string
+  activityPrivacy?: string
+  playlistPrivacy?: string
+  contactEmail?: string | null
+  website?: string | null
+  socials?: string | null
+  preferences?: string | null
+  widgets?: string | null
+  commentsHidden?: boolean
+  hideCommentsEverywhere?: boolean
+  defaultGameListStatus?: string
+  defaultGameListSort?: string
+  defaultGameListView?: string
+  defaultActivityFilter?: string
+  siteThemeMode?: string
+  siteThemeColor?: string | null
+  siteAccentColor?: string | null
+  notifyCommentReplies?: boolean
+  notifyProfileComments?: boolean
+  notifyLikes?: boolean
+  notifyFollows?: boolean
+  notifyFollowerLists?: boolean
+  notifyBadges?: boolean
+  roles?: Prisma.UserCreaterolesInput | $Enums.UserRole[]
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  games?: Prisma.UserGameEntryUncheckedCreateNestedManyWithoutUserInput
+  tags?: Prisma.UserTagUncheckedCreateNestedManyWithoutUserInput
+  gameLists?: Prisma.GameListUncheckedCreateNestedManyWithoutUserInput
+  likes?: Prisma.LikeUncheckedCreateNestedManyWithoutUserInput
+  comments?: Prisma.CommentUncheckedCreateNestedManyWithoutUserInput
+  activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  sentNotifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutActorInput
+  following?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowerInput
+  followers?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowingInput
+  badges?: Prisma.UserBadgeUncheckedCreateNestedManyWithoutUserInput
+  userGamePlayLogs?: Prisma.UserGamePlayLogUncheckedCreateNestedManyWithoutUserInput
+  roadmapVotes?: Prisma.RoadmapVoteUncheckedCreateNestedManyWithoutUserInput
+  reportsAgainst?: Prisma.ReportUncheckedCreateNestedManyWithoutReportedUserInput
+  reportsHandled?: Prisma.ReportUncheckedCreateNestedManyWithoutHandlerInput
+  feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutReportsMadeInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutReportsMadeInput, Prisma.UserUncheckedCreateWithoutReportsMadeInput>
+}
+
+export type UserCreateWithoutReportsAgainstInput = {
+  id?: string
+  name?: string | null
+  email?: string | null
+  emailVerified?: Date | string | null
+  passwordHash?: string | null
+  image?: string | null
+  background?: string | null
+  bio?: string | null
+  profileColor?: string | null
+  accentColor?: string | null
+  privacy?: string
+  libraryPrivacy?: string
+  logsPrivacy?: string
+  activityPrivacy?: string
+  playlistPrivacy?: string
+  contactEmail?: string | null
+  website?: string | null
+  socials?: string | null
+  preferences?: string | null
+  widgets?: string | null
+  commentsHidden?: boolean
+  hideCommentsEverywhere?: boolean
+  defaultGameListStatus?: string
+  defaultGameListSort?: string
+  defaultGameListView?: string
+  defaultActivityFilter?: string
+  siteThemeMode?: string
+  siteThemeColor?: string | null
+  siteAccentColor?: string | null
+  notifyCommentReplies?: boolean
+  notifyProfileComments?: boolean
+  notifyLikes?: boolean
+  notifyFollows?: boolean
+  notifyFollowerLists?: boolean
+  notifyBadges?: boolean
+  roles?: Prisma.UserCreaterolesInput | $Enums.UserRole[]
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  games?: Prisma.UserGameEntryCreateNestedManyWithoutUserInput
+  tags?: Prisma.UserTagCreateNestedManyWithoutUserInput
+  gameLists?: Prisma.GameListCreateNestedManyWithoutUserInput
+  likes?: Prisma.LikeCreateNestedManyWithoutUserInput
+  comments?: Prisma.CommentCreateNestedManyWithoutUserInput
+  activities?: Prisma.ActivityCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  sentNotifications?: Prisma.NotificationCreateNestedManyWithoutActorInput
+  following?: Prisma.UserFollowCreateNestedManyWithoutFollowerInput
+  followers?: Prisma.UserFollowCreateNestedManyWithoutFollowingInput
+  badges?: Prisma.UserBadgeCreateNestedManyWithoutUserInput
+  userGamePlayLogs?: Prisma.UserGamePlayLogCreateNestedManyWithoutUserInput
+  roadmapVotes?: Prisma.RoadmapVoteCreateNestedManyWithoutUserInput
+  reportsMade?: Prisma.ReportCreateNestedManyWithoutReporterInput
+  reportsHandled?: Prisma.ReportCreateNestedManyWithoutHandlerInput
+  feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutReportsAgainstInput = {
+  id?: string
+  name?: string | null
+  email?: string | null
+  emailVerified?: Date | string | null
+  passwordHash?: string | null
+  image?: string | null
+  background?: string | null
+  bio?: string | null
+  profileColor?: string | null
+  accentColor?: string | null
+  privacy?: string
+  libraryPrivacy?: string
+  logsPrivacy?: string
+  activityPrivacy?: string
+  playlistPrivacy?: string
+  contactEmail?: string | null
+  website?: string | null
+  socials?: string | null
+  preferences?: string | null
+  widgets?: string | null
+  commentsHidden?: boolean
+  hideCommentsEverywhere?: boolean
+  defaultGameListStatus?: string
+  defaultGameListSort?: string
+  defaultGameListView?: string
+  defaultActivityFilter?: string
+  siteThemeMode?: string
+  siteThemeColor?: string | null
+  siteAccentColor?: string | null
+  notifyCommentReplies?: boolean
+  notifyProfileComments?: boolean
+  notifyLikes?: boolean
+  notifyFollows?: boolean
+  notifyFollowerLists?: boolean
+  notifyBadges?: boolean
+  roles?: Prisma.UserCreaterolesInput | $Enums.UserRole[]
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  games?: Prisma.UserGameEntryUncheckedCreateNestedManyWithoutUserInput
+  tags?: Prisma.UserTagUncheckedCreateNestedManyWithoutUserInput
+  gameLists?: Prisma.GameListUncheckedCreateNestedManyWithoutUserInput
+  likes?: Prisma.LikeUncheckedCreateNestedManyWithoutUserInput
+  comments?: Prisma.CommentUncheckedCreateNestedManyWithoutUserInput
+  activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  sentNotifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutActorInput
+  following?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowerInput
+  followers?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowingInput
+  badges?: Prisma.UserBadgeUncheckedCreateNestedManyWithoutUserInput
+  userGamePlayLogs?: Prisma.UserGamePlayLogUncheckedCreateNestedManyWithoutUserInput
+  roadmapVotes?: Prisma.RoadmapVoteUncheckedCreateNestedManyWithoutUserInput
+  reportsMade?: Prisma.ReportUncheckedCreateNestedManyWithoutReporterInput
+  reportsHandled?: Prisma.ReportUncheckedCreateNestedManyWithoutHandlerInput
+  feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutReportsAgainstInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutReportsAgainstInput, Prisma.UserUncheckedCreateWithoutReportsAgainstInput>
+}
+
+export type UserCreateWithoutReportsHandledInput = {
+  id?: string
+  name?: string | null
+  email?: string | null
+  emailVerified?: Date | string | null
+  passwordHash?: string | null
+  image?: string | null
+  background?: string | null
+  bio?: string | null
+  profileColor?: string | null
+  accentColor?: string | null
+  privacy?: string
+  libraryPrivacy?: string
+  logsPrivacy?: string
+  activityPrivacy?: string
+  playlistPrivacy?: string
+  contactEmail?: string | null
+  website?: string | null
+  socials?: string | null
+  preferences?: string | null
+  widgets?: string | null
+  commentsHidden?: boolean
+  hideCommentsEverywhere?: boolean
+  defaultGameListStatus?: string
+  defaultGameListSort?: string
+  defaultGameListView?: string
+  defaultActivityFilter?: string
+  siteThemeMode?: string
+  siteThemeColor?: string | null
+  siteAccentColor?: string | null
+  notifyCommentReplies?: boolean
+  notifyProfileComments?: boolean
+  notifyLikes?: boolean
+  notifyFollows?: boolean
+  notifyFollowerLists?: boolean
+  notifyBadges?: boolean
+  roles?: Prisma.UserCreaterolesInput | $Enums.UserRole[]
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  games?: Prisma.UserGameEntryCreateNestedManyWithoutUserInput
+  tags?: Prisma.UserTagCreateNestedManyWithoutUserInput
+  gameLists?: Prisma.GameListCreateNestedManyWithoutUserInput
+  likes?: Prisma.LikeCreateNestedManyWithoutUserInput
+  comments?: Prisma.CommentCreateNestedManyWithoutUserInput
+  activities?: Prisma.ActivityCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  sentNotifications?: Prisma.NotificationCreateNestedManyWithoutActorInput
+  following?: Prisma.UserFollowCreateNestedManyWithoutFollowerInput
+  followers?: Prisma.UserFollowCreateNestedManyWithoutFollowingInput
+  badges?: Prisma.UserBadgeCreateNestedManyWithoutUserInput
+  userGamePlayLogs?: Prisma.UserGamePlayLogCreateNestedManyWithoutUserInput
+  roadmapVotes?: Prisma.RoadmapVoteCreateNestedManyWithoutUserInput
+  reportsMade?: Prisma.ReportCreateNestedManyWithoutReporterInput
+  reportsAgainst?: Prisma.ReportCreateNestedManyWithoutReportedUserInput
+  feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutReportsHandledInput = {
+  id?: string
+  name?: string | null
+  email?: string | null
+  emailVerified?: Date | string | null
+  passwordHash?: string | null
+  image?: string | null
+  background?: string | null
+  bio?: string | null
+  profileColor?: string | null
+  accentColor?: string | null
+  privacy?: string
+  libraryPrivacy?: string
+  logsPrivacy?: string
+  activityPrivacy?: string
+  playlistPrivacy?: string
+  contactEmail?: string | null
+  website?: string | null
+  socials?: string | null
+  preferences?: string | null
+  widgets?: string | null
+  commentsHidden?: boolean
+  hideCommentsEverywhere?: boolean
+  defaultGameListStatus?: string
+  defaultGameListSort?: string
+  defaultGameListView?: string
+  defaultActivityFilter?: string
+  siteThemeMode?: string
+  siteThemeColor?: string | null
+  siteAccentColor?: string | null
+  notifyCommentReplies?: boolean
+  notifyProfileComments?: boolean
+  notifyLikes?: boolean
+  notifyFollows?: boolean
+  notifyFollowerLists?: boolean
+  notifyBadges?: boolean
+  roles?: Prisma.UserCreaterolesInput | $Enums.UserRole[]
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  games?: Prisma.UserGameEntryUncheckedCreateNestedManyWithoutUserInput
+  tags?: Prisma.UserTagUncheckedCreateNestedManyWithoutUserInput
+  gameLists?: Prisma.GameListUncheckedCreateNestedManyWithoutUserInput
+  likes?: Prisma.LikeUncheckedCreateNestedManyWithoutUserInput
+  comments?: Prisma.CommentUncheckedCreateNestedManyWithoutUserInput
+  activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  sentNotifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutActorInput
+  following?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowerInput
+  followers?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowingInput
+  badges?: Prisma.UserBadgeUncheckedCreateNestedManyWithoutUserInput
+  userGamePlayLogs?: Prisma.UserGamePlayLogUncheckedCreateNestedManyWithoutUserInput
+  roadmapVotes?: Prisma.RoadmapVoteUncheckedCreateNestedManyWithoutUserInput
+  reportsMade?: Prisma.ReportUncheckedCreateNestedManyWithoutReporterInput
+  reportsAgainst?: Prisma.ReportUncheckedCreateNestedManyWithoutReportedUserInput
+  feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutReportsHandledInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutReportsHandledInput, Prisma.UserUncheckedCreateWithoutReportsHandledInput>
+}
+
+export type UserUpsertWithoutReportsMadeInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutReportsMadeInput, Prisma.UserUncheckedUpdateWithoutReportsMadeInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutReportsMadeInput, Prisma.UserUncheckedCreateWithoutReportsMadeInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutReportsMadeInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutReportsMadeInput, Prisma.UserUncheckedUpdateWithoutReportsMadeInput>
+}
+
+export type UserUpdateWithoutReportsMadeInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  background?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profileColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  accentColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  privacy?: Prisma.StringFieldUpdateOperationsInput | string
+  libraryPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  logsPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  activityPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  playlistPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  contactEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  socials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferences?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  widgets?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  commentsHidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hideCommentsEverywhere?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  defaultGameListStatus?: Prisma.StringFieldUpdateOperationsInput | string
+  defaultGameListSort?: Prisma.StringFieldUpdateOperationsInput | string
+  defaultGameListView?: Prisma.StringFieldUpdateOperationsInput | string
+  defaultActivityFilter?: Prisma.StringFieldUpdateOperationsInput | string
+  siteThemeMode?: Prisma.StringFieldUpdateOperationsInput | string
+  siteThemeColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  siteAccentColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notifyCommentReplies?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyProfileComments?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyLikes?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyFollows?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyFollowerLists?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyBadges?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  roles?: Prisma.UserUpdaterolesInput | $Enums.UserRole[]
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  games?: Prisma.UserGameEntryUpdateManyWithoutUserNestedInput
+  tags?: Prisma.UserTagUpdateManyWithoutUserNestedInput
+  gameLists?: Prisma.GameListUpdateManyWithoutUserNestedInput
+  likes?: Prisma.LikeUpdateManyWithoutUserNestedInput
+  comments?: Prisma.CommentUpdateManyWithoutUserNestedInput
+  activities?: Prisma.ActivityUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  sentNotifications?: Prisma.NotificationUpdateManyWithoutActorNestedInput
+  following?: Prisma.UserFollowUpdateManyWithoutFollowerNestedInput
+  followers?: Prisma.UserFollowUpdateManyWithoutFollowingNestedInput
+  badges?: Prisma.UserBadgeUpdateManyWithoutUserNestedInput
+  userGamePlayLogs?: Prisma.UserGamePlayLogUpdateManyWithoutUserNestedInput
+  roadmapVotes?: Prisma.RoadmapVoteUpdateManyWithoutUserNestedInput
+  reportsAgainst?: Prisma.ReportUpdateManyWithoutReportedUserNestedInput
+  reportsHandled?: Prisma.ReportUpdateManyWithoutHandlerNestedInput
+  feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutReportsMadeInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  background?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profileColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  accentColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  privacy?: Prisma.StringFieldUpdateOperationsInput | string
+  libraryPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  logsPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  activityPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  playlistPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  contactEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  socials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferences?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  widgets?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  commentsHidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hideCommentsEverywhere?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  defaultGameListStatus?: Prisma.StringFieldUpdateOperationsInput | string
+  defaultGameListSort?: Prisma.StringFieldUpdateOperationsInput | string
+  defaultGameListView?: Prisma.StringFieldUpdateOperationsInput | string
+  defaultActivityFilter?: Prisma.StringFieldUpdateOperationsInput | string
+  siteThemeMode?: Prisma.StringFieldUpdateOperationsInput | string
+  siteThemeColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  siteAccentColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notifyCommentReplies?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyProfileComments?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyLikes?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyFollows?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyFollowerLists?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyBadges?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  roles?: Prisma.UserUpdaterolesInput | $Enums.UserRole[]
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  games?: Prisma.UserGameEntryUncheckedUpdateManyWithoutUserNestedInput
+  tags?: Prisma.UserTagUncheckedUpdateManyWithoutUserNestedInput
+  gameLists?: Prisma.GameListUncheckedUpdateManyWithoutUserNestedInput
+  likes?: Prisma.LikeUncheckedUpdateManyWithoutUserNestedInput
+  comments?: Prisma.CommentUncheckedUpdateManyWithoutUserNestedInput
+  activities?: Prisma.ActivityUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  sentNotifications?: Prisma.NotificationUncheckedUpdateManyWithoutActorNestedInput
+  following?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowerNestedInput
+  followers?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowingNestedInput
+  badges?: Prisma.UserBadgeUncheckedUpdateManyWithoutUserNestedInput
+  userGamePlayLogs?: Prisma.UserGamePlayLogUncheckedUpdateManyWithoutUserNestedInput
+  roadmapVotes?: Prisma.RoadmapVoteUncheckedUpdateManyWithoutUserNestedInput
+  reportsAgainst?: Prisma.ReportUncheckedUpdateManyWithoutReportedUserNestedInput
+  reportsHandled?: Prisma.ReportUncheckedUpdateManyWithoutHandlerNestedInput
+  feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserUpsertWithoutReportsAgainstInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutReportsAgainstInput, Prisma.UserUncheckedUpdateWithoutReportsAgainstInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutReportsAgainstInput, Prisma.UserUncheckedCreateWithoutReportsAgainstInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutReportsAgainstInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutReportsAgainstInput, Prisma.UserUncheckedUpdateWithoutReportsAgainstInput>
+}
+
+export type UserUpdateWithoutReportsAgainstInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  background?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profileColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  accentColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  privacy?: Prisma.StringFieldUpdateOperationsInput | string
+  libraryPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  logsPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  activityPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  playlistPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  contactEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  socials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferences?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  widgets?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  commentsHidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hideCommentsEverywhere?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  defaultGameListStatus?: Prisma.StringFieldUpdateOperationsInput | string
+  defaultGameListSort?: Prisma.StringFieldUpdateOperationsInput | string
+  defaultGameListView?: Prisma.StringFieldUpdateOperationsInput | string
+  defaultActivityFilter?: Prisma.StringFieldUpdateOperationsInput | string
+  siteThemeMode?: Prisma.StringFieldUpdateOperationsInput | string
+  siteThemeColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  siteAccentColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notifyCommentReplies?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyProfileComments?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyLikes?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyFollows?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyFollowerLists?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyBadges?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  roles?: Prisma.UserUpdaterolesInput | $Enums.UserRole[]
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  games?: Prisma.UserGameEntryUpdateManyWithoutUserNestedInput
+  tags?: Prisma.UserTagUpdateManyWithoutUserNestedInput
+  gameLists?: Prisma.GameListUpdateManyWithoutUserNestedInput
+  likes?: Prisma.LikeUpdateManyWithoutUserNestedInput
+  comments?: Prisma.CommentUpdateManyWithoutUserNestedInput
+  activities?: Prisma.ActivityUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  sentNotifications?: Prisma.NotificationUpdateManyWithoutActorNestedInput
+  following?: Prisma.UserFollowUpdateManyWithoutFollowerNestedInput
+  followers?: Prisma.UserFollowUpdateManyWithoutFollowingNestedInput
+  badges?: Prisma.UserBadgeUpdateManyWithoutUserNestedInput
+  userGamePlayLogs?: Prisma.UserGamePlayLogUpdateManyWithoutUserNestedInput
+  roadmapVotes?: Prisma.RoadmapVoteUpdateManyWithoutUserNestedInput
+  reportsMade?: Prisma.ReportUpdateManyWithoutReporterNestedInput
+  reportsHandled?: Prisma.ReportUpdateManyWithoutHandlerNestedInput
+  feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutReportsAgainstInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  background?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profileColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  accentColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  privacy?: Prisma.StringFieldUpdateOperationsInput | string
+  libraryPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  logsPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  activityPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  playlistPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  contactEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  socials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferences?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  widgets?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  commentsHidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hideCommentsEverywhere?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  defaultGameListStatus?: Prisma.StringFieldUpdateOperationsInput | string
+  defaultGameListSort?: Prisma.StringFieldUpdateOperationsInput | string
+  defaultGameListView?: Prisma.StringFieldUpdateOperationsInput | string
+  defaultActivityFilter?: Prisma.StringFieldUpdateOperationsInput | string
+  siteThemeMode?: Prisma.StringFieldUpdateOperationsInput | string
+  siteThemeColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  siteAccentColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notifyCommentReplies?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyProfileComments?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyLikes?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyFollows?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyFollowerLists?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyBadges?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  roles?: Prisma.UserUpdaterolesInput | $Enums.UserRole[]
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  games?: Prisma.UserGameEntryUncheckedUpdateManyWithoutUserNestedInput
+  tags?: Prisma.UserTagUncheckedUpdateManyWithoutUserNestedInput
+  gameLists?: Prisma.GameListUncheckedUpdateManyWithoutUserNestedInput
+  likes?: Prisma.LikeUncheckedUpdateManyWithoutUserNestedInput
+  comments?: Prisma.CommentUncheckedUpdateManyWithoutUserNestedInput
+  activities?: Prisma.ActivityUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  sentNotifications?: Prisma.NotificationUncheckedUpdateManyWithoutActorNestedInput
+  following?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowerNestedInput
+  followers?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowingNestedInput
+  badges?: Prisma.UserBadgeUncheckedUpdateManyWithoutUserNestedInput
+  userGamePlayLogs?: Prisma.UserGamePlayLogUncheckedUpdateManyWithoutUserNestedInput
+  roadmapVotes?: Prisma.RoadmapVoteUncheckedUpdateManyWithoutUserNestedInput
+  reportsMade?: Prisma.ReportUncheckedUpdateManyWithoutReporterNestedInput
+  reportsHandled?: Prisma.ReportUncheckedUpdateManyWithoutHandlerNestedInput
+  feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserUpsertWithoutReportsHandledInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutReportsHandledInput, Prisma.UserUncheckedUpdateWithoutReportsHandledInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutReportsHandledInput, Prisma.UserUncheckedCreateWithoutReportsHandledInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutReportsHandledInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutReportsHandledInput, Prisma.UserUncheckedUpdateWithoutReportsHandledInput>
+}
+
+export type UserUpdateWithoutReportsHandledInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  background?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profileColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  accentColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  privacy?: Prisma.StringFieldUpdateOperationsInput | string
+  libraryPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  logsPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  activityPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  playlistPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  contactEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  socials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferences?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  widgets?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  commentsHidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hideCommentsEverywhere?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  defaultGameListStatus?: Prisma.StringFieldUpdateOperationsInput | string
+  defaultGameListSort?: Prisma.StringFieldUpdateOperationsInput | string
+  defaultGameListView?: Prisma.StringFieldUpdateOperationsInput | string
+  defaultActivityFilter?: Prisma.StringFieldUpdateOperationsInput | string
+  siteThemeMode?: Prisma.StringFieldUpdateOperationsInput | string
+  siteThemeColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  siteAccentColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notifyCommentReplies?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyProfileComments?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyLikes?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyFollows?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyFollowerLists?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyBadges?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  roles?: Prisma.UserUpdaterolesInput | $Enums.UserRole[]
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  games?: Prisma.UserGameEntryUpdateManyWithoutUserNestedInput
+  tags?: Prisma.UserTagUpdateManyWithoutUserNestedInput
+  gameLists?: Prisma.GameListUpdateManyWithoutUserNestedInput
+  likes?: Prisma.LikeUpdateManyWithoutUserNestedInput
+  comments?: Prisma.CommentUpdateManyWithoutUserNestedInput
+  activities?: Prisma.ActivityUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  sentNotifications?: Prisma.NotificationUpdateManyWithoutActorNestedInput
+  following?: Prisma.UserFollowUpdateManyWithoutFollowerNestedInput
+  followers?: Prisma.UserFollowUpdateManyWithoutFollowingNestedInput
+  badges?: Prisma.UserBadgeUpdateManyWithoutUserNestedInput
+  userGamePlayLogs?: Prisma.UserGamePlayLogUpdateManyWithoutUserNestedInput
+  roadmapVotes?: Prisma.RoadmapVoteUpdateManyWithoutUserNestedInput
+  reportsMade?: Prisma.ReportUpdateManyWithoutReporterNestedInput
+  reportsAgainst?: Prisma.ReportUpdateManyWithoutReportedUserNestedInput
+  feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutReportsHandledInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  background?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profileColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  accentColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  privacy?: Prisma.StringFieldUpdateOperationsInput | string
+  libraryPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  logsPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  activityPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  playlistPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  contactEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  socials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferences?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  widgets?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  commentsHidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hideCommentsEverywhere?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  defaultGameListStatus?: Prisma.StringFieldUpdateOperationsInput | string
+  defaultGameListSort?: Prisma.StringFieldUpdateOperationsInput | string
+  defaultGameListView?: Prisma.StringFieldUpdateOperationsInput | string
+  defaultActivityFilter?: Prisma.StringFieldUpdateOperationsInput | string
+  siteThemeMode?: Prisma.StringFieldUpdateOperationsInput | string
+  siteThemeColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  siteAccentColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notifyCommentReplies?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyProfileComments?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyLikes?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyFollows?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyFollowerLists?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyBadges?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  roles?: Prisma.UserUpdaterolesInput | $Enums.UserRole[]
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  games?: Prisma.UserGameEntryUncheckedUpdateManyWithoutUserNestedInput
+  tags?: Prisma.UserTagUncheckedUpdateManyWithoutUserNestedInput
+  gameLists?: Prisma.GameListUncheckedUpdateManyWithoutUserNestedInput
+  likes?: Prisma.LikeUncheckedUpdateManyWithoutUserNestedInput
+  comments?: Prisma.CommentUncheckedUpdateManyWithoutUserNestedInput
+  activities?: Prisma.ActivityUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  sentNotifications?: Prisma.NotificationUncheckedUpdateManyWithoutActorNestedInput
+  following?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowerNestedInput
+  followers?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowingNestedInput
+  badges?: Prisma.UserBadgeUncheckedUpdateManyWithoutUserNestedInput
+  userGamePlayLogs?: Prisma.UserGamePlayLogUncheckedUpdateManyWithoutUserNestedInput
+  roadmapVotes?: Prisma.RoadmapVoteUncheckedUpdateManyWithoutUserNestedInput
+  reportsMade?: Prisma.ReportUncheckedUpdateManyWithoutReporterNestedInput
+  reportsAgainst?: Prisma.ReportUncheckedUpdateManyWithoutReportedUserNestedInput
+  feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutFeedbackInput = {
+  id?: string
+  name?: string | null
+  email?: string | null
+  emailVerified?: Date | string | null
+  passwordHash?: string | null
+  image?: string | null
+  background?: string | null
+  bio?: string | null
+  profileColor?: string | null
+  accentColor?: string | null
+  privacy?: string
+  libraryPrivacy?: string
+  logsPrivacy?: string
+  activityPrivacy?: string
+  playlistPrivacy?: string
+  contactEmail?: string | null
+  website?: string | null
+  socials?: string | null
+  preferences?: string | null
+  widgets?: string | null
+  commentsHidden?: boolean
+  hideCommentsEverywhere?: boolean
+  defaultGameListStatus?: string
+  defaultGameListSort?: string
+  defaultGameListView?: string
+  defaultActivityFilter?: string
+  siteThemeMode?: string
+  siteThemeColor?: string | null
+  siteAccentColor?: string | null
+  notifyCommentReplies?: boolean
+  notifyProfileComments?: boolean
+  notifyLikes?: boolean
+  notifyFollows?: boolean
+  notifyFollowerLists?: boolean
+  notifyBadges?: boolean
+  roles?: Prisma.UserCreaterolesInput | $Enums.UserRole[]
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  games?: Prisma.UserGameEntryCreateNestedManyWithoutUserInput
+  tags?: Prisma.UserTagCreateNestedManyWithoutUserInput
+  gameLists?: Prisma.GameListCreateNestedManyWithoutUserInput
+  likes?: Prisma.LikeCreateNestedManyWithoutUserInput
+  comments?: Prisma.CommentCreateNestedManyWithoutUserInput
+  activities?: Prisma.ActivityCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  sentNotifications?: Prisma.NotificationCreateNestedManyWithoutActorInput
+  following?: Prisma.UserFollowCreateNestedManyWithoutFollowerInput
+  followers?: Prisma.UserFollowCreateNestedManyWithoutFollowingInput
+  badges?: Prisma.UserBadgeCreateNestedManyWithoutUserInput
+  userGamePlayLogs?: Prisma.UserGamePlayLogCreateNestedManyWithoutUserInput
+  roadmapVotes?: Prisma.RoadmapVoteCreateNestedManyWithoutUserInput
+  reportsMade?: Prisma.ReportCreateNestedManyWithoutReporterInput
+  reportsAgainst?: Prisma.ReportCreateNestedManyWithoutReportedUserInput
+  reportsHandled?: Prisma.ReportCreateNestedManyWithoutHandlerInput
+}
+
+export type UserUncheckedCreateWithoutFeedbackInput = {
+  id?: string
+  name?: string | null
+  email?: string | null
+  emailVerified?: Date | string | null
+  passwordHash?: string | null
+  image?: string | null
+  background?: string | null
+  bio?: string | null
+  profileColor?: string | null
+  accentColor?: string | null
+  privacy?: string
+  libraryPrivacy?: string
+  logsPrivacy?: string
+  activityPrivacy?: string
+  playlistPrivacy?: string
+  contactEmail?: string | null
+  website?: string | null
+  socials?: string | null
+  preferences?: string | null
+  widgets?: string | null
+  commentsHidden?: boolean
+  hideCommentsEverywhere?: boolean
+  defaultGameListStatus?: string
+  defaultGameListSort?: string
+  defaultGameListView?: string
+  defaultActivityFilter?: string
+  siteThemeMode?: string
+  siteThemeColor?: string | null
+  siteAccentColor?: string | null
+  notifyCommentReplies?: boolean
+  notifyProfileComments?: boolean
+  notifyLikes?: boolean
+  notifyFollows?: boolean
+  notifyFollowerLists?: boolean
+  notifyBadges?: boolean
+  roles?: Prisma.UserCreaterolesInput | $Enums.UserRole[]
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  games?: Prisma.UserGameEntryUncheckedCreateNestedManyWithoutUserInput
+  tags?: Prisma.UserTagUncheckedCreateNestedManyWithoutUserInput
+  gameLists?: Prisma.GameListUncheckedCreateNestedManyWithoutUserInput
+  likes?: Prisma.LikeUncheckedCreateNestedManyWithoutUserInput
+  comments?: Prisma.CommentUncheckedCreateNestedManyWithoutUserInput
+  activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  sentNotifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutActorInput
+  following?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowerInput
+  followers?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowingInput
+  badges?: Prisma.UserBadgeUncheckedCreateNestedManyWithoutUserInput
+  userGamePlayLogs?: Prisma.UserGamePlayLogUncheckedCreateNestedManyWithoutUserInput
+  roadmapVotes?: Prisma.RoadmapVoteUncheckedCreateNestedManyWithoutUserInput
+  reportsMade?: Prisma.ReportUncheckedCreateNestedManyWithoutReporterInput
+  reportsAgainst?: Prisma.ReportUncheckedCreateNestedManyWithoutReportedUserInput
+  reportsHandled?: Prisma.ReportUncheckedCreateNestedManyWithoutHandlerInput
+}
+
+export type UserCreateOrConnectWithoutFeedbackInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutFeedbackInput, Prisma.UserUncheckedCreateWithoutFeedbackInput>
+}
+
+export type UserUpsertWithoutFeedbackInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutFeedbackInput, Prisma.UserUncheckedUpdateWithoutFeedbackInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutFeedbackInput, Prisma.UserUncheckedCreateWithoutFeedbackInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutFeedbackInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutFeedbackInput, Prisma.UserUncheckedUpdateWithoutFeedbackInput>
+}
+
+export type UserUpdateWithoutFeedbackInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  background?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profileColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  accentColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  privacy?: Prisma.StringFieldUpdateOperationsInput | string
+  libraryPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  logsPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  activityPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  playlistPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  contactEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  socials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferences?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  widgets?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  commentsHidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hideCommentsEverywhere?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  defaultGameListStatus?: Prisma.StringFieldUpdateOperationsInput | string
+  defaultGameListSort?: Prisma.StringFieldUpdateOperationsInput | string
+  defaultGameListView?: Prisma.StringFieldUpdateOperationsInput | string
+  defaultActivityFilter?: Prisma.StringFieldUpdateOperationsInput | string
+  siteThemeMode?: Prisma.StringFieldUpdateOperationsInput | string
+  siteThemeColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  siteAccentColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notifyCommentReplies?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyProfileComments?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyLikes?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyFollows?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyFollowerLists?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyBadges?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  roles?: Prisma.UserUpdaterolesInput | $Enums.UserRole[]
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  games?: Prisma.UserGameEntryUpdateManyWithoutUserNestedInput
+  tags?: Prisma.UserTagUpdateManyWithoutUserNestedInput
+  gameLists?: Prisma.GameListUpdateManyWithoutUserNestedInput
+  likes?: Prisma.LikeUpdateManyWithoutUserNestedInput
+  comments?: Prisma.CommentUpdateManyWithoutUserNestedInput
+  activities?: Prisma.ActivityUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  sentNotifications?: Prisma.NotificationUpdateManyWithoutActorNestedInput
+  following?: Prisma.UserFollowUpdateManyWithoutFollowerNestedInput
+  followers?: Prisma.UserFollowUpdateManyWithoutFollowingNestedInput
+  badges?: Prisma.UserBadgeUpdateManyWithoutUserNestedInput
+  userGamePlayLogs?: Prisma.UserGamePlayLogUpdateManyWithoutUserNestedInput
+  roadmapVotes?: Prisma.RoadmapVoteUpdateManyWithoutUserNestedInput
+  reportsMade?: Prisma.ReportUpdateManyWithoutReporterNestedInput
+  reportsAgainst?: Prisma.ReportUpdateManyWithoutReportedUserNestedInput
+  reportsHandled?: Prisma.ReportUpdateManyWithoutHandlerNestedInput
+}
+
+export type UserUncheckedUpdateWithoutFeedbackInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  background?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profileColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  accentColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  privacy?: Prisma.StringFieldUpdateOperationsInput | string
+  libraryPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  logsPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  activityPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  playlistPrivacy?: Prisma.StringFieldUpdateOperationsInput | string
+  contactEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  socials?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferences?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  widgets?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  commentsHidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hideCommentsEverywhere?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  defaultGameListStatus?: Prisma.StringFieldUpdateOperationsInput | string
+  defaultGameListSort?: Prisma.StringFieldUpdateOperationsInput | string
+  defaultGameListView?: Prisma.StringFieldUpdateOperationsInput | string
+  defaultActivityFilter?: Prisma.StringFieldUpdateOperationsInput | string
+  siteThemeMode?: Prisma.StringFieldUpdateOperationsInput | string
+  siteThemeColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  siteAccentColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notifyCommentReplies?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyProfileComments?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyLikes?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyFollows?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyFollowerLists?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyBadges?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  roles?: Prisma.UserUpdaterolesInput | $Enums.UserRole[]
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  games?: Prisma.UserGameEntryUncheckedUpdateManyWithoutUserNestedInput
+  tags?: Prisma.UserTagUncheckedUpdateManyWithoutUserNestedInput
+  gameLists?: Prisma.GameListUncheckedUpdateManyWithoutUserNestedInput
+  likes?: Prisma.LikeUncheckedUpdateManyWithoutUserNestedInput
+  comments?: Prisma.CommentUncheckedUpdateManyWithoutUserNestedInput
+  activities?: Prisma.ActivityUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  sentNotifications?: Prisma.NotificationUncheckedUpdateManyWithoutActorNestedInput
+  following?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowerNestedInput
+  followers?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowingNestedInput
+  badges?: Prisma.UserBadgeUncheckedUpdateManyWithoutUserNestedInput
+  userGamePlayLogs?: Prisma.UserGamePlayLogUncheckedUpdateManyWithoutUserNestedInput
+  roadmapVotes?: Prisma.RoadmapVoteUncheckedUpdateManyWithoutUserNestedInput
+  reportsMade?: Prisma.ReportUncheckedUpdateManyWithoutReporterNestedInput
+  reportsAgainst?: Prisma.ReportUncheckedUpdateManyWithoutReportedUserNestedInput
+  reportsHandled?: Prisma.ReportUncheckedUpdateManyWithoutHandlerNestedInput
 }
 
 
@@ -4636,6 +6289,11 @@ export type UserCountOutputType = {
   followers: number
   badges: number
   userGamePlayLogs: number
+  roadmapVotes: number
+  reportsMade: number
+  reportsAgainst: number
+  reportsHandled: number
+  feedback: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -4653,6 +6311,11 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   followers?: boolean | UserCountOutputTypeCountFollowersArgs
   badges?: boolean | UserCountOutputTypeCountBadgesArgs
   userGamePlayLogs?: boolean | UserCountOutputTypeCountUserGamePlayLogsArgs
+  roadmapVotes?: boolean | UserCountOutputTypeCountRoadmapVotesArgs
+  reportsMade?: boolean | UserCountOutputTypeCountReportsMadeArgs
+  reportsAgainst?: boolean | UserCountOutputTypeCountReportsAgainstArgs
+  reportsHandled?: boolean | UserCountOutputTypeCountReportsHandledArgs
+  feedback?: boolean | UserCountOutputTypeCountFeedbackArgs
 }
 
 /**
@@ -4763,6 +6426,41 @@ export type UserCountOutputTypeCountUserGamePlayLogsArgs<ExtArgs extends runtime
   where?: Prisma.UserGamePlayLogWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountRoadmapVotesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.RoadmapVoteWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountReportsMadeArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ReportWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountReportsAgainstArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ReportWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountReportsHandledArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ReportWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountFeedbackArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.FeedbackWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -4817,6 +6515,11 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   followers?: boolean | Prisma.User$followersArgs<ExtArgs>
   badges?: boolean | Prisma.User$badgesArgs<ExtArgs>
   userGamePlayLogs?: boolean | Prisma.User$userGamePlayLogsArgs<ExtArgs>
+  roadmapVotes?: boolean | Prisma.User$roadmapVotesArgs<ExtArgs>
+  reportsMade?: boolean | Prisma.User$reportsMadeArgs<ExtArgs>
+  reportsAgainst?: boolean | Prisma.User$reportsAgainstArgs<ExtArgs>
+  reportsHandled?: boolean | Prisma.User$reportsHandledArgs<ExtArgs>
+  feedback?: boolean | Prisma.User$feedbackArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -4959,6 +6662,11 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   followers?: boolean | Prisma.User$followersArgs<ExtArgs>
   badges?: boolean | Prisma.User$badgesArgs<ExtArgs>
   userGamePlayLogs?: boolean | Prisma.User$userGamePlayLogsArgs<ExtArgs>
+  roadmapVotes?: boolean | Prisma.User$roadmapVotesArgs<ExtArgs>
+  reportsMade?: boolean | Prisma.User$reportsMadeArgs<ExtArgs>
+  reportsAgainst?: boolean | Prisma.User$reportsAgainstArgs<ExtArgs>
+  reportsHandled?: boolean | Prisma.User$reportsHandledArgs<ExtArgs>
+  feedback?: boolean | Prisma.User$feedbackArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -4981,6 +6689,11 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     followers: Prisma.$UserFollowPayload<ExtArgs>[]
     badges: Prisma.$UserBadgePayload<ExtArgs>[]
     userGamePlayLogs: Prisma.$UserGamePlayLogPayload<ExtArgs>[]
+    roadmapVotes: Prisma.$RoadmapVotePayload<ExtArgs>[]
+    reportsMade: Prisma.$ReportPayload<ExtArgs>[]
+    reportsAgainst: Prisma.$ReportPayload<ExtArgs>[]
+    reportsHandled: Prisma.$ReportPayload<ExtArgs>[]
+    feedback: Prisma.$FeedbackPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -5429,6 +7142,11 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   followers<T extends Prisma.User$followersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$followersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserFollowPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   badges<T extends Prisma.User$badgesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$badgesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserBadgePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   userGamePlayLogs<T extends Prisma.User$userGamePlayLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$userGamePlayLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserGamePlayLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  roadmapVotes<T extends Prisma.User$roadmapVotesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$roadmapVotesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RoadmapVotePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  reportsMade<T extends Prisma.User$reportsMadeArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$reportsMadeArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReportPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  reportsAgainst<T extends Prisma.User$reportsAgainstArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$reportsAgainstArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReportPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  reportsHandled<T extends Prisma.User$reportsHandledArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$reportsHandledArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReportPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  feedback<T extends Prisma.User$feedbackArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$feedbackArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FeedbackPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -6222,6 +7940,126 @@ export type User$userGamePlayLogsArgs<ExtArgs extends runtime.Types.Extensions.I
   take?: number
   skip?: number
   distinct?: Prisma.UserGamePlayLogScalarFieldEnum | Prisma.UserGamePlayLogScalarFieldEnum[]
+}
+
+/**
+ * User.roadmapVotes
+ */
+export type User$roadmapVotesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the RoadmapVote
+   */
+  select?: Prisma.RoadmapVoteSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the RoadmapVote
+   */
+  omit?: Prisma.RoadmapVoteOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.RoadmapVoteInclude<ExtArgs> | null
+  where?: Prisma.RoadmapVoteWhereInput
+  orderBy?: Prisma.RoadmapVoteOrderByWithRelationInput | Prisma.RoadmapVoteOrderByWithRelationInput[]
+  cursor?: Prisma.RoadmapVoteWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.RoadmapVoteScalarFieldEnum | Prisma.RoadmapVoteScalarFieldEnum[]
+}
+
+/**
+ * User.reportsMade
+ */
+export type User$reportsMadeArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Report
+   */
+  select?: Prisma.ReportSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Report
+   */
+  omit?: Prisma.ReportOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ReportInclude<ExtArgs> | null
+  where?: Prisma.ReportWhereInput
+  orderBy?: Prisma.ReportOrderByWithRelationInput | Prisma.ReportOrderByWithRelationInput[]
+  cursor?: Prisma.ReportWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ReportScalarFieldEnum | Prisma.ReportScalarFieldEnum[]
+}
+
+/**
+ * User.reportsAgainst
+ */
+export type User$reportsAgainstArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Report
+   */
+  select?: Prisma.ReportSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Report
+   */
+  omit?: Prisma.ReportOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ReportInclude<ExtArgs> | null
+  where?: Prisma.ReportWhereInput
+  orderBy?: Prisma.ReportOrderByWithRelationInput | Prisma.ReportOrderByWithRelationInput[]
+  cursor?: Prisma.ReportWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ReportScalarFieldEnum | Prisma.ReportScalarFieldEnum[]
+}
+
+/**
+ * User.reportsHandled
+ */
+export type User$reportsHandledArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Report
+   */
+  select?: Prisma.ReportSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Report
+   */
+  omit?: Prisma.ReportOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ReportInclude<ExtArgs> | null
+  where?: Prisma.ReportWhereInput
+  orderBy?: Prisma.ReportOrderByWithRelationInput | Prisma.ReportOrderByWithRelationInput[]
+  cursor?: Prisma.ReportWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ReportScalarFieldEnum | Prisma.ReportScalarFieldEnum[]
+}
+
+/**
+ * User.feedback
+ */
+export type User$feedbackArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Feedback
+   */
+  select?: Prisma.FeedbackSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Feedback
+   */
+  omit?: Prisma.FeedbackOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.FeedbackInclude<ExtArgs> | null
+  where?: Prisma.FeedbackWhereInput
+  orderBy?: Prisma.FeedbackOrderByWithRelationInput | Prisma.FeedbackOrderByWithRelationInput[]
+  cursor?: Prisma.FeedbackWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.FeedbackScalarFieldEnum | Prisma.FeedbackScalarFieldEnum[]
 }
 
 /**

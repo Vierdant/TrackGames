@@ -1,68 +1,44 @@
 "use client";
 
-import type { Dispatch, SetStateAction } from "react";
+import { useState } from "react";
 import { Plus, X } from "lucide-react";
 import StarRating from "@/components/game/StarRating";
-import { timeModeLabel } from "@/components/library/_playlist-editor/shared";
-import { GhostButton, PrimaryButton } from "@/components/ui/control/Button";
+import { SurfaceButton } from "@/components/ui/control/Button";
 import { Checkbox } from "@/components/ui/control/Checkbox";
 import { Select } from "@/components/ui/control/Select";
 import { TextArea } from "@/components/ui/control/TextArea";
-import type { UserLibraryEntryWithTags } from "@/lib/data/library";
 import { GameStatus } from "@/lib/generated/prisma/enums";
 import { formLabel } from "@/lib/util/client/func";
+import { useEntryEditor } from "./context";
+import { timeModeLabel } from "./shared";
 
 type EntryTabProps = Readonly<{
-	entry: UserLibraryEntryWithTags;
 	isActive: boolean;
-	save: (formData: FormData) => void;
-	onClose: () => void;
-	pending: boolean;
-	entryStatus: GameStatus;
-	setEntryStatus: (status: GameStatus) => void;
-	isFinished: boolean;
-	setEntryFinished: (finished: boolean) => void;
-	tags: string[];
-	setTags: Dispatch<SetStateAction<string[]>>;
-	isAddingTag: boolean;
-	setAddingTag: (adding: boolean) => void;
-	tagInput: string;
-	setTagInput: (value: string) => void;
-	addTag: () => void;
-	rating: number;
-	setRating: (rating: number) => void;
-	setActiveTab: (tab: string) => void;
 }>;
 
-export default function EntryTab({
-	entry,
-	isActive,
-	save,
-	onClose,
-	pending,
-	entryStatus,
-	setEntryStatus,
-	isFinished,
-	setEntryFinished,
-	tags,
-	setTags,
-	isAddingTag,
-	setAddingTag,
-	tagInput,
-	setTagInput,
-	addTag,
-	rating,
-	setRating,
-	setActiveTab,
-}: EntryTabProps) {
+export default function EntryTab({ isActive }: EntryTabProps) {
+	const { entry, save, entryStatus, setEntryStatus, isFinished, setEntryFinished, tags, setTags, isAddingTag, setAddingTag, tagInput, setTagInput, addTag, rating, setRating } =
+		useEntryEditor();
+	const [removingTag, setRemovingTag] = useState<string | null>(null);
+
+	function removeTag(tag: string) {
+		setRemovingTag(tag);
+		setTimeout(() => {
+			setTags((current) => current.filter((item) => item !== tag));
+			setRemovingTag(null);
+		}, 140);
+	}
+
 	return (
-		<form action={save} className={isActive ? "flex min-h-full flex-col gap-3" : "hidden"}>
+		<form id="entry-editor-entry-form" action={save} className={isActive ? "flex flex-col gap-3" : "hidden"}>
 			<input type="hidden" name="timemode" value={timeModeLabel(entry.timeMode)} />
 			<input type="hidden" name="timeplayed" value={entry.timePlayed ?? ""} />
 			<input type="hidden" name="tagsTouched" value="1" />
-			{tags.map((tag) => (
-				<input key={tag} type="hidden" name="tags" value={tag} />
-			))}
+			{tags
+				.filter((tag) => tag !== removingTag)
+				.map((tag) => (
+					<input key={tag} type="hidden" name="tags" value={tag} />
+				))}
 			<Select
 				label="Status"
 				name="status"
@@ -95,11 +71,14 @@ export default function EntryTab({
 				Tags
 				<div className="mt-1 flex min-h-10 flex-wrap items-center gap-2">
 					{tags.map((tag) => (
-						<span key={tag} className="flex max-w-full items-center gap-1 rounded border border-border bg-bg px-2 py-1 text-xs text-text">
+						<span
+							key={tag}
+							className={`flex h-8 max-w-full items-center gap-1 rounded border border-border bg-bg px-2 py-1 text-xs text-text ${removingTag === tag ? "animate-tag-chip-out" : "animate-tag-chip-in"}`}
+						>
 							<span className="truncate">{tag}</span>
 							<button
 								type="button"
-								onClick={() => setTags((current) => current.filter((item) => item !== tag))}
+								onClick={() => removeTag(tag)}
 								className="grid size-4 shrink-0 cursor-pointer place-items-center rounded text-text-muted hover:text-error"
 								aria-label={`Remove ${tag}`}
 							>
@@ -121,33 +100,17 @@ export default function EntryTab({
 									addTag();
 								}
 							}}
-							className="rounded border border-border bg-bg px-2 py-1 text-xs text-text outline-none"
+							className="animate-tag-input-in h-8 w-32 rounded border border-border bg-bg px-2 py-1 text-xs text-text outline-none"
 							maxLength={40}
 						/>
 					) : (
-						<button
-							type="button"
-							onClick={() => setAddingTag(true)}
-							className="grid size-7 cursor-pointer place-items-center rounded border border-border text-text-muted hover:border-primary hover:text-primary"
-							aria-label="Add tag"
-						>
+						<SurfaceButton variant="outline" onClick={() => setAddingTag(true)} aria-label="Add tag" className="text-text">
 							<Plus size={14} aria-hidden="true" />
-						</button>
+						</SurfaceButton>
 					)}
 				</div>
 			</div>
 			<TextArea label="Notes" name="notes" rows={3} defaultValue={entry.notes ?? ""} />
-			<div className="mt-auto grid grid-cols-3 gap-2 pt-2 md:flex md:justify-end">
-				<GhostButton type="button" className="md:text-md text-sm" onClick={() => setActiveTab("log")}>
-					Create Log
-				</GhostButton>
-				<GhostButton type="button" className="md:text-md text-sm" onClick={onClose}>
-					Cancel
-				</GhostButton>
-				<PrimaryButton type="submit" className="md:text-md text-sm" disabled={pending}>
-					{pending ? "Saving..." : "Save"}
-				</PrimaryButton>
-			</div>
 		</form>
 	);
 }

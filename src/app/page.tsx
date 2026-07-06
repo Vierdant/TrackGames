@@ -41,7 +41,7 @@ export default async function Home() {
 							<h1 className="text-4xl font-bold text-nowrap md:text-5xl">
 								Build Your <span className="text-shadow-lg text-shadow-primary/50">Library</span>
 							</h1>
-							<p className="text-md mt-5 font-body text-text-muted md:text-xl">
+							<p className="text-md mt-5 mr-10 ml-10 font-body text-text-muted md:mr-0 md:ml-0 md:text-xl">
 								Rate, track and categorize your games into lists. Customize your page and share it among friends.
 							</p>
 						</div>
@@ -51,17 +51,21 @@ export default async function Home() {
 							<StatBlock color="var(--success)" title="Libraries" value={stats.libraries} />
 							<StatBlock color="var(--error)" title="Playlists" value={stats.playlists} />
 						</div>
-						<div className="mt-5 flex flex-row items-center gap-5">
+						<div className="mt-5 flex flex-col items-center md:flex-row md:gap-5">
 							{session ? (
 								<>
 									<PrimaryButton href={`/library/${session.user.name}`}>Check Library</PrimaryButton>
-									<GhostButton href={`/u/${session.user.name}?tab=profile`}>Your Profile</GhostButton>
+									<GhostButton variant="outline" href={`/u/${session.user.name}?tab=profile`}>
+										Your Profile
+									</GhostButton>
 								</>
 							) : (
 								<>
-									<PrimaryButton href="/login?mode=register">Join</PrimaryButton>
+									<PrimaryButton href="/login?mode=register">Register</PrimaryButton>
 									<p>or</p>
-									<GhostButton href="/login?mode=login">Log into your account</GhostButton>
+									<GhostButton variant="outline" href="/login?mode=login">
+										Log into your account
+									</GhostButton>
 								</>
 							)}
 						</div>

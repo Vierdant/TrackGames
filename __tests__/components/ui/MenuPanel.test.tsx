@@ -62,7 +62,7 @@ describe("MenuPanel", () => {
 		expect(screen.queryByRole("button", { name: "Close" })).not.toBeInTheDocument();
 	});
 
-	it("does not portal for the anchored variant", async () => {
+	it("renders the anchored variant without a modal dialog backdrop", async () => {
 		render(
 			<MenuPanel open onClose={jest.fn()} variant="anchored">
 				content
@@ -70,7 +70,7 @@ describe("MenuPanel", () => {
 		);
 
 		await waitFor(() => expect(screen.getByText("content")).toBeInTheDocument());
-		expect(screen.getByRole("dialog")).not.toBe(document.body.lastElementChild);
-		expect(screen.getByRole("dialog")).not.toHaveAttribute("aria-modal");
+		// Anchored panels float in the top layer (to escape ancestor overflow clipping) but the panel itself is never flagged aria-modal.
+		expect(document.querySelector('[aria-modal="true"]')).not.toBeInTheDocument();
 	});
 });

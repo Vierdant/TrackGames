@@ -36,6 +36,7 @@ export default function WidgetsSettingsForm({ profile }: Readonly<{ profile: Sec
 			<div className="flex flex-wrap gap-2">
 				{[WidgetType.GAMELIST, WidgetType.MARKDOWN, WidgetType.STATS].map((type) => (
 					<GhostButton
+						variant="outline"
 						key={type}
 						type="button"
 						onClick={() => {

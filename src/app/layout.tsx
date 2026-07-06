@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Manrope } from "next/font/google";
+import AnalyticsTracker from "@/components/analytics/AnalyticsTracker";
 import Footer from "@/components/layout/Footer";
 import Header from "@/components/layout/Header";
 import { absoluteUrl, DEFAULT_DESCRIPTION, DEFAULT_OG_IMAGE, SITE_NAME } from "@/lib/util/metadata";
@@ -71,6 +72,7 @@ export default function RootLayout({
 	return (
 		<html lang="en" className={`dark ${inter.variable} ${manrope.variable} h-full antialiased`}>
 			<body className="flex h-full min-h-96 flex-col" suppressHydrationWarning>
+				<AnalyticsTracker />
 				<Header />
 				{children}
 				<Footer />

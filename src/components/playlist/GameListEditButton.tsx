@@ -4,7 +4,7 @@ import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { Edit3, Trash2 } from "lucide-react";
 import TierLabelsForm from "@/app/(library)/playlist/[id]/TierLabelsForm";
-import { GhostButton, PrimaryButton } from "@/components/ui/control/Button";
+import { DangerButton, GhostButton } from "@/components/ui/control/Button";
 import { Select } from "@/components/ui/control/Select";
 import { TextArea } from "@/components/ui/control/TextArea";
 import { TextInput } from "@/components/ui/control/TextInput";
@@ -53,11 +53,27 @@ export default function GameListEditButton({ list, tiers, tierColors }: GameList
 
 	return (
 		<>
-			<GhostButton type="button" onClick={() => setOpen(true)}>
+			<GhostButton variant="outline" type="button" onClick={() => setOpen(true)}>
 				<Edit3 size={16} />
 			</GhostButton>
-			<MenuPanel open={open} onClose={() => setOpen(false)} title="Edit list" panelClassName="max-w-lg bg-bg">
-				<form action={save} className="flex flex-col gap-3">
+			<MenuPanel
+				open={open}
+				onClose={() => setOpen(false)}
+				title="Edit list"
+				panelClassName="max-w-lg bg-bg"
+				formId="game-list-edit-form"
+				submitLabel={pending ? "Saving..." : "Save"}
+				isSubmitPending={pending}
+				footer={
+					isPlaylist && (
+						<DangerButton variant="outline" onClick={remove} disabled={pending}>
+							<Trash2 size={16} />
+							Delete
+						</DangerButton>
+					)
+				}
+			>
+				<form id="game-list-edit-form" action={save} className="flex flex-col gap-3">
 					<TextInput label="Name" name="name" required maxLength={80} defaultValue={list.name} fieldClassName="text-text" />
 					<TextArea label="Bio" name="description" rows={1} maxLength={500} defaultValue={list.description ?? ""} fieldClassName="text-text" />
 					<TextInput label="Background image" name="background" type="url" placeholder="https://..." defaultValue={list.background ?? ""} fieldClassName="text-text" />
@@ -82,27 +98,6 @@ export default function GameListEditButton({ list, tiers, tierColors }: GameList
 					)}
 					{isPlaylist && tiers && tierColors && <TierLabelsForm tiers={tiers} colors={tierColors} />}
 					{error && <p className="text-sm font-bold text-error">{error}</p>}
-					<div className="mt-2 flex flex-wrap justify-between gap-2">
-						{isPlaylist && (
-							<button
-								type="button"
-								onClick={remove}
-								disabled={pending}
-								className="flex cursor-pointer items-center gap-2 rounded border border-error/50 px-4 py-2 text-sm font-bold text-error hover:bg-error/10 disabled:cursor-not-allowed disabled:opacity-60"
-							>
-								<Trash2 size={16} />
-								Delete
-							</button>
-						)}
-						<div className="ml-auto flex gap-2">
-							<GhostButton type="button" onClick={() => setOpen(false)}>
-								Cancel
-							</GhostButton>
-							<PrimaryButton type="submit" disabled={pending}>
-								{pending ? "Saving..." : "Save"}
-							</PrimaryButton>
-						</div>
-					</div>
 				</form>
 			</MenuPanel>
 		</>

@@ -47,7 +47,9 @@ export default async function Page({ params }: Readonly<{ params: Promise<{ slug
 							</div>
 							<div className="md:justify-emd flex shrink-0 flex-row flex-wrap justify-center gap-3 md:gap-5">
 								{isOwnLibrary && <GameListEditButton list={library} />}
-								<GhostButton href={`/u/${slug}?tab=profile`}>Profile</GhostButton>
+								<GhostButton variant="outline" href={`/u/${slug}?tab=profile`}>
+									Profile
+								</GhostButton>
 							</div>
 						</div>
 					</Container>

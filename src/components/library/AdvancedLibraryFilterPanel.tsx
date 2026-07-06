@@ -62,7 +62,23 @@ export default function AdvancedLibraryFilterPanel({ open, onClose, filters, onC
 	}
 
 	return (
-		<MenuPanel open={open} onClose={onClose} variant="drawer-left" width="28rem" title="Filter" closeLabel="Close filters">
+		<MenuPanel
+			open={open}
+			onClose={onClose}
+			variant="drawer-left"
+			width="28rem"
+			title="Filter"
+			footer={
+				<div className="flex flex-row gap-2">
+					<GhostButton variant="outline" type="button" onClick={onReset}>
+						Reset
+					</GhostButton>
+					<PrimaryButton type="button" onClick={onClose}>
+						Apply
+					</PrimaryButton>
+				</div>
+			}
+		>
 			<div className="flex flex-col gap-5 text-sm">
 				<section>
 					<h4 className="mb-2 font-bold text-text">Statuses and tags</h4>
@@ -193,15 +209,6 @@ export default function AdvancedLibraryFilterPanel({ open, onClose, filters, onC
 						</Select>
 					</label>
 				</section>
-			</div>
-
-			<div className="mt-6 flex justify-end gap-2 border-t border-border pt-4">
-				<GhostButton type="button" onClick={onReset}>
-					Reset
-				</GhostButton>
-				<PrimaryButton type="button" onClick={onClose}>
-					Apply
-				</PrimaryButton>
 			</div>
 		</MenuPanel>
 	);

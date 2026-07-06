@@ -1,5 +1,34 @@
 import z from "zod";
+import { type FeedbackType, type ReportReason, type ReportTargetType } from "@/lib/generated/prisma/enums";
 import { LinkType } from "@/lib/types";
+
+export const REPORT_REASON_LABELS: Record<ReportReason, string> = {
+	SPAM: "Spam or advertising",
+	HARASSMENT: "Harassment or bullying",
+	HATE: "Hate speech",
+	SEXUAL: "Sexual or explicit content",
+	VIOLENCE: "Violence or threats",
+	ILLEGAL: "Illegal content",
+	IMPERSONATION: "Impersonation",
+	MISINFORMATION: "Misinformation",
+	OTHER: "Something else",
+};
+
+export const REPORT_TARGET_LABELS: Record<ReportTargetType, string> = {
+	COMMENT: "Comment",
+	USER_PROFILE: "Profile",
+	GAME_LIST: "List",
+	GAME: "Game",
+};
+
+export const FEEDBACK_TYPE_LABELS: Record<FeedbackType, string> = {
+	BUG: "Bug report",
+	SUGGESTION: "Suggestion",
+	UI: "Design / UI",
+	PERFORMANCE: "Performance",
+	CONTENT: "Content / data",
+	OTHER: "Other",
+};
 
 export const SOCIAL_PLATFORMS = [
 	{ id: "x-link", value: "x", kind: LinkType.LINK, label: "X (Twitter)", placeholder: "https://x.com/username" },
@@ -48,10 +77,29 @@ export const SETTING_TABS: { id: string; label: string; href: string }[] = [
 	{ id: "widgets", label: "Widgets", href: "/settings?tab=widgets" },
 	{ id: "preferences", label: "Preferences", href: "/settings?tab=preferences" },
 	{ id: "import", label: "Import", href: "/settings?tab=import" },
+	{ id: "backing", label: "Backing", href: "/settings?tab=backing" },
+	{ id: "feedback", label: "Feedback", href: "/settings?tab=feedback" },
 	{ id: "account", label: "Account", href: "/settings?tab=account" },
 ];
 
-export const ALLOWED_HOSTS = new Set(["i.imgur.com", "images.unsplash.com", "media.discordapp.net", "cdn.discordapp.com", "cdn.pixabay.com"]);
+export const ADMIN_TABS: { id: string; label: string; href: string }[] = [
+	{ id: "overview", label: "Overview", href: "/dashboard?tab=overview" },
+	{ id: "reports", label: "Reports", href: "/dashboard?tab=reports" },
+	{ id: "feedback", label: "Feedback", href: "/dashboard?tab=feedback" },
+	{ id: "members", label: "Members", href: "/dashboard?tab=members" },
+	{ id: "moderation", label: "Moderation", href: "/dashboard?tab=moderation" },
+	{ id: "changelog", label: "Changelog", href: "/dashboard?tab=changelog" },
+	{ id: "roadmap", label: "Roadmap", href: "/dashboard?tab=roadmap" },
+];
+
+export const DOC_TABS = [
+	{ id: "about", label: "About", href: "/about" },
+	{ id: "backing", label: "Backing", href: "/backing" },
+	{ id: "changelog", label: "Changelog", href: "/changelog" },
+	{ id: "roadmap", label: "Roadmap", href: "/roadmap" },
+	{ id: "privacy", label: "Privacy", href: "/privacy" },
+	{ id: "terms", label: "Terms", href: "/terms" },
+] as const;
 
 export const ALLOWED_TAGS = [
 	"p",
@@ -69,7 +117,6 @@ export const ALLOWED_TAGS = [
 	"h2",
 	"h3",
 	"a",
-	"img",
 	"hr",
 	"table",
 	"thead",

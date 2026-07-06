@@ -106,7 +106,7 @@ export const Select = forwardRef<HTMLButtonElement, CustomSelectProps>(function 
 				role="listbox"
 				shouldShowClose={false}
 				anchorRef={triggerRef}
-				panelClassName="left-0 right-auto mt-2 max-h-64 w-max min-w-full max-w-[min(24rem,90vw)] overflow-y-auto p-1"
+				panelClassName="max-h-64 w-max max-w-[min(24rem,90vw)] overflow-y-auto p-1"
 			>
 				<div className="animate-content-fade-in flex flex-col">
 					{options.map((option) => (

@@ -37,21 +37,24 @@ export default function PlaylistTab({ position, tier, tiers, save, onRemove, onC
 				onClose={() => setOpenPlaylistConfirm(false)}
 				onConfirm={onRemove}
 			/>
-			<GhostButton
-				type="button"
-				onClick={() => setOpenPlaylistConfirm(true)}
-				disabled={pending}
-				className="md:text-md w-max text-sm text-error hover:border-error hover:text-error"
-			>
-				Remove From Playlist
-			</GhostButton>
-			<div className="mt-auto grid grid-cols-3 gap-2 pt-2 md:flex md:justify-end">
-				<GhostButton type="button" className="md:text-md text-sm" onClick={onClose}>
-					Cancel
+			<div className="mt-auto flex items-center justify-between gap-2 pt-2">
+				<GhostButton
+					variant="outline"
+					type="button"
+					onClick={() => setOpenPlaylistConfirm(true)}
+					disabled={pending}
+					className="text-error hover:border-error hover:text-error"
+				>
+					Remove
 				</GhostButton>
-				<PrimaryButton type="submit" className="md:text-md text-sm" disabled={pending}>
-					{pending ? "Saving..." : "Save"}
-				</PrimaryButton>
+				<div className="flex items-center gap-2">
+					<GhostButton variant="outline" type="button" onClick={onClose}>
+						Cancel
+					</GhostButton>
+					<PrimaryButton type="submit" disabled={pending}>
+						{pending ? "Saving..." : "Save"}
+					</PrimaryButton>
+				</div>
 			</div>
 		</form>
 	);

@@ -4,12 +4,14 @@ import { useRef, useState, useTransition } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Heart, MessageCircle, Send, Trash2 } from "lucide-react";
+import CopyIdButton from "@/components/admin/CopyIdButton";
 import StarRating from "@/components/game/StarRating";
+import ReportButton from "@/components/report/ReportButton";
 import { PrimaryButton } from "@/components/ui/control/Button";
 import AvatarView from "@/components/user/AvatarView";
 import RoleTags from "@/components/user/RoleTags";
 import { addComment, deleteComment, toggleLike } from "@/lib/actions/social";
-import { InteractionTargetType, LikeTargetType, type UserRole } from "@/lib/generated/prisma/enums";
+import { InteractionTargetType, LikeTargetType, ReportTargetType, type UserRole } from "@/lib/generated/prisma/enums";
 import { ratingToFive } from "@/lib/util/format/rating";
 
 type Comment = {
@@ -37,6 +39,7 @@ type CommentItemProps = Readonly<{
 	targetType: InteractionTargetType;
 	targetId: string;
 	currentUserId: string | null;
+	isAdmin: boolean;
 }>;
 
 type CommenSectionClientProps = Readonly<{
@@ -44,9 +47,10 @@ type CommenSectionClientProps = Readonly<{
 	targetId: string;
 	comments: Comment[];
 	currentUserId: string | null;
+	isAdmin: boolean;
 }>;
 
-export default function CommentSectionClient({ targetType, targetId, comments, currentUserId }: CommenSectionClientProps) {
+export default function CommentSectionClient({ targetType, targetId, comments, currentUserId, isAdmin }: CommenSectionClientProps) {
 	const topLevelComments = comments.filter((comment) => !comment.parentId);
 	const addTopLevel = addComment.bind(null, targetType, targetId, null);
 
@@ -69,7 +73,15 @@ export default function CommentSectionClient({ targetType, targetId, comments, c
 			<div className="flex flex-col gap-4">
 				{topLevelComments.length ? (
 					topLevelComments.map((comment) => (
-						<CommentItem key={comment.id} comment={comment} comments={comments} targetType={targetType} targetId={targetId} currentUserId={currentUserId} />
+						<CommentItem
+							key={comment.id}
+							comment={comment}
+							comments={comments}
+							targetType={targetType}
+							targetId={targetId}
+							currentUserId={currentUserId}
+							isAdmin={isAdmin}
+						/>
 					))
 				) : (
 					<p className="text-sm text-text-muted">No comments yet.</p>
@@ -126,7 +138,7 @@ function CommentForm({ action, placeholder = "Write a comment" }: CommentFormPro
 	);
 }
 
-function CommentItem({ comment, comments, targetType, targetId, currentUserId }: CommentItemProps) {
+function CommentItem({ comment, comments, targetType, targetId, currentUserId, isAdmin }: CommentItemProps) {
 	const [replying, setReplying] = useState(false);
 	const [error, setError] = useState<string | null>(null);
 	const [pending, startTransition] = useTransition();
@@ -161,7 +173,7 @@ function CommentItem({ comment, comments, targetType, targetId, currentUserId }:
 	}
 
 	return (
-		<div className="flex gap-3">
+		<div id={`comment-${comment.id}`} className="flex scroll-mt-24 gap-3">
 			<AvatarView image={comment.user.image} size={8} mdSize={8} iconSize={18} />
 			<div className="min-w-0 flex-1">
 				<div className="rounded bg-bg pl-1">
@@ -203,6 +215,17 @@ function CommentItem({ comment, comments, targetType, targetId, currentUserId }:
 							Delete
 						</button>
 					)}
+					{currentUserId && currentUserId !== comment.userId && (
+						<ReportButton
+							targetType={ReportTargetType.COMMENT}
+							targetId={comment.id}
+							reportedUserId={comment.userId}
+							anchor={`comment-${comment.id}`}
+							context={{ author: comment.user.name ?? "", excerpt: comment.content.slice(0, 140) }}
+							className="px-2 py-1"
+						/>
+					)}
+					<CopyIdButton id={comment.id} isAdmin={isAdmin} />
 				</div>
 				{error && <output className="mt-1 text-xs text-error">{error}</output>}
 				{replying && (
@@ -213,7 +236,15 @@ function CommentItem({ comment, comments, targetType, targetId, currentUserId }:
 				{replies.length > 0 && (
 					<div className="mt-3 flex flex-col gap-3 border-l border-border pl-3">
 						{replies.map((reply) => (
-							<CommentItem key={reply.id} comment={reply} comments={comments} targetType={targetType} targetId={targetId} currentUserId={currentUserId} />
+							<CommentItem
+								key={reply.id}
+								comment={reply}
+								comments={comments}
+								targetType={targetType}
+								targetId={targetId}
+								currentUserId={currentUserId}
+								isAdmin={isAdmin}
+							/>
 						))}
 					</div>
 				)}

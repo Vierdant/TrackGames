@@ -37,12 +37,11 @@ export default function FollowButton({ userId, hasFollowedState, isLoggedIn }: F
 	}
 
 	return (
-		<div className="flex flex-col items-start gap-1">
-			<Button type="button" onClick={toggle} disabled={pending}>
+		<>
+			<Button variant="outline" onClick={toggle} disabled={pending}>
 				{following ? <UserCheck size={16} /> : <UserPlus size={16} />}
-				{following ? "Following" : "Follow"}
 			</Button>
 			{error && <output className="text-xs text-error">{error}</output>}
-		</div>
+		</>
 	);
 }

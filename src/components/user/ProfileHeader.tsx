@@ -1,9 +1,11 @@
 import Container from "@/components/layout/Container";
+import ReportButton from "@/components/report/ReportButton";
 import FollowButton from "@/components/social/FollowButton";
 import { GhostButton, PrimaryButton } from "@/components/ui/control/Button";
 import AvatarPreview from "@/components/user/AvatarView";
 import RoleTags from "@/components/user/RoleTags";
 import SocialIconLinks from "@/components/user/SocialIconLinks";
+import { ReportTargetType } from "@/lib/generated/prisma/enums";
 import type { PublicUser } from "@/lib/types";
 import { parseSocials } from "@/lib/util/parse/socials";
 
@@ -80,10 +82,28 @@ function ControlsSection({ displayName, followUserId, isFollowing, isLoggedIn, i
 	const followerButton = followUserId ? <FollowButton userId={followUserId} hasFollowedState={isFollowing} isLoggedIn={isLoggedIn} /> : <PrimaryButton>Follow</PrimaryButton>;
 
 	return isSettings ? (
-		<GhostButton href={`/u/${encodeURIComponent(displayName)}?tab=profile`}>View profile</GhostButton>
+		<GhostButton variant="outline" href={`/u/${encodeURIComponent(displayName)}?tab=profile`}>
+			View profile
+		</GhostButton>
 	) : (
 		<>
-			{isOwned ? <GhostButton href="/settings">Settings</GhostButton> : followerButton}
+			{!isOwned && isLoggedIn && followUserId && (
+				<ReportButton
+					targetType={ReportTargetType.USER_PROFILE}
+					targetId={followUserId}
+					reportedUserId={followUserId}
+					context={{ profile: displayName }}
+					display="button"
+					label={`Report ${displayName}`}
+				/>
+			)}
+			{isOwned ? (
+				<GhostButton variant="outline" href="/settings">
+					Settings
+				</GhostButton>
+			) : (
+				followerButton
+			)}
 			<PrimaryButton href={`/library/${displayName}`}>Library</PrimaryButton>
 		</>
 	);

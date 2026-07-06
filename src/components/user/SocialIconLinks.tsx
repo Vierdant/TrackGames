@@ -45,7 +45,7 @@ export default function SocialIconLinks({ socials }: Readonly<{ socials: SocialL
 						>
 							{copied ? <Check size={16} aria-hidden className="shrink-0" /> : <Icon size={16} title="" aria-hidden className="shrink-0" />}
 							{copied && (
-								<span className="pointer-events-none absolute -top-7 left-1/2 -translate-x-1/2 rounded bg-success px-2 py-0.5 text-[0.65rem] font-bold whitespace-nowrap text-bg shadow-main">
+								<span className="shadow-main pointer-events-none absolute -top-7 left-1/2 -translate-x-1/2 rounded bg-success px-2 py-0.5 text-[0.65rem] font-bold whitespace-nowrap text-bg">
 									Copied!
 								</span>
 							)}

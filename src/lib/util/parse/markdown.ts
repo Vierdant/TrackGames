@@ -2,25 +2,11 @@ import { MarkdownAlign, type MarkdownBlock } from "@/lib/types";
 import * as normalize from "@/lib/util/validate/normalize";
 import { isSafeLinkHref, isSafeUrl } from "@/lib/util/validate/safety";
 
-type ActiveState =
-	| {
-			type: "group";
-			align?: MarkdownAlign;
-			color?: string;
-			href?: string;
-			lines: string[];
-	  }
-	| {
-			type: "grid";
-			columns: number;
-			gap: number;
-			lines: string[];
-	  };
+type BlockTagName = (typeof BLOCK_TAGS)[number];
 
-type MediaDirectiveResult = {
-	handled: boolean;
-	block?: MarkdownBlock;
-};
+type OpenTag = { name: BlockTagName; attributes: string };
+
+const BLOCK_TAGS = ["center", "left", "right", "color", "link", "grid"] as const;
 
 function normalizeAlign(value: string | undefined): MarkdownAlign | undefined {
 	switch (normalize.choice(value, ["start", "left", "center", "end", "right"] as const)) {
@@ -78,6 +64,7 @@ function readAttributeValue(input: string, index: number) {
 	};
 }
 
+/** Parses a `key=value` attribute list. Bare words (e.g. `rounded`) become flags. */
 function parseAttributes(input: string) {
 	const attributes: Record<string, string> = {};
 	let index = 0;
@@ -86,8 +73,14 @@ function parseAttributes(input: string) {
 		index = skipWhitespace(input, index);
 		const key = readAttributeKey(input, index);
 
-		if (!key || input[key.end] !== "=") {
+		if (!key) {
 			index += 1;
+			continue;
+		}
+
+		if (input[key.end] !== "=") {
+			attributes[key.value] = "true";
+			index = key.end;
 			continue;
 		}
 
@@ -99,14 +92,96 @@ function parseAttributes(input: string) {
 	return attributes;
 }
 
-function splitGridCells(content: string) {
+/** Reads the shorthand value in `[color=…]` / `[link=…]`, quoted or bare. */
+function readShorthandValue(attributes: string) {
+	const rest = attributes.trimStart();
+	if (!rest.startsWith("=")) return undefined;
+
+	const body = rest.slice(1);
+	if (body.startsWith('"') || body.startsWith("'")) {
+		const end = body.indexOf(body[0], 1);
+		return end === -1 ? body.slice(1) : body.slice(1, end);
+	}
+
+	const match = /^[^\s\]]+/.exec(body);
+	return match ? match[0] : "";
+}
+
+/** Matches an opening block tag that stands alone on its line. */
+function parseOpenTag(line: string): OpenTag | null {
+	const trimmed = line.trim();
+	if (!trimmed.startsWith("[") || trimmed.startsWith("[/") || !trimmed.endsWith("]")) return null;
+
+	const inner = trimmed.slice(1, -1);
+	// A stray "]" means the tag was used inline on this line (e.g. [center]x[/center]);
+	// only own-line tags open a block.
+	if (inner.includes("]")) return null;
+
+	let index = 0;
+	while (index < inner.length && isAttributeKeyChar(inner[index])) index += 1;
+
+	const name = inner.slice(0, index).toLowerCase();
+	if (!(BLOCK_TAGS as readonly string[]).includes(name)) return null;
+
+	return { name: name as BlockTagName, attributes: inner.slice(index) };
+}
+
+/** Matches a closing tag that stands alone on its line, returning its name. */
+function parseCloseTag(line: string) {
+	const match = /^\[\/([a-z]+)]$/i.exec(line.trim());
+	return match ? match[1].toLowerCase() : null;
+}
+
+/** Builds an image/video block from a self-closing media tag alone on its line. */
+function parseMediaLine(line: string): MarkdownBlock | null | undefined {
+	const match = /^\[(image|video)\b([^\]]*)]$/i.exec(line.trim());
+	if (!match) return null;
+
+	const attributes = parseAttributes(match[2]);
+	const src = attributes.src;
+
+	// Recognized as media but the source is unsafe: drop it (undefined) instead of
+	// leaking the raw tag into the text.
+	if (!isSafeUrl(src)) return undefined;
+
+	const width = normalize.integer(attributes.width, { min: 40, max: 1200 });
+	const height = normalize.integer(attributes.height, { min: 40, max: 1200 });
+	const align = normalizeAlign(attributes.align);
+	const rounded = normalize.boolean(attributes.rounded);
+
+	if (match[1].toLowerCase() === "image") {
+		return {
+			type: "image",
+			src,
+			alt: attributes.alt ?? "",
+			align,
+			width,
+			height,
+			fit: normalize.choice(attributes.fit, ["contain", "cover"] as const),
+			position: normalize.choice(attributes.position, ["center", "left", "right", "top", "bottom"] as const),
+			rounded,
+		};
+	}
+
+	return {
+		type: "video",
+		src,
+		poster: isSafeUrl(attributes.poster) ? attributes.poster : undefined,
+		align,
+		width,
+		height,
+		rounded,
+	};
+}
+
+/** Splits grid inner lines into cells on `[cell]` separators (leading one optional). */
+function splitGridCells(lines: string[]) {
 	const cells: string[] = [];
 	const current: string[] = [];
 
-	for (const line of content.split("\n")) {
-		if (line.trim() === "---cell---") {
-			const cell = current.join("\n").trim();
-			if (cell) cells.push(cell);
+	for (const line of lines) {
+		if (/^\[cell]$/i.test(line.trim())) {
+			cells.push(current.join("\n").trim());
 			current.length = 0;
 			continue;
 		}
@@ -114,184 +189,99 @@ function splitGridCells(content: string) {
 		current.push(line);
 	}
 
-	const cell = current.join("\n").trim();
-	if (cell) cells.push(cell);
+	cells.push(current.join("\n").trim());
 
-	return cells;
+	return cells.filter((cell) => cell.length > 0);
 }
 
-function parseDirective(line: string, names: readonly string[]) {
-	if (!line.startsWith("::")) return null;
+function buildBlock(open: OpenTag, innerLines: string[]): MarkdownBlock | null {
+	const inner = innerLines.join("\n");
 
-	const content = line.slice(2).trimStart();
-	let spaceIndex = -1;
+	if (open.name === "grid") {
+		const attributes = parseAttributes(open.attributes);
+		const cells = splitGridCells(innerLines).map(parseMarkdownBlocks);
+		if (cells.length === 0) return null;
 
-	for (let index = 0; index < content.length; index += 1) {
-		if (isWhitespace(content[index])) {
-			spaceIndex = index;
-			break;
-		}
-	}
-
-	const name = (spaceIndex === -1 ? content : content.slice(0, spaceIndex)).toLowerCase();
-
-	if (!names.includes(name)) return null;
-
-	return {
-		name,
-		attributes: spaceIndex === -1 ? "" : content.slice(spaceIndex + 1).trimStart(),
-	};
-}
-
-function pushDefaultBlock(blocks: MarkdownBlock[], defaultLines: string[]) {
-	const content = defaultLines.join("\n").trim();
-	if (!content) return;
-
-	blocks.push({ type: "markdown", align: MarkdownAlign.START, content });
-	defaultLines.length = 0;
-}
-
-function activeStateToBlock(active: ActiveState): MarkdownBlock | null {
-	const content = active.lines.join("\n").trim();
-	if (!content) return null;
-
-	if (active.type === "grid") {
 		return {
 			type: "grid",
-			columns: active.columns,
-			gap: active.gap,
-			cells: splitGridCells(content).map(parseMarkdownBlocks),
-		};
-	}
-
-	return {
-		type: "group",
-		align: active.align,
-		color: active.color,
-		href: active.href,
-		children: parseMarkdownBlocks(content),
-	};
-}
-
-function pushActiveBlock(blocks: MarkdownBlock[], active: ActiveState | null) {
-	if (!active) return;
-
-	const block = activeStateToBlock(active);
-	if (block) blocks.push(block);
-}
-
-function parseMediaDirective(line: string): MediaDirectiveResult {
-	const directive = parseDirective(line, ["image", "video"]);
-	if (!directive?.attributes) return { handled: false };
-
-	const attributes = parseAttributes(directive.attributes);
-	const src = attributes.src;
-
-	if (!isSafeUrl(src)) return { handled: true };
-
-	const width = normalize.integer(attributes.width, { min: 40, max: 1200 });
-	const height = normalize.integer(attributes.height, { min: 40, max: 1200 });
-	const align = normalizeAlign(attributes.align ?? "") ?? undefined;
-	const rounded = normalize.boolean(attributes.rounded);
-
-	if (directive.name === "image") {
-		return {
-			handled: true,
-			block: {
-				type: "image",
-				src,
-				alt: attributes.alt ?? "",
-				align,
-				width,
-				height,
-				fit: normalize.choice(attributes.fit, ["contain", "cover"] as const),
-				position: normalize.choice(attributes.position, ["center", "left", "right", "top", "bottom"] as const),
-				rounded,
-			},
-		};
-	}
-
-	return {
-		handled: true,
-		block: {
-			type: "video",
-			src,
-			poster: isSafeUrl(attributes.poster) ? attributes.poster : undefined,
-			align,
-			width,
-			height,
-			rounded,
-		},
-	};
-}
-
-function parseBlockDirective(line: string): ActiveState | null {
-	const directive = parseDirective(line, ["start", "left", "center", "end", "right", "color", "link", "grid"]);
-	if (!directive) return null;
-
-	const attributes = parseAttributes(directive.attributes);
-
-	if (directive.name === "grid") {
-		return {
-			type: "grid",
-			columns: normalize.integer(attributes.columns, { min: 1, max: 4, fallback: 2 }) ?? 2,
+			columns: normalize.integer(attributes.columns ?? attributes.cols, { min: 1, max: 4, fallback: 2 }) ?? 2,
 			gap: normalize.integer(attributes.gap, { min: 0, max: 32, fallback: 8 }) ?? 8,
-			lines: [],
+			cells,
 		};
 	}
 
-	const href = attributes.href && isSafeLinkHref(attributes.href) ? attributes.href : undefined;
-	const colorValue = attributes.value ?? attributes.color;
+	const children = parseMarkdownBlocks(inner);
+	if (children.length === 0) return null;
 
-	return {
-		type: "group",
-		align: normalizeAlign(directive.name) ?? undefined,
-		color: colorValue ? normalize.hexColor(colorValue) : undefined,
-		href,
-		lines: [],
-	};
+	if (open.name === "link") {
+		const href = readShorthandValue(open.attributes) ?? parseAttributes(open.attributes).href;
+		return { type: "group", href: href && isSafeLinkHref(href) ? href : undefined, children };
+	}
+
+	if (open.name === "color") {
+		const attributes = parseAttributes(open.attributes);
+		const color = normalize.markdownColor(readShorthandValue(open.attributes) ?? attributes.value ?? attributes.color);
+		return { type: "group", color, children };
+	}
+
+	return { type: "group", align: normalizeAlign(open.name), children };
 }
 
 export function parseMarkdownBlocks(markdown: string): MarkdownBlock[] {
 	const blocks: MarkdownBlock[] = [];
-	const defaultLines: string[] = [];
+	const text: string[] = [];
 	const lines = markdown.replaceAll("\r\n", "\n").replaceAll("\r", "\n").split("\n");
-	let active: ActiveState | null = null;
 
-	for (const line of lines) {
-		const trimmed = line.trim();
+	const flushText = () => {
+		const content = text.join("\n").trim();
+		if (content) blocks.push({ type: "markdown", align: MarkdownAlign.START, content });
+		text.length = 0;
+	};
 
-		if (!active) {
-			const mediaDirective = parseMediaDirective(trimmed);
+	let index = 0;
 
-			if (mediaDirective.handled) {
-				pushDefaultBlock(blocks, defaultLines);
-				if (mediaDirective.block) blocks.push(mediaDirective.block);
-				continue;
-			}
+	while (index < lines.length) {
+		const line = lines[index];
 
-			active = parseBlockDirective(trimmed);
-			if (active) {
-				pushDefaultBlock(blocks, defaultLines);
-				continue;
-			}
-		}
-
-		if (trimmed === "::" && active) {
-			pushActiveBlock(blocks, active);
-			active = null;
+		const media = parseMediaLine(line);
+		if (media !== null) {
+			flushText();
+			if (media) blocks.push(media);
+			index += 1;
 			continue;
 		}
 
-		if (active) {
-			active.lines.push(line);
-		} else {
-			defaultLines.push(line);
+		const open = parseOpenTag(line);
+		if (open) {
+			// Walk forward to the matching close, balancing nested tags of the same name
+			// so [center] inside [center] closes at the right depth.
+			let depth = 1;
+			let close = lines.length;
+
+			for (let scan = index + 1; scan < lines.length; scan += 1) {
+				if (parseOpenTag(lines[scan])?.name === open.name) {
+					depth += 1;
+				} else if (parseCloseTag(lines[scan]) === open.name) {
+					depth -= 1;
+					if (depth === 0) {
+						close = scan;
+						break;
+					}
+				}
+			}
+
+			flushText();
+			const block = buildBlock(open, lines.slice(index + 1, close));
+			if (block) blocks.push(block);
+			index = close < lines.length ? close + 1 : close;
+			continue;
 		}
+
+		text.push(line);
+		index += 1;
 	}
 
-	pushActiveBlock(blocks, active);
-	pushDefaultBlock(blocks, defaultLines);
+	flushText();
 
 	return blocks;
 }

@@ -147,3 +147,33 @@ export type UserBadge = Prisma.UserBadgeModel
  * 
  */
 export type Notification = Prisma.NotificationModel
+/**
+ * Model Changelog
+ * 
+ */
+export type Changelog = Prisma.ChangelogModel
+/**
+ * Model RoadmapItem
+ * 
+ */
+export type RoadmapItem = Prisma.RoadmapItemModel
+/**
+ * Model RoadmapVote
+ * 
+ */
+export type RoadmapVote = Prisma.RoadmapVoteModel
+/**
+ * Model Report
+ * 
+ */
+export type Report = Prisma.ReportModel
+/**
+ * Model Feedback
+ * 
+ */
+export type Feedback = Prisma.FeedbackModel
+/**
+ * Model Analytics
+ * 
+ */
+export type Analytics = Prisma.AnalyticsModel

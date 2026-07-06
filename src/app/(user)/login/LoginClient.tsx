@@ -2,9 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Eye, EyeOff, Lock, Mail, User } from "lucide-react";
+import { Eye, EyeOff } from "lucide-react";
 import { GhostButton, IconButton, PrimaryButton } from "@/components/ui/control/Button";
-import { IconField } from "@/components/ui/control/Field";
+import { TextInput } from "@/components/ui/control/TextInput";
 import MenuPanel from "@/components/ui/MenuPanel";
 import { DiscordIcon, GithubIcon, GoogleIcon, TwitchIcon } from "@/components/ui/SVG";
 import { login, loginProvider, signup } from "@/lib/actions/auth";
@@ -42,7 +42,7 @@ export default function LoginClient() {
 	const [providerUsername, setProviderUsername] = useState("");
 	const [providerUsernameError, setProviderUsernameError] = useState("");
 	const isRegister = mode === "register";
-	const passwordMessage = isRegister && password.length > 0 && password.length < 8 ? "Password must be at least 8 characters." : fieldErrors.password;
+	const passwordError = isRegister && password.length > 0 && password.length < 8 ? "Password must be at least 8 characters." : fieldErrors.password;
 
 	useEffect(() => {
 		const defer = deferHook(() => {
@@ -123,84 +123,103 @@ export default function LoginClient() {
 	}
 
 	return (
-		<div className="w-full max-w-md rounded bg-bg-secondary p-5 sm:p-6">
-			<div className="mb-4">
-				<h1 className="pb-5 text-center text-2xl font-bold text-text sm:text-3xl">{isRegister ? "Join" : "Login"}</h1>
+		<div className="w-full max-w-md rounded bg-bg p-6 sm:p-8">
+			<div className="mb-6">
+				<h1 className="text-2xl font-bold text-text sm:text-3xl">{isRegister ? "Create your account" : "Welcome back"}</h1>
 			</div>
-			{errorMessage && (
-				<div className="mb-2 rounded border-2 border-error/50 bg-error/20 p-5 text-error">
-					<p className="text-sm">{errorMessage}</p>
-				</div>
-			)}
+
+			{errorMessage && <div className="mb-4 rounded border border-error/40 bg-error/10 p-3 text-sm text-error">{errorMessage}</div>}
+
 			<form action={handleSubmit} key={mode} className="animate-auth-mode-in flex flex-col gap-4">
 				{isRegister && (
-					<IconField
-						icon={User}
-						label="Username"
-						id="name"
-						name="name"
-						type="text"
-						autoComplete="username"
-						placeholder="Your display name"
-						maxLength={32}
-						pattern="[A-Za-z0-9_\-]+"
-						value={name}
-						onChange={(event) => setName(event.target.value)}
-						error={fieldErrors.name}
-					/>
+					<div>
+						<TextInput
+							label="Username"
+							id="name"
+							name="name"
+							type="text"
+							autoComplete="username"
+							placeholder="Your display name"
+							maxLength={32}
+							pattern="[A-Za-z0-9_\-]+"
+							value={name}
+							onChange={(event) => setName(event.target.value)}
+							fieldClassName="text-sm"
+							className={fieldErrors.name ? "ring-error focus-visible:ring-error" : ""}
+						/>
+						{fieldErrors.name && <p className="mt-1 text-xs font-bold text-error">{fieldErrors.name}</p>}
+					</div>
 				)}
 
-				<IconField icon={Mail} label="Email" id="email" name="email" type="email" autoComplete="email" placeholder="Email address" error={fieldErrors.email} />
+				<div>
+					<TextInput
+						label="Email"
+						id="email"
+						name="email"
+						type="email"
+						autoComplete="email"
+						placeholder="Email address"
+						fieldClassName="text-sm"
+						className={fieldErrors.email ? "ring-error focus-visible:ring-error" : ""}
+					/>
+					{fieldErrors.email && <p className="mt-1 text-xs font-bold text-error">{fieldErrors.email}</p>}
+				</div>
 
-				<IconField
-					icon={Lock}
-					label="Password"
-					id="password"
-					name="password"
-					type={showPassword ? "text" : "password"}
-					autoComplete={isRegister ? "new-password" : "current-password"}
-					placeholder="Password"
-					value={password}
-					onChange={(event) => setPassword(event.target.value)}
-					error={passwordMessage}
-					endAdornment={
+				<div>
+					<div className="relative">
+						<TextInput
+							label="Password"
+							id="password"
+							name="password"
+							type={showPassword ? "text" : "password"}
+							autoComplete={isRegister ? "new-password" : "current-password"}
+							placeholder="Password"
+							value={password}
+							onChange={(event) => setPassword(event.target.value)}
+							fieldClassName="text-sm"
+							className={passwordError ? "pr-11 ring-error focus-visible:ring-error" : "pr-11"}
+						/>
 						<IconButton
 							onClick={() => setShowPassword((value) => !value)}
 							pressed={showPassword}
 							label="Toggle password"
 							icon={showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-							className="absolute top-1/2 right-2 -translate-y-1/2"
+							className="absolute right-2 bottom-1.5"
 						/>
-					}
-				/>
+					</div>
+					{passwordError && <p className="mt-1 text-xs font-bold text-error">{passwordError}</p>}
+				</div>
 
 				{isRegister && (
-					<IconField
-						icon={Lock}
-						label="Confirm password"
-						id="passwordConfirm"
-						name="passwordConfirm"
-						type={showPassword ? "text" : "password"}
-						autoComplete="new-password"
-						placeholder="Repeat your password"
-						error={fieldErrors.passwordConfirm}
-					/>
+					<div>
+						<TextInput
+							label="Confirm password"
+							id="passwordConfirm"
+							name="passwordConfirm"
+							type={showPassword ? "text" : "password"}
+							autoComplete="new-password"
+							placeholder="Repeat your password"
+							fieldClassName="text-sm"
+							className={fieldErrors.passwordConfirm ? "ring-error focus-visible:ring-error" : ""}
+						/>
+						{fieldErrors.passwordConfirm && <p className="mt-1 text-xs font-bold text-error">{fieldErrors.passwordConfirm}</p>}
+					</div>
 				)}
 
 				{!isRegister && (
-					<a href="/login" className="w-fit cursor-pointer text-sm font-bold text-primary transition-colors hover:text-primary-hover">
+					<a href="/login" className="w-fit text-sm font-bold text-primary transition-colors hover:text-primary-hover">
 						Forgot password?
 					</a>
 				)}
 
 				<PrimaryButton type="submit" className="mt-1 h-10 text-sm">
-					{isRegister ? "Create account" : "Log in"}
+					{isRegister ? "Create account" : "Sign in"}
 				</PrimaryButton>
 			</form>
 
-			<div className="my-4 flex items-center gap-3 text-xs font-bold tracking-normal text-text-faint uppercase">
+			<div className="my-5 flex items-center gap-3 text-xs font-bold tracking-wide text-text-faint uppercase">
 				<span className="h-px flex-1 bg-border" />
-				<span>{isRegister ? "Or register with" : "Or use"}</span>
+				<span>{isRegister ? "Or register with" : "Or continue with"}</span>
 				<span className="h-px flex-1 bg-border" />
 			</div>
 
@@ -209,7 +228,7 @@ export default function LoginClient() {
 					const Icon = provider.icon;
 
 					return (
-						<GhostButton key={provider.slug} type="button" onClick={() => handleProvider(provider)}>
+						<GhostButton variant="outline" key={provider.slug} type="button" onClick={() => handleProvider(provider)} className="border-border py-2 text-sm">
 							<Icon size={16} aria-hidden="true" />
 							<span>{provider.name}</span>
 						</GhostButton>
@@ -217,21 +236,20 @@ export default function LoginClient() {
 				})}
 			</div>
 
-			<p className="mt-4 text-center text-sm text-text-muted">
+			<p className="mt-6 text-center text-sm text-text-muted">
 				{isRegister ? "Already have an account?" : "Need an account?"}{" "}
 				<button
 					type="button"
 					onClick={() => switchTo(isRegister ? "login" : "register")}
 					className="cursor-pointer font-bold text-primary transition-colors hover:text-primary-hover"
 				>
-					{isRegister ? "Log in" : "Register"}
+					{isRegister ? "Sign in" : "Register"}
 				</button>
 			</p>
 
 			<MenuPanel open={Boolean(providerSignup)} onClose={() => setProviderSignup(null)} title={providerSignup ? `Register with ${providerSignup.name}` : ""} width="24rem">
 				<form action={handleProviderSignup}>
-					<IconField
-						icon={User}
+					<TextInput
 						label="Username"
 						id="provider-username"
 						name="name"
@@ -245,10 +263,12 @@ export default function LoginClient() {
 							setProviderUsername(event.target.value);
 							setProviderUsernameError("");
 						}}
-						error={providerUsernameError}
+						fieldClassName="text-sm"
+						className={providerUsernameError ? "ring-error focus-visible:ring-error" : ""}
 					/>
+					{providerUsernameError && <p className="mt-1 text-xs font-bold text-error">{providerUsernameError}</p>}
 					<div className="mt-5 flex justify-end gap-2">
-						<GhostButton type="button" onClick={() => setProviderSignup(null)} className="px-4 py-2">
+						<GhostButton variant="outline" type="button" onClick={() => setProviderSignup(null)} className="px-4 py-2">
 							Cancel
 						</GhostButton>
 						<PrimaryButton type="submit" className="text-sm">

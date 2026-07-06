@@ -116,7 +116,7 @@ export default function ImportSettingsForm() {
 						<TextInput id="steamfield" value={steamId} onChange={(event) => setSteamId(event.target.value)} placeholder="7656119..." />
 					</label>
 					<div className="flex flex-row gap-2">
-						<GhostButton type="button" onClick={previewProfile} disabled={pending || !steamId.trim()}>
+						<GhostButton variant="outline" type="button" onClick={previewProfile} disabled={pending || !steamId.trim()}>
 							{pending ? "Checking..." : "Check profile"}
 						</GhostButton>
 					</div>
@@ -215,7 +215,7 @@ export default function ImportSettingsForm() {
 						className="h-max w-max text-sm"
 					/>
 					<p className="text-sm text-text-muted">Export a new backup file: </p>
-					<GhostButton type="button" onClick={exportLibrary} disabled={pending} className="w-max shrink-0 text-sm">
+					<GhostButton variant="outline" type="button" onClick={exportLibrary} disabled={pending} className="w-max shrink-0 text-sm">
 						{pending ? "Working..." : "Export .TG"}
 					</GhostButton>
 				</div>

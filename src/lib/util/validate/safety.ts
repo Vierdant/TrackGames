@@ -1,15 +1,8 @@
-import { ALLOWED_HOSTS } from "@/lib/constants";
-
 export function isSafeUrl(src: unknown) {
 	try {
 		if (typeof src !== "string") return false;
 
-		const url = new URL(src);
-
-		if (url.protocol !== "https:") return false;
-		if (!ALLOWED_HOSTS.has(url.hostname.toLowerCase())) return false;
-
-		return true;
+		return new URL(src).protocol === "https:";
 	} catch {
 		return false;
 	}

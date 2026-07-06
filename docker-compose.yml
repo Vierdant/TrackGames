@@ -11,3 +11,12 @@ services:
             - "5432:5432"
         volumes:
             - D:/Development/Databases/TrackGames/postgres:/var/lib/postgresql/data
+    redis:
+        image: redis:7-alpine
+        container_name: trackgames-redis-data
+        restart: unless-stopped
+        ports:
+            - "6379:6379"
+        volumes:
+            - D:/Development/Databases/TrackGames/redis:/data
+        command: redis-server --appendonly yes

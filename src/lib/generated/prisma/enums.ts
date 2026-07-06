@@ -9,6 +9,16 @@
 * 🟢 You can import this file directly.
 */
 
+export const RoadmapStatus = {
+  CONSIDERING: 'CONSIDERING',
+  PLANNED: 'PLANNED',
+  IN_PROGRESS: 'IN_PROGRESS',
+  SHIPPED: 'SHIPPED'
+} as const
+
+export type RoadmapStatus = (typeof RoadmapStatus)[keyof typeof RoadmapStatus]
+
+
 export const GameListType = {
   LIBRARY: 'LIBRARY',
   PLAYLIST: 'PLAYLIST'
@@ -132,3 +142,58 @@ export const PlayerPerspective = {
 } as const
 
 export type PlayerPerspective = (typeof PlayerPerspective)[keyof typeof PlayerPerspective]
+
+
+export const ReportStatus = {
+  PENDING: 'PENDING',
+  HANDLING: 'HANDLING',
+  RESOLVED: 'RESOLVED'
+} as const
+
+export type ReportStatus = (typeof ReportStatus)[keyof typeof ReportStatus]
+
+
+export const ReportReason = {
+  SPAM: 'SPAM',
+  HARASSMENT: 'HARASSMENT',
+  HATE: 'HATE',
+  SEXUAL: 'SEXUAL',
+  VIOLENCE: 'VIOLENCE',
+  ILLEGAL: 'ILLEGAL',
+  IMPERSONATION: 'IMPERSONATION',
+  MISINFORMATION: 'MISINFORMATION',
+  OTHER: 'OTHER'
+} as const
+
+export type ReportReason = (typeof ReportReason)[keyof typeof ReportReason]
+
+
+export const ReportTargetType = {
+  COMMENT: 'COMMENT',
+  USER_PROFILE: 'USER_PROFILE',
+  GAME_LIST: 'GAME_LIST',
+  GAME: 'GAME'
+} as const
+
+export type ReportTargetType = (typeof ReportTargetType)[keyof typeof ReportTargetType]
+
+
+export const FeedbackType = {
+  BUG: 'BUG',
+  SUGGESTION: 'SUGGESTION',
+  UI: 'UI',
+  PERFORMANCE: 'PERFORMANCE',
+  CONTENT: 'CONTENT',
+  OTHER: 'OTHER'
+} as const
+
+export type FeedbackType = (typeof FeedbackType)[keyof typeof FeedbackType]
+
+
+export const FeedbackStatus = {
+  NEW: 'NEW',
+  REVIEWED: 'REVIEWED',
+  ARCHIVED: 'ARCHIVED'
+} as const
+
+export type FeedbackStatus = (typeof FeedbackStatus)[keyof typeof FeedbackStatus]

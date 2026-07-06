@@ -124,7 +124,7 @@ function SearchBox({ autoFocus = false, onPick }: Readonly<{ autoFocus?: boolean
 			)}
 
 			{open && search.length >= 2 && (
-				<div className="absolute top-full right-0 left-0 z-dropdown mt-2 overflow-hidden rounded border border-border bg-bg-secondary shadow-main">
+				<div className="shadow-main absolute top-full right-0 left-0 z-dropdown mt-2 overflow-hidden rounded border border-border bg-bg-secondary">
 					<Link
 						href={searchHref}
 						prefetch={false}

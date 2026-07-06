@@ -1,9 +1,10 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { AlignCenter, AlignLeft, AlignRight, Bold, Eye, Image as ImageIcon, Italic, Link, Palette, Strikethrough, Table, Video } from "lucide-react";
+import { AlignCenter, AlignLeft, AlignRight, Bold, Columns3, Eye, Image as ImageIcon, Italic, Link, Palette, Strikethrough, Table, Video } from "lucide-react";
 import { MarkdownBlocks } from "@/components/markdown/MarkdownBlocks";
 import { GhostButton } from "@/components/ui/control/Button";
+import { ColorPicker } from "@/components/ui/control/ColorPicker";
 import { TextArea } from "@/components/ui/control/TextArea";
 import { TextInput } from "@/components/ui/control/TextInput";
 import MenuPanel from "@/components/ui/MenuPanel";
@@ -22,6 +23,8 @@ export default function MarkdownWidgetEditor({ value, onChange }: MarkdownWidget
 	const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 	const [mediaModal, setMediaModal] = useState<"image" | "video" | null>(null);
 	const [lastMediaModal, setLastMediaModal] = useState<"image" | "video">("image");
+	const [colorModal, setColorModal] = useState(false);
+	const [color, setColor] = useState("#7B5CDB");
 	const [showPreview, setShowPreview] = useState(false);
 	const [imageSrc, setImageSrc] = useState("");
 	const [videoSrc, setVideoSrc] = useState("");
@@ -61,15 +64,20 @@ export default function MarkdownWidgetEditor({ value, onChange }: MarkdownWidget
 		replaceSelection((selection) => `${before}${selection || fallback}${after}`);
 	}
 
-	function wrapBlock(directive: "start" | "center" | "end") {
-		replaceSelection((selection) => `::${directive}\n${selection || "Text"}\n::`);
+	function wrapBlock(tag: "left" | "center" | "right") {
+		replaceSelection((selection) => `[${tag}]\n${selection || "Text"}\n[/${tag}]`);
+	}
+
+	function insertColor() {
+		wrapSelection(`[color=${color}]`, "[/color]", "colored text");
+		setColorModal(false);
 	}
 
 	function insertImage() {
 		if (!imageSrc.trim()) return;
 
 		insertBlock(
-			`::image src="${quoteAttribute(imageSrc.trim())}" alt="${quoteAttribute(mediaAlt.trim())}" align=center width=${mediaWidth || 520} height=${mediaHeight || 280} fit=cover position=center rounded=true`,
+			`[image src="${quoteAttribute(imageSrc.trim())}" alt="${quoteAttribute(mediaAlt.trim())}" align=center width=${mediaWidth || 520} height=${mediaHeight || 280} fit=cover position=center rounded]`,
 		);
 		setImageSrc("");
 		setMediaAlt("");
@@ -79,7 +87,7 @@ export default function MarkdownWidgetEditor({ value, onChange }: MarkdownWidget
 	function insertVideo() {
 		if (!videoSrc.trim()) return;
 
-		insertBlock(`::video src="${quoteAttribute(videoSrc.trim())}" align=center width=${mediaWidth || 520} height=${mediaHeight || 292} rounded=true`);
+		insertBlock(`[video src="${quoteAttribute(videoSrc.trim())}" align=center width=${mediaWidth || 520} height=${mediaHeight || 292} rounded]`);
 		setVideoSrc("");
 		setMediaModal(null);
 	}
@@ -89,28 +97,44 @@ export default function MarkdownWidgetEditor({ value, onChange }: MarkdownWidget
 	return (
 		<div className="mt-3 flex flex-col gap-3">
 			<div className="flex flex-wrap gap-2">
-				<GhostButton type="button" onClick={() => wrapSelection("**")} className="px-3 py-2" title="Bold selected text" aria-label="Bold selected text">
+				<GhostButton variant="outline" type="button" onClick={() => wrapSelection("**")} className="px-3 py-2" title="Bold selected text" aria-label="Bold selected text">
 					<Bold size={16} />
 				</GhostButton>
-				<GhostButton type="button" onClick={() => wrapSelection("*")} className="px-3 py-2" title="Italic selected text" aria-label="Italic selected text">
+				<GhostButton
+					variant="outline"
+					type="button"
+					onClick={() => wrapSelection("*")}
+					className="px-3 py-2"
+					title="Italic selected text"
+					aria-label="Italic selected text"
+				>
 					<Italic size={16} />
 				</GhostButton>
-				<GhostButton type="button" onClick={() => wrapSelection("~~")} className="px-3 py-2" title="Strikethrough selected text" aria-label="Strikethrough selected text">
+				<GhostButton
+					variant="outline"
+					type="button"
+					onClick={() => wrapSelection("~~")}
+					className="px-3 py-2"
+					title="Strikethrough selected text"
+					aria-label="Strikethrough selected text"
+				>
 					<Strikethrough size={16} />
 				</GhostButton>
-				<GhostButton type="button" onClick={() => wrapSelection("[", "](https://example.com)", "link text")} className="px-3 py-2" title="Add link" aria-label="Add link">
+				<GhostButton
+					variant="outline"
+					type="button"
+					onClick={() => wrapSelection("[", "](https://example.com)", "link text")}
+					className="px-3 py-2"
+					title="Add link"
+					aria-label="Add link"
+				>
 					<Link size={16} />
 				</GhostButton>
-				<GhostButton
-					type="button"
-					onClick={() => wrapSelection("[", "]{color=primary}", "colored text")}
-					className="px-3 py-2"
-					title="Apply color token"
-					aria-label="Apply color token"
-				>
+				<GhostButton variant="outline" type="button" onClick={() => setColorModal(true)} className="px-3 py-2" title="Color selected text" aria-label="Color selected text">
 					<Palette size={16} />
 				</GhostButton>
 				<GhostButton
+					variant="outline"
 					type="button"
 					onClick={() => insertBlock("| Head | Value |\n| --- | --- |\n| Label | Text |")}
 					className="px-3 py-2"
@@ -119,16 +143,27 @@ export default function MarkdownWidgetEditor({ value, onChange }: MarkdownWidget
 				>
 					<Table size={16} />
 				</GhostButton>
-				<GhostButton type="button" onClick={() => wrapBlock("start")} className="px-3 py-2" title="Align block to start" aria-label="Align block to start">
+				<GhostButton
+					variant="outline"
+					type="button"
+					onClick={() => insertBlock("[grid cols=2 gap=8]\nLeft column\n[cell]\nRight column\n[/grid]")}
+					className="px-3 py-2"
+					title="Insert grid"
+					aria-label="Insert grid"
+				>
+					<Columns3 size={16} />
+				</GhostButton>
+				<GhostButton variant="outline" type="button" onClick={() => wrapBlock("left")} className="px-3 py-2" title="Align block left" aria-label="Align block left">
 					<AlignLeft size={16} />
 				</GhostButton>
-				<GhostButton type="button" onClick={() => wrapBlock("center")} className="px-3 py-2" title="Center block" aria-label="Center block">
+				<GhostButton variant="outline" type="button" onClick={() => wrapBlock("center")} className="px-3 py-2" title="Center block" aria-label="Center block">
 					<AlignCenter size={16} />
 				</GhostButton>
-				<GhostButton type="button" onClick={() => wrapBlock("end")} className="px-3 py-2" title="Align block to end" aria-label="Align block to end">
+				<GhostButton variant="outline" type="button" onClick={() => wrapBlock("right")} className="px-3 py-2" title="Align block right" aria-label="Align block right">
 					<AlignRight size={16} />
 				</GhostButton>
 				<GhostButton
+					variant="outline"
 					type="button"
 					onClick={() => {
 						setLastMediaModal("image");
@@ -141,6 +176,7 @@ export default function MarkdownWidgetEditor({ value, onChange }: MarkdownWidget
 					<ImageIcon size={16} />
 				</GhostButton>
 				<GhostButton
+					variant="outline"
 					type="button"
 					onClick={() => {
 						setLastMediaModal("video");
@@ -162,7 +198,13 @@ export default function MarkdownWidgetEditor({ value, onChange }: MarkdownWidget
 				placeholder="# Markdown widget"
 			/>
 
+			<p className="text-xs text-text-faint">
+				Standard markdown plus layout tags: <code>[center]…[/center]</code>, <code>[color=#ff5500]…[/color]</code>, <code>[link=https://…]…[/link]</code>, and{" "}
+				<code>[grid cols=2]…[cell]…[/grid]</code>. Tags on their own line wrap a block; nest them to layer effects.
+			</p>
+
 			<GhostButton
+				variant="outline"
 				type="button"
 				onClick={() => setShowPreview((current) => !current)}
 				className="px-3 py-2"
@@ -185,6 +227,18 @@ export default function MarkdownWidgetEditor({ value, onChange }: MarkdownWidget
 				</div>
 			)}
 
+			<MenuPanel open={colorModal} onClose={() => setColorModal(false)} title="Color text">
+				<ColorPicker value={color} onChange={(event) => setColor(event.target.value)} label="Pick a color" />
+				<div className="mt-5 flex justify-end gap-2">
+					<GhostButton variant="outline" type="button" onClick={() => setColorModal(false)}>
+						Cancel
+					</GhostButton>
+					<GhostButton variant="outline" type="button" onClick={insertColor}>
+						Apply
+					</GhostButton>
+				</div>
+			</MenuPanel>
+
 			<MenuPanel open={Boolean(mediaModal)} onClose={() => setMediaModal(null)} title={lastMediaModal === "image" ? "Insert image" : "Insert video"}>
 				<div className="flex flex-col gap-2">
 					{lastMediaModal === "image" ? (
@@ -201,10 +255,11 @@ export default function MarkdownWidgetEditor({ value, onChange }: MarkdownWidget
 					</div>
 				</div>
 				<div className="mt-5 flex justify-end gap-2">
-					<GhostButton type="button" onClick={() => setMediaModal(null)}>
+					<GhostButton variant="outline" type="button" onClick={() => setMediaModal(null)}>
 						Cancel
 					</GhostButton>
 					<GhostButton
+						variant="outline"
 						type="button"
 						onClick={lastMediaModal === "image" ? insertImage : insertVideo}
 						disabled={lastMediaModal === "image" ? !imageSrc.trim() : !videoSrc.trim()}

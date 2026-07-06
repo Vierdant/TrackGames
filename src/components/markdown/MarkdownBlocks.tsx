@@ -1,13 +1,12 @@
 import { Children, cloneElement, isValidElement, type ReactNode } from "react";
 import ReactMarkdown, { type Components } from "react-markdown";
-import Image from "next/image";
 import rehypeSanitize from "rehype-sanitize";
 import remarkGfm from "remark-gfm";
 import { ALLOWED_TAGS } from "@/lib/constants";
 import type { MarkdownBlock } from "@/lib/types";
 import { MarkdownAlign } from "@/lib/types";
-import * as normalize from "@/lib/util/validate/normalize";
-import { isSafeLinkHref, isSafeUrl } from "@/lib/util/validate/safety";
+import { markdownColor } from "@/lib/util/validate/normalize";
+import { isSafeLinkHref } from "@/lib/util/validate/safety";
 
 type MarkdownImageProps = Readonly<{
 	src: string;
@@ -40,13 +39,11 @@ type MarkdownGroupProps = Readonly<{
 
 type MarkdownContentProps = Readonly<{ block: Extract<MarkdownBlock, { type: "markdown" }>; parentAlign: MarkdownAlign }>;
 
-type MarkdownComponentName = "h1" | "h2" | "h3" | "p" | "strong" | "em" | "del" | "ul" | "ol" | "li" | "blockquote" | "hr" | "table" | "th" | "td" | "code" | "pre" | "a" | "img";
+type MarkdownComponentName = "h1" | "h2" | "h3" | "p" | "strong" | "em" | "del" | "ul" | "ol" | "li" | "blockquote" | "hr" | "table" | "th" | "td" | "code" | "pre" | "a";
 
 type MarkdownComponentProps = {
 	children?: ReactNode;
 	href?: string;
-	src?: unknown;
-	alt?: string;
 };
 
 type MarkdownBlocksProps = Readonly<{
@@ -75,18 +72,18 @@ const markdownComponents: Components = {
 	code: (props) => renderMarkdownComponent("code", props),
 	pre: (props) => renderMarkdownComponent("pre", props),
 	a: (props) => renderMarkdownComponent("a", props),
-	img: (props) => renderMarkdownComponent("img", props),
 };
 
 function MarkdownImage({ src, alt, width, height, fit, position, rounded, shouldFillCell = false, align = MarkdownAlign.START }: MarkdownImageProps) {
 	const widthPx = width ? `${width}px` : undefined;
 
 	return (
-		<Image
+		// Plain img (not next/image) so a bare [image src] renders at natural size with
+		// every dimension attribute optional; remote hosts are unrestricted anyway.
+		// eslint-disable-next-line @next/next/no-img-element
+		<img
 			src={src}
 			alt={alt}
-			width={width}
-			height={height}
 			loading="lazy"
 			referrerPolicy="no-referrer"
 			className={mediaClassName({ rounded, align })}
@@ -199,41 +196,66 @@ function groupClassName(align: MarkdownAlign, inline = false) {
 	}
 }
 
-function renderColoredTextString(value: string) {
+function renderColoredTextString(value: string): ReactNode[] {
 	const parts: ReactNode[] = [];
+	const openTag = /\[color=([^\]\s]+)]/i;
 	let index = 0;
 
 	while (index < value.length) {
-		const start = value.indexOf("[", index);
+		const match = openTag.exec(value.slice(index));
 
-		if (start === -1) {
+		if (!match) {
 			parts.push(value.slice(index));
 			break;
 		}
 
-		const textEnd = value.indexOf("]{color=", start);
-		const colorEnd = textEnd === -1 ? -1 : value.indexOf("}", textEnd + 8);
+		const openStart = index + match.index;
+		const contentStart = openStart + match[0].length;
 
-		if (textEnd === -1 || colorEnd === -1) {
+		// Find the matching [/color], balancing nested [color] tags.
+		let depth = 1;
+		let cursor = contentStart;
+		let closeStart = -1;
+
+		while (cursor < value.length) {
+			const nextOpen = value.indexOf("[color=", cursor);
+			const nextClose = value.indexOf("[/color]", cursor);
+
+			if (nextClose === -1) break;
+
+			if (nextOpen !== -1 && nextOpen < nextClose) {
+				depth += 1;
+				cursor = nextOpen + 7;
+			} else {
+				depth -= 1;
+				cursor = nextClose + 8;
+				if (depth === 0) {
+					closeStart = nextClose;
+					break;
+				}
+			}
+		}
+
+		if (closeStart === -1) {
 			parts.push(value.slice(index));
 			break;
 		}
 
-		if (start > index) parts.push(value.slice(index, start));
+		if (openStart > index) parts.push(value.slice(index, openStart));
 
-		const text = value.slice(start + 1, textEnd);
-		const color = normalize.hexColor(value.slice(textEnd + 8, colorEnd));
+		const color = markdownColor(match[1]);
+		const inner = value.slice(contentStart, closeStart);
 
 		parts.push(
 			color ? (
-				<span key={`${text}-${start}`} style={{ color }}>
-					{text}
+				<span key={openStart} style={{ color }}>
+					{renderColoredTextString(inner)}
 				</span>
 			) : (
-				value.slice(start, colorEnd + 1)
+				value.slice(openStart, closeStart + 8)
 			),
 		);
-		index = colorEnd + 1;
+		index = closeStart + 8;
 	}
 
 	return parts;
@@ -263,7 +285,7 @@ function mediaClassName({ rounded, align }: { rounded?: boolean; align: Markdown
 	return classes.join(" ");
 }
 
-function renderMarkdownComponent(name: MarkdownComponentName, { children, href, src, alt }: MarkdownComponentProps) {
+function renderMarkdownComponent(name: MarkdownComponentName, { children, href }: MarkdownComponentProps) {
 	switch (name) {
 		case "h1":
 			return <h1 className="mb-3 text-2xl leading-tight font-bold">{renderColoredText(children)}</h1>;
@@ -311,10 +333,6 @@ function renderMarkdownComponent(name: MarkdownComponentName, { children, href, 
 					{renderColoredText(children)}
 				</a>
 			);
-		case "img":
-			if (!src || typeof src !== "string" || !isSafeUrl(src)) return null;
-
-			return <MarkdownImage src={src} alt={alt ?? ""} />;
 		default:
 			return children;
 	}

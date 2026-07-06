@@ -100,29 +100,36 @@ export default function GameLibraryButtonPanel({ gameId, gameSlug, isLoggedIn, e
 		});
 	}
 
-	function togglePlaylist(listId: string, entryId?: string) {
+	function submitPlaylists(listIds: string[]) {
 		setError("");
+		const wanted = new Set(listIds);
 		startTransition(async () => {
-			if (entryId) {
-				const result = await removeGameFromPlaylist(listId, entryId);
-				if (result && "error" in result) {
-					setError(result.error);
-					return;
+			for (const playlist of userPlaylists) {
+				const existing = playlist.entries.find((entry) => entry.gameId === gameId);
+				const shouldHave = wanted.has(playlist.id);
+
+				if (shouldHave && !existing) {
+					const formData = new FormData();
+					formData.set("gameId", String(gameId));
+					const entry = await addGameToPlaylist(playlist.id, formData);
+					if ("error" in entry) {
+						setError(entry.error);
+						continue;
+					}
+
+					setUserPlaylists((current) => addGameEntryToPlaylists(current, playlist.id, entry.id, gameId));
+				} else if (!shouldHave && existing) {
+					const result = await removeGameFromPlaylist(playlist.id, existing.id);
+					if (result && "error" in result) {
+						setError(result.error);
+						continue;
+					}
+
+					setUserPlaylists((current) => removeGameEntryFromPlaylists(current, playlist.id, existing.id));
 				}
-
-				setUserPlaylists((current) => removeGameEntryFromPlaylists(current, listId, entryId));
-				return;
 			}
 
-			const formData = new FormData();
-			formData.set("gameId", String(gameId));
-			const entry = await addGameToPlaylist(listId, formData);
-			if ("error" in entry) {
-				setError(entry.error);
-				return;
-			}
-
-			setUserPlaylists((current) => addGameEntryToPlaylists(current, listId, entry.id, gameId));
+			setManagingLists(false);
 		});
 	}
 
@@ -226,6 +233,7 @@ export default function GameLibraryButtonPanel({ gameId, gameSlug, isLoggedIn, e
 						</div>
 						<div className="border-t border-border pt-3">
 							<GhostButton
+								variant="outline"
 								type="button"
 								disabled={pending}
 								onClick={() => {
@@ -242,24 +250,23 @@ export default function GameLibraryButtonPanel({ gameId, gameSlug, isLoggedIn, e
 			</div>
 			<div className="flex flex-row flex-wrap justify-center gap-3 md:contents">
 				{logsHref && (
-					<GhostButton href={logsHref} className="h-12 px-5">
+					<GhostButton variant="outline" href={logsHref} className="h-12 px-5">
 						<NotebookText size={18} />
 						Logs
 					</GhostButton>
 				)}
-				<GhostButton type="button" disabled={pending} onClick={() => setManagingLists(true)} className="h-12 px-5 disabled:cursor-wait disabled:opacity-60">
+				<GhostButton
+					variant="outline"
+					type="button"
+					disabled={pending}
+					onClick={() => setManagingLists(true)}
+					className="h-12 px-5 disabled:cursor-wait disabled:opacity-60"
+				>
 					<ListPlus size={18} />
 					Manage lists
 				</GhostButton>
 			</div>
-			<ManageListsPanel
-				open={managingLists}
-				onClose={() => setManagingLists(false)}
-				gameId={gameId}
-				playlists={userPlaylists}
-				pending={pending}
-				onTogglePlaylist={togglePlaylist}
-			/>
+			<ManageListsPanel open={managingLists} onClose={() => setManagingLists(false)} gameId={gameId} playlists={userPlaylists} pending={pending} onSubmit={submitPlaylists} />
 		</div>
 	);
 }

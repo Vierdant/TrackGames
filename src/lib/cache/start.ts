@@ -7,7 +7,7 @@ export async function startCacheJobs() {
 	started = true;
 
 	for (const resource of cachedResources) {
-		await resource.hydrateFromDisk();
+		await resource.hydrateFromStore();
 
 		resource.refresh().catch(Error);
 

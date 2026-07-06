@@ -1,33 +1,33 @@
 "use client";
 
-import { useEffect } from "react";
-import { Home, RotateCcw } from "lucide-react";
-import { GhostButton, PrimaryButton } from "@/components/ui/control/Button";
+import { DangerButton, GhostButton, PrimaryButton, SecondaryButton, SuccessButton } from "@/components/ui/control/Button";
 
-export default function ErrorPage({ error, reset }: Readonly<{ error: Error & { digest?: string }; reset: () => void }>) {
-	useEffect(() => {
-		console.error(error);
-	}, [error]);
+const buttons = [
+	{ label: "Primary", Btn: PrimaryButton },
+	{ label: "Secondary", Btn: SecondaryButton },
+	{ label: "Ghost", Btn: GhostButton },
+	{ label: "Danger", Btn: DangerButton },
+	{ label: "Success", Btn: SuccessButton },
+] as const;
 
+const variants = ["main", "outline", "text"] as const;
+
+export default function ButtonShowcase() {
 	return (
-		<main className="flex h-full min-h-64 w-full flex-col items-center justify-center gap-4 p-6 text-center">
-			<h1 className="mt-12 px-4 text-[clamp(4rem,18vw,6.75rem)] leading-none font-bold text-primary sm:mt-18">
-				5<span className="text-secondary">0</span>0
-			</h1>
-			<div className="flex flex-col gap-2">
-				<h2 className="text-xl font-bold text-text md:text-2xl">Something went wrong</h2>
-				<p className="text-sm text-text-muted md:text-base">Oops... An unexpected error occurred, sorry</p>
-			</div>
-			<div className="flex w-auto flex-row justify-center gap-3">
-				<PrimaryButton onClick={reset} className="w-full sm:w-auto">
-					<RotateCcw className="size-4" aria-hidden="true" />
-					Try again
-				</PrimaryButton>
-				<GhostButton href="/" className="w-full sm:w-auto">
-					<Home className="size-4" aria-hidden="true" />
-					Home
-				</GhostButton>
-			</div>
+		<main className="mx-auto flex w-full max-w-3xl flex-col gap-6 p-8">
+			<h1 className="text-2xl font-bold text-text">Buttons</h1>
+			{buttons.map(({ label, Btn }) => (
+				<div key={label} className="flex flex-col gap-2">
+					<h2 className="text-sm font-bold text-text-muted">{label}</h2>
+					<div className="flex flex-wrap items-center gap-3">
+						{variants.map((variant) => (
+							<Btn key={variant} variant={variant}>
+								{variant}
+							</Btn>
+						))}
+					</div>
+				</div>
+			))}
 		</main>
 	);
 }

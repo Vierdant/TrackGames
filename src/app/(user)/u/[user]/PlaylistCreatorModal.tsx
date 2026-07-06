@@ -42,7 +42,7 @@ export default function PlaylistCreatorModal({ canCreate }: Readonly<{ canCreate
 					<TextArea label="Description" name="description" rows={1} maxLength={500} />
 					{error && <p className="text-sm font-bold text-error">{error}</p>}
 					<div className="mt-2 flex justify-end gap-2">
-						<GhostButton type="button" onClick={() => setOpen(false)}>
+						<GhostButton variant="outline" type="button" onClick={() => setOpen(false)}>
 							Cancel
 						</GhostButton>
 						<PrimaryButton type="submit" disabled={pending}>

@@ -2,10 +2,12 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import AddPlaylistGameForm from "@/app/(library)/playlist/[id]/AddPlaylistGameForm";
 import GamesTrackedWidget from "@/app/(library)/playlist/[id]/GamesTrackedWidget";
+import CopyIdButton from "@/components/admin/CopyIdButton";
 import CommentSection from "@/components/comments/CommentSection";
 import Container from "@/components/layout/Container";
 import GameListEditButton from "@/components/playlist/GameListEditButton";
 import PlaylistEntriesView from "@/components/playlist/PlaylistEntriesView";
+import ReportButton from "@/components/report/ReportButton";
 import LikeButton from "@/components/social/LikeButton";
 import { GhostButton } from "@/components/ui/control/Button";
 import PrivateDisplay from "@/components/ui/PrivateDisplay";
@@ -14,7 +16,7 @@ import { auth } from "@/lib/auth";
 import { getPlaylist, getPlaylistLibraryCount } from "@/lib/data/playlists";
 import { getPlaylistLikeState } from "@/lib/data/social";
 import { getUser, isFollower } from "@/lib/data/user";
-import { InteractionTargetType, LikeTargetType } from "@/lib/generated/prisma/enums";
+import { InteractionTargetType, LikeTargetType, ReportTargetType, UserRole } from "@/lib/generated/prisma/enums";
 import { profileThemeStyle } from "@/lib/util/client/theme";
 import { absoluteUrl, metadataDescription, robotsForPrivacy, SITE_NAME } from "@/lib/util/metadata";
 import { checkPublicPrivacy, shouldHideComments } from "@/lib/util/privacy";
@@ -50,9 +52,10 @@ export default async function Page({ params }: Readonly<{ params: Promise<{ id: 
 					<Container className="relative z-raised flex flex-row items-end justify-start gap-10 pt-5">
 						<div className="mb-4 flex min-w-0 flex-1 flex-col justify-end gap-3 md:flex-row md:items-end md:justify-between md:gap-5">
 							<div>
-								<div className="flex flex-col gap-2 md:flex-row md:items-end">
+								<div className="flex flex-col items-center gap-2 md:flex-row">
 									<h1 className="text-center text-3xl md:text-start">{playlist.name}</h1>
 									<p className="text-center text-sm text-text-faint md:text-start">By {playlist.user?.name ?? "Unknown"}</p>
+									<CopyIdButton id={playlist.id} isAdmin={Boolean(viewer?.roles.includes(UserRole.ADMIN))} className="text-sm text-text-faint" />
 								</div>
 								<p className="text-md text-center text-text-muted md:text-start">{playlist.description || "No description."}</p>
 							</div>
@@ -64,8 +67,22 @@ export default async function Page({ params }: Readonly<{ params: Promise<{ id: 
 									hasLikedState={likeState.liked}
 									isLoggedIn={Boolean(session?.user?.id)}
 								/>
+								{!isOwner && session?.user?.id && (
+									<ReportButton
+										targetType={ReportTargetType.GAME_LIST}
+										targetId={playlist.id}
+										reportedUserId={playlist.userId}
+										context={{ list: playlist.name, owner: playlist.user?.name ?? "" }}
+										display="button"
+										label={`Report ${playlist.name}`}
+									/>
+								)}
 								{canEdit && <GameListEditButton list={playlist} tiers={tiers} tierColors={tierColors} />}
-								{playlist.user?.name && <GhostButton href={`/u/${playlist.user.name}?tab=profile`}>View Profile</GhostButton>}
+								{playlist.user?.name && (
+									<GhostButton variant="outline" href={`/u/${playlist.user.name}?tab=profile`}>
+										View Profile
+									</GhostButton>
+								)}
 							</div>
 						</div>
 					</Container>

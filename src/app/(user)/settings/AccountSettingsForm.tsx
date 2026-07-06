@@ -104,11 +104,11 @@ export default function AccountSettingsForm({ profile, linkedProviders, hasPassw
 									<span>{provider.label}</span>
 								</div>
 								{linked ? (
-									<GhostButton type="submit" formAction={unlinkProvider.bind(null, provider.slug)} className="px-3 py-1 text-sm">
+									<GhostButton variant="outline" type="submit" formAction={unlinkProvider.bind(null, provider.slug)} className="px-3 py-1 text-sm">
 										Unlink
 									</GhostButton>
 								) : (
-									<GhostButton type="submit" formAction={linkProvider.bind(null, provider.slug)} className="px-3 py-1 text-sm">
+									<GhostButton variant="outline" type="submit" formAction={linkProvider.bind(null, provider.slug)} className="px-3 py-1 text-sm">
 										Link
 									</GhostButton>
 								)}
@@ -125,13 +125,28 @@ export default function AccountSettingsForm({ profile, linkedProviders, hasPassw
 				<h3>Danger zone</h3>
 				<p className="mt-1 text-sm text-text-muted">These actions permanently remove account data. Each action requires confirmation before it runs.</p>
 				<div className="mt-4 grid gap-2 md:grid-cols-3">
-					<GhostButton type="button" onClick={() => setConfirming("library")} className="border-error px-3 py-2 text-error hover:border-error hover:text-error">
+					<GhostButton
+						variant="outline"
+						type="button"
+						onClick={() => setConfirming("library")}
+						className="border-error px-3 py-2 text-error hover:border-error hover:text-error"
+					>
 						Clear library
 					</GhostButton>
-					<GhostButton type="button" onClick={() => setConfirming("data")} className="border-error px-3 py-2 text-error hover:border-error hover:text-error">
+					<GhostButton
+						variant="outline"
+						type="button"
+						onClick={() => setConfirming("data")}
+						className="border-error px-3 py-2 text-error hover:border-error hover:text-error"
+					>
 						Clear all data
 					</GhostButton>
-					<GhostButton type="button" onClick={() => setConfirming("account")} className="border-error px-3 py-2 text-error hover:border-error hover:text-error">
+					<GhostButton
+						variant="outline"
+						type="button"
+						onClick={() => setConfirming("account")}
+						className="border-error px-3 py-2 text-error hover:border-error hover:text-error"
+					>
 						Delete account
 					</GhostButton>
 				</div>

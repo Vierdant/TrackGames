@@ -1,20 +1,18 @@
 import { isSafeLinkHref, isSafeUrl, isVideoUrl } from "@/lib/util/validate/safety";
 
 describe("isSafeUrl", () => {
-	it("accepts an https URL on an allow-listed host", () => {
+	it("accepts any https URL", () => {
 		expect(isSafeUrl("https://i.imgur.com/abc.png")).toBe(true);
+		expect(isSafeUrl("https://t3.ftcdn.net/jpg/03/66/76/96/img.jpg")).toBe(true);
 	});
 
-	it("rejects an http URL even on an allow-listed host", () => {
+	it("rejects an http URL", () => {
 		expect(isSafeUrl("http://i.imgur.com/abc.png")).toBe(false);
 	});
 
-	it("rejects a host not on the allow list", () => {
-		expect(isSafeUrl("https://evil.example.com/abc.png")).toBe(false);
-	});
-
-	it("rejects a host that merely contains an allowed host as a substring", () => {
-		expect(isSafeUrl("https://i.imgur.com.evil.com/abc.png")).toBe(false);
+	it("rejects non-https protocols", () => {
+		expect(isSafeUrl("javascript:alert(1)")).toBe(false);
+		expect(isSafeUrl("data:image/png;base64,AAAA")).toBe(false);
 	});
 
 	it("rejects non-string input", () => {
@@ -25,10 +23,6 @@ describe("isSafeUrl", () => {
 
 	it("rejects unparsable strings", () => {
 		expect(isSafeUrl("not a url")).toBe(false);
-	});
-
-	it("is case-insensitive on the hostname", () => {
-		expect(isSafeUrl("https://I.IMGUR.COM/abc.png")).toBe(true);
 	});
 });
 

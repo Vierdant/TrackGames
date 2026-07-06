@@ -1,12 +1,17 @@
-import { type ButtonHTMLAttributes, type ReactNode } from "react";
+import { type AnchorHTMLAttributes, type ButtonHTMLAttributes, type ReactNode } from "react";
 import Link from "next/link";
 import { SlidersHorizontal } from "lucide-react";
 import { joinClass } from "@/lib/util/client/func";
 
+type ButtonColor = "primary" | "secondary" | "surface" | "ghost" | "danger" | "success";
+type ButtonVariant = "main" | "outline" | "text";
+
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
 	children: ReactNode;
 	href?: string;
-	variant?: "primary" | "secondary" | "ghost";
+	target?: string;
+	color?: ButtonColor;
+	variant?: ButtonVariant;
 };
 
 type FloatedSquareButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
@@ -21,17 +26,50 @@ type IconButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
 	pressed?: boolean;
 };
 
-const classes: Record<NonNullable<ButtonProps["variant"]>, string> = {
-	primary: "flex items-center gap-5 justify-center bg-primary text-text px-6 py-2 rounded cursor-pointer font-bold transition-colors hover:bg-primary-hover",
-	secondary: "flex items-center gap-5 justify-center bg-secondary text-text-inverse px-6 py-2 rounded cursor-pointer font-bold transition-colors hover:bg-secondary-hover",
-	ghost: "flex items-center gap-5 justify-center bg-primary/0 border-text-faint border text-text-muted px-6 py-2 rounded cursor-pointer font-bold hover:border-primary hover:text-primary transition-colors",
+const base = "flex items-center gap-5 justify-center px-6 py-2 rounded cursor-pointer font-bold transition-colors";
+
+// Each color maps to its solid/hover token + a Tailwind class set per variant.
+// main:    filled, brightens on hover.
+// outline: hollow, border+text in color; hover fills bg and flips text to inverse.
+// text:    no border; hover shows a faint tint and shifts text to the hover shade.
+const colors: Record<ButtonColor, Record<ButtonVariant, string>> = {
+	primary: {
+		main: "bg-primary ring ring-primary text-text-inverse hover:bg-primary-hover",
+		outline: "ring ring-primary text-primary hover:bg-primary hover:text-text-inverse",
+		text: "text-primary hover:bg-primary/15 hover:text-primary-hover",
+	},
+	secondary: {
+		main: "bg-secondary ring ring-secondary text-text-inverse hover:bg-secondary-hover",
+		outline: "ring ring-secondary text-secondary hover:bg-secondary hover:text-text-inverse",
+		text: "text-secondary hover:bg-secondary/15 hover:text-secondary-hover",
+	},
+	surface: {
+		main: "bg-surface ring ring-surface text-text hover:bg-surface-hover",
+		outline: "ring ring-surface text-surface hover:bg-surface hover:text-text",
+		text: "text-surface hover:bg-surface/15 hover:text-surface-hover",
+	},
+	ghost: {
+		main: "bg-text-faint ring ring-text-faint text-text hover:bg-surface-hover",
+		outline: "ring ring-text-faint  text-text-faint hover:bg-text-faint hover:text-text-inverse",
+		text: "text-text-faint hover:bg-text-faint/15 hover:text-text-faint-hover",
+	},
+	danger: {
+		main: "bg-error ring ring-error text-text-inverse hover:bg-error-hover",
+		outline: "ring ring-error text-error hover:bg-error hover:text-text-inverse",
+		text: "text-error hover:bg-error/15 hover:text-error-hover",
+	},
+	success: {
+		main: "bg-success ring ring-success text-text-inverse hover:bg-success-hover",
+		outline: "border border-success text-success hover:bg-success hover:text-text-inverse",
+		text: "text-success hover:bg-success/15 hover:text-success-hover",
+	},
 };
 
-export function Button({ children, href, className, variant = "primary", ...props }: ButtonProps) {
-	const cls = joinClass(classes[variant], className);
+export function Button({ children, href, target, className, color = "primary", variant = "main", ...props }: ButtonProps) {
+	const cls = joinClass(base, colors[color][variant], className);
 	if (href)
 		return (
-			<Link href={href} className={cls}>
+			<Link {...(props as AnchorHTMLAttributes<HTMLAnchorElement>)} href={href} target={target} rel="noopener noreferrer" className={cls}>
 				{children}
 			</Link>
 		);
@@ -43,13 +81,17 @@ export function Button({ children, href, className, variant = "primary", ...prop
 	);
 }
 
-export const PrimaryButton = (p: ButtonProps) => <Button {...p} variant="primary" />;
-export const SecondaryButton = (p: ButtonProps) => <Button {...p} variant="secondary" />;
-export const GhostButton = (p: ButtonProps) => <Button {...p} variant="ghost" />;
+export const PrimaryButton = (p: Omit<ButtonProps, "color">) => <Button {...p} color="primary" />;
+export const SecondaryButton = (p: Omit<ButtonProps, "color">) => <Button {...p} color="secondary" />;
+export const SurfaceButton = (p: Omit<ButtonProps, "color">) => <Button {...p} color="surface" />;
+export const GhostButton = (p: Omit<ButtonProps, "color">) => <Button {...p} color="ghost" />;
+export const DangerButton = (p: Omit<ButtonProps, "color">) => <Button {...p} color="danger" />;
+export const SuccessButton = (p: Omit<ButtonProps, "color">) => <Button {...p} color="success" />;
 
 export function AdvancedFilterButton({ onClick, filterCount }: { onClick: () => void; filterCount: number }) {
 	return (
 		<GhostButton
+			variant="outline"
 			onClick={onClick}
 			className={joinClass("h-9 border-border", filterCount ? "border-primary text-primary" : "border-border text-text-muted")}
 			aria-label="Advanced filters"

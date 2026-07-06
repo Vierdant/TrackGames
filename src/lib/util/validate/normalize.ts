@@ -51,6 +51,30 @@ export function hexColor(value: unknown, fallback = "#7B5CDB"): string {
 	return typeof value === "string" && /^#[0-9a-f]{6}$/i.test(value) ? value : fallback;
 }
 
+/** Named palette tokens usable in markdown colors, resolved to theme-aware CSS values. */
+export const MARKDOWN_COLOR_TOKENS: Record<string, string> = {
+	primary: "var(--color-primary)",
+	secondary: "var(--color-secondary)",
+	success: "var(--color-success)",
+	warning: "var(--color-warning)",
+	error: "var(--color-error)",
+	muted: "var(--color-text-muted)",
+};
+
+/**
+ * Resolves a markdown color to a safe CSS value: a 3- or 6-digit hex, or a named
+ * palette token. Returns undefined when the value is not recognized so callers can
+ * skip coloring instead of forcing a fallback.
+ */
+export function markdownColor(value: unknown): string | undefined {
+	if (typeof value !== "string") return undefined;
+
+	const token = value.trim().toLowerCase();
+	if (/^#([0-9a-f]{3}|[0-9a-f]{6})$/.test(token)) return token;
+
+	return MARKDOWN_COLOR_TOKENS[token];
+}
+
 /*
  * List and map-style normalization
  * Use these when an external value must resolve to one item or field from a

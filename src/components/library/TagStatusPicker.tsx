@@ -78,7 +78,7 @@ export default function TagStatusPicker({ open, tags, onAddStatus, onAddTag }: T
 			{pickerOpen && (
 				<div
 					id="advanced-filter-picker"
-					className="absolute top-full right-0 left-0 z-elevated mt-2 max-h-72 overflow-y-auto rounded border border-border bg-bg-secondary p-2 shadow-main"
+					className="shadow-main absolute top-full right-0 left-0 z-elevated mt-2 max-h-72 overflow-y-auto rounded border border-border bg-bg-secondary p-2"
 				>
 					{statusOptions.length > 0 && (
 						<div className="mb-2">

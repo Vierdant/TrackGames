@@ -175,7 +175,7 @@ async function getConfirmedUser(confirmName: string) {
 	return user;
 }
 
-async function clearAccountData(userId: string) {
+export async function clearAccountData(userId: string) {
 	const lists = await db.gameList.findMany({ where: { userId }, select: { id: true } });
 	const listCleanup = await Promise.all(lists.map((list) => deleteActivityForGameList(db, list.id)));
 

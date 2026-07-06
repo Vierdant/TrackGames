@@ -24,6 +24,7 @@ export default function StarRating({ rating, size = 12, isInteractive = false, s
 	const [hover, setHover] = useState<number | null>(null);
 	const value = rating ?? 0;
 	const shown = isInteractive ? (hover ?? value) : value;
+	const isPreviewing = isInteractive && hover !== null;
 
 	return (
 		<div className="flex items-center gap-3">
@@ -33,13 +34,20 @@ export default function StarRating({ rating, size = 12, isInteractive = false, s
 					const fill = Math.round(Math.min(1, Math.max(0, shown - index)) * 100);
 					const style = { width: size, height: size };
 
+					const overlay = (
+						<span
+							className={`pointer-events-none absolute inset-0 overflow-hidden ease-out motion-safe:transition-[width,color] motion-safe:duration-200 ${isPreviewing ? "text-primary-hover" : "text-primary"}`}
+							style={{ width: `${fill}%` }}
+						>
+							<Star size={size} strokeWidth={0.75} className="fill-current" aria-hidden="true" />
+						</span>
+					);
+
 					if (!isInteractive) {
 						return (
 							<span key={index} className="relative text-text-faint" style={style}>
 								<Star size={size} strokeWidth={0.75} aria-hidden="true" />
-								<span className="pointer-events-none absolute inset-0 overflow-hidden text-primary" style={{ width: `${fill}%` }}>
-									<Star size={size} strokeWidth={0.75} className="fill-primary" aria-hidden="true" />
-								</span>
+								{overlay}
 							</span>
 						);
 					}
@@ -50,17 +58,14 @@ export default function StarRating({ rating, size = 12, isInteractive = false, s
 							type="button"
 							onPointerMove={(event) => setHover(pick(event.currentTarget, event.clientX, index))}
 							onClick={(event) => {
-								const next = pick(event.currentTarget, event.clientX, index);
-								onChange?.(value === next ? 0 : next);
+								onChange?.(pick(event.currentTarget, event.clientX, index));
 							}}
-							className="relative cursor-pointer text-text-faint transition hover:text-primary focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
+							className="relative cursor-pointer text-text-faint transition-transform duration-150 ease-out focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none motion-safe:active:scale-90"
 							style={style}
 							aria-label={`${index + 1} star rating`}
 						>
 							<Star size={size} strokeWidth={0.75} aria-hidden="true" />
-							<span className="pointer-events-none absolute inset-0 overflow-hidden text-primary" style={{ width: `${fill}%` }}>
-								<Star size={size} strokeWidth={0.75} className="fill-primary" aria-hidden="true" />
-							</span>
+							{overlay}
 						</button>
 					);
 				})}

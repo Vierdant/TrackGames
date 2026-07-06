@@ -38,7 +38,12 @@ export default function TierLabelsForm({ tiers, colors }: TierLabelsFormProps) {
 					<input type="hidden" name="colors" value={tier.color} />
 				</div>
 			))}
-			<GhostButton type="button" onClick={() => setOpen(!open)} className="flex h-10 w-full cursor-pointer items-center justify-between gap-2 border-none px-2.5 font-bold">
+			<GhostButton
+				variant="outline"
+				type="button"
+				onClick={() => setOpen(!open)}
+				className="flex h-10 w-full cursor-pointer items-center justify-between gap-2 border-none px-2.5 font-bold"
+			>
 				Tier labels
 				{open ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
 			</GhostButton>

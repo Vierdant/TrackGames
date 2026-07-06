@@ -93,7 +93,7 @@ export default function ProfileSettingsForm({ profile }: Readonly<{ profile: Sec
 						<h3>Avatar</h3>
 						<div className="mt-1 flex flex-row items-center gap-8">
 							<AvatarPreview image={image} size={12} />
-							<GhostButton type="button" onClick={() => setModal("avatar")} className="h-8 w-20 text-sm">
+							<GhostButton variant="outline" type="button" onClick={() => setModal("avatar")} className="h-8 w-20 text-sm">
 								Change
 							</GhostButton>
 						</div>
@@ -102,7 +102,7 @@ export default function ProfileSettingsForm({ profile }: Readonly<{ profile: Sec
 						<h3>Background</h3>
 						<div className="mt-1 flex flex-row items-center gap-8">
 							<BackgroundView src={background} size={24} mdSize={32} alt="Profile background" />
-							<GhostButton type="button" onClick={() => setModal("background")} className="h-8 w-20 text-sm">
+							<GhostButton variant="outline" type="button" onClick={() => setModal("background")} className="h-8 w-20 text-sm">
 								Change
 							</GhostButton>
 						</div>

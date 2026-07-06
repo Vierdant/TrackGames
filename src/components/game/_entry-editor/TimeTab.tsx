@@ -1,27 +1,16 @@
 "use client";
 
 import { Check, Clock, Crown } from "lucide-react";
-import { GhostButton, PrimaryButton } from "@/components/ui/control/Button";
 import { NumberInput } from "@/components/ui/control/NumberInput";
 import { TextInput } from "@/components/ui/control/TextInput";
-import type { UserLibraryEntryWithTags } from "@/lib/data/library";
 import { ratingToFive } from "@/lib/util/format/rating";
+import { useEntryEditor } from "./context";
 
-type TimeTabProps = Readonly<{
-	entry: UserLibraryEntryWithTags;
-	save: (formData: FormData) => void;
-	onClose: () => void;
-	pending: boolean;
-	timeMode: string;
-	setTimeMode: (mode: string) => void;
-	today: string;
-	finishedAtValue: string;
-	masteredAtValue: string;
-}>;
+export default function TimeTab() {
+	const { entry, save, timeMode, setTimeMode, today, finishedAtValue, masteredAtValue } = useEntryEditor();
 
-export default function TimeTab({ entry, save, onClose, pending, timeMode, setTimeMode, today, finishedAtValue, masteredAtValue }: TimeTabProps) {
 	return (
-		<form action={save} className="flex min-h-full flex-col gap-3">
+		<form id="entry-editor-time-form" action={save} className="flex flex-col gap-3">
 			<input type="hidden" name="status" value={entry.status} />
 			<input type="hidden" name="rating" value={ratingToFive(entry.rating) ?? ""} />
 			<input type="hidden" name="notes" value={entry.notes ?? ""} />
@@ -89,14 +78,6 @@ export default function TimeTab({ entry, save, onClose, pending, timeMode, setTi
 						<TextInput name="masteredat" type="date" max={today} defaultValue={masteredAtValue || today} aria-label="Mastered date" />
 					</div>
 				)}
-			</div>
-			<div className="mt-auto flex justify-end gap-2 pt-2">
-				<GhostButton type="button" onClick={onClose}>
-					Cancel
-				</GhostButton>
-				<PrimaryButton type="submit" disabled={pending}>
-					{pending ? "Saving..." : "Save time"}
-				</PrimaryButton>
 			</div>
 		</form>
 	);

@@ -23,7 +23,7 @@ export function MediaModal({ open, title, value, onClose, onSave }: MediaModelPr
 				<TextInput value={draft} onChange={(event) => setDraft(event.target.value)} placeholder="https://..." />
 			</div>
 			<div className="mt-5 flex justify-end gap-2">
-				<GhostButton type="button" onClick={onClose}>
+				<GhostButton variant="outline" type="button" onClick={onClose}>
 					Cancel
 				</GhostButton>
 				<PrimaryButton type="button" onClick={() => onSave(draft)}>

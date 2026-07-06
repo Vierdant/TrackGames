@@ -6,42 +6,18 @@ import { Checkbox } from "@/components/ui/control/Checkbox";
 import { NumberInput } from "@/components/ui/control/NumberInput";
 import { TextArea } from "@/components/ui/control/TextArea";
 import { TextInput } from "@/components/ui/control/TextInput";
-import type { UserLibraryEntryWithTags } from "@/lib/data/library";
 import { joinClass } from "@/lib/util/client/func";
+import { useEntryEditor } from "./context";
 
-type HistoryTabProps = Readonly<{
-	saveHistoryLog: (formData: FormData) => void;
-	deleteHistoryLog: (logId: string) => void;
-	pending: boolean;
-	today: string;
-	logDate: string;
-	setLogDate: (date: string) => void;
-	logs: NonNullable<UserLibraryEntryWithTags["logs"]>;
-	filteredLogs: NonNullable<UserLibraryEntryWithTags["logs"]>;
-	selectedLog: NonNullable<UserLibraryEntryWithTags["logs"]>[number] | undefined;
-	selectedLogId: string;
-	setSelectedLogId: (id: string) => void;
-}>;
+export default function HistoryTab() {
+	const { saveHistoryLog, deleteHistoryLog, pending, today, logDate, setLogDate, logs, filteredLogs, selectedLog, selectedLogId, setSelectedLogId } = useEntryEditor();
 
-export default function HistoryTab({
-	saveHistoryLog,
-	deleteHistoryLog,
-	pending,
-	today,
-	logDate,
-	setLogDate,
-	logs,
-	filteredLogs,
-	selectedLog,
-	selectedLogId,
-	setSelectedLogId,
-}: HistoryTabProps) {
 	return (
 		<div className="grid min-h-full gap-3 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
 			<div className="flex max-h-112 flex-col gap-2 overflow-y-auto pr-1">
 				<TextInput label="Filter" name="logdate" type="date" max={today} value={logDate} onChange={(event) => setLogDate(event.target.value)} />
 				{logDate && (
-					<GhostButton type="button" onClick={() => setLogDate("")} className="justify-center py-2">
+					<GhostButton variant="outline" type="button" onClick={() => setLogDate("")} className="justify-center py-2">
 						Clear
 					</GhostButton>
 				)}
@@ -77,6 +53,7 @@ export default function HistoryTab({
 					<Checkbox label="Skip recap" name="skipRecap" defaultChecked={selectedLog.skipRecap} fieldClassName="rounded border border-border p-2" />
 					<div className="mt-2 flex justify-end gap-2">
 						<GhostButton
+							variant="outline"
 							type="button"
 							onClick={() => deleteHistoryLog(selectedLog.id)}
 							disabled={pending}

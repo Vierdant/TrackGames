@@ -1,16 +1,18 @@
 "use client";
 
-import type { CSSProperties, ReactNode } from "react";
+import type { CSSProperties } from "react";
 import { useState, useTransition } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ArrowUpRight, X } from "lucide-react";
+import { ArrowUpRight, ExternalLink } from "lucide-react";
+import { type EditorTab, EntryEditorProvider } from "@/components/game/_entry-editor/context";
+import EntryEditorTabs from "@/components/game/_entry-editor/EntryEditorTabs";
+import PlaylistTab from "@/components/game/_entry-editor/PlaylistTab";
+import { timeModeLabel } from "@/components/game/_entry-editor/shared";
 import Tabs from "@/components/layout/Tabs";
-import PlaylistTab from "@/components/library/_playlist-editor/PlaylistTab";
-import PlaylistCardEditorTabs, { type PlaylistCardEditorTabsProps, timeModeLabel } from "@/components/library/PlaylistCardEditorTabs";
 import ConfirmAction from "@/components/ui/ConfirmAction";
-import { GhostButton } from "@/components/ui/control/Button";
+import { DangerButton, GhostButton, PrimaryButton } from "@/components/ui/control/Button";
 import MenuPanel from "@/components/ui/MenuPanel";
 import {
 	createUserGamePlayLog,
@@ -54,130 +56,10 @@ type GameEntryMenuProps = Readonly<{
 	children: (ctrl: { onTileClick: (event: React.MouseEvent) => void }) => React.ReactNode;
 }>;
 
-type GameEntryMenuContentProps = Omit<PlaylistCardEditorTabsProps, "entry" | "onClose" | "playlistEditor"> &
-	Readonly<{
-		entry: LibraryEntry | null;
-		fullEntry: UserLibraryEntryWithTags | null;
-		loadingFull: boolean;
-		onClose: () => void;
-		gameSlug: string;
-		quickTab: "add" | "playlist";
-		setQuickTab: (tab: "add" | "playlist") => void;
-		playlistEditor?: PlaylistEditorContext | null;
-		addWithStatus: (status: GameStatus) => void;
-		savePlaylistEntry: (formData: FormData) => void;
-		removeFromPlaylist: () => void;
-	}>;
-
 const quickAddStatuses = [GameStatus.PLAYING, GameStatus.BACKLOG, GameStatus.WISHLIST, GameStatus.COMPLETED, GameStatus.PAUSED, GameStatus.DROPPED];
 
-function GameEntryMenuContent({
-	entry,
-	fullEntry,
-	loadingFull,
-	onClose,
-	pending,
-	gameSlug,
-	quickTab,
-	setQuickTab,
-	playlistEditor,
-	addWithStatus,
-	savePlaylistEntry,
-	removeFromPlaylist,
-	...editorProps
-}: GameEntryMenuContentProps) {
-	if (fullEntry) {
-		return (
-			<PlaylistCardEditorTabs
-				entry={fullEntry}
-				onClose={onClose}
-				pending={pending}
-				playlistEditor={
-					playlistEditor
-						? {
-								position: playlistEditor.position,
-								tier: playlistEditor.tier,
-								tiers: playlistEditor.tiers,
-								save: savePlaylistEntry,
-								onRemove: removeFromPlaylist,
-							}
-						: null
-				}
-				{...editorProps}
-			/>
-		);
-	}
-
-	if (entry && loadingFull) {
-		return <p className="text-sm text-text-muted">Loading...</p>;
-	}
-
-	let quickBody: ReactNode;
-	if (quickTab === "playlist" && playlistEditor) {
-		quickBody = (
-			<PlaylistTab
-				position={playlistEditor.position}
-				tier={playlistEditor.tier}
-				tiers={playlistEditor.tiers}
-				save={savePlaylistEntry}
-				onRemove={removeFromPlaylist}
-				onClose={onClose}
-				pending={pending}
-			/>
-		);
-	} else {
-		quickBody = (
-			<div className="flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto pr-1">
-				<p className="text-sm text-text-muted">Not in your library yet. Add it with a status:</p>
-				<div className="flex flex-col gap-2">
-					{quickAddStatuses.map((status) => {
-						const meta = GAME_STATUS_META[status];
-						const Icon = meta.icon;
-						const colors = gameStatusColorClasses(status);
-
-						return (
-							<button
-								key={status}
-								type="button"
-								disabled={pending}
-								onClick={() => addWithStatus(status)}
-								className={joinClass(
-									"flex cursor-pointer items-center gap-3 rounded border p-3 text-sm font-bold transition hover:bg-bg-secondary disabled:cursor-wait disabled:opacity-60",
-									colors.className,
-								)}
-							>
-								<Icon size={17} />
-								{meta.label}
-							</button>
-						);
-					})}
-				</div>
-				<div className="border-t border-border pt-3">
-					<GhostButton href={`/game/${gameSlug}`} className="w-full justify-center px-4 py-2">
-						<ArrowUpRight size={16} aria-hidden="true" />
-						Visit game
-					</GhostButton>
-				</div>
-			</div>
-		);
-	}
-
-	return (
-		<>
-			{playlistEditor && (
-				<Tabs
-					tabs={[
-						{ id: "add", label: "Add to library" },
-						{ id: "playlist", label: "Playlist" },
-					]}
-					active={quickTab}
-					onSelect={(id) => setQuickTab(id as "add" | "playlist")}
-					responsive="compact"
-				/>
-			)}
-			{quickBody}
-		</>
-	);
+function isFullEntry(entry: LibraryEntry): entry is UserLibraryEntryWithTags {
+	return "logs" in entry;
 }
 
 export default function GameEntryMenu({
@@ -198,11 +80,13 @@ export default function GameEntryMenu({
 	const [override, setOverride] = useState<UserLibraryEntryWithTags | null>(null);
 	const [loadingFull, setLoadingFull] = useState(false);
 	const [confirmingRemove, setConfirmingRemove] = useState(false);
+	const [confirmingClose, setConfirmingClose] = useState(false);
+	const [dirty, setDirty] = useState(false);
 	const [quickTab, setQuickTab] = useState<"add" | "playlist">("add");
 	const [error, setError] = useState("");
 	const [pending, startTransition] = useTransition();
 
-	const [activeTab, setActiveTab] = useState<string>("entry");
+	const [activeTab, setActiveTab] = useState<EditorTab>("entry");
 	const [selectedLogId, setSelectedLogId] = useState("");
 	const [logDate, setLogDate] = useState("");
 	const [timeMode, setTimeMode] = useState("manual");
@@ -222,7 +106,23 @@ export default function GameEntryMenu({
 		else router.refresh();
 	}
 
+	// Single gate for every close path (backdrop, Esc, Cancel): confirm when editing dirty.
+	function requestClose() {
+		if (fullEntry && dirty) {
+			setConfirmingClose(true);
+			return;
+		}
+		closeNow();
+	}
+
+	function closeNow() {
+		setConfirmingClose(false);
+		setDirty(false);
+		setOpen(false);
+	}
+
 	function resetFormFromEntry(full: UserLibraryEntryWithTags) {
+		setDirty(false);
 		setActiveTab("entry");
 		setSelectedLogId("");
 		setLogDate("");
@@ -303,7 +203,7 @@ export default function GameEntryMenu({
 			}
 
 			syncEntry(updated);
-			setOpen(false);
+			closeNow();
 		});
 	}
 
@@ -319,7 +219,7 @@ export default function GameEntryMenu({
 			}
 
 			syncEntry(updated);
-			setOpen(false);
+			closeNow();
 		});
 	}
 
@@ -399,110 +299,172 @@ export default function GameEntryMenu({
 
 			<MenuPanel
 				open={open}
-				onClose={() => setOpen(false)}
+				onClose={requestClose}
 				shouldShowClose={false}
 				width={isEditorView ? "42rem" : "26rem"}
 				panelClassName={
 					isEditorView
-						? "flex h-[min(42rem,calc(100dvh-1rem))] w-[calc(100vw-1rem)] flex-col gap-4 overflow-hidden bg-bg p-4 md:h-[min(36rem,calc(100vh-2rem))] md:w-[min(var(--menu-panel-width,42rem),calc(100vw-2rem))] md:flex-row md:p-5"
+						? "flex h-[min(42rem,calc(100dvh-1rem))] w-[calc(100vw-1rem)] flex-col overflow-hidden bg-bg p-4 md:h-[min(36rem,calc(100vh-2rem))] md:w-[min(var(--menu-panel-width,42rem),calc(100vw-2rem))] md:p-5"
 						: "flex max-h-[calc(100dvh-2rem)] w-[calc(100vw-2rem)] flex-col gap-4 overflow-hidden bg-bg p-4 md:w-[min(var(--menu-panel-width,26rem),calc(100vw-2rem))]"
 				}
 				style={themeStyle}
 			>
-				{isEditorView && (
-					<div className="hidden w-32 shrink-0 flex-col gap-3 md:flex">
-						<Link href={`/game/${gameSlug}`} className="relative h-44 overflow-hidden rounded bg-bg">
+				<div className={joinClass("flex min-h-0 flex-1 flex-col gap-4", isEditorView && "md:flex-row")}>
+					{isEditorView && (
+						<Link href={`/game/${gameSlug}`} className="relative hidden h-44 w-32 shrink-0 overflow-hidden rounded md:block">
 							{src && <Image src={src} alt={gameName} fill sizes="128px" className="object-cover" />}
 						</Link>
-						<GhostButton
-							type="button"
-							onClick={() => setConfirmingRemove(true)}
-							disabled={pending}
-							className="px-3 py-2 text-error hover:border-error hover:text-error"
+					)}
+					<div className="flex min-h-0 min-w-0 flex-1 flex-col" onInput={isEditorView ? () => setDirty(true) : undefined}>
+						<div
+							className={joinClass(
+								"mb-3 grid shrink-0 grid-cols-[3.75rem_minmax(0,1fr)_auto] items-center gap-3",
+								isEditorView && "md:mb-4 md:grid-cols-[minmax(0,1fr)_auto]",
+							)}
 						>
-							Remove
-						</GhostButton>
-					</div>
-				)}
-				<div className="flex min-h-0 min-w-0 flex-1 flex-col">
-					<div
-						className={joinClass(
-							"mb-3 grid shrink-0 grid-cols-[3.75rem_minmax(0,1fr)_auto_auto] items-center gap-3",
-							isEditorView && "md:mb-4 md:flex md:justify-between",
-						)}
-					>
-						<Link href={`/game/${gameSlug}`} className={joinClass("relative h-20 overflow-hidden rounded bg-bg", isEditorView && "md:hidden")}>
-							{src && <Image src={src} alt={gameName} fill sizes="60px" className="object-cover" />}
-						</Link>
-						<Link href={`/game/${gameSlug}`}>
-							<h3 className="min-w-0 truncate text-base font-bold text-text md:text-lg">{gameName}</h3>
-						</Link>
-						<div className="flex flex-row">
-							<Link
-								href={`/game/${gameSlug}`}
-								className={joinClass("grid size-8 shrink-0 cursor-pointer place-items-center rounded text-text-muted hover:text-primary")}
-								aria-label="Visit game"
-							>
-								<ArrowUpRight size={18} aria-hidden="true" />
+							<Link href={`/game/${gameSlug}`} className={joinClass("relative h-20 overflow-hidden rounded bg-bg", isEditorView && "md:hidden")}>
+								{src && <Image src={src} alt={gameName} fill sizes="60px" className="object-cover" />}
 							</Link>
-							<button
-								type="button"
-								onClick={() => setOpen(false)}
-								className="grid size-8 shrink-0 cursor-pointer place-items-center rounded text-text-muted hover:text-primary"
-								aria-label="Close"
+							<Link href={`/game/${gameSlug}`}>
+								<h3 className="min-w-0 truncate text-base font-bold text-text md:text-lg">{gameName}</h3>
+							</Link>
+							<GhostButton variant="text" href={`/game/${gameSlug}`} target="_blank" rel="noreferrer noopener" aria-label="Visit game">
+								<ExternalLink size={18} aria-hidden="true" />
+							</GhostButton>
+						</div>
+
+						{fullEntry ? (
+							<EntryEditorProvider
+								value={{
+									entry: fullEntry,
+									pending,
+									today,
+									onClose: requestClose,
+									save,
+									saveLog,
+									saveHistoryLog,
+									deleteHistoryLog,
+									entryStatus,
+									setEntryStatus,
+									isFinished,
+									setEntryFinished: setIsFinished,
+									tags,
+									setTags,
+									isAddingTag,
+									setAddingTag,
+									tagInput,
+									setTagInput,
+									addTag,
+									rating,
+									setRating,
+									timeMode,
+									setTimeMode,
+									finishedAtValue,
+									masteredAtValue,
+									logDate,
+									setLogDate,
+									logs,
+									filteredLogs,
+									selectedLog,
+									selectedLogId,
+									setSelectedLogId,
+									playlist: playlistEditor
+										? {
+												position: playlistEditor.position,
+												tier: playlistEditor.tier,
+												tiers: playlistEditor.tiers,
+												save: savePlaylistEntry,
+												onRemove: removeFromPlaylist,
+											}
+										: null,
+								}}
 							>
-								<X size={18} aria-hidden="true" />
-							</button>
+								<EntryEditorTabs activeTab={activeTab} setActiveTab={setActiveTab} error={error} />
+							</EntryEditorProvider>
+						) : entry && loadingFull ? (
+							<p className="text-sm text-text-muted">Loading...</p>
+						) : (
+							<>
+								{error && <p className="mb-3 shrink-0 rounded border border-error/50 bg-error/15 p-2 text-sm text-error">{error}</p>}
+								{playlistEditor && (
+									<Tabs
+										tabs={[
+											{ id: "add", label: "Add to library" },
+											{ id: "playlist", label: "Playlist" },
+										]}
+										active={quickTab}
+										onSelect={(id) => setQuickTab(id as "add" | "playlist")}
+										responsive="compact"
+									/>
+								)}
+								{quickTab === "playlist" && playlistEditor ? (
+									<PlaylistTab
+										position={playlistEditor.position}
+										tier={playlistEditor.tier}
+										tiers={playlistEditor.tiers}
+										save={savePlaylistEntry}
+										onRemove={removeFromPlaylist}
+										onClose={() => setOpen(false)}
+										pending={pending}
+									/>
+								) : (
+									<div className="flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto pr-1">
+										<p className="text-sm text-text-muted">Not in your library yet. Add it with a status:</p>
+										<div className="flex flex-col gap-2">
+											{quickAddStatuses.map((status) => {
+												const meta = GAME_STATUS_META[status];
+												const Icon = meta.icon;
+												const colors = gameStatusColorClasses(status);
+
+												return (
+													<button
+														key={status}
+														type="button"
+														disabled={pending}
+														onClick={() => addWithStatus(status)}
+														className={joinClass(
+															"flex cursor-pointer items-center gap-3 rounded border p-3 text-sm font-bold transition hover:bg-bg-secondary disabled:cursor-wait disabled:opacity-60",
+															colors.className,
+														)}
+													>
+														<Icon size={17} />
+														{meta.label}
+													</button>
+												);
+											})}
+										</div>
+										<div className="border-t border-border pt-3">
+											<GhostButton variant="outline" href={`/game/${gameSlug}`} className="w-full justify-center px-4 py-2">
+												<ArrowUpRight size={16} aria-hidden="true" />
+												Visit game
+											</GhostButton>
+										</div>
+									</div>
+								)}
+							</>
+						)}
+					</div>
+				</div>
+
+				{/* Panel-level footer: spans full panel width so Remove hugs the panel's left edge,
+				    not the content column's. History has no single form to submit; playlist has its own. */}
+				{fullEntry && activeTab !== "playlist" && (
+					<div className="mt-4 flex shrink-0 items-center justify-between gap-2 border-t border-border pt-4">
+						<DangerButton variant="outline" onClick={() => setConfirmingRemove(true)} disabled={pending}>
+							Remove
+						</DangerButton>
+						<div className="flex items-center gap-2">
+							<GhostButton variant="outline" onClick={requestClose}>
+								Cancel
+							</GhostButton>
+							{activeTab !== "history" && (
+								<PrimaryButton type="submit" form={`entry-editor-${activeTab}-form`} disabled={pending}>
+									{pending ? "Saving..." : activeTab === "log" ? "Add log" : activeTab === "time" ? "Save time" : "Save"}
+								</PrimaryButton>
+							)}
 						</div>
 					</div>
-					{!fullEntry && error && <p className="mb-3 shrink-0 rounded border border-error/50 bg-error/15 p-2 text-sm text-error">{error}</p>}
-					<GameEntryMenuContent
-						entry={entry}
-						fullEntry={fullEntry}
-						loadingFull={loadingFull}
-						onClose={() => setOpen(false)}
-						pending={pending}
-						gameSlug={gameSlug}
-						quickTab={quickTab}
-						setQuickTab={setQuickTab}
-						playlistEditor={playlistEditor}
-						addWithStatus={addWithStatus}
-						savePlaylistEntry={savePlaylistEntry}
-						removeFromPlaylist={removeFromPlaylist}
-						activeTab={activeTab}
-						setActiveTab={setActiveTab}
-						error={error}
-						save={save}
-						saveLog={saveLog}
-						saveHistoryLog={saveHistoryLog}
-						deleteHistoryLog={deleteHistoryLog}
-						timeMode={timeMode}
-						setTimeMode={setTimeMode}
-						entryStatus={entryStatus}
-						setEntryStatus={setEntryStatus}
-						isFinished={isFinished}
-						setEntryFinished={setIsFinished}
-						tags={tags}
-						setTags={setTags}
-						isAddingTag={isAddingTag}
-						setAddingTag={setAddingTag}
-						tagInput={tagInput}
-						setTagInput={setTagInput}
-						addTag={addTag}
-						rating={rating}
-						setRating={setRating}
-						today={today}
-						logDate={logDate}
-						setLogDate={setLogDate}
-						logs={logs}
-						filteredLogs={filteredLogs}
-						selectedLog={selectedLog}
-						selectedLogId={selectedLogId}
-						setSelectedLogId={setSelectedLogId}
-						finishedAtValue={finishedAtValue}
-						masteredAtValue={masteredAtValue}
-					/>
-				</div>
+				)}
 			</MenuPanel>
 
 			<ConfirmAction
@@ -514,10 +476,15 @@ export default function GameEntryMenu({
 				onClose={() => setConfirmingRemove(false)}
 				onConfirm={removeEntry}
 			/>
+
+			<ConfirmAction
+				open={confirmingClose}
+				title="Discard changes?"
+				message="You have unsaved changes. Closing will lose them."
+				confirmLabel="Discard"
+				onClose={() => setConfirmingClose(false)}
+				onConfirm={closeNow}
+			/>
 		</>
 	);
-}
-
-function isFullEntry(entry: LibraryEntry): entry is UserLibraryEntryWithTags {
-	return "logs" in entry;
 }

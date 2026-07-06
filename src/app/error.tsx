@@ -23,7 +23,7 @@ export default function ErrorPage({ error, reset }: Readonly<{ error: Error & { 
 					<RotateCcw className="size-4" aria-hidden="true" />
 					Try again
 				</PrimaryButton>
-				<GhostButton href="/" className="w-full sm:w-auto">
+				<GhostButton variant="outline" href="/" className="w-full sm:w-auto">
 					<Home className="size-4" aria-hidden="true" />
 					Home
 				</GhostButton>

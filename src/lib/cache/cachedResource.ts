@@ -1,4 +1,4 @@
-import { readDiskCache, writeDiskCache } from "@/lib/cache/diskCache";
+import { readCache, writeCache } from "@/lib/cache/store";
 import { logger } from "@/lib/logger";
 
 export default class CachedResource<T> {
@@ -27,17 +27,18 @@ export default class CachedResource<T> {
 		return Date.now() - this.lastUpdated > this.options.ttlMs;
 	}
 
-	public async hydrateFromDisk() {
-		const diskData = await readDiskCache<T>(this.options.name);
+	public async hydrateFromStore() {
+		const entry = await readCache<T>(this.options.name);
 
-		if (diskData != null) {
-			this.data = diskData;
+		if (entry != null) {
+			this.data = entry.data;
+			this.lastUpdated = entry.updatedAt;
 		}
 	}
 
 	public async get(): Promise<T> {
 		if (this.data === null) {
-			await this.hydrateFromDisk();
+			await this.hydrateFromStore();
 		}
 
 		if ((this.data === null || this.isExpired) && !this.isUpdating) {
@@ -64,7 +65,7 @@ export default class CachedResource<T> {
 			this.data = freshData;
 			this.lastUpdated = Date.now();
 
-			await writeDiskCache(this.options.name, freshData);
+			await writeCache(this.options.name, freshData);
 
 			return freshData;
 		} finally {

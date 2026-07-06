@@ -2,12 +2,14 @@
 
 import { useState, useTransition } from "react";
 import AccountSettingsForm from "@/app/(user)/settings/AccountSettingsForm";
+import FeedbackSettingsForm from "@/app/(user)/settings/FeedbackSettingsForm";
 import ImportSettingsForm from "@/app/(user)/settings/ImportSettingsForm";
 import PreferencesSettingsForm from "@/app/(user)/settings/PreferencesSettingsForm";
 import PrivacySettingsForm from "@/app/(user)/settings/PrivacySettingsForm";
 import ProfileSettingsForm from "@/app/(user)/settings/ProfileSettingsForm";
 import { SaveBar } from "@/app/(user)/settings/SettingsShared";
 import WidgetsSettingsForm from "@/app/(user)/settings/WidgetsSettingsForm";
+import PlansPanel from "@/components/doc/PlansPanel";
 import { updateUserSettings } from "@/lib/actions/settings";
 import { type SecuredUser } from "@/lib/data/user";
 
@@ -17,6 +19,14 @@ export default function SettingsPanel({ activeTab, profile, linkedProviders, has
 	const [error, setError] = useState("");
 	const [saved, setSaved] = useState(false);
 	const [pending, startTransition] = useTransition();
+
+	if (activeTab === "backing") {
+		return <PlansPanel showHeader={false} />;
+	}
+
+	if (activeTab === "feedback") {
+		return <FeedbackSettingsForm />;
+	}
 
 	function save(formData: FormData) {
 		setError("");

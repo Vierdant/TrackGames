@@ -1,8 +1,8 @@
 import { IGDB_BASE_URL, importConfigs } from "@/lib/external/igdb/import";
 import { getAccessToken } from "@/lib/external/igdb/token";
-import { loadEnvConfig } from "@next/env";
+import { loadEnvFile } from "process";
 
-loadEnvConfig(process.cwd());
+loadEnvFile("./.env.local");
 
 const methods = ["create", "update", "delete"];
 

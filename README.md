@@ -11,6 +11,7 @@ TrackGames is a game library and profile platform for tracking what you play, ra
 ![Prisma](https://img.shields.io/badge/Prisma-7.8-2d3748?style=flat-square)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-4169e1?style=flat-square)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-3178c6?style=flat-square)
+[![wakatime](https://wakatime.com/badge/user/c1689fc3-1f39-4c70-8cd9-d2ed3ed4dce8/project/ef2aba7f-788c-4fe2-aadd-b8e02954cdeb.svg?style=flat-square)](https://wakatime.com/badge/user/c1689fc3-1f39-4c70-8cd9-d2ed3ed4dce8/project/ef2aba7f-788c-4fe2-aadd-b8e02954cdeb)
 
 ## Features
 

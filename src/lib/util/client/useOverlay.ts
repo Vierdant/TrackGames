@@ -2,6 +2,7 @@
 
 import type { RefObject, SyntheticEvent } from "react";
 import { useEffect, useRef, useState } from "react";
+import { deferHook } from "./func";
 
 let scrollLockCount = 0;
 
@@ -71,6 +72,18 @@ export function useOverlay(open: boolean, onClose: () => void, anchorRef?: RefOb
 			document.removeEventListener("pointerdown", closeOnOutsideClick);
 		};
 	}, [anchorRef, onClose, rendered]);
+
+	useEffect(() => {
+		if (open || !rendered) return;
+		// Reduced motion strips the close animation, so animationend never fires. Unmount directly.
+		if (!globalThis.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return;
+
+		deferHook(() => {
+			setRendered(false);
+		});
+		if (dialogRef.current?.open) dialogRef.current.close();
+		previousFocusRef.current?.focus();
+	}, [open, rendered]);
 
 	function attachDialog(node: HTMLDialogElement | null) {
 		dialogRef.current = node;

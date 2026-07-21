@@ -20,9 +20,9 @@
 		"test:watch": "jest --watch",
 		"test:coverage": "jest --coverage",
 		"test:e2e": "playwright test",
-		"import:api": "tsx scripts/import-api.ts",
-		"import:clear-data": "tsx scripts/clear-import-data.ts",
-		"webhooks:register": "tsx scripts/register-webhooks.ts",
+		"import:api": "tsx src/scripts/import-api.ts",
+		"import:clear-data": "tsx src/scripts/clear-import-data.ts",
+		"webhooks:register": "tsx src/scripts/register-webhooks.ts",
 		"prepare": "husky"
 	},
 	"engines": {
